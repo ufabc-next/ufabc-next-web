@@ -10,6 +10,7 @@ import SignupForm from '@/pages/Signup/SignupForm'
 import Confirmation from '@/pages/Signup/Confirmation'
 import jsonwebtoken from 'jsonwebtoken'
 import History from '@/pages/History'
+import Simulation from '@/pages/Simulation'
 import Settings from '@/pages/Settings'
 import Stats from '@/pages/Stats'
 import Admin from '@/pages/Admin'
@@ -125,6 +126,16 @@ const router = new VueRouter({
       component: History,
       meta: {
         title: 'Meu Histórico',
+        auth: true
+      },
+    },
+      
+    {
+      name: 'simulation',
+      path: '/simulation',
+      component: Simulation,
+      meta: {
+        title: 'Simulador de Quad.',
         auth: true
       },
     },

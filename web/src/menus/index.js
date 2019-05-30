@@ -25,6 +25,12 @@ export default [
   },
 
   {
+    title: 'Simulador de Quad.',
+    icon: 'mdi-fast-forward',
+    route: '/simulation',
+  },
+
+  {
     title: 'Dados da Matrícula',
     icon: 'mdi-book-multiple-variant',
     route: '/stats',

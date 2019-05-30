@@ -1,0 +1,99 @@
+<v-container style="display: flex; flex-direction: column; min-height: 100%;">
+
+  <v-layout row wrap class="white elevation-1 mr-0" :class="$vuetify.breakpoint.xsOnly ? 'px-3' : 'px-5'"
+    style="flex: none">
+    <div :class="$vuetify.breakpoint.xsOnly ? 'mt-5' : 'mt-4'">
+      <h2 class="history-title ufabcnext-primary--text">Simulador de Quadrimestre</h2>
+      <div class="history-text mt-3 mb-4">
+        Esta ficha individual é uma réplica do que você pode encontrar no site do <a
+          href="https://aluno.ufabc.edu.br/fichas_individuais" target="_blank" style="text-decoration: none;">Portal do
+          Aluno.</a> <br />
+        <br />
+        Caso o seu histórico esteja desatualizado, basta acessar o portal novamente utilizando a <a
+          href="https://chrome.google.com/webstore/detail/ufabc-matricula/gphjopenfpnlnffmhhhhdiecgdcopmhk"
+          style="text-decoration: none;" target="_blank">extensão do UFABC Next</a></i> e as informações serão
+        atualizadas. <br />
+        <br />
+        Se o nome de algum professor estiver errado, você pode corrigir clicando no botão "Fazer comentário" ao lado do
+        nome do professor.
+      </div>
+    </div>
+
+    <div class="history-chips">
+      <div class="history-chip mr-3 mb-3">
+        <div class="ra-icon ufabcnext-charcoal-grey--text">CR Atual</div>
+        {{ crAtual }}
+      </div>
+      <div class="history-chip mr-3 mb-3">
+        <div class="ra-icon ufabcnext-charcoal-grey--text">CR Simulado</div>
+        {{ crSimulado }}
+      </div>
+    </div>
+
+    <div class="history-complete mb-5" v-loading='loading'>
+      <el-table class="history-header" style="width: 100%;">
+        <el-table-column label="Disciplina" min-width="200" fixed="left">
+        </el-table-column>
+
+        <el-table-column align="center" width="100" label="Conceito">
+        </el-table-column>
+
+        <el-table-column align="center" width="100" label="Créditos">
+        </el-table-column>
+
+        <el-table-column align="center" width="80" label="Remover">
+        </el-table-column>
+      </el-table>
+
+      <div class="season">
+        <el-table :data="simulatedSeason" row-class-name="simulation-row" empty-text="Nenhuma disciplina adicionada"
+          :show-header="false" class="history-table" style="width: 100%;">
+          <el-table-column min-width="200" fixed="left">
+            <template slot-scope="scope">
+              <input type="text" v-model="scope.row.disciplina" class="subject-in-simulation"
+                :class="{ 'disapproved': scope.row.conceito == 'F' || scope.row.conceito == 'O'}">
+            </template>
+          </el-table-column>
+
+          <el-table-column width="100">
+            <template slot-scope="scope">
+              <select v-model="scope.row.conceito" class="concept-in-simulation"
+                :style="{'color': conceptsColor[scope.row.conceito || 'null']}">
+                <option value="A">A</option>
+                <option value="B">B</option>
+                <option value="C">C</option>
+                <option value="D">D</option>
+                <option value="F">F</option>
+                <option value="O">O</option>
+              </select>
+            </template>
+          </el-table-column>
+
+          <el-table-column width="100">
+            <template slot-scope="scope">
+              <select v-model="scope.row.creditos" class="concept-in-simulation">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+              </select>
+            </template>
+          </el-table-column>
+
+          <el-table-column width="80">
+            <template slot-scope="scope">
+              <v-btn flat icon color="red" @click="remove(scope.$index)">
+                <v-icon>delete</v-icon>
+              </v-btn>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <v-btn color="success" @click="addDisciplina">Adicionar disciplina</v-btn>
+      </div>
+    </div>
+  </v-layout>
+
+</v-container>
