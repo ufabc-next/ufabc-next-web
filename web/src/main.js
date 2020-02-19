@@ -15,6 +15,22 @@ import ElementCSS from '@/styles/Element.css'
 import Auth from '@/services/Auth'
 import Axios from 'axios'
 
+document.addEventListener(
+  'deviceready',
+  async () => {
+    console.log('DEVICE READY')
+    window.handleOpenURL = url => {
+      setTimeout(() => {
+        window.location.href =
+          // talvex isso não redirecione puramente para a página de
+          // login, temos que descobrir um jeito de redirecionar para extrair o token
+          window.location.href + url.replace('ufabcnext://', '');
+      }, 0);
+    };
+  },
+  false
+);
+
 Vue.use(Vuetify)
 
 import VCharts from 'v-charts'
