@@ -24,6 +24,18 @@ document.addEventListener(
           window.location.href + url.replace('ufabcnext://', '');
       }, 0);
     };
+
+    window.FirebasePlugin.onTokenRefresh(function(fcmToken) {
+      if (fcmToken) {
+        Auth.addDevice({ token: fcmToken });
+      }
+    });
+
+    window.FirebasePlugin.getToken(function(fcmToken) {
+      if (fcmToken) {
+        Auth.addDevice({ token: fcmToken });
+      }
+    });
   },
   false
 );
