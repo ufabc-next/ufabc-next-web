@@ -71,7 +71,7 @@ class Auth {
   }
 
   async removeDevice(deviceId) {
-    return await Axios.delete('/users/me/devices/:deviceId')
+    return await Axios.delete(`/users/me/devices/:${deviceId}`)
   }
 }
 
