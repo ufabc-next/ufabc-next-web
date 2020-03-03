@@ -3,7 +3,7 @@ import Vue from 'vue'
 import JwtDecode from 'jwt-decode'
 
 class Auth {
-  constructor(){ 
+  constructor(){
     Vue.util.defineReactive(this, 'user', null)
     Vue.util.defineReactive(this, 'token', null)
     this.loadFromLocalStorage()
@@ -66,6 +66,13 @@ class Auth {
     return await Axios.post('/auth/reset', user)
   }
 
+  async addDevice(device) {
+    return await Axios.post('/users/me/devices', { device })
+  }
+
+  async removeDevice(deviceId) {
+    return await Axios.delete('/users/me/devices/:deviceId')
+  }
 }
 
 export default (new Auth)
