@@ -25,15 +25,9 @@ document.addEventListener(
       }, 0);
     };
 
-    window.FirebasePlugin.onTokenRefresh(function(fcmToken) {
-      if (fcmToken) {
-        Auth.addDevice({ token: fcmToken });
-      }
-    });
-
-    window.FirebasePlugin.getToken(function(fcmToken) {
-      if (fcmToken) {
-        Auth.addDevice({ token: fcmToken });
+    window.FirebasePlugin.onTokenRefresh(function(device) {
+      if (device) {
+        Auth.addDevice({ token: device.token, id: device.uuid });
       }
     });
   },
