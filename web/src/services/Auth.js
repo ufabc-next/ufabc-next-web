@@ -66,12 +66,22 @@ class Auth {
     return await Axios.post('/auth/reset', user)
   }
 
-  async addDevice(device) {
-    return await Axios.post('/users/me/devices', { device })
-  }
+  async addDevice() {
+    const firebaseToken = localStorage.getItem('firebaseToken') || null
+    const deviceId = window.device.uuid
 
-  async removeDevice(deviceId) {
-    return await Axios.delete(`/users/me/devices/:${deviceId}`)
+    if(Auth.isLoggedIn() && firebaseToken && deviceId) {
+       await Axios.post('/users/me/devices', { token: firebaseToken, deviceId: deviceId })
+    }
+ }
+
+  async removeDevice() {
+    const deviceId = window.device.uuid
+
+    if(deviceId) {
+      return await Axios.delete(`/users/me/devices/${deviceId}`)
+    }
+
   }
 }
 

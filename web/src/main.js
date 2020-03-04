@@ -25,14 +25,22 @@ document.addEventListener(
       }, 0);
     };
 
-    window.FirebasePlugin.onTokenRefresh(function(device) {
-      if (device) {
-        Auth.addDevice({ token: device.token, id: device.uuid });
-      }
+    window.FirebasePlugin.onTokenRefresh(function(fcmToken) {
+      localStorage.setItem('firebaseToken', fcmToken)
+      Auth.addDevice()
     });
   },
   false
 );
+
+document.addEventListener("resume", () => {
+  window.FirebasePlugin.getToken(function(fcmToken) {
+    if (fcmToken) {
+      localStorage.setItem('firebaseToken', fcmToken)
+      Auth.addDevice()
+    }
+  });
+}, false);
 
 Vue.use(Vuetify)
 

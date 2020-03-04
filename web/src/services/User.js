@@ -13,11 +13,8 @@ class User {
     // return await Axios.post('/users/me/confirm', params)
     const token = await Axios.post('/account/confirm', params)
 
-    if(device) {
-      await Auth.addDevice({
-        token: device.token,
-        id: device.uuid
-      })
+    if(window.device) {
+      await Auth.addDevice()
     }
 
     return token
