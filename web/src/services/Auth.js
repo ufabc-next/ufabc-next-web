@@ -70,7 +70,7 @@ class Auth {
     const firebaseToken = localStorage.getItem('firebaseToken') || null
     const deviceId = window.device.uuid
 
-    if(Auth.isLoggedIn() && firebaseToken && deviceId) {
+    if(this.isLoggedIn() && firebaseToken && deviceId) {
        await Axios.post('/users/me/devices', { token: firebaseToken, deviceId: deviceId })
     }
  }

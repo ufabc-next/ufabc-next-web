@@ -20,6 +20,8 @@
     "cordova-plugin-androidx": "^1.0.2",
     "cordova-plugin-androidx-adapter": "^1.1.0",
     "cordova-plugin-customurlscheme": "^5.0.0",
+    "cordova-plugin-enable-multidex": "^0.2.0",
+    "cordova-plugin-firebasex": "^8.1.1",
     "cordova-plugin-inappbrowser": "^3.2.0"
   },
   "devDependencies": {
@@ -53,12 +55,13 @@
         "ANDROID_CRASHLYTICS_NDK_VERSION": "2.1.1",
         "ANDROID_GSON_VERSION": "2.8.6"
       },
-      "cordova-plugin-device": {}
+      "cordova-plugin-device": {},
+      "cordova-plugin-enable-multidex": {}
     },
     "platforms": [
-      "android",
       "ios",
-      "browser"
+      "browser",
+      "android"
     ]
   }
 }
