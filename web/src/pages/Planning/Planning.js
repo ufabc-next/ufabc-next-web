@@ -153,6 +153,7 @@ export default {
       if (subjectName == "Livre Escolha") {
         return true;
       }
+      console.log(this.disciplines);
       return this.disciplines.find((d) => d.disciplina == subjectName);
     },
 
@@ -279,6 +280,14 @@ export default {
       const yearsPassed = Math.floor((quad + (quadNumber - 2)) / 3);
       const diffQuad = Math.floor((quad + sum) % 3);
       return year + yearsPassed + ":" + (diffQuad == 0 ? "3" : diffQuad);
+    },
+
+    getGradeBySubject(subjectName) {
+      const discipline = this.disciplines.find(
+        (d) => d.disciplina == subjectName
+      );
+
+      return discipline ? discipline.conceito : "";
     },
   },
 };

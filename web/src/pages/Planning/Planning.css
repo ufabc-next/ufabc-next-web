@@ -104,7 +104,9 @@
   border: 1px solid #05c218;
 }
 .graduation-term-subjects.completed .graduation-subject-credits {
-  background-color: #05c218;
+  background-color: #ffffff;
+  border: 1px solid #05c218;
+  color: #05c218;
 }
 .graduation-subject-name {
   line-height: 15px;
