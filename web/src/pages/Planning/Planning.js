@@ -15,6 +15,8 @@ export default {
       starterYear: null,
       starterQuad: null,
       mode: "ideal",
+      dialog: false,
+      selectedSubject: "",
     };
   },
 
@@ -289,5 +291,7 @@ export default {
 
       return discipline ? discipline.conceito : "";
     },
+
+
   },
 };
