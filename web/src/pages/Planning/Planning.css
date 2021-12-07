@@ -24,7 +24,7 @@
   background: #9b9b9b;
   border-radius: 4px;
   padding: 4px;
-  width: 64px;
+  width: max-content;
   text-align: center;
   line-height: 16px;
 }
@@ -117,6 +117,8 @@
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 4;
   width: 100%;
+  white-space: normal;
+  word-wrap: break-word;
 }
 .graduation-subject-code {
   text-align: center;
@@ -137,3 +139,25 @@
   bottom: 6px;
   box-shadow: 0 1px 2px rgb(0 0 0 / 5%);
 }
+
+.graduation-buttom-add-subject {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  width: 136px;
+  height: 100%;
+  font-weight: 500;
+  flex: none;
+  padding: 0;
+  flex-direction: column;
+  position: relative;
+  margin: 0;
+
+}
+
+.graduation-add-quad {
+  width: 80%;
+  margin: 0 auto;
+  
+} 
