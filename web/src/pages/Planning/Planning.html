@@ -166,8 +166,8 @@
       <v-container class="subject-grade-container">
         <v-dialog v-model="dialog" width="700px">
           <template v-slot:activator="{ on, attrs }">
-            <v-btn rounded depressed elevation="2" outlined class="dialog-open-btn ufabcnext-primary" v-bind="attrs"
-              v-on="on">Quero ajudar!</v-btn>
+            <v-btn rounded depressed elevation="2" outlined class="dialog-testeDisciplina-btn ufabcnext-primary"
+              v-bind="attrs" v-on="on">Botão teste - Disciplina</v-btn>
           </template>
 
           <v-card class="dialog-content">
@@ -185,26 +185,20 @@
             <v-card-text class="dialog-body" :style="{'display': $vuetify.breakpoint.smAndDown ? 'block' : 'flex',
                 'padding': $vuetify.breakpoint.smAndDown ? '0' : '0 40px'
                 }">
-              <v-autocomplete v-model="selectedSubject" clearable label="Selecione a disciplina..." solo>
-              </v-autocomplete>
-
+              <v-autocomplete v-model="selectedSubject" :items="testeMateria2" dense filled clearable
+                label="Selecione a disciplina..."></v-autocomplete>
             </v-card-text>
 
             <v-card-text class="dialog-footer">
-              <div>
-                <v-chip-group v-model="selection" mandatory>
-                  <v-chip class="ufabcnext-green"><b>A</b></v-chip>
-                  <v-chip class="ufabcnext-primary"><b>B</b></v-chip>
-                  <v-chip class="ufabcnext-yellow"><b>C</b></v-chip>
-                  <v-chip class="ufabcnext-orange"><b>D</b></v-chip>
-                  <v-chip class="ufabcnext-red"><b>F</b></v-chip>
-                </v-chip-group>
-              </div>
+              <v-slider v-model="conceitoSelecionado" :tick-labels="conceitos" :max="4" step="1" ticks="always"
+                tick-size="7">
+              </v-slider>
             </v-card-text>
+            <v-btn rounded depressed elevation="2" outlined class="dialog-confirm-btn ufabcnext-primary" v-bind="attrs"
+              v-on="on">Adicionar</v-btn>
           </v-card>
         </v-dialog>
       </v-container>
-
     </div>
   </template>
 </div>

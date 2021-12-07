@@ -17,6 +17,9 @@ export default {
       mode: "ideal",
       dialog: false,
       selectedSubject: "",
+      conceitos: ["A", "B", "C", "D", "F"],
+      conceitoSelecionado: "",
+      testeMateria2: ["disciplines", "BCC", "BCH", "BCT", "BECN", "BRU MESTRA", "GUT DAS PLACAS", "GUT DOS CONES", "NI DOS D", "LUZ DO VAL"],
     };
   },
 

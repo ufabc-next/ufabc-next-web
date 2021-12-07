@@ -154,6 +154,26 @@
   border-radius: 20px;
 }
 
+.dialog-testeDisciplina-btn {
+  font-family: Ubuntu;
+  color: white !important;
+  width: 50%;
+  height: 30px;
+  font-size: 20px;
+  align-self: center;
+  border-radius: 20px;
+}
+
+.dialog-confirm-btn{
+  font-family: Ubuntu;
+  color: white !important;
+  width: 20%;
+  height: 30px;
+  font-size: 15px;
+  align-self: right;
+  border-radius: 20px;
+}
+
 .dialog-content {
   padding: 20px;
   border-radius: 10px;
