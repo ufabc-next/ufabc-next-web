@@ -222,5 +222,7 @@
 
 .dialog-footer {
   font-size: 18px;
+  width: 500px;
   text-align: center;
+  align-self: center;
 }
