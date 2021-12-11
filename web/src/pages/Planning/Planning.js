@@ -8,9 +8,10 @@ export default {
     return {
       graduations: [],
       selectedGraduation: null,
+      grades: ["A", "B", "C", "D", "F", "0"],
       subjects: [],
       history: null,
-      simulatorHistory: null,
+      simulatorHistory: [],
       loadingSubjects: false,
       loadingHistory: false,
       starterYear: null,
@@ -19,18 +20,8 @@ export default {
       dialog: false,
       selectedSubject: "",
       conceitoSelecionado: "",
-      testeMateria2: [
-        "disciplines",
-        "BCC",
-        "BCH",
-        "BCT",
-        "BECN",
-        "BRU MESTRA",
-        "GUT DAS PLACAS",
-        "GUT DOS CONES",
-        "NI DOS D",
-        "LUZ DO VAL",
-      ],
+      lastYearSimulated: null,
+      lastQuadSimulated: null,
     };
   },
 
@@ -69,14 +60,13 @@ export default {
       if (!creditsBreakdown) return [];
 
       const creditsBreakdownGroupedByYear = _.groupBy(creditsBreakdown, "year");
-      //console.log(this.simulatorHistory);
 
       return creditsBreakdownGroupedByYear;
     },
 
     disciplines() {
       const disciplinas = _.get(this.history, "disciplinas", []);
-      console.log(this.subjects);
+
       return disciplinas;
     },
 
@@ -183,7 +173,6 @@ export default {
       if (subjectName == "Livre Escolha") {
         return true;
       }
-      //console.log(this.disciplines);
       return this.disciplines.find((d) => d.disciplina == subjectName);
     },
 
@@ -294,7 +283,39 @@ export default {
             });
           });
       });
-      //console.log("populateSubjects", hasChoosableCredits);
+      console.log("populateSubjects", hasChoosableCredits);
+    },
+
+    addSimulationQuad(lastYear, lastQuad) {
+      if (lastQuad == 3) {
+        const quad = 1;
+        const year = lastYear + 1;
+        const newYearQuad = {
+          quad,
+          year,
+          disciplines: [],
+        };
+        this.simulatorHistory = {
+          ...this.simulatorHistory,
+          year: newYearQuad,
+        };
+        lastYearSimulated = year;
+        lastQuadSimulated = quad;
+      } else {
+        const quad = lastQuad + 1;
+        const year = lastYear;
+        const newQuad = {
+          quad,
+          year,
+          disciplines: [],
+        };
+        this.simulatorHistory = {
+          ...this.simulatorHistory,
+          year: newQuad,
+        };
+        lastYearSimulated = year;
+        lastQuadSimulated = quad;
+      }
     },
 
     getCurrentYearQuad(quadNumber) {
@@ -320,25 +341,44 @@ export default {
       return discipline ? discipline.conceito : "";
     },
 
-    addSimulatorDiscipline(grade, disciplineName, year, quad) {
-      const simulatorDisciplines = this.simulatorDisciplines;
-      const discipline = {
-        ano: year,
-        codigo: "",
-        conceito: grade,
-        creditos: 0,
-        disciplina: disciplineName,
-        periodo: quad,
-        situacao: "",
-      };
+    getDisciplineByCode(code) {
+      return this.disciplines.find((d) => d.codigo == code);
     },
 
-    convertValue(value) {
-      if (value == 0) return "A";
-      if (value == 1) return "B";
-      if (value == 2) return "C";
-      if (value == 3) return "D";
-      if (value == 4) return "F";
+    addSimulatorDiscipline(grade, disciplineCode, year, quad) {
+      const discipline = this.getDisciplineByCode(disciplineCode);
+
+      if (!discipline) return;
+
+      const disciplineValues = {
+        ...discipline,
+        year,
+        quad,
+        grade,
+        subject: "?",
+        historyGraduation: "?",
+        active: {
+          type: "?",
+        },
+      };
+
+      const yearSimulator = this.simulatorHistory;
+      yearSimulator.push(disciplineValues);
+    },
+
+    convertGradeByValue(value) {
+      return !value ? this.grades[0] : this.grades[value];
+    },
+
+    submitSimulatedDiscipline() {
+      const canSubmit = this.$refs.form.validate();
+      if (canSubmit) {
+        const grade = this.convertGradeByValue(this.conceitoSelecionado);
+        this.addSimulatorDiscipline(grade, this.selectedSubject);
+
+        this.dialog = false;
+      }
+      return canSubmit;
     },
   },
 };
