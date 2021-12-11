@@ -10,6 +10,7 @@ export default {
       selectedGraduation: null,
       subjects: [],
       history: null,
+      simulatorHistory: null,
       loadingSubjects: false,
       loadingHistory: false,
       starterYear: null,
@@ -43,12 +44,19 @@ export default {
 
       if (!creditsBreakdown) return [];
 
-      return _.groupBy(creditsBreakdown, "year");
+      const creditsBreakdownGroupedByYear = _.groupBy(creditsBreakdown, "year");
+      //console.log(this.simulatorHistory);
+
+      return creditsBreakdownGroupedByYear;
     },
 
     disciplines() {
-      return _.get(this.history, "disciplinas", []);
+      const disciplinas = _.get(this.history, "disciplinas", []);
+      console.log(this.subjects);
+      return disciplinas;
     },
+
+
 
     mandatoryCreditsTotal() {
       return _.get(this.selectedGraduation, "mandatory_credits_number", "?");
@@ -153,7 +161,7 @@ export default {
       if (subjectName == "Livre Escolha") {
         return true;
       }
-      console.log(this.disciplines);
+      //console.log(this.disciplines);
       return this.disciplines.find((d) => d.disciplina == subjectName);
     },
 
@@ -264,7 +272,7 @@ export default {
             });
           });
       });
-      console.log("populateSubjects", hasChoosableCredits);
+      //console.log("populateSubjects", hasChoosableCredits);
     },
 
     getCurrentYearQuad(quadNumber) {
@@ -289,5 +297,20 @@ export default {
 
       return discipline ? discipline.conceito : "";
     },
+
+    addSimulatorDiscipline(grade, disciplineName, year, quad) {
+      const simulatorDisciplines = this.simulatorDisciplines;
+      const discipline = {
+        ano: year,
+        codigo: "",
+        conceito: grade,
+        creditos: 0,
+        disciplina: disciplineName,
+        periodo: quad,
+        situacao: ""
+      }
+
+    },
+
   },
 };
