@@ -153,11 +153,85 @@
   flex-direction: column;
   position: relative;
   margin: 0;
-
 }
 
 .graduation-add-quad {
   width: 80%;
   margin: 0 auto;
-  
-} 
+}
+.subject-grade-container {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+.dialog-open-btn {
+  font-family: Ubuntu;
+  color: white !important;
+  width: 80%;
+  height: 50px;
+  font-size: 25px;
+  align-self: center;
+  border-radius: 20px;
+}
+
+.dialog-testeDisciplina-btn {
+  font-family: Ubuntu;
+  color: white !important;
+  width: 50%;
+  height: 30px;
+  font-size: 20px;
+  align-self: center;
+  border-radius: 20px;
+}
+
+.dialog-confirm-btn {
+  font-family: Ubuntu;
+  color: white !important;
+  width: 20%;
+  height: 30px;
+  font-size: 15px;
+  align-self: right;
+  border-radius: 20px;
+}
+
+.dialog-content {
+  padding: 20px;
+  border-radius: 10px;
+  transition: all 2s;
+}
+
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.dialog-title {
+  font-weight: 500;
+  padding-top: 30px;
+  font-size: 30px;
+}
+
+.dialog-close-btn {
+  align-items: flex-start;
+}
+
+.dialog-body {
+  margin: 20px 0 20px 0;
+  display: flex;
+  transition: all 1s;
+}
+
+.dialog-body {
+  margin: 20px 0 20px 0;
+  display: flex;
+  transition: all 1s;
+}
+
+.dialog-footer {
+  font-size: 18px;
+  width: 500px;
+  text-align: center;
+  align-self: center;
+}
