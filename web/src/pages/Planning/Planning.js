@@ -15,6 +15,10 @@ export default {
       starterYear: null,
       starterQuad: null,
       mode: "ideal",
+      dialog: false,
+      selectedSubject: "",
+      conceitoSelecionado: "",
+      testeMateria2: ["disciplines", "BCC", "BCH", "BCT", "BECN", "BRU MESTRA", "GUT DAS PLACAS", "GUT DOS CONES", "NI DOS D", "LUZ DO VAL"],
     };
   },
 
@@ -32,6 +36,15 @@ export default {
   computed: {
     hasStudentHistory() {
       return true;
+    },
+
+    color() {
+      if (this.conceitoSelecionado == "0") return '#3FCF8C'
+      if (this.conceitoSelecionado == "1") return '#B8E986'
+      if (this.conceitoSelecionado == "2") return '#F8B74C'
+      if (this.conceitoSelecionado == "3") return '#FFA004'
+      if (this.conceitoSelecionado == "4") return '#F95469'
+      return '#3FCF8C'
     },
 
     termsByYear() {
@@ -153,6 +166,7 @@ export default {
       if (subjectName == "Livre Escolha") {
         return true;
       }
+      console.log(this.disciplines);
       return this.disciplines.find((d) => d.disciplina == subjectName);
     },
 
@@ -280,5 +294,22 @@ export default {
       const diffQuad = Math.floor((quad + sum) % 3);
       return year + yearsPassed + ":" + (diffQuad == 0 ? "3" : diffQuad);
     },
+
+    getGradeBySubject(subjectName) {
+      const discipline = this.disciplines.find(
+        (d) => d.disciplina == subjectName
+      );
+
+      return discipline ? discipline.conceito : "";
+    },
+
+    convertValue(value) {
+      if (value == 0) return "A";
+      if (value == 1) return "B";
+      if (value == 2) return "C";
+      if (value == 3) return "D";
+      if (value == 4) return "F";
+    },
+
   },
 };
