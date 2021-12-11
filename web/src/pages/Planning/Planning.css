@@ -164,7 +164,7 @@
   border-radius: 20px;
 }
 
-.dialog-confirm-btn{
+.dialog-confirm-btn {
   font-family: Ubuntu;
   color: white !important;
   width: 20%;
@@ -212,4 +212,12 @@
   width: 500px;
   text-align: center;
   align-self: center;
+}
+
+.grade-button {
+  font-size: 20px;
+  color: var(--ufabcnext-charcoal-grey) !important;
+}
+.grade-active {
+  border: 3px solid var(--ufabcnext-blue) !important;
 }
