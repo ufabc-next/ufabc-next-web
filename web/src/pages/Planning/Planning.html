@@ -188,10 +188,11 @@
               <v-autocomplete v-model="selectedSubject" :items="testeMateria2" dense filled clearable
                 label="Selecione a disciplina..."></v-autocomplete>
             </v-card-text>
-
-            <v-card-text class="dialog-footer">
-              <v-slider v-model="conceitoSelecionado" :color="color" track-color="grey" ticks="always" always-dirty
-                :max="4" step="1" tick-size="3" :thumb-size="30" thumb-label="always">
+            <v-card-text class="dialog-body" :style="{'display': $vuetify.breakpoint.smAndDown ? 'block' : 'flex',
+            'padding': $vuetify.breakpoint.smAndDown ? '0' : '0 40px'
+            }">
+              <v-slider align-center v-model="conceitoSelecionado" :color="color" ticks="always" always-dirty :max="4"
+                step="1" tick-size="5" :thumb-size="30" thumb-label="always" label="Selecione o conceito:">
                 <template v-slot:thumb-label="{ value }">
                   {{convertValue(value)}}
                 </template>

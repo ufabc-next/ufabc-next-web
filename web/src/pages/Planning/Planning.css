@@ -201,23 +201,10 @@
   transition: all 1s;
 }
 
-.dialog-body-qrcode {
-  text-align: center;
-  transition: all 1s;
-}
-
-.dialog-body-account {
-  padding-top: 40px;
+.dialog-body {
+  margin: 20px 0 20px 0;
   display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  font-size: 22px;
-  line-height: 20px;
   transition: all 1s;
-}
-
-.dialog-body-account-item {
-  margin-bottom: 20px;
 }
 
 .dialog-footer {
