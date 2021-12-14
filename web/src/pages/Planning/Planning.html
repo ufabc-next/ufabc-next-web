@@ -3,11 +3,19 @@
     <h2>
       Parece que não encontramos os dados do seu histórico :( <br />
       É necessário instalar a
-      <a href="https://chrome.google.com/webstore/detail/ufabc-matricula/gphjopenfpnlnffmhhhhdiecgdcopmhk"
-        style="text-decoration: none;" target="_blank">extensão</a>
+      <a
+        href="https://chrome.google.com/webstore/detail/ufabc-matricula/gphjopenfpnlnffmhhhhdiecgdcopmhk"
+        style="text-decoration: none;"
+        target="_blank"
+        >extensão</a
+      >
       e acessar a tela de Fichas Individuais no
-      <a href="https://aluno.ufabc.edu.br/fichas_individuais" target="_blank" style="text-decoration: none;">Portal do
-        Aluno.</a>
+      <a
+        href="https://aluno.ufabc.edu.br/fichas_individuais"
+        target="_blank"
+        style="text-decoration: none;"
+        >Portal do Aluno.</a
+      >
     </h2>
     <img src="@/assets/missing_history.svg" width="100%" />
   </center>
@@ -15,12 +23,25 @@
   <template v-else>
     <v-layout row :wrap="$vuetify.breakpoint.xsOnly">
       <v-flex xs12 md6>
-        <v-combobox solo item-text="curso" v-model="selectedGraduation" :items="graduations"
-          label="Selecione o seu curso">
+        <v-combobox
+          solo
+          item-text="curso"
+          v-model="selectedGraduation"
+          :items="graduations"
+          label="Selecione o seu curso"
+        >
           <template v-slot:item="data">
-            <v-chip :key="JSON.stringify(data.item)" :selected="data.selected" :disabled="data.disabled"
-              class="v-chip--select-multi mr-2" @click.stop="data.parent.selectedIndex = data.index"
-              @input="data.parent.selectItem(data.item)" label color="blue" text-color="white">
+            <v-chip
+              :key="JSON.stringify(data.item)"
+              :selected="data.selected"
+              :disabled="data.disabled"
+              class="v-chip--select-multi mr-2"
+              @click.stop="data.parent.selectedIndex = data.index"
+              @input="data.parent.selectItem(data.item)"
+              label
+              color="blue"
+              text-color="white"
+            >
               {{ data.item.grade }}
             </v-chip>
             {{ data.item.curso }}
@@ -28,9 +49,17 @@
           <template v-slot:selection="data">
             <div>
               {{ data.item.curso }}
-              <v-chip :key="JSON.stringify(data.item)" :selected="data.selected" :disabled="data.disabled"
-                class="v-chip--select-multi ml-2" @click.stop="data.parent.selectedIndex = data.index"
-                @input="data.parent.selectItem(data.item)" label color="blue" text-color="white">
+              <v-chip
+                :key="JSON.stringify(data.item)"
+                :selected="data.selected"
+                :disabled="data.disabled"
+                class="v-chip--select-multi ml-2"
+                @click.stop="data.parent.selectedIndex = data.index"
+                @input="data.parent.selectItem(data.item)"
+                label
+                color="blue"
+                text-color="white"
+              >
                 {{ data.item.grade }}
               </v-chip>
             </div>
@@ -48,11 +77,17 @@
       </v-flex>
     </v-layout>
 
-    <v-layout class="card-group-stats mb-4" row style="min-height: 145px; flex: none"
-      :class="{ 'wrap': !$vuetify.breakpoint.lgOnly }">
+    <v-layout
+      class="card-group-stats mb-4"
+      row
+      style="min-height: 145px; flex: none"
+      :class="{ 'wrap': !$vuetify.breakpoint.lgOnly }"
+    >
       <v-flex xs12 sm3 md3 lg3 class="card-stats">
         <v-layout row align-center>
-          <v-icon class="mb-1" color="ufabcnext-orange" style="display: block;">mdi-brain</v-icon>
+          <v-icon class="mb-1" color="ufabcnext-orange" style="display: block;"
+            >mdi-brain</v-icon
+          >
           <span class="stats-subtitle f-14 ml-2">Obrigatórias</span>
         </v-layout>
         <div class="stats-counter">
@@ -64,14 +99,22 @@
           {{mandatoryCreditsPercentage}}% completo
         </div>
         <div v-if="!$vuetify.breakpoint.xsOnly">
-          <v-progress-linear color="ufabcnext-orange" height="6" :value="mandatoryCreditsPercentage"
-            style="border-radius: .25rem;"></v-progress-linear>
+          <v-progress-linear
+            color="ufabcnext-orange"
+            height="6"
+            :value="mandatoryCreditsPercentage"
+            style="border-radius: .25rem;"
+          ></v-progress-linear>
         </div>
       </v-flex>
 
       <v-flex xs12 sm3 md3 lg3 class="card-stats">
         <v-layout row align-center>
-          <v-icon class="mb-1" color="ufabcnext-blue-light" style="display: block;">mdi-bullseye-arrow
+          <v-icon
+            class="mb-1"
+            color="ufabcnext-blue-light"
+            style="display: block;"
+            >mdi-bullseye-arrow
           </v-icon>
           <span class="stats-subtitle f-14 ml-2">Limitadas</span>
         </v-layout>
@@ -82,14 +125,20 @@
         </div>
         <div class="stats-subtitle">{{limitedCreditsPercentage}}% completo</div>
         <div v-if="!$vuetify.breakpoint.xsOnly">
-          <v-progress-linear color="ufabcnext-blue-light" height="6" :value="limitedCreditsPercentage"
-            style="border-radius: .25rem;"></v-progress-linear>
+          <v-progress-linear
+            color="ufabcnext-blue-light"
+            height="6"
+            :value="limitedCreditsPercentage"
+            style="border-radius: .25rem;"
+          ></v-progress-linear>
         </div>
       </v-flex>
 
       <v-flex xs12 sm3 md3 lg3 class="card-stats">
         <v-layout row align-center>
-          <v-icon class="mb-1" color="ufabcnext-pink" style="display: block;">mdi-balloon</v-icon>
+          <v-icon class="mb-1" color="ufabcnext-pink" style="display: block;"
+            >mdi-balloon</v-icon
+          >
           <span class="stats-subtitle f-14 ml-2">Livres</span>
         </v-layout>
         <div class="stats-counter">
@@ -99,14 +148,20 @@
         </div>
         <div class="stats-subtitle">{{ freeCreditsPercentage }}% completo</div>
         <div v-if="!$vuetify.breakpoint.xsOnly">
-          <v-progress-linear color="ufabcnext-pink" height="6" :value="freeCreditsPercentage"
-            style="border-radius: .25rem;"></v-progress-linear>
+          <v-progress-linear
+            color="ufabcnext-pink"
+            height="6"
+            :value="freeCreditsPercentage"
+            style="border-radius: .25rem;"
+          ></v-progress-linear>
         </div>
       </v-flex>
 
       <v-flex xs12 sm3 md3 lg3 class="card-stats">
         <v-layout row align-center>
-          <v-icon class="mb-1" color="ufabcnext-green" style="display: block;">mdi-school</v-icon>
+          <v-icon class="mb-1" color="ufabcnext-green" style="display: block;"
+            >mdi-school</v-icon
+          >
           <span class="stats-subtitle f-14 ml-2">Progresso total</span>
         </v-layout>
         <div class="stats-counter">
@@ -116,18 +171,30 @@
         </div>
         <div class="stats-subtitle">{{ totalCreditsPercentage }}% completo</div>
         <div v-if="!$vuetify.breakpoint.xsOnly">
-          <v-progress-linear color="ufabcnext-green" height="6" :value="totalCreditsPercentage"
-            style="border-radius: .25rem;"></v-progress-linear>
+          <v-progress-linear
+            color="ufabcnext-green"
+            height="6"
+            :value="totalCreditsPercentage"
+            style="border-radius: .25rem;"
+          ></v-progress-linear>
         </div>
       </v-flex>
     </v-layout>
 
     <v-layout column v-loading="loadingSubjects || loadingHistory">
-      <div class="graduation-year mb-3" v-for="(year, i) in Object.keys(termsByYear)" :key="i">
+      <div
+        class="graduation-year mb-3"
+        v-for="(year, i) in Object.keys(termsByYear)"
+        :key="i"
+      >
         <div class="graduation-year-chip f-16 white--text">
           {{ year }}º ano
         </div>
-        <div class="graduation-term" v-for="(term, j) in termsByYear[year]" :key="j">
+        <div
+          class="graduation-term"
+          v-for="(term, j) in termsByYear[year]"
+          :key="j"
+        >
           <div class="graduation-term-title white--text ufabcnext-purple">
             <div class="graduation-term-title-top">
               <div class="graduation-term-title-year">
@@ -143,81 +210,143 @@
           </div>
 
           <div class="graduation-subjects ml-2 mb-3">
-            <div class="graduation-term-subjects mr-2 elevate-3d"
+            <div
+              class="graduation-term-subjects mr-2 elevate-3d"
               v-for="subject in filterSubjects(term.quad, term.year)"
-              :class="isCompleted(subject.subject.name) ? 'completed' : subject.category" :key="subject.id">
+              :class="isCompleted(subject.subject.name) ? 'completed' : subject.category"
+              :key="subject.id"
+            >
               <div class="graduation-subject-name">
                 {{ subject.subject.name }}
               </div>
               <div class="graduation-subject-code">{{ subject.codigo }}</div>
 
               <div class="graduation-subject-credits">
-                <template v-if="isCompleted(subject.subject.name)">{{ getGradeBySubject(subject.subject.name)
-                  }}</template>
-                <template v-else>{{ subject.creditos || '?' }}</template>
+                <template v-if="isCompleted(subject.subject.name)"
+                  >{{ getGradeBySubject(subject.subject.name) }}</template
+                >
+                <template v-else
+                  >{{ subject.creditos || '?' }}</template
+                >
               </div>
             </div>
           </div>
         </div>
       </div>
+
+      <div class="graduation-add-quad">
+        <v-btn block color="ufabcnext-purple white--text">
+          + Adicionar Quadrimestre
+        </v-btn>
+      </div>
+
+      <div class="graduation-year mb-3">
+        <div class="graduation-year-chip f-16 white--text">
+          Quadrimestre Simulado
+        </div>
+        <div class="graduation-term">
+          <div class="graduation-term-title white--text ufabcnext-nav-blue">
+            <div class="graduation-term-title-top">
+              <div class="graduation-term-title-year">
+                1º QUAD
+              </div>
+              <div>2022:1</div>
+            </div>
+            <div class="graduation-term-title-credits">
+              6 de 22 créditos
+            </div>
+          </div>
+          <div>
+            <v-container class="subject-grade-container">
+              <v-form ref="form" lazy-validation>
+                <v-dialog v-model="dialog" width="700px">
+                  <template v-slot:activator="{ on, attrs }">
+                    <div class="graduation-subjects ml-2 mb-3">
+                      <v-btn
+                        outlined
+                        class="graduation-buttom-add-subject mr-2 elevate-3d"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <span class="graduation-subject-name">
+                          + adicionar disciplina
+                        </span>
+                      </v-btn>
+                    </div>
+                  </template>
+
+                  <v-card class="dialog-content">
+                    <div class="dialog-header">
+                      <v-card-title
+                        class="dialog-title ufabcnext-darkgrey--text"
+                      >
+                        Análise de disciplina
+                      </v-card-title>
+                      <v-card-actions class="dialog-close-btn">
+                        <v-btn icon large>
+                          <v-icon
+                            color="ufabcnext-darkgrey"
+                            @click="dialog = false"
+                            >close</v-icon
+                          >
+                        </v-btn>
+                      </v-card-actions>
+                    </div>
+
+                    <v-card-text
+                      class="dialog-body"
+                      :style="{'display': $vuetify.breakpoint.smAndDown ? 'block' : 'flex',
+                        'padding': $vuetify.breakpoint.smAndDown ? '0' : '0 40px'
+                        }"
+                    >
+                      <v-autocomplete
+                        v-model="selectedSubject"
+                        :items="subjects"
+                        :rules="[v => !!v || 'Item is required']"
+                        item-text="subject.name"
+                        item-value="codigo"
+                        dense
+                        filled
+                        clearable
+                        label="Selecione a disciplina..."
+                        required
+                      ></v-autocomplete>
+                    </v-card-text>
+                    <div class="text-center">
+                      <v-btn 
+                          fab
+                          v-for="grade in grades" 
+                          :key="grade.value"
+                          :color="grade.color"
+                          @click="selectedGrade = grade.value"
+                          :depressed="selectedGrade == grade.value"
+                          class="grade-button"
+                          :class="{ 'grade-active': selectedGrade == grade.value }"
+                        >
+                        {{grade.value}}
+                      </v-btn>
+                    </div>
+                    <div style="width: 100%; text-align: right;" class="mt-3">
+                      <v-btn 
+                        height="32"
+                        rounded 
+                        depressed 
+                        elevation="2" 
+                        outlined 
+                        class="dialog-confirm-btn ufabcnext-primary" 
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        Adicionar
+                      </v-btn>
+                    </div>
+                  </v-card>
+                </v-dialog>
+              </v-form>
+            </v-container>
+          </div>
+        </div>
+      </div>
     </v-layout>
-
-    <div>
-      <v-container class="subject-grade-container">
-        <v-dialog v-model="dialog" width="700px">
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn rounded depressed elevation="2" outlined class="dialog-testeDisciplina-btn ufabcnext-primary"
-              v-bind="attrs" v-on="on">Botão teste - Discipli2na</v-btn>
-          </template>
-
-          <v-card class="dialog-content">
-            <div class="dialog-header">
-              <v-card-title class="dialog-title ufabcnext-darkgrey--text">
-                Análise de disciplina
-              </v-card-title>
-              <v-card-actions class="dialog-close-btn">
-                <v-btn icon large>
-                  <v-icon color="ufabcnext-darkgrey" @click="dialog = false">close</v-icon>
-                </v-btn>
-              </v-card-actions>
-            </div>
-            <v-card-text class="dialog-body" :style="{'display': $vuetify.breakpoint.smAndDown ? 'block' : 'flex',
-                'padding': $vuetify.breakpoint.smAndDown ? '0' : '0 40px'
-                }">
-              <v-autocomplete v-model="selectedSubject" :items="testeMateria2" dense filled clearable
-                label="Selecione a disciplina..."></v-autocomplete>
-            </v-card-text>
-            <div class="text-center">
-              <v-btn 
-                  fab
-                  v-for="grade in grades" 
-                  :key="grade.value"
-                  :color="grade.color"
-                  @click="selectedGrade = grade.value"
-                  :depressed="selectedGrade == grade.value"
-                  class="grade-button"
-                  :class="{ 'grade-active': selectedGrade == grade.value }"
-                >
-                {{grade.value}}
-              </v-btn>
-            </div>
-            <div style="width: 100%; text-align: right;" class="mt-3">
-              <v-btn 
-                height="32"
-                rounded 
-                depressed 
-                elevation="2" 
-                outlined 
-                class="dialog-confirm-btn ufabcnext-primary" 
-                v-bind="attrs"
-                v-on="on"
-              >
-                Adicionar
-              </v-btn>
-            </div>
-          </v-card>
-        </v-dialog>
-      </v-container>
-    </div>
   </template>
 </div>

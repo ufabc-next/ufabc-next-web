@@ -10,6 +10,7 @@ export default {
       selectedGraduation: null,
       subjects: [],
       history: null,
+      simulatorHistory: [],
       loadingSubjects: false,
       loadingHistory: false,
       starterYear: null,
@@ -17,6 +18,8 @@ export default {
       mode: "ideal",
       dialog: false,
       selectedSubject: "",
+      lastYearSimulated: null,
+      lastQuadSimulated: null,
       selectedGrade: "",
       grades: [{
         value: "A",
@@ -34,7 +37,6 @@ export default {
         value: "F",
         color: "#F95469"
       }],
-      testeMateria2: ["disciplines", "BCC", "BCH", "BCT", "BECN", "BRU MESTRA", "GUT DAS PLACAS", "GUT DOS CONES", "NI DOS D", "LUZ DO VAL"],
     };
   },
 
@@ -63,11 +65,15 @@ export default {
 
       if (!creditsBreakdown) return [];
 
-      return _.groupBy(creditsBreakdown, "year");
+      const creditsBreakdownGroupedByYear = _.groupBy(creditsBreakdown, "year");
+
+      return creditsBreakdownGroupedByYear;
     },
 
     disciplines() {
-      return _.get(this.history, "disciplinas", []);
+      const disciplinas = _.get(this.history, "disciplinas", []);
+
+      return disciplinas;
     },
 
     mandatoryCreditsTotal() {
@@ -173,7 +179,6 @@ export default {
       if (subjectName == "Livre Escolha") {
         return true;
       }
-      console.log(this.disciplines);
       return this.disciplines.find((d) => d.disciplina == subjectName);
     },
 
@@ -287,6 +292,38 @@ export default {
       console.log("populateSubjects", hasChoosableCredits);
     },
 
+    addSimulationQuad(lastYear, lastQuad) {
+      if (lastQuad == 3) {
+        const quad = 1;
+        const year = lastYear + 1;
+        const newYearQuad = {
+          quad,
+          year,
+          disciplines: [],
+        };
+        this.simulatorHistory = {
+          ...this.simulatorHistory,
+          year: newYearQuad,
+        };
+        lastYearSimulated = year;
+        lastQuadSimulated = quad;
+      } else {
+        const quad = lastQuad + 1;
+        const year = lastYear;
+        const newQuad = {
+          quad,
+          year,
+          disciplines: [],
+        };
+        this.simulatorHistory = {
+          ...this.simulatorHistory,
+          year: newQuad,
+        };
+        lastYearSimulated = year;
+        lastQuadSimulated = quad;
+      }
+    },
+
     getCurrentYearQuad(quadNumber) {
       if (!this.starterYear || !this.starterQuad) {
         return "-";
@@ -310,13 +347,44 @@ export default {
       return discipline ? discipline.conceito : "";
     },
 
-    convertValue(value) {
-      if (value == 0) return "A";
-      if (value == 1) return "B";
-      if (value == 2) return "C";
-      if (value == 3) return "D";
-      if (value == 4) return "F";
+    getDisciplineByCode(code) {
+      return this.disciplines.find((d) => d.codigo == code);
     },
 
+    addSimulatorDiscipline(grade, disciplineCode, year, quad) {
+      const discipline = this.getDisciplineByCode(disciplineCode);
+
+      if (!discipline) return;
+
+      const disciplineValues = {
+        ...discipline,
+        year,
+        quad,
+        grade,
+        subject: "?",
+        historyGraduation: "?",
+        active: {
+          type: "?",
+        },
+      };
+
+      const yearSimulator = this.simulatorHistory;
+      yearSimulator.push(disciplineValues);
+    },
+
+    convertGradeByValue(value) {
+      return !value ? this.grades[0] : this.grades[value];
+    },
+
+    submitSimulatedDiscipline() {
+      const canSubmit = this.$refs.form.validate();
+      if (canSubmit) {
+        const grade = this.convertGradeByValue(this.selectedGrade);
+        this.addSimulatorDiscipline(grade, this.selectedSubject);
+
+        this.dialog = false;
+      }
+      return canSubmit;
+    },
   },
 };
