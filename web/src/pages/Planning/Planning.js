@@ -8,7 +8,6 @@ export default {
     return {
       graduations: [],
       selectedGraduation: null,
-      grades: ["A", "B", "C", "D", "F", "0"],
       subjects: [],
       history: null,
       simulatorHistory: [],
@@ -19,9 +18,25 @@ export default {
       mode: "ideal",
       dialog: false,
       selectedSubject: "",
-      conceitoSelecionado: "",
       lastYearSimulated: null,
       lastQuadSimulated: null,
+      selectedGrade: "",
+      grades: [{
+        value: "A",
+        color: "#3FCF8C"
+      }, {
+        value: "B",
+        color: "#B8E986"
+      }, {
+        value: "C",
+        color: "#F8B74C"
+      }, {
+        value: "D",
+        color: "#FFA004"
+      }, {
+        value: "F",
+        color: "#F95469"
+      }],
     };
   },
 
@@ -39,15 +54,6 @@ export default {
   computed: {
     hasStudentHistory() {
       return true;
-    },
-
-    color() {
-      if (this.conceitoSelecionado == "0") return "#3FCF8C";
-      if (this.conceitoSelecionado == "1") return "#B8E986";
-      if (this.conceitoSelecionado == "2") return "#F8B74C";
-      if (this.conceitoSelecionado == "3") return "#FFA004";
-      if (this.conceitoSelecionado == "4") return "#F95469";
-      return "#3FCF8C";
     },
 
     termsByYear() {
@@ -373,7 +379,7 @@ export default {
     submitSimulatedDiscipline() {
       const canSubmit = this.$refs.form.validate();
       if (canSubmit) {
-        const grade = this.convertGradeByValue(this.conceitoSelecionado);
+        const grade = this.convertGradeByValue(this.selectedGrade);
         this.addSimulatorDiscipline(grade, this.selectedSubject);
 
         this.dialog = false;

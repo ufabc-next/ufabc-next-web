@@ -312,39 +312,34 @@
                         required
                       ></v-autocomplete>
                     </v-card-text>
-                    <v-card-text
-                      class="dialog-body"
-                      :style="{'display': $vuetify.breakpoint.smAndDown ? 'block' : 'flex',
-                    'padding': $vuetify.breakpoint.smAndDown ? '0' : '0 40px'
-                    }"
-                    >
-                      <v-slider
-                        align-center
-                        v-model="conceitoSelecionado"
-                        :color="color"
-                        ticks="always"
-                        always-dirty
-                        :max="4"
-                        step="1"
-                        tick-size="5"
-                        :thumb-size="30"
-                        thumb-label="always"
-                        label="Selecione o conceito:"
+                    <div class="text-center">
+                      <v-btn 
+                          fab
+                          v-for="grade in grades" 
+                          :key="grade.value"
+                          :color="grade.color"
+                          @click="selectedGrade = grade.value"
+                          :depressed="selectedGrade == grade.value"
+                          class="grade-button"
+                          :class="{ 'grade-active': selectedGrade == grade.value }"
+                        >
+                        {{grade.value}}
+                      </v-btn>
+                    </div>
+                    <div style="width: 100%; text-align: right;" class="mt-3">
+                      <v-btn 
+                        height="32"
+                        rounded 
+                        depressed 
+                        elevation="2" 
+                        outlined 
+                        class="dialog-confirm-btn ufabcnext-primary" 
+                        v-bind="attrs"
+                        v-on="on"
                       >
-                        <template v-slot:thumb-label="{ value }">
-                          {{convertGradeByValue(value)}}
-                        </template>
-                      </v-slider>
-                    </v-card-text>
-                    <v-btn
-                      rounded
-                      depressed
-                      elevation="2"
-                      outlined
-                      class="dialog-confirm-btn ufabcnext-primary"
-                      @click="submitSimulatedDiscipline"
-                      >Adicionar</v-btn
-                    >
+                        Adicionar
+                      </v-btn>
+                    </div>
                   </v-card>
                 </v-dialog>
               </v-form>

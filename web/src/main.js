@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Vuetify from 'vuetify/lib'
+import Vuetify from 'vuetify'
 import 'element-ui/lib/theme-chalk/index.css'
 import 'vuetify/src/stylus/app.styl'
 import '@mdi/font/css/materialdesignicons.css'
