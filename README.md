@@ -1,4 +1,4 @@
-# aaa
+# ufabc-next-frontend-v2
 
 ## Project setup
 ```
