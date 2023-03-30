@@ -1,14 +1,14 @@
 {
-  "name": "ufabc-next-frontend-v2",
-  "version": "0.1.0",
+  "name": "ufabc-next-web",
+  "version": "2.0.0",
+  "license": "AGPL-3.0",
   "private": true,
   "scripts": {
     "prepare": "husky install",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint",
-    "test": "echo \"no test specified\""
+    "test": "vue-cli-service test:unit",
+    "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "core-js": "3.29.1",
@@ -48,5 +48,8 @@
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,vue,ts,tsx}": "vue-cli-service lint"
   }
 }
