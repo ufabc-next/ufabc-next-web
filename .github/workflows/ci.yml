@@ -21,7 +21,11 @@ jobs:
           node-version: 18.x
 
       - name: Install dependencies
-        run: npm install
+        uses: borales/actions-yarn@v4
+        with:
+          cmd: install
 
       - name: Run tests and lint
-        run: npm run ${{ matrix.command }}
+        uses: borales/actions-yarn@v4
+        with: 
+          cmd: ${{ matrix.command }}
