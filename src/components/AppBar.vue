@@ -22,7 +22,7 @@
 
     <v-spacer></v-spacer>
 
-    <img class="logo-white" src="@/assets/images/logo.png" height="32" />
+    <img class="logo-white" src="@/assets/logo.svg" height="32" />
 
     <v-spacer></v-spacer>
 
