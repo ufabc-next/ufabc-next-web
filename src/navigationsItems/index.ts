@@ -20,13 +20,13 @@ const NavigationsItems = [
     route: '/relationship',
   },
 
-  {
-    title: 'Planejamento',
-    featured: false,
-    private: true,
-    icon: 'mdi-file-document-box-multiple',
-    route: '/planning',
-  },
+  // {
+  //   title: 'Planejamento',
+  //   featured: false,
+  //   private: true,
+  //   icon: 'mdi-file-document-box-multiple',
+  //   route: '/planning',
+  // },
 
   {
     title: 'Meu histórico',
@@ -38,7 +38,7 @@ const NavigationsItems = [
   {
     title: 'Dados da Matrícula',
     featured: false,
-    icon: 'mdi-book-multiple-variant',
+    icon: 'mdi-book-multiple',
     route: '/stats',
   },
 
@@ -51,7 +51,7 @@ const NavigationsItems = [
   {
     title: 'Configurações',
     featured: false,
-    icon: 'settings',
+    icon: 'mdi-cog',
     route: '/settings',
   },
 
@@ -65,7 +65,7 @@ const NavigationsItems = [
   {
     title: 'Apoie o UFABC next',
     featured: true,
-    icon: 'account_balance',
+    icon: 'mdi-bank',
     route: '/donate',
   },
 ];
