@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import HomeView from '../views/HomeView.vue';
 import ReviewsView from '../views/ReviewsView.vue';
 import PerformanceView from '../views/PerformanceView.vue';
 import RelationshipView from '../views/RelationshipView.vue';
@@ -10,11 +9,6 @@ import SettingsView from '../views/SettingsView.vue';
 import DonateView from '../views/DonateView.vue';
 
 const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    name: 'home',
-    component: HomeView,
-  },
   {
     path: '/reviews',
     name: 'reviews',
@@ -55,6 +49,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'donate',
     component: DonateView,
   },
+  { path: '/:pathMatch(.*)*', redirect: '/reviews' },
 
   // {
   //   path: '/about',
