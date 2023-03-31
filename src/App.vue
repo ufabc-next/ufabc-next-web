@@ -1,8 +1,10 @@
 <template>
   <v-app>
     <AppBar />
-    <v-main>
-      <router-view />
+    <v-main style="background-color: #f0f0f0">
+      <v-container fluid style="max-width: 1200px">
+        <router-view />
+      </v-container>
     </v-main>
   </v-app>
 </template>
