@@ -40,8 +40,8 @@
   align-items: center;
 }
 .welcome-subtitle {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 20px;
   margin-top: 20px;
   margin-bottom: 8px;
 }
