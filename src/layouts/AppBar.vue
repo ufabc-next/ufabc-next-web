@@ -26,8 +26,8 @@
         :key="item.title"
       >
         <v-layout>
-          <v-icon :icon="item.icon" class="mr-4" />
-          <p>{{ item.title }}</p>
+          <v-icon :icon="item.icon" class="mr-3" />
+          <p class="font-weight-medium text-caption">{{ item.title }}</p>
         </v-layout>
       </v-list-item>
     </v-list>
