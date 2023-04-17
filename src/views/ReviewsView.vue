@@ -11,13 +11,6 @@
   </v-layout>
 </template>
 
-<script lang="ts">
+<script setup lang="ts">
 import ReviewsWelcome from '@/components/ReviewsWelcome.vue';
-import { defineComponent } from 'vue';
-
-export default defineComponent({
-  components: {
-    ReviewsWelcome,
-  },
-});
 </script>
