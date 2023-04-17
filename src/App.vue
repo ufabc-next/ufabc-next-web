@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <AppBar />
-    <v-main style="background-color: #f0f0f0">
+    <v-main style="background-color: #f5f5f5">
       <v-container fluid style="max-width: 1200px">
         <router-view />
       </v-container>
@@ -9,18 +9,16 @@
   </v-app>
 </template>
 
-<script lang="ts">
-import { useTheme } from 'vuetify';
-import AppBar from '@/components/AppBar.vue';
-
-export default {
-  setup() {
-    const theme = useTheme();
-
-    return { theme };
-  },
-  components: {
-    AppBar,
-  },
-};
+<script setup lang="ts">
+import AppBar from '@/layouts/AppBar.vue';
 </script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+html {
+  font-family: 'Roboto', sans-serif;
+}
+#app {
+  font-family: 'Roboto', sans-serif;
+}
+</style>

@@ -1,15 +1,34 @@
 <template>
   <v-navigation-drawer v-model="drawer" color="navigation" width="240">
     <v-list>
+      <div class="py-4 d-flex justify-center align-center">
+        <img class="logo-white" src="@/assets/logo_white.svg" height="44" />
+      </div>
+      <v-divider />
       <v-list-item
-        v-for="item in NavigationsItems"
-        :href="item.route || item.url"
+        v-for="item in internalNavigationsItems"
+        :to="item.route"
+        :key="item.title"
+      >
+        <v-layout>
+          <v-icon :icon="item.icon" class="mr-3" />
+          <p class="font-weight-medium text-caption">{{ item.title }}</p>
+        </v-layout>
+      </v-list-item>
+    </v-list>
+    <v-divider />
+    <v-list>
+      <v-list-item
+        v-for="item in externalNavigationsItems"
+        :href="item.url"
         :target="item.url && '_blank'"
         :rel="item.url && 'noopener noreferrer'"
         :key="item.title"
-        :prepend-icon="item.icon"
       >
-        {{ item.title }}
+        <v-layout>
+          <v-icon :icon="item.icon" class="mr-4" />
+          <p>{{ item.title }}</p>
+        </v-layout>
       </v-list-item>
     </v-list>
   </v-navigation-drawer>
@@ -28,7 +47,6 @@
     <img class="logo-white" src="@/assets/logo.svg" height="32" />
 
     <v-spacer></v-spacer>
-
     <v-btn color="primary" icon="mdi-dots-vertical">
       <v-icon></v-icon>
       <v-menu activator="parent">
@@ -61,30 +79,21 @@
   <div style="height: 64px" />
 </template>
 
-<script lang="ts">
-import NavigationsItems from '@/navigationsItems';
+<script setup lang="ts">
+import {
+  internalNavigationsItems,
+  externalNavigationsItems,
+} from '@/navigationsItems';
+import { computed, ref } from 'vue';
 
-export default {
-  computed: {
-    NavigationsItems() {
-      return NavigationsItems;
-    },
-    userLogin() {
-      return 'fusimoto.daniel';
-    },
-    userInitials() {
-      return 'fd';
-    },
-    user() {
-      return {
-        ra: '123456',
-      };
-    },
-  },
-  data: () => ({
-    drawer: false,
-  }),
-};
+const drawer = ref(false);
+const userLogin = computed(() => 'test.username');
+const userInitials = computed(() => 'tu');
+const user = computed(() => {
+  return {
+    ra: '1234567',
+  };
+});
 </script>
 
 <style scoped lang="scss">
