@@ -15,7 +15,7 @@ const myCustomLightTheme: ThemeDefinition = {
     navigation: '#215096',
     primary: '#2e7eed',
     secondary: '#f3f6f7',
-    'ufabcnext-green': '#3fcf8c',
+    'ufabcnext-green': '#56cdb7',
     background: '#ffffff',
   },
 };
