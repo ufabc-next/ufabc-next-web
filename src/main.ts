@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+
 import '@mdi/font/css/materialdesignicons.css';
 
 import 'vuetify/styles';
@@ -13,6 +14,8 @@ const myCustomLightTheme: ThemeDefinition = {
   colors: {
     navigation: '#215096',
     primary: '#2e7eed',
+    secondary: '#f3f6f7',
+    'ufabcnext-green': '#3fcf8c',
     background: '#ffffff',
   },
 };
