@@ -20,6 +20,20 @@ const myCustomLightTheme: ThemeDefinition = {
   },
 };
 
+interface Device {
+  cordova: string;
+  model: string;
+  platform: string;
+  uuid: string;
+  version: string;
+}
+
+declare global {
+  interface Window {
+    device: Device;
+  }
+}
+
 const vuetify = createVuetify({
   components,
   directives,
