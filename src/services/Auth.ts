@@ -1,12 +1,40 @@
 import Axios from 'axios';
 import JwtDecode from 'jwt-decode';
 
-class Auth {
-  user: any; // I don't know what kind of it here. I need to align with the backend
-  _listeners: Array<(any: any) => void> | any; // receive functions in 'router/index.js' on original project
-  token: any; // I don't know what kind of it here. I need to align with the backend
+interface Device {
+  _id: string;
+  deviceId: string;
+  token: string;
+  phone: string;
+}
 
-  constructor(user?: any, _listeners?: Array<() => void>, token?: any) {
+interface User {
+  _id: string;
+  oauth: {
+    email: string;
+    emailFacebook?: string;
+    emailGoogle?: string;
+    facebook?: string;
+    google?: string;
+    picture?: string;
+  };
+  confirmed: boolean;
+  email: string;
+  ra: number;
+  createdAt: Date;
+  devices?: Array<Device>;
+}
+
+class Auth {
+  user?: User | null;
+  _listeners: Array<(any: any) => void> | any; // receive functions in 'router/index.js' on original project
+  token?: string | null; // I don't know what kind of it here. I need to align with the backend
+
+  constructor(
+    user?: User | null,
+    _listeners?: Array<() => void>,
+    token?: string | null,
+  ) {
     this.user = user;
     this._listeners = _listeners;
     this.token = token;
@@ -91,7 +119,7 @@ class Auth {
    * function used in 'router/index.js' on original project, but i dont understand the reason.
    *
    */
-  onAuthStateChanged(callback: (user: object) => void) {
+  onAuthStateChanged(callback: <TReturn>(user?: User | null) => TReturn) {
     /**
      * I'm having a problem with this line of code below.
      * For some reason TS is pulling the "number|string|symbol"
@@ -123,7 +151,7 @@ class Auth {
    * @param user - i dont know what is
    * @returns - AJAX request (axios)
    */
-  async reset(user: any) {
+  async reset(user: User) {
     return await Axios.post('/auth/reset', user);
   }
 
@@ -167,4 +195,6 @@ class Auth {
  * because TS asks for the required arguments.
  * I need help with this module.
  */
+// const teste = new Auth();
+// teste.user?.createdAt
 export default new Auth();
