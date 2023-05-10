@@ -26,19 +26,13 @@ interface User {
 }
 
 class Auth {
-  user?: User | null;
-  _listeners: Array<(any: any) => void> | any; // receive functions in 'router/index.js' on original project
-  token?: string | null; // I don't know what kind of it here. I need to align with the backend
+  public user: User | null;
+  private _listeners: Array<(any: any) => void> | any; // receive functions in 'router/index.js' on original project
+  private token: string | null; // I don't know what kind of it here. I need to align with the backend
 
-  constructor(
-    user?: User | null,
-    _listeners?: Array<() => void>,
-    token?: string | null,
-  ) {
-    this.user = user;
-    this._listeners = _listeners;
-    this.token = token;
-
+  constructor() {
+    this.user = null;
+    this.token = null;
     // -------------------------------------------
     // O próprio vue já é reativo. Definir isso com ref() ou deixar padrão?
     // Fonte: https://stackoverflow.com/questions/41791193/vuejs-reactive-binding-for-a-plugin-how-to
@@ -48,14 +42,13 @@ class Auth {
     // Vue.util.defineReactive(this, 'user', null);
     // Vue.util.defineReactive(this, 'token', null);
     // -------------------------------------------
-
     this.loadFromLocalStorage();
   }
 
   /**
    * system logout via token
    */
-  logOut() {
+  public logOut(): void {
     this.setToken(null);
   }
 
@@ -63,7 +56,7 @@ class Auth {
    * get auth status
    * @returns boolean
    */
-  isLoggedIn() {
+  public isLoggedIn() {
     if (this.user) {
       window &&
         window.opener &&
@@ -77,7 +70,7 @@ class Auth {
    * set auth token
    * @return - undefined if token pre-setted
    */
-  setToken(token: string | null) {
+  public setToken(token: string | null) {
     if (this.token === token) {
       return;
     }
@@ -119,7 +112,9 @@ class Auth {
    * function used in 'router/index.js' on original project, but i dont understand the reason.
    *
    */
-  onAuthStateChanged(callback: <TReturn>(user?: User | null) => TReturn) {
+  public onAuthStateChanged(
+    callback: <TReturn>(user?: User | null) => TReturn,
+  ) {
     /**
      * I'm having a problem with this line of code below.
      * For some reason TS is pulling the "number|string|symbol"
@@ -138,7 +133,7 @@ class Auth {
    * @param email - user email
    * @returns - AJAX request (axios)
    */
-  async forgot(email: string) {
+  public async forgot(email: string) {
     return await Axios.get('/auth/reset', {
       params: {
         email: email,
@@ -151,14 +146,14 @@ class Auth {
    * @param user - i dont know what is
    * @returns - AJAX request (axios)
    */
-  async reset(user: User) {
+  public async reset(user: User) {
     return await Axios.post('/auth/reset', user);
   }
 
   /**
    * session device for mobile
    */
-  async addDevice() {
+  public async addDevice() {
     const firebaseToken = localStorage.getItem('firebaseToken') || null;
 
     // "window.device.uuid" returns error:
@@ -176,7 +171,7 @@ class Auth {
     }
   }
 
-  async removeDevice() {
+  public async removeDevice() {
     // "window.device.uuid" returns error:
     // Property 'device' does not exist on type 'Window & typeof globalThis'.ts(2339)
 
