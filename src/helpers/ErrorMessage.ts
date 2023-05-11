@@ -1,3 +1,4 @@
+import { AxiosError } from 'axios';
 import ParseHTTPError from './ParseHTTPError';
 
 /**
@@ -5,12 +6,7 @@ import ParseHTTPError from './ParseHTTPError';
  * @param err
  * @returns
  */
-export default function (err: any) {
+export default function (err: AxiosError<{ error: string }>) {
   const parsed = ParseHTTPError(err);
-
-  if (!parsed) {
-    return null;
-  }
-
-  return parsed.toString();
+  return `${parsed.message}`; // This needs to be aligned with the backend
 }
