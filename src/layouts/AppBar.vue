@@ -86,7 +86,7 @@ import {
 } from '@/navigationsItems';
 import { computed, ref } from 'vue';
 
-const drawer = ref(false);
+const drawer = ref(true);
 const userLogin = computed(() => 'test.username');
 const userInitials = computed(() => 'tu');
 const user = computed(() => {
