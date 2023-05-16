@@ -2,7 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
     <router-link to="/about">About</router-link> |
-    <router-link to="/config">Config</router-link>
+    <router-link to="/settings">Config</router-link>
   </nav>
   <transition name="slide-x-transition" mode="out-in">
     <router-view />
