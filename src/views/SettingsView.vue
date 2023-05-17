@@ -151,7 +151,10 @@ import axios from 'axios';
 // ------- dados do usuário ---------- //
 const user = computed(() => Auth.user);
 const userLogin = computed(() => {
-  return user.value?.email.replace('@aluno.ufabc.edu.br', '');
+  if (!user.value) {
+    return 'Universidade.Federal'; // sugesttion: router push to login page
+  }
+  return user.value.email.replace('@aluno.ufabc.edu.br', '');
 });
 
 const userInitials = computed(() => AliasInitials(userLogin.value)); // argument type error here
