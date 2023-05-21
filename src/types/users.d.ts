@@ -1,8 +1,10 @@
 type OAuth = {
   email: string;
-  facebook: string;
-  picture: string;
-  emailFacebook: string;
+  emailFacebook?: string;
+  emailGoogle?: string;
+  facebook?: string;
+  google?: string;
+  picture?: string;
 };
 
 type Device = {
@@ -18,6 +20,6 @@ export type User = {
   confirmed: boolean;
   email: string;
   ra: number;
-  createdAt: string;
+  createdAt: Date;
   devices: Device[];
 };
