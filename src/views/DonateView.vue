@@ -69,7 +69,7 @@ export default {
               label="Custo"
               width="180">
             </el-table-column>
-            <template slot="append">
+            <template v-slot:append>
               <div class="summary">
                 <div class="summary-text flex">Total de aproximadamente</div>
                 <div class="summary-total">~R$ 1200,00/ano 😬</div>
