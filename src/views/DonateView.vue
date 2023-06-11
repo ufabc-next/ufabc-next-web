@@ -35,7 +35,7 @@ export default {
     <template v-slot:activator="{ on, attrs }">
 
       <v-row class="justify-center">
-        <v-flex sm12 md12 lg8 class="justify-center">
+        <v-col sm12 md12 lg8 class="justify-center">
           <div class="donation-text">
             <h2 class="history-title ufabcnext-primary--text">Ajude o UFABC Next</h2>
             <div class="history-text mt-3 mb-4">
@@ -86,7 +86,7 @@ export default {
             v-on="on"
             >Quero ajudar!</v-btn
           >
-        </v-flex>
+        </v-col>
       </v-row>
     </template>
 
