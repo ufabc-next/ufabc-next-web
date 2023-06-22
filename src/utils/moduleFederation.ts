@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineAsyncComponent, h } from 'vue';
 import Loading from '@/components/MFLoading.vue';
 import Error from '@/components/MFError.vue';
@@ -12,7 +13,7 @@ export function defineFederatedReactComponent({
   return defineAsyncComponent({
     loader: async () =>
       defineReactComponent({
-        component: ((await loader()) as any)[component],
+        component: (await loader())[component],
         ...options,
       }),
     loadingComponent: Loading,
@@ -21,7 +22,7 @@ export function defineFederatedReactComponent({
   });
 }
 
-export function defineReactComponent({ component, ...options }: any) {
+export function defineReactComponent({ component, ...options }: any = {}) {
   return {
     ...options,
     setup(props: React.Attributes) {

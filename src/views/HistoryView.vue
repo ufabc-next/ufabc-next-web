@@ -26,10 +26,7 @@ async function loginDev() {
 const HelloWorld = defineFederatedReactComponent({
   loader: () => import('react/HelloWorld'),
   props: {
-    name: { type: String, default: 'unknown' },
-  },
-  mounted() {
-    //
+    name: { type: String, default: 'World' },
   },
 });
 </script>

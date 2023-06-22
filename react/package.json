@@ -1,27 +1,26 @@
 {
-  "name": "library1",
+  "name": "ufabc-next-web-react",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "webpack serve --mode development"
+    "serve": "webpack serve --mode development"
   },
-  "author": "Renan Zago Lorijola <renanzago@gmail.com>",
   "devDependencies": {
-    "@babel/core": "^7.18.6",
-    "@babel/preset-env": "^7.18.6",
+    "@babel/core": "^7.21.8",
+    "@babel/preset-env": "^7.21.5",
     "@babel/preset-react": "^7.18.6",
-    "@types/node": "^18.15.11",
-    "@types/react": "^18.0.31",
-    "@types/react-dom": "^18.0.11",
-    "babel-loader": "^8.2.5",
-    "css-loader": "^0.15.6",
-    "html-webpack-plugin": "^5.5.0",
+    "@types/node": "^18.16.3",
+    "@types/react": "^18.2.5",
+    "@types/react-dom": "^18.2.3",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
+    "html-webpack-plugin": "^5.5.1",
     "react-dom": "^18.2.0",
     "ts-loader": "^9.4.2",
-    "typescript": "^5.0.2",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.10.0",
-    "webpack-dev-server": "^4.9.3"
+    "typescript": "^5.0.4",
+    "webpack": "^5.82.0",
+    "webpack-cli": "^5.0.2",
+    "webpack-dev-server": "^4.13.3"
   },
   "engines": {
     "node": ">=v18.4.0",
