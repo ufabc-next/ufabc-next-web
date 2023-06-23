@@ -14,11 +14,16 @@ import AppBar from '@/layouts/AppBar.vue';
 </script>
 
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,500,700,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap');
+@import url('https://fonts.googleapis.com/css?family=Ubuntu:100,300,400,500,700,900&display=swap');
 html {
-  font-family: 'Roboto', sans-serif;
+  font-family: Lato, sans-serif;
 }
 #app {
-  font-family: 'Roboto', sans-serif;
+  font-family: Lato, sans-serif;
+}
+a {
+  color: #1976d2;
 }
 </style>

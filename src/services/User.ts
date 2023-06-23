@@ -2,34 +2,34 @@ import Axios from 'axios';
 import Auth from './Auth';
 
 class User {
-  async completeSignup(params = {}) {
-    return await Axios.put('/users/complete', params);
+  completeSignup(params = {}) {
+    return Axios.put('/users/complete', params);
   }
 
-  async confirmSignup(params = {}) {
-    const token = await Axios.post('/account/confirm', params);
+  confirmSignup(params = {}) {
+    const token = Axios.post('/account/confirm', params);
 
     if (window.device) {
-      await Auth.addDevice();
+      Auth.addDevice();
     }
 
     return token;
   }
 
-  async resendEmail() {
-    return await Axios.post('/users/me/resend');
+  resendEmail() {
+    return Axios.post('/users/me/resend');
   }
 
-  async recovery(email: string) {
-    return await Axios.post('/users/me/recover', { email });
+  recovery(email: string) {
+    return Axios.post('/users/me/recover', { email });
   }
 
-  async delete() {
-    return await Axios.delete('/users/me/delete');
+  delete() {
+    return Axios.delete('/users/me/delete');
   }
 
-  async info() {
-    return await Axios.get('/users/info');
+  info() {
+    return Axios.get('/users/info');
   }
 }
 

@@ -16,20 +16,11 @@ const myCustomLightTheme: ThemeDefinition = {
     primary: '#2e7eed',
     secondary: '#f3f6f7',
     'ufabcnext-green': '#56cdb7',
+    'next-gray': '#404040',
+    error: '#f45576',
     background: '#ffffff',
   },
 };
-
-const vuetify = createVuetify({
-  components,
-  directives,
-  theme: {
-    defaultTheme: 'myCustomLightTheme',
-    themes: {
-      myCustomLightTheme,
-    },
-  },
-});
 
 interface Device {
   cordova: string;
@@ -44,6 +35,17 @@ declare global {
     device: Device;
   }
 }
+
+const vuetify = createVuetify({
+  components,
+  directives,
+  theme: {
+    defaultTheme: 'myCustomLightTheme',
+    themes: {
+      myCustomLightTheme,
+    },
+  },
+});
 
 import elementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
