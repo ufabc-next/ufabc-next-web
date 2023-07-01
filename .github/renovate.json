@@ -1,0 +1,14 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": ["config:base", ":disableDependencyDashboard"],
+  "stabilityDays": 5,
+  "labels": ["update-deps"],
+  "prHourlyLimit": 2,
+  "automerge": true,
+  "schedule": [
+    "before 7am on Monday"
+  ],
+  "constraints": {
+    "pnpm": "7"
+  }
+}
