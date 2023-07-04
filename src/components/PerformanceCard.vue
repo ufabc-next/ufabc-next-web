@@ -5,15 +5,13 @@
     <v-card-text class="stats-subtitle pl-0">
       <p>{{ title }}</p>
     </v-card-text>
-    <div>
-      <div
-        role="progressbar"
-        aria-valuemin="0"
-        aria-valuemax="100"
-        aria-valuenow="100"
-        class="v-progress-linear"
-      ></div>
-    </div>
+    <div
+      role="progressbar"
+      aria-valuemin="0"
+      aria-valuemax="100"
+      aria-valuenow="100"
+      :class="['v-progress-linear', cor]"
+    ></div>
   </v-card>
 </template>
 <script setup lang="ts">
@@ -27,14 +25,12 @@ defineProps({
     default: 0.0,
   },
   title: String,
+  cor: {
+    type: String,
+    required: true,
+  },
 });
 </script>
-<style>
-.table-body > tr > td {
-  outline: 1px solid white;
-  text-align: center;
-}
-</style>
 
 <style lang="scss" scoped>
 .v-progress-linear {
