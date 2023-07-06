@@ -78,12 +78,12 @@
   </v-app-bar>
   <div style="height: 64px" />
 </template>
-
+<style scoped lang="scss">
+.v-list-item {
+  font-size: 14px;
+}
+</style>
 <script setup lang="ts">
-import {
-  internalNavigationsItems,
-  externalNavigationsItems,
-} from '@/navigationsItems';
 import { computed, ref } from 'vue';
 
 const drawer = ref(true);
@@ -94,10 +94,66 @@ const user = computed(() => {
     ra: '1234567',
   };
 });
-</script>
+const internalNavigationsItems = [
+  {
+    title: 'Reviews',
+    icon: 'mdi-message-draw',
+    route: '/reviews',
+  },
+  {
+    title: 'Meu histórico',
+    icon: 'mdi-history',
+    route: '/history',
+  },
+  {
+    title: 'Performance',
+    icon: 'mdi-google-analytics',
+    route: '/performance',
+  },
+  {
+    title: 'Dados da Matrícula',
+    icon: 'mdi-book-multiple',
+    route: '/stats',
+  },
+  {
+    title: 'Conexões',
+    icon: 'mdi-hubspot',
+    route: '/relationship',
+  },
+  {
+    title: 'Apoie o UFABC next',
+    icon: 'mdi-bank',
+    route: '/donate',
+  },
+  {
+    title: 'Configurações',
+    icon: 'mdi-cog',
+    route: '/settings',
+  },
+  // {
+  //   title: 'Planejamento',
+  //   featured: false,
+  //   private: true,
+  //   icon: 'mdi-file-document-box-multiple',
+  //   route: '/planning',
+  // },
+];
 
-<style scoped lang="scss">
-.v-list-item {
-  font-size: 14px;
-}
-</style>
+const externalNavigationsItems = [
+  {
+    title: 'Snapshot da Matrícula',
+    icon: 'mdi-open-in-new',
+    url: 'https://api.ufabcnext.com/snapshot',
+  },
+  {
+    title: 'Grupos no WhatsApp',
+    icon: 'mdi-whatsapp',
+    url: 'https://rebrand.ly/ufabc-grupos-whatsapp',
+  },
+  {
+    title: 'Use a Extensão',
+    icon: 'mdi-download',
+    url: 'https://chrome.google.com/webstore/detail/ufabc-next/gphjopenfpnlnffmhhhhdiecgdcopmhk',
+  },
+];
+</script>
