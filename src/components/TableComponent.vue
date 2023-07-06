@@ -1,5 +1,5 @@
 <template>
-  <v-table density="comfortable" class="rounded-lg">
+  <v-table hover density="comfortable" class="rounded-lg">
     <thead class="table-head bg-ufabcnext-green">
       <slot name="head"></slot>
     </thead>
@@ -11,9 +11,37 @@
 
 <script setup lang="ts" />
 
-<style>
-.table-body > tr > td {
-  outline: 1px solid white;
-  text-align: center;
+<style lang="scss">
+.fixed-column {
+  position: sticky;
+  left: 0;
+  min-width: 200px;
+  @media screen and (max-width: 500px) {
+    min-width: 150px;
+  }
+}
+
+.v-table .v-table__wrapper > table {
+  thead.table-head {
+    & > tr > th {
+      &:first-of-type {
+        @extend .fixed-column;
+        background-color: #56cdb7;
+      }
+    }
+  }
+
+  tbody.table-body {
+    & > tr:not(:last-child) > td {
+      border-bottom: none;
+    }
+    & > tr > td {
+      &:first-of-type {
+        @extend .fixed-column;
+      }
+      outline: 1px solid white;
+      text-align: center;
+    }
+  }
 }
 </style>

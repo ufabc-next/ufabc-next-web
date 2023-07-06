@@ -17,6 +17,7 @@ const myCustomLightTheme: ThemeDefinition = {
     secondary: '#f3f6f7',
     'ufabcnext-green': '#56cdb7',
     'next-gray': '#404040',
+    'next-light-gray': '#848687',
     error: '#f45576',
     background: '#ffffff',
   },

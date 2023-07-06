@@ -1,5 +1,5 @@
 <template>
-  <v-card v-bind:class="`pa-5 rounded-lg ${_class}`">
+  <v-card class="pa-5 rounded-lg">
     <v-card-text>
       <p class="text-primary text-h4 font-weight-bold">{{ title }}</p>
       <slot />
@@ -10,6 +10,5 @@
 <script setup lang="ts">
 defineProps({
   title: String,
-  _class: String,
 });
 </script>
