@@ -1,41 +1,38 @@
 <template>
   <v-layout class="flex-column align-center justify-center">
-    <el-select
+    <v-combobox
+      variant="solo"
       v-model="searchTerm"
-      filterable
-      placeholder="Digite o nome do professor ou disciplina"
-      remote
-      :remote-method="search"
-      :loading="isLoading"
-      loading-text="Carregando..."
+      :items="processedResults"
+      @update:search="(val:string) => search(val)"
+      :prepend-inner-icon="isLoading ? 'mdi-loading mdi-spin' : 'mdi-magnify'"
+      :multiple="false"
+      chips
       clearable
+      hide-details
+      hide-selected
+      :menu="menu"
+      :focused="menu"
+      no-filter
+      @update:menu="openMenu"
       class="w-100 mb-5"
     >
-      <template #prefix>
-        <v-icon
-          :icon="isLoading ? 'mdi-loading mdi-spin' : 'mdi-magnify'"
-          class="ml-2"
-        />
-      </template>
-      <el-option
-        v-for="item in processedResults"
-        :key="item.name"
-        :label="item.name"
-        :value="item.name"
-        class="py-6 d-flex align-center"
-      >
-        <button @click="enterSearch(item.id, item.type)">
+      <template #item="{ item }">
+        <v-list-item
+          variant="plain"
+          @click="enterSearch(item.value.id, item.value.type, item.value.name)"
+        >
           <v-icon
-            :icon="item.type === 'teacher' ? 'mdi-account' : 'mdi-book'"
+            :icon="item.value.type === 'teacher' ? 'mdi-account' : 'mdi-book'"
+            class="mr-3"
           />
-          {{ item.name }}
-        </button>
-      </el-option>
-    </el-select>
-
+          {{ item.value.name }}
+        </v-list-item>
+      </template>
+    </v-combobox>
     <TeacherReview
       v-if="router.currentRoute.value.query.teacherId"
-      :id="router.currentRoute.value.query.teacherId as string"
+      :id="router.currentRoute.value.query.teacherId.toString()"
     />
     <ReviewsWelcome v-else />
   </v-layout>
@@ -50,14 +47,25 @@ import router from '@/router';
 import { onMounted } from 'vue';
 import api from '@/utils/api';
 import { computed } from 'vue';
-import { SearchSubject, SearchTeacher } from '@/types';
+import { ElMessage } from 'element-plus';
+import Reviews, { SearchSubject, SearchTeacher } from '@/services/Reviews';
+import useFetch from '@/hooks/useFetch';
 const searchTerm = ref('');
-const teachersSearchResults = ref<SearchTeacher>([]);
-const subjectsSearchResults = ref<SearchSubject>([]);
+const teachersSearchResults = ref<SearchTeacher[]>([]);
+const subjectsSearchResults = ref<SearchSubject[]>([]);
 const isLoading = ref(false);
+const menu = ref(false);
 
-const enterSearch = (id: string, type: string) => {
-  console.log('enterSearch', id, type);
+const openMenu = () => {
+  menu.value = true;
+};
+const closeMenu = () => {
+  menu.value = false;
+};
+
+const enterSearch = (id: string, type: string, name: string) => {
+  searchTerm.value = name;
+  closeMenu();
   router.replace({
     name: 'reviews',
     query: {
@@ -90,7 +98,10 @@ const useSearch = debounce(async (query: string) => {
     teachersSearchResults.value = teachersResponse.data.data;
     subjectsSearchResults.value = subjectsResponse.data.data;
   } catch (error) {
-    console.error('Error searching:', error);
+    ElMessage({
+      message: 'Erro ao buscar professores e disciplinas',
+      type: 'error',
+    });
   } finally {
     isLoading.value = false;
   }
@@ -100,6 +111,9 @@ const search = (query: string) => {
   if (!query) {
     teachersSearchResults.value = [];
     subjectsSearchResults.value = [];
+    router.replace({
+      name: 'reviews',
+    });
     return;
   }
   isLoading.value = true;
@@ -107,6 +121,11 @@ const search = (query: string) => {
 };
 
 const processedResults = computed(() => {
+  // return [
+  //   { id: '123', name: 'Abc', type: 'teacher' },
+  //   { id: '1234', name: 'abCd', type: 'subject' },
+  // ];
+  // return [...teachersSearchResults.value.map((result) => result.name)];
   return [
     ...teachersSearchResults.value.map((result) => ({
       name: result.name,

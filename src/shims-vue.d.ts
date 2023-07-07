@@ -4,5 +4,5 @@ declare module '*.vue' {
   export default component;
 }
 
-declare module "react/HelloWorld"
-declare module "react/Test"
+declare module 'react/HelloWorld';
+declare module 'react/Test';
