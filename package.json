@@ -11,6 +11,9 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@capacitor/android": "^5.1.1",
+    "@capacitor/core": "^5.1.1",
+    "@capacitor/ios": "^5.1.1",
     "@mdi/font": "^7.2.96",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.1",
@@ -25,6 +28,7 @@
     "vuetify": "3.1.10"
   },
   "devDependencies": {
+    "@capacitor/cli": "^5.1.1",
     "@commitlint/cli": "17.4.4",
     "@commitlint/config-conventional": "17.4.4",
     "@types/jest": "29.5.0",

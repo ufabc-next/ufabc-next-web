@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">ufabc-next-web</string>
+    <string name="title_activity_main">ufabc-next-web</string>
+    <string name="package_name">com.ufabc.next.web</string>
+    <string name="custom_url_scheme">com.ufabc.next.web</string>
+</resources>
