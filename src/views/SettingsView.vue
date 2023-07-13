@@ -1,7 +1,4 @@
 <template>
-  <!-- Everything that used to v-layout is now v-row. -->
-  <!-- Everything that was v-flex is now v-col -->
-  <!-- https://vuetifyjs.com/en/components/grids/ -->
   <section>
     <v-container>
       <div class="title-settings mb-7">Configurações da conta</div>
