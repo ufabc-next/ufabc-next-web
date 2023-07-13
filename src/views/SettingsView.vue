@@ -192,7 +192,7 @@ async function removeUser(): Promise<void> {
     loading.value = false;
     if (axios.isAxiosError(err)) {
       ElMessage({
-        message: ErrorMessage(err),
+        message: "Ocorreu um erro ao tentar excluir sua conta",
         type: 'error',
       });
     }
