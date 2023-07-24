@@ -1,6 +1,5 @@
+import { Grade } from '@/types/grades';
 import api from '@/utils/api';
-
-export type Concept = 'A' | 'B' | 'C' | 'D' | 'F' | 'O';
 
 type EnrollmentTeacher = {
   _id: string;
@@ -25,7 +24,7 @@ export type Enrollment = {
   pratica?: EnrollmentTeacher;
   teoria?: EnrollmentTeacher;
   updatedAt: string;
-  conceito: Concept;
+  conceito: Grade;
   creditos: number;
   disciplina: string;
   quad: number;

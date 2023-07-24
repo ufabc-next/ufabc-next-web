@@ -249,7 +249,6 @@
 import PaperCard from '@/components/PaperCard.vue';
 import TableComponent from '@/components/TableComponent.vue';
 import Enrollment, {
-  Concept,
   Enrollment as EnrollmentType,
 } from '@/services/Enrollment';
 import User from '@/services/User';
@@ -258,6 +257,8 @@ import { computed } from 'vue';
 import CenteredLoading from '@/components/CenteredLoading.vue';
 import FeedbackAlert from '@/components/FeedbackAlert.vue';
 import { ref } from 'vue';
+import { Concept } from '@/types/concept';
+import { conceptsColor } from '@/utils/consts';
 
 const tableHead = [
   'Disciplina',
@@ -281,20 +282,6 @@ const extensionURL =
   'https://chrome.google.com/webstore/detail/ufabc-matricula/gphjopenfpnlnffmhhhhdiecgdcopmhk';
 
 const studentRecordURL = 'https://aluno.ufabc.edu.br/fichas_individuais';
-
-const conceptsColor = {
-  A: 'rgb(63, 207, 140)',
-  B: 'rgb(184, 233, 134)',
-  C: 'rgb(248, 183, 76)',
-  D: 'rgb(255, 160, 4)',
-  F: 'rgb(249, 84, 105)',
-  O: 'rgb(169, 169, 169)',
-
-  // exceptions
-  I: 'rgb(25, 118, 210)',
-  E: 'rgb(25, 118, 210)',
-  null: 'rgb(0, 0, 0)',
-};
 
 const subjectConceptClass = {
   A: 'gray',
@@ -334,3 +321,4 @@ const lastUpdate = computed(() => {
   return date && new Date(date);
 });
 </script>
+@/types/grades

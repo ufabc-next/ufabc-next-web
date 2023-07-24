@@ -1,6 +1,7 @@
 import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
+import { VueQueryPlugin } from '@tanstack/vue-query';
 
 import '@mdi/font/css/materialdesignicons.css';
 
@@ -51,4 +52,9 @@ const vuetify = createVuetify({
 import elementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 
-createApp(App).use(router).use(vuetify).use(elementPlus).mount('#app');
+createApp(App)
+  .use(router)
+  .use(vuetify)
+  .use(elementPlus)
+  .use(VueQueryPlugin)
+  .mount('#app');

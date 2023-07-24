@@ -5,17 +5,19 @@
       v-model="searchTerm"
       :items="processedResults"
       @update:search="(val:string) => search(val)"
-      :prepend-inner-icon="isLoading ? 'mdi-loading mdi-spin' : 'mdi-magnify'"
+      :prepend-inner-icon="
+        isFetchingTeachers || isFetchingSubjects
+          ? 'mdi-loading mdi-spin'
+          : 'mdi-magnify'
+      "
       :multiple="false"
       chips
       clearable
-      hide-details
+      hide-details="auto"
       hide-selected
-      :menu="menu"
-      :focused="menu"
       no-filter
-      @update:menu="openMenu"
       class="w-100 mb-5"
+      return-object
     >
       <template #item="{ item }">
         <v-list-item
@@ -23,6 +25,7 @@
           @click="enterSearch(item.value.id, item.value.type, item.value.name)"
         >
           <v-icon
+            v-if="item.value.type"
             :icon="item.value.type === 'teacher' ? 'mdi-account' : 'mdi-book'"
             class="mr-3"
           />
@@ -39,36 +42,24 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 import ReviewsWelcome from '@/components/ReviewsWelcome.vue';
 import TeacherReview from '@/components/TeacherReview.vue';
 import router from '@/router';
 import { onMounted } from 'vue';
-import api from '@/utils/api';
 import { computed } from 'vue';
 import { ElMessage } from 'element-plus';
-import Reviews, { SearchSubject, SearchTeacher } from '@/services/Reviews';
-import useFetch from '@/hooks/useFetch';
+import reviews from '@/services/Reviews';
+import { useQuery } from '@tanstack/vue-query';
 const searchTerm = ref('');
-const teachersSearchResults = ref<SearchTeacher[]>([]);
-const subjectsSearchResults = ref<SearchSubject[]>([]);
-const isLoading = ref(false);
-const menu = ref(false);
-
-const openMenu = () => {
-  menu.value = true;
-};
-const closeMenu = () => {
-  menu.value = false;
-};
 
 const enterSearch = (id: string, type: string, name: string) => {
   searchTerm.value = name;
-  closeMenu();
   router.replace({
     name: 'reviews',
     query: {
+      q: name,
       teacherId: type === 'teacher' ? id : undefined,
       subjectId: type === 'subject' ? id : undefined,
     },
@@ -83,66 +74,69 @@ onMounted(() => {
   }
 });
 
-const useSearch = debounce(async (query: string) => {
-  try {
-    const teachersResponse = await api.get('/teachers/search', {
-      params: {
-        q: query,
-      },
-    });
-    const subjectsResponse = await api.get('/subjects/search', {
-      params: {
-        q: query,
-      },
-    });
-    teachersSearchResults.value = teachersResponse.data.data;
-    subjectsSearchResults.value = subjectsResponse.data.data;
-  } catch (error) {
-    ElMessage({
-      message: 'Erro ao buscar professores e disciplinas',
-      type: 'error',
-    });
-  } finally {
-    isLoading.value = false;
-  }
+const {
+  isError: isErrorTeachers,
+  isFetching: isFetchingTeachers,
+  data: searchResultsTeachers,
+  refetch: refetchTeachers,
+} = useQuery({
+  refetchOnWindowFocus: false,
+  queryKey: ['reviews', 'search', searchTerm.value, 'teachers'],
+  queryFn: () => reviews.searchTeachers(searchTerm.value),
+  // enabled: !!searchTerm.value && searchTerm.value !== '',
+});
+
+const {
+  isError: isErrorSubjects,
+  isFetching: isFetchingSubjects,
+  data: searchResultsSubjects,
+  refetch: refetchSubjects,
+} = useQuery({
+  refetchOnWindowFocus: false,
+  queryKey: ['reviews', 'search', searchTerm.value, 'subjects'],
+  queryFn: () => reviews.searchSubjects(searchTerm.value),
+  enabled: !!searchTerm.value && searchTerm.value !== '',
+});
+
+watch(
+  () => [isErrorTeachers, isErrorSubjects],
+  ([isErrorTeachers, isErrorSubjects]) => {
+    if (isErrorTeachers) {
+      ElMessage.error('Erro ao buscar professores');
+    }
+    if (isErrorSubjects) {
+      ElMessage.error('Erro ao buscar disciplinas');
+    }
+  },
+);
+
+const useSearch = debounce(() => {
+  refetchTeachers();
+  refetchSubjects();
 }, 500);
 
 const search = (query: string) => {
   if (!query) {
-    teachersSearchResults.value = [];
-    subjectsSearchResults.value = [];
     router.replace({
       name: 'reviews',
     });
     return;
   }
-  isLoading.value = true;
-  useSearch(query);
+  useSearch();
 };
 
 const processedResults = computed(() => {
-  // return [
-  //   { id: '123', name: 'Abc', type: 'teacher' },
-  //   { id: '1234', name: 'abCd', type: 'subject' },
-  // ];
-  // return [...teachersSearchResults.value.map((result) => result.name)];
   return [
-    ...teachersSearchResults.value.map((result) => ({
+    ...(searchResultsTeachers.value?.data.data.map((result) => ({
       name: result.name,
       id: result._id,
-      type: 'teacher',
-    })),
-    ...subjectsSearchResults.value.map((result) => ({
+      type: result._id && 'teacher',
+    })) || []),
+    ...(searchResultsSubjects.value?.data.data.map((result) => ({
       name: result.name,
       id: result._id,
       type: 'subject',
-    })),
+    })) || []),
   ];
 });
 </script>
-
-<style lang="scss">
-.el-input__inner {
-  height: 56px !important;
-}
-</style>

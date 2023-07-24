@@ -2,9 +2,11 @@ import { ref } from 'vue';
 
 import type { AxiosResponse } from 'axios';
 
-const useFetch = <T extends () => Promise<AxiosResponse>>(
+const useFetch = <
+  T extends (...params: Parameters<T>) => Promise<AxiosResponse>,
+>(
   method: T,
-  params?: Parameters<T>,
+  ...params: Parameters<T>
 ) => {
   const data = ref<Awaited<ReturnType<T>>['data']>();
   const error = ref();
@@ -13,7 +15,7 @@ const useFetch = <T extends () => Promise<AxiosResponse>>(
   async function fetchData() {
     isLoading.value = true;
     try {
-      const { data: _data } = await method(...(params || []));
+      const { data: _data } = await method(...params);
       data.value = _data;
       error.value = undefined;
     } catch (err) {

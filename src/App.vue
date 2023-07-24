@@ -2,7 +2,7 @@
   <v-app>
     <AppBar />
     <v-main style="background-color: #f5f5f5">
-      <v-container style="max-width: 900px">
+      <v-container>
         <router-view />
       </v-container>
     </v-main>
