@@ -6426,11 +6426,21 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
+<<<<<<< HEAD
 headers-polyfill@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/headers-polyfill/-/headers-polyfill-4.0.2.tgz#9115a76eee3ce8fbf95b6e3c6bf82d936785b44a"
   integrity sha512-EWGTfnTqAO2L/j5HZgoM/3z82L7necsJ0pO9Tp0X1wil3PDLrkypTBRgVO2ExehEEvUycejZD3FuRaXpZZc3kw==
+=======
+<<<<<<< HEAD
+headers-polyfill@3.2.5:
+  version "3.2.5"
+  resolved "https://registry.npmjs.org/headers-polyfill/-/headers-polyfill-3.2.5.tgz"
+  integrity sha512-tUCGvt191vNSQgttSyJoibR+VO+I6+iCHIUdhzEMJKE+EAL8BwCN7fUOZlY4ofOelNHsK+gEjxB/B+9N3EWtdA==
+>>>>>>> b1ed8eb (feat: include highcharts and example)
 
+=======
+>>>>>>> e3160c3 (feat: include highcharts and example)
 highcharts-vue@^1.4.3:
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/highcharts-vue/-/highcharts-vue-1.4.3.tgz#8cb7452c005282ee70f237021af93725d1c9a4f4"

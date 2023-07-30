@@ -41,7 +41,11 @@
           </v-icon>
         </PerformanceCard>
       </div>
-      <div
+
+      <section class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white">
+        <Chart :options="crChartOptions" />
+      </section>
+      <!-- <div
         class="flex mb-4 ml-0 column ra-1 elevate-2 pa-3 white"
         style="justify-content: center; display: flex; position: relative"
       >
@@ -76,67 +80,51 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
-
-<script lang="ts">
-import Chart from 'chart.js/auto';
+<script setup lang="ts">
 import { ref } from 'vue';
 import PerformanceCard from '@/components/PerformanceCard.vue';
-export default {
-  components: {
-    PerformanceCard,
-  },
-  setup() {
-    const cor = ref('red');
+import { Chart } from 'highcharts-vue';
 
-    const alterarCor = () => {
-      cor.value = 'blue';
-    };
-
-    return {
-      cor,
-      alterarCor,
-    };
+// full highcharts options available on: https://api.highcharts.com/highcharts/
+const crChartOptions = ref({
+  chart: {
+    type: 'area',
+    style: { fontFamily: 'Roboto, sans-serif' },
   },
-  mounted() {
-    const ctx = document.getElementById('ze_0') as HTMLCanvasElement;
 
-    const ze_0 = new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: [
-          '2020:2',
-          '2020:3',
-          '2021:1',
-          '2021:2',
-          '2021:3',
-          '2022:1',
-          '2022:2',
-          '2022:3',
-          '2023:1',
-        ],
-        datasets: [
-          {
-            label: 'Seu CR',
-            data: [1, 3, 3, 4, 2, 3, 3, 4, 4],
-            borderWidth: 1,
-          },
-        ],
-      },
-      options: {
-        scales: {
-          y: {
-            beginAtZero: true,
-          },
-        },
-      },
-    });
-    ze_0;
+  plotOptions: {
+    area: {
+      fillOpacity: 0.45,
+    },
   },
-};
+  colors: ['#2e7eed'],
+
+  title: {
+    text: 'Seu CR ao longo do tempo',
+  },
+
+  yAxis: {
+    title: {
+      text: 'CR',
+    },
+  },
+
+  xAxis: {
+    title: {
+      text: 'Quadrimestre',
+    },
+  },
+
+  series: [
+    {
+      data: [1, 2, 3], // sample data
+    },
+  ],
+});
 </script>
 
 <style>
