@@ -6427,11 +6427,14 @@ he@^1.2.0:
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 headers-polyfill@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/headers-polyfill/-/headers-polyfill-4.0.2.tgz#9115a76eee3ce8fbf95b6e3c6bf82d936785b44a"
   integrity sha512-EWGTfnTqAO2L/j5HZgoM/3z82L7necsJ0pO9Tp0X1wil3PDLrkypTBRgVO2ExehEEvUycejZD3FuRaXpZZc3kw==
 =======
+=======
+>>>>>>> 921ad74 (feat: type performance requests)
 <<<<<<< HEAD
 headers-polyfill@3.2.5:
   version "3.2.5"
@@ -6442,11 +6445,14 @@ headers-polyfill@3.2.5:
 =======
 >>>>>>> e3160c3 (feat: include highcharts and example)
 highcharts-vue@^1.4.3:
+=======
+highcharts-vue@1.4.3:
+>>>>>>> 7a3f19f (feat: type performance requests)
   version "1.4.3"
   resolved "https://registry.yarnpkg.com/highcharts-vue/-/highcharts-vue-1.4.3.tgz#8cb7452c005282ee70f237021af93725d1c9a4f4"
   integrity sha512-qIy9EFuLIgOw+reNkTvu0pvMBcSE0BAPtONAqZoEl0qaAIpGxiyXqhRNPDufWieSC0YlybpCznxE8EK19Kcg+A==
 
-highcharts@^11.1.0:
+highcharts@11.1.0:
   version "11.1.0"
   resolved "https://registry.yarnpkg.com/highcharts/-/highcharts-11.1.0.tgz#715eb55fd081351b526e28cd89ac0e4e30b35c15"
   integrity sha512-vhmqq6/frteWMx0GKYWwEFL25g4OYc7+m+9KQJb/notXbNtIb8KVy+ijOF7XAFqF165cq0pdLIePAmyFY5ph3g==
