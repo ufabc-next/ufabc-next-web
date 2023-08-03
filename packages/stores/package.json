@@ -1,0 +1,18 @@
+{
+  "name": "stores",
+  "version": "0.0.0",
+  "main": "./index.tsx",
+  "types": "./index.tsx",
+  "license": "MIT",
+  "scripts": {
+    "lint": "eslint \"**/*.ts*\""
+  },
+  "devDependencies": {
+    "eslint-config-custom": "*",
+    "tsconfig": "*",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "zustand": "^4.4.0"
+  }
+}
