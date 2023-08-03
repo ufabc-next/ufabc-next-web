@@ -8,7 +8,7 @@
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:staging": "vue-cli-service build --mode staging",
-    "test": "vue-cli-service test:unit",
+    "test": "vue-cli-service test:unit --passWithNoTests",
     "lint": "vue-cli-service lint",
     "test:watch": "vue-cli-service test:unit --watch"
   },
