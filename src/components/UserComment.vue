@@ -20,21 +20,32 @@
       sm=""
       order="3"
       order-sm="2"
-      class="comment-text mr-2 pa-0 flex-grow-1 flex-shrink-0 d-flex justify-center flex-column"
+      class="comment-text-container mr-2 pa-0"
+      :style="`max-height: ${expanded || smAndDown ? 'unset' : '80px'}`"
     >
-      <p class="text-primary pt-2 pt-sm-0">
-        <v-chip
-          v-if="isEAD"
-          density="compact"
-          class="px-2"
-          style="font-size: 12px"
-          >EAD</v-chip
+      <div>
+        <p class="text-primary pt-2 pt-sm-0">
+          <v-chip
+            v-if="isEAD"
+            density="compact"
+            class="px-2"
+            style="font-size: 12px"
+            >EAD</v-chip
+          >
+          {{ comment?.subject.name }}
+        </p>
+        <p ref="commentText">
+          {{ comment?.comment }}
+        </p>
+        <button
+          class="show-more text-primary text-subtitle-2"
+          :style="`display:${expanded || smAndDown ? 'none' : 'block'}`"
+          @click="showMore"
         >
-        {{ comment?.subject.name }}
-      </p>
-      <p>
-        {{ comment?.comment }}
-      </p>
+          MOSTRAR MAIS
+          <v-icon>mdi-chevron-down</v-icon>
+        </button>
+      </div>
     </v-col>
     <v-col
       sm=""
@@ -87,7 +98,7 @@
 
 <script lang="ts" setup>
 import { conceptsColor } from '@/utils/consts';
-import { PropType, computed } from 'vue';
+import { PropType, computed, onMounted, ref } from 'vue';
 import { Comment } from '@/types/comments';
 import { ElMessage } from 'element-plus';
 import { useMutation, useQueryClient } from '@tanstack/vue-query';
@@ -95,6 +106,8 @@ import comments from '@/services/Comment';
 import transformDataToTimeAgo from '@/utils/transformDataToTimeAgo';
 import { RequestError } from '@/types/request-error';
 import { AxiosError } from 'axios';
+import { useDisplay } from 'vuetify';
+const { smAndDown } = useDisplay();
 
 const conceptStyle = computed(() => {
   return {
@@ -182,20 +195,39 @@ const isEAD = computed(() => {
   ];
   return possibles.includes(season.value);
 });
+
+const expanded = ref(false);
+const commentText = ref<HTMLElement | null>(null);
+
+const showMore = () => {
+  if (!commentText.value) return;
+  expanded.value = true;
+};
+onMounted(() => {
+  if (!commentText.value) return;
+  if (commentText.value.clientHeight <= 60) {
+    expanded.value = true;
+  }
+});
 </script>
 
 <style scoped lang="scss">
-.comment-text {
-  // max-height: 75px;
+.comment-text-container {
+  overflow: hidden;
   transition: max-height 0.5s ease-in-out;
   font-size: 14px;
-  // overflow: hidden;
-  //   position: relative;
+  flex-grow: 1;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  position: relative;
 }
-// .comment-text.collapsed {
-//   max-height: 3.9em;
-// }
-
+.show-more {
+  position: absolute;
+  width: 100%;
+  top: 60px;
+  background-image: linear-gradient(to right, transparent, white 40%);
+}
 .v-btn--icon.v-btn--density-default.icon-button {
   height: 36px;
   width: 36px;

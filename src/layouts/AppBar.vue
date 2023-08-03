@@ -33,7 +33,7 @@
     </v-list>
   </v-navigation-drawer>
 
-  <v-app-bar elevation="1" app height="min-content" class="py-2">
+  <v-app-bar app height="min-content" class="py-2 header">
     <v-app-bar-nav-icon
       app
       variant="text"
@@ -157,3 +157,9 @@ const externalNavigationsItems = [
   },
 ];
 </script>
+
+<style scoped lang="scss">
+.header {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+</style>

@@ -18,6 +18,7 @@
       no-filter
       class="w-100 mb-5"
       return-object
+      placeholder="Digite o nome do professor ou disciplina"
     >
       <template #item="{ item }">
         <v-list-item
@@ -37,6 +38,10 @@
       v-if="router.currentRoute.value.query.teacherId"
       :id="router.currentRoute.value.query.teacherId.toString()"
     />
+    <SubjectReview
+      v-else-if="router.currentRoute.value.query.subjectId"
+      :id="router.currentRoute.value.query.subjectId.toString()"
+    />
     <ReviewsWelcome v-else />
   </v-layout>
 </template>
@@ -46,6 +51,7 @@ import { ref, watch } from 'vue';
 import debounce from 'lodash.debounce';
 import ReviewsWelcome from '@/components/ReviewsWelcome.vue';
 import TeacherReview from '@/components/TeacherReview.vue';
+import SubjectReview from '@/components/SubjectReview.vue';
 import router from '@/router';
 import { onMounted } from 'vue';
 import { computed } from 'vue';

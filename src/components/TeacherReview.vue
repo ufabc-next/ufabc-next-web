@@ -22,21 +22,16 @@
                 {{ chip.text }}
               </v-chip>
             </v-col>
-            <v-col>
-              <div
-                style="
-                  width: 100%;
-                  height: 200px;
-                  margin-left: calc(50% - 100px);
-                "
-              >
-                <div
-                  style="width: 200px; height: 200px"
-                  class="bg-purple-darken-2 text-center d-flex justify-center flex-column"
-                >
-                  {{ grades }}
-                </div>
-              </div>
+            <v-col class="d-flex flex-column align-center">
+              <PieChart :key="`chart-${selectedSubject}`" :grades="grades" />
+              <p class="text-body-2 text-center font-weight-bold mt-6">
+                * Provavelmente esse professor
+                {{
+                  demandsAttendance
+                    ? ' cobra presença👎'
+                    : ' NÃO cobra presença👍'
+                }}
+              </p>
             </v-col>
           </v-row>
         </v-col>
@@ -55,9 +50,15 @@
               >
               </v-select>
             </v-col>
-            <v-col>
-              <v-col cols="12" class="px-0 px-sm-3">
-                <div v-if="commentsData?.total !== 0">
+            <v-col class="pr-sm-0">
+              <v-col
+                cols="12"
+                class="px-0 px-sm-3"
+                :style="`${
+                  !smAndDown && 'max-height:600px ; overflow-y:scroll'
+                }`"
+              >
+                <div v-if="commentsData?.total !== 0" class="pr-sm-2">
                   <UserComment
                     v-for="comment in commentsData?.data"
                     :key="comment._id"
@@ -70,8 +71,7 @@
                     class="text-center"
                   >
                     <v-btn
-                      color="primary"
-                      class="text-body-1"
+                      class="load-more text-body-2"
                       @click="fetchMoreComments"
                       :disabled="!hasMoreComments"
                       :loading="isFetchingMoreComments"
@@ -116,6 +116,7 @@ const props = defineProps({
   id: { type: String, required: true },
 });
 
+import PieChart from './PieChart.vue';
 import { computed, ref } from 'vue';
 import PaperCard from '@/components/PaperCard.vue';
 import { watch } from 'vue';
@@ -123,6 +124,8 @@ import UserComment from './UserComment.vue';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import comments from '@/services/Comment';
 import reviews from '@/services/Reviews';
+import { useDisplay } from 'vuetify';
+const { smAndDown } = useDisplay();
 
 const selectedSubject = ref<string>('Todas as matérias');
 const page = ref<number>(0);
@@ -231,21 +234,42 @@ const subjects = computed(() => {
 });
 
 const grades = computed(() => {
-  if (!teacherData.value?.data) return [];
-  return selectedSubject.value === 'Todas as matérias'
-    ? teacherData.value.data.general.distribution.map((grade) => ({
-        [grade.conceito]: grade.count / teacherData.value.data.general.count,
-      }))
-    : teacherData.value.data.specific
-        .find((subject) => subject._id.name === selectedSubject.value)
-        ?.distribution.map((grade) => ({
-          [grade.conceito]:
-            grade.count /
-            (teacherData.value.data.specific.find(
-              (subject) => subject._id.name === selectedSubject.value,
-            )?.count || 1),
-        }));
+  if (!teacherData.value?.data) return {};
+  const result: { [x: string]: number } = {};
+  if (selectedSubject.value === 'Todas as matérias')
+    teacherData.value.data.general.distribution.forEach((grade) => {
+      result[grade.conceito] =
+        (100 * grade.count) / teacherData.value.data.general.count;
+    });
+  else
+    teacherData.value.data.specific
+      .find((subject) => subject._id.name === selectedSubject.value)
+      ?.distribution.forEach((grade) => {
+        result[grade.conceito] =
+          (100 * grade.count) /
+          (teacherData.value.data.specific.find(
+            (subject) => subject._id.name === selectedSubject.value,
+          )?.count || 1);
+      });
+  const ordered = Object.keys(result)
+    .sort()
+    .reduce((obj: typeof result, key) => {
+      obj[key] = result[key];
+      return obj;
+    }, {});
+  return ordered;
+});
+
+const demandsAttendance = computed(() => {
+  if (!teacherData.value?.data) return false;
+  return teacherData.value.data.general.distribution.some(
+    (grade) => grade.conceito === 'O',
+  );
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.load-more {
+  width: 100%;
+}
+</style>
