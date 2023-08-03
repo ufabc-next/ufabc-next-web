@@ -11,6 +11,25 @@
 
 <script setup lang="ts">
 import AppBar from '@/layouts/AppBar.vue';
+import { auth } from 'stores';
+import { onMounted } from 'vue';
+import create from 'vue-zustand';
+import router from './router';
+
+const useAuth = create(auth);
+const { authenticate } = useAuth();
+
+onMounted(async () => {
+  await router.isReady();
+  const { query } = router.currentRoute.value;
+  const { token: tokenParam, ...otherQueries } = query;
+  if (tokenParam) {
+    authenticate.value(tokenParam as string);
+    router.replace({
+      query: otherQueries,
+    });
+  }
+});
 </script>
 
 <style>

@@ -1,5 +1,4 @@
 import api from '@/utils/api';
-import Auth from './Auth';
 
 type Oauth = {
   email: string;
@@ -33,9 +32,9 @@ const user = {
   confirmSignup(params = {}) {
     const token = api.post('/account/confirm', params);
 
-    if (window.device) {
-      Auth.addDevice();
-    }
+    // if (window.device) {
+    //   Auth.addDevice();
+    // }
 
     return token;
   },

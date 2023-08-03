@@ -253,7 +253,7 @@ import Enrollment, {
   Enrollment as EnrollmentType,
 } from '@/services/Enrollment';
 import User from '@/services/User';
-import useFetch from '@/hooks/useFetch';
+import useFetch from '@/composables/useFetch';
 import { computed } from 'vue';
 import CenteredLoading from '@/components/CenteredLoading.vue';
 import FeedbackAlert from '@/components/FeedbackAlert.vue';
@@ -315,14 +315,17 @@ const { data: user, error: errorUser } = useFetch(User.info);
 
 const enrollmentByDate = computed(() => {
   const enrollmentCopy = enrollment.value?.slice();
-  return enrollmentCopy?.reduce((acc, enroll) => {
-    const date = enroll.quad + enroll.year * 10;
-    if (!acc[date]) {
-      acc[date] = [];
-    }
-    acc[date].push(enroll);
-    return acc;
-  }, {} as Record<string, EnrollmentType[]>);
+  return enrollmentCopy?.reduce(
+    (acc, enroll) => {
+      const date = enroll.quad + enroll.year * 10;
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(enroll);
+      return acc;
+    },
+    {} as Record<string, EnrollmentType[]>,
+  );
 });
 
 const enrollmentByDateKeysSorted = computed(() => {
