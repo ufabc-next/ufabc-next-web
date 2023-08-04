@@ -5,7 +5,6 @@ const remotes = require(`./remotes.hosts.${env}.js`);
 
 module.exports = {
   name: 'container',
-  filename: 'remoteEntry.js',
   remotes,
   shared: {
     react: {
