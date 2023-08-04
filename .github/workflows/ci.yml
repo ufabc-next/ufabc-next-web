@@ -27,5 +27,5 @@ jobs:
 
       - name: Run tests and lint
         uses: borales/actions-yarn@v4
-        with: 
+        with:
           cmd: ${{ matrix.command }}

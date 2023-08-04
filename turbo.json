@@ -1,0 +1,25 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "globalDependencies": ["**/.env.*local"],
+  "pipeline": {
+    "build": {
+      "env": ["MF_ENV", "BASE_URL"],
+      "dependsOn": ["^build"],
+      "outputs": ["dist/**"]
+    },
+    "build:staging": {
+      "env": ["MF_ENV", "BASE_URL"],
+      "dependsOn": ["^build:staging"],
+      "outputs": ["dist/**"]
+    },
+    "lint": {},
+    "test": {},
+    "test:watch": {
+      "cache": false
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}
