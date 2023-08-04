@@ -8,6 +8,7 @@ import 'vuetify/styles';
 import { ThemeDefinition, createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import HighchartsVue from 'highcharts-vue';
 
 const myCustomLightTheme: ThemeDefinition = {
   dark: false,
@@ -56,4 +57,5 @@ createApp(App)
   .use(vuetify)
   .use(elementPlus)
   .use(VueQueryPlugin)
+  .use(HighchartsVue as any)
   .mount('#app');

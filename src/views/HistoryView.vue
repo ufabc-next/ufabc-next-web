@@ -257,7 +257,7 @@ import { computed } from 'vue';
 import CenteredLoading from '@/components/CenteredLoading.vue';
 import FeedbackAlert from '@/components/FeedbackAlert.vue';
 import { ref } from 'vue';
-import { Concept } from '@/types/concept';
+import { Grade as Concept } from '@/types/grades';
 import { conceptsColor } from '@/utils/consts';
 
 const tableHead = [

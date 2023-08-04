@@ -1,5 +1,6 @@
 import api from '@/utils/api';
 import { TeacherReview } from '@/types/teacher';
+import { SubjectInfo } from '@/types/subject';
 
 export type SearchTeacherItem = {
   _id: string;
@@ -39,7 +40,10 @@ const reviews = {
     api.get<SearchSubject>('/subjects/search', {
       params: { q },
     }),
-  get: async (id: string) => api.get<TeacherReview>(`/reviews/teachers/${id}`),
+  getTeacher: async (id: string) =>
+    api.get<TeacherReview>(`/reviews/teachers/${id}`),
+  getSubject: async (id: string) =>
+    api.get<SubjectInfo>(`/reviews/subjects/${id}`),
 };
 
 export default reviews;

@@ -1,41 +1,56 @@
 <template>
-  <v-combobox
+  <v-text-field
     variant="solo"
     v-model="searchTerm"
-    :items="processedResults"
-    @update:search="(val:string) => search(val)"
-    :prepend-inner-icon="
-      isFetchingTeachers || isFetchingSubjects
-        ? 'mdi-loading mdi-spin'
-        : 'mdi-magnify'
-    "
-    :multiple="false"
-    chips
-    clearable
-    hide-details="auto"
-    hide-selected
-    hide-no-data
-    no-filter
-    class="w-100 mb-5"
-    return-object
     placeholder="Digite o nome do professor ou disciplina"
+    @input="search"
+    class="wrapper w-100 mb-5"
+    hide-details
+    prepend-inner-icon="mdi-magnify"
+    clearable
+    @update:focused="(e) => (showResults = e)"
+    @click:clear="clear"
   >
-    <template #item="{ item, props }">
+    <v-list
+      v-if="processedResults.length && (router.currentRoute.value.query.q as string) && showResults"
+      class="results"
+      elevation="1"
+    >
       <v-list-item
+        v-for="item in processedResults"
+        :key="item.id"
         variant="plain"
-        :v-bind="props"
-        @click="enterSearch(item.value.id, item.value.type, item.value.name)"
+        @click="enterSearch(item.id, item.type, item.name)"
       >
         <v-icon
-          v-if="item.value.type"
-          :icon="item.value.type === 'teacher' ? 'mdi-account' : 'mdi-book'"
+          v-if="item.type"
+          :icon="item.type === 'teacher' ? 'mdi-account' : 'mdi-book'"
           class="mr-3"
         />
-        {{ item.value.name }}
+        {{ item.name }}
       </v-list-item>
-    </template>
-  </v-combobox>
+    </v-list>
+  </v-text-field>
 </template>
+
+<style scoped lang="scss">
+.wrapper {
+  position: relative;
+  z-index: 9999;
+}
+.input {
+  width: 100%;
+}
+.results {
+  position: absolute;
+  width: 100%;
+  margin: 45px 0;
+  max-height: 320px;
+  overflow-y: auto;
+  border-radius: 4px;
+  display: block; /* Hide the results by default */
+}
+</style>
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
@@ -47,9 +62,29 @@ import reviews from '@/services/Reviews';
 import router from '@/router';
 import { useQuery } from '@tanstack/vue-query';
 
+const clear = () => {
+  searchTerm.value = '';
+  showResults.value = false;
+  router.replace({
+    name: 'reviews',
+  });
+};
+
+const showResults = ref(false);
 const searchTerm = ref('');
+onMounted(() => {
+  searchTerm.value = router.currentRoute.value.query.q as string;
+});
+
+watch(
+  () => router.currentRoute.value.query.q as string,
+  (q) => {
+    searchTerm.value = q;
+  },
+);
 
 const enterSearch = (id: string, type: string, name: string) => {
+  showResults.value = false;
   searchTerm.value = name;
   router.replace({
     name: 'reviews',
@@ -61,14 +96,6 @@ const enterSearch = (id: string, type: string, name: string) => {
   });
 };
 
-onMounted(() => {
-  const query = router.currentRoute.value.query.q;
-  if (query) {
-    searchTerm.value = query as string;
-    search(query as string);
-  }
-});
-
 const {
   isError: isErrorTeachers,
   isFetching: isFetchingTeachers,
@@ -76,9 +103,15 @@ const {
   refetch: refetchTeachers,
 } = useQuery({
   refetchOnWindowFocus: false,
-  queryKey: ['reviews', 'search', searchTerm.value, 'teachers'],
-  queryFn: () => reviews.searchTeachers(searchTerm.value),
-  // enabled: !!searchTerm.value && searchTerm.value !== '',
+  queryKey: [
+    'reviews',
+    'search',
+    router.currentRoute.value.query.q as string,
+    'teachers',
+  ],
+  queryFn: () =>
+    reviews.searchTeachers(router.currentRoute.value.query.q as string),
+  enabled: !!(router.currentRoute.value.query.q as string),
 });
 
 const {
@@ -88,9 +121,15 @@ const {
   refetch: refetchSubjects,
 } = useQuery({
   refetchOnWindowFocus: false,
-  queryKey: ['reviews', 'search', searchTerm.value, 'subjects'],
-  queryFn: () => reviews.searchSubjects(searchTerm.value),
-  enabled: !!searchTerm.value && searchTerm.value !== '',
+  queryKey: [
+    'reviews',
+    'search',
+    router.currentRoute.value.query.q as string,
+    'subjects',
+  ],
+  queryFn: () =>
+    reviews.searchSubjects(router.currentRoute.value.query.q as string),
+  enabled: !!(router.currentRoute.value.query.q as string),
 });
 
 watch(
@@ -110,27 +149,19 @@ const useSearch = debounce(() => {
   refetchSubjects();
 }, 500);
 
-const search = (query: string) => {
-  if (!query) {
-    router.replace({
-      name: 'reviews',
-    });
-    return;
-  }
+//receives InputEvent
+const search = (e) => {
+  showResults.value = true;
+  router.replace({
+    name: 'reviews',
+    query: {
+      q: e.target?.value,
+    },
+  });
   useSearch();
 };
 
 const processedResults = computed(() => {
-  if (
-    (searchResultsTeachers.value?.data.data.length === 1 &&
-      searchResultsTeachers.value?.data.data[0]._id ===
-        router.currentRoute.value.query.teacherId) ||
-    (searchResultsSubjects.value?.data.data.length === 1 &&
-      searchResultsSubjects.value?.data.data[0]._id ===
-        router.currentRoute.value.query.subjectId)
-  ) {
-    return [];
-  }
   return [
     ...(searchResultsTeachers.value?.data.data.map((result) => ({
       name: result.name,

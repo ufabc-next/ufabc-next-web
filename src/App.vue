@@ -2,7 +2,7 @@
   <v-app>
     <AppBar />
     <v-main style="background-color: #f5f5f5">
-      <v-container>
+      <v-container id="app-container">
         <router-view />
       </v-container>
     </v-main>
@@ -24,6 +24,9 @@ html {
   font-family: Lato, sans-serif;
 }
 a {
-  color: #1976d2;
+  color: #56cdb7;
+}
+#app-container {
+  max-width: 1200px;
 }
 </style>

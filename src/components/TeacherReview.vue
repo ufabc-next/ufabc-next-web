@@ -1,5 +1,6 @@
 <template>
-  <PaperCard class="w-100">
+  <CenteredLoading v-if="isFetchingTeacher" class="mt-5" />
+  <PaperCard v-else class="w-100">
     <div v-if="Number(teacherData?.data.general.count) > 0">
       <v-row>
         <v-col cols="12" md="5">
@@ -23,7 +24,10 @@
               </v-chip>
             </v-col>
             <v-col class="d-flex flex-column align-center">
-              <PieChart :key="`chart-${selectedSubject}`" :grades="grades" />
+              <ConceptsPieChart
+                :key="`chart-${selectedSubject}`"
+                :grades="grades"
+              />
               <p class="text-body-2 text-center font-weight-bold mt-6">
                 * Provavelmente esse professor
                 {{
@@ -54,9 +58,7 @@
               <v-col
                 cols="12"
                 class="px-0 px-sm-3"
-                :style="`${
-                  !smAndDown && 'max-height:600px ; overflow-y:scroll'
-                }`"
+                :style="`${!smAndDown && 'max-height:500px ; overflow-y:auto'}`"
               >
                 <div v-if="commentsData?.total !== 0" class="pr-sm-2">
                   <UserComment
@@ -116,14 +118,17 @@ const props = defineProps({
   id: { type: String, required: true },
 });
 
-import PieChart from './PieChart.vue';
+import ConceptsPieChart from './ConceptsPieChart.vue';
 import { computed, ref } from 'vue';
 import PaperCard from '@/components/PaperCard.vue';
 import { watch } from 'vue';
 import UserComment from './UserComment.vue';
+import CenteredLoading from '@/components/CenteredLoading.vue';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import comments from '@/services/Comment';
 import reviews from '@/services/Reviews';
+import transformGradeDataToObject from '@/utils/transformGradeDataToObject';
+
 import { useDisplay } from 'vuetify';
 const { smAndDown } = useDisplay();
 
@@ -144,7 +149,7 @@ const {
 } = useQuery({
   refetchOnWindowFocus: false,
   queryKey: ['teacher', props.id],
-  queryFn: () => reviews.get(props.id),
+  queryFn: () => reviews.getTeacher(props.id),
   enabled: !!props.id,
 });
 
@@ -177,11 +182,13 @@ const commentsData = computed(() => {
 });
 
 watch(
-  () => [props.id, selectedSubject.value],
-  () => {
-    refetchTeacher();
-    refetchComments();
-  },
+  () => props.id,
+  () => refetchTeacher(),
+);
+
+watch(
+  () => selectedSubject.value,
+  () => refetchComments(),
 );
 
 const chips = computed(() => {
@@ -235,29 +242,16 @@ const subjects = computed(() => {
 
 const grades = computed(() => {
   if (!teacherData.value?.data) return {};
-  const result: { [x: string]: number } = {};
-  if (selectedSubject.value === 'Todas as matérias')
-    teacherData.value.data.general.distribution.forEach((grade) => {
-      result[grade.conceito] =
-        (100 * grade.count) / teacherData.value.data.general.count;
-    });
-  else
-    teacherData.value.data.specific
-      .find((subject) => subject._id.name === selectedSubject.value)
-      ?.distribution.forEach((grade) => {
-        result[grade.conceito] =
-          (100 * grade.count) /
-          (teacherData.value.data.specific.find(
-            (subject) => subject._id.name === selectedSubject.value,
-          )?.count || 1);
-      });
-  const ordered = Object.keys(result)
-    .sort()
-    .reduce((obj: typeof result, key) => {
-      obj[key] = result[key];
-      return obj;
-    }, {});
-  return ordered;
+  if (selectedSubject.value === 'Todas as matérias') {
+    return transformGradeDataToObject(
+      teacherData.value.data.general.distribution,
+      teacherData.value.data.general.count,
+    );
+  }
+  const data = teacherData.value.data.specific.find(
+    (subject) => subject._id.name === selectedSubject.value,
+  );
+  return transformGradeDataToObject(data?.distribution || [], data?.count || 1);
 });
 
 const demandsAttendance = computed(() => {
