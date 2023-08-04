@@ -1,0 +1,42 @@
+{
+  "name": "ufabc-next-web-react",
+  "version": "1.0.0",
+  "license": "AGPL-3.0",
+  "scripts": {
+    "dev": "webpack serve --mode development",
+    "build": "webpack --mode production",
+    "lint": "eslint .",
+    "test": "jest --passWithNoTests"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.22.9",
+    "@babel/preset-env": "^7.22.9",
+    "@babel/preset-react": "^7.22.5",
+    "@types/node": "^20.4.7",
+    "@types/react": "^18.2.18",
+    "@types/react-dom": "^18.2.7",
+    "babel-loader": "^9.1.3",
+    "css-loader": "^6.8.1",
+    "eslint": "^8.46.0",
+    "html-webpack-plugin": "^5.5.3",
+    "eslint-config-react-ts": "*",
+    "eslint-config-custom": "*",
+    "prettier": "^3.0.1",
+    "react-dom": "^18.2.0",
+    "ts-loader": "^9.4.4",
+    "typescript": "^5.1.6",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "engines": {
+    "node": ">=v18.4.0",
+    "npm": ">=8.12.0"
+  },
+  "engineStrict": true,
+  "dependencies": {
+    "react": "^18.2.0",
+    "store": "*",
+    "zustand": "^4.4.0"
+  }
+}
