@@ -1943,6 +1943,36 @@
   resolved "https://registry.yarnpkg.com/@soda/get-current-script/-/get-current-script-1.0.2.tgz#a53515db25d8038374381b73af20bb4f2e508d87"
   integrity sha512-T7VNNlYVM1SgQ+VsMYhnDkcGmWhQdL0bDyGm5TlQ3GBXnJscEClUUOKduWTmm2zCnvNLC1hc3JpuXjs/nFOc5w==
 
+"@tanstack/match-sorter-utils@^8.8.4":
+  version "8.8.4"
+  resolved "https://registry.yarnpkg.com/@tanstack/match-sorter-utils/-/match-sorter-utils-8.8.4.tgz#0b2864d8b7bac06a9f84cb903d405852cc40a457"
+  integrity sha512-rKH8LjZiszWEvmi01NR72QWZ8m4xmXre0OOwlRGnjU01Eqz/QnN+cqpty2PJ0efHblq09+KilvyR7lsbzmXVEw==
+  dependencies:
+    remove-accents "0.4.2"
+
+"@tanstack/query-core@5.0.0-beta.9", "@tanstack/query-core@^5.0.0-beta.9":
+  version "5.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.0.0-beta.9.tgz#3715379e7e83876bd974695318567f0b453f6cf2"
+  integrity sha512-SXaTZ+K/Gw4kd7ZAtHrc0AgffcdLVOHMX0ECgDbyZ8F5hxwS/Fi7F3r1FTiVBxDf1QW4oAiHQW65zhGWikRSng==
+
+"@tanstack/react-query@5.0.0-beta.9":
+  version "5.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.0.0-beta.9.tgz#10768f2ec060bce7dfcfa228e9d5461cd16b89fd"
+  integrity sha512-9gCv+sKOrxUGshOeiQM+jlOvIvfnUPY4bjTpdsfim1wqoY5qjP+yw4KqHImP+t3gNRYgt2CpXsLaEkU3/2x8jg==
+  dependencies:
+    "@tanstack/query-core" "5.0.0-beta.9"
+    client-only "0.0.1"
+
+"@tanstack/vue-query@5.0.0-beta.9":
+  version "5.0.0-beta.9"
+  resolved "https://registry.yarnpkg.com/@tanstack/vue-query/-/vue-query-5.0.0-beta.9.tgz#703fe4e40cf94547494e31ec87cf5c211fa085d7"
+  integrity sha512-LKlECz/RIvDIiGCqNq4jkVfNDx3/V3LQNKiqmIwuoBYrOQUTkjaUD/jrTU1q5Dl0L3h24N/6YnEwvKQ6sRJXbQ==
+  dependencies:
+    "@tanstack/match-sorter-utils" "^8.8.4"
+    "@tanstack/query-core" "5.0.0-beta.9"
+    "@vue/devtools-api" "^6.5.0"
+    vue-demi "^0.13.11"
+
 "@tootallnate/once@1":
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-1.1.2.tgz#ccb91445360179a04e7fe6aff78c00ffc1eeaf82"
@@ -2178,10 +2208,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.5.tgz#9dc0a5cb1ccce4f7a731660935ab70b9c00a5d69"
   integrity sha512-rt40Nk13II9JwQBdeYqmbn2Q6IVTA5uPhvSO+JVqdXw/6/4glI6oR9ezty/A9Hg5u7JH4OmYmuQ+XvjKm0Datg==
 
-"@types/node@^20.4.6":
-  version "20.4.6"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.6.tgz#b66b66c9bb5d49b199f03399e341c9d6036e9e88"
-  integrity sha512-q0RkvNgMweWWIvSMDiXhflGUKMdIxBo2M2tYM/0kEGDueQByFzK4KZAgu5YHGFNxziTlppNpTIBcqHQAxlfHdA==
+"@types/node@^20.4.7":
+  version "20.4.7"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-20.4.7.tgz#74d323a93f1391a63477b27b9aec56669c98b2ab"
+  integrity sha512-bUBrPjEry2QUTsnuEjzjbS7voGWCc30W0qzgMf90GPeDGFRakvrz47ju+oqDAKCXLUCe39u57/ORMl/O/04/9g==
 
 "@types/normalize-package-data@^2.4.0":
   version "2.4.1"
@@ -4007,6 +4037,11 @@ cli-truncate@^3.1.0:
   dependencies:
     slice-ansi "^5.0.0"
     string-width "^5.0.0"
+
+client-only@0.0.1:
+  version "0.0.1"
+  resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
+  integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
 
 clipboardy@^2.3.0:
   version "2.3.0"
@@ -9278,6 +9313,11 @@ relateurl@^0.2.7:
   resolved "https://registry.yarnpkg.com/relateurl/-/relateurl-0.2.7.tgz#54dbf377e51440aca90a4cd274600d3ff2d888a9"
   integrity sha512-G08Dxvm4iDN3MLM0EsP62EDV9IuhXPR6blNz6Utcp7zyV3tr4HVNINt6MpaRWbxoOHT3Q7YN2P+jaHX8vUbgog==
 
+remove-accents@0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/remove-accents/-/remove-accents-0.4.2.tgz#0a43d3aaae1e80db919e07ae254b285d9e1c7bb5"
+  integrity sha512-7pXIJqJOq5tFgG1A2Zxti3Ht8jJF337m4sowbuHsW30ZnkQFnDzy9qBNhgzX8ZLW4+UBcXiiR7SwR6pokHsxiA==
+
 renderkid@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/renderkid/-/renderkid-3.0.0.tgz#5fd823e4d6951d37358ecc9a58b1f06836b6268a"
@@ -10646,6 +10686,11 @@ vue-demi@*, vue-demi@>=0.14.5:
   version "0.14.5"
   resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.14.5.tgz#676d0463d1a1266d5ab5cba932e043d8f5f2fbd9"
   integrity sha512-o9NUVpl/YlsGJ7t+xuqJKx8EBGf1quRhCiT6D/J0pfwmk9zUwYkC7yrF4SZCe6fETvSM3UNL2edcbYrSyc4QHA==
+
+vue-demi@^0.13.11:
+  version "0.13.11"
+  resolved "https://registry.yarnpkg.com/vue-demi/-/vue-demi-0.13.11.tgz#7d90369bdae8974d87b1973564ad390182410d99"
+  integrity sha512-IR8HoEEGM65YY3ZJYAjMlKygDQn25D5ajNFNoKh9RSDMQtlzCxtfQjdQgv9jjK+m3377SsJXY8ysq8kLCZL25A==
 
 vue-eslint-parser@^9.1.1, vue-eslint-parser@^9.3.1:
   version "9.3.1"

@@ -1,4 +1,4 @@
-import api from '@/utils/api';
+import api from './api';
 
 export type Concept = 'A' | 'B' | 'C' | 'D' | 'F' | 'O';
 

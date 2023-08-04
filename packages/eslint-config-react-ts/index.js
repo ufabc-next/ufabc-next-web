@@ -37,7 +37,6 @@ module.exports = {
     'no-prototype-builtins': 'off',
     'import/prefer-default-export': 'off',
     'import/no-default-export': 'off',
-    'import/no-unresolved': 'error',
     'dot-notation': 'off',
     '@typescript-eslint/dot-notation': ['error'],
     '@typescript-eslint/explicit-function-return-type': 'off',

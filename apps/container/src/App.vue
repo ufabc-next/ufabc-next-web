@@ -11,12 +11,12 @@
 
 <script setup lang="ts">
 import AppBar from '@/layouts/AppBar.vue';
-import { auth } from 'stores';
+import { authStore } from 'stores';
 import { onMounted } from 'vue';
 import create from 'vue-zustand';
 import router from './router';
 
-const useAuth = create(auth);
+const useAuth = create(authStore);
 const { authenticate } = useAuth();
 
 onMounted(async () => {

@@ -34,6 +34,7 @@ interface Device {
 declare global {
   interface Window {
     device: Device;
+    queryClient: QueryClient;
   }
 }
 
@@ -50,5 +51,23 @@ const vuetify = createVuetify({
 
 import elementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
+import {
+  VueQueryPlugin,
+  QueryClient as QueryClientVue,
+} from '@tanstack/vue-query';
+import client from './queryClient';
+import { QueryClient } from '@tanstack/query-core';
 
-createApp(App).use(router).use(vuetify).use(elementPlus).mount('#app');
+const queryClient = new QueryClientVue({
+  queryCache: client.getQueryCache(),
+  defaultOptions: client.getDefaultOptions(),
+});
+
+createApp(App)
+  .use(router)
+  .use(vuetify)
+  .use(elementPlus)
+  .use(VueQueryPlugin, {
+    queryClient,
+  })
+  .mount('#app');
