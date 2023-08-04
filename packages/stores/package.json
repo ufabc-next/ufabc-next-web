@@ -5,10 +5,11 @@
   "types": "./index.tsx",
   "license": "MIT",
   "scripts": {
-    "lint": "eslint \"**/*.ts*\""
+    "lint": "eslint \"**/*.ts\""
   },
   "devDependencies": {
     "eslint-config-custom": "*",
+    "eslint-config-react-ts": "*",
     "tsconfig": "*",
     "typescript": "^5.1.6"
   },

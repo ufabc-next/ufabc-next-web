@@ -4,7 +4,7 @@ module.exports = {
   extends: ['custom'],
   settings: {
     ts: {
-      rootDir: ['apps/*/'],
+      rootDir: ['apps/*/', 'packages/*/'],
     },
   },
 };

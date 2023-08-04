@@ -1,5 +1,5 @@
-import { createStore } from 'zustand/vanilla';
 import { persist } from 'zustand/middleware';
+import { createStore } from 'zustand/vanilla';
 
 type OAuth = {
   email: string;
