@@ -3,9 +3,7 @@
     <v-col cols="12">
       <h1>Performance</h1>
       <h2>Your info in Vue: {{ user?.email }}</h2>
-      <QueryProvider :client="client">
-        <HelloWorld />
-      </QueryProvider>
+      <HelloWorld />
     </v-col>
   </v-row>
 </template>
@@ -14,7 +12,6 @@ import { defineFederatedReactComponent } from '@/utils/moduleFederation';
 
 import { authStore } from 'stores';
 import create from 'vue-zustand';
-import client from '@/queryClient';
 
 const useAuth = create(authStore);
 const { user } = useAuth();
