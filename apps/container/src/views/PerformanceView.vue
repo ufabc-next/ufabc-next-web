@@ -10,10 +10,10 @@
 <script setup lang="ts">
 import { defineFederatedReactComponent } from '@/utils/moduleFederation';
 
-import { auth } from 'stores';
+import { authStore } from 'stores';
 import create from 'vue-zustand';
 
-const useAuth = create(auth);
+const useAuth = create(authStore);
 const { user } = useAuth();
 
 const HelloWorld = defineFederatedReactComponent({

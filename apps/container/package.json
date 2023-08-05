@@ -4,7 +4,6 @@
   "license": "AGPL-3.0",
   "private": true,
   "scripts": {
-    "prepare": "husky install",
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:staging": "vue-cli-service build --mode staging",
@@ -14,6 +13,8 @@
   },
   "dependencies": {
     "@mdi/font": "^7.2.96",
+    "@tanstack/query-core": "^5.0.0-beta.9",
+    "@tanstack/vue-query": "5.0.0-beta.9",
     "@types/react": "^18.2.18",
     "@types/react-dom": "^18.2.7",
     "axios": "^1.4.0",
@@ -21,6 +22,7 @@
     "element-plus": "2.3.8",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "services": "*",
     "stores": "*",
     "vue": "3.3.4",
     "vue-router": "4.2.4",
@@ -28,6 +30,7 @@
     "vuetify": "3.3.11"
   },
   "devDependencies": {
+    "@babel/plugin-transform-private-methods": "^7.22.5",
     "@types/jest": "29.5.3",
     "@typescript-eslint/eslint-plugin": "6.2.1",
     "@typescript-eslint/parser": "6.2.1",

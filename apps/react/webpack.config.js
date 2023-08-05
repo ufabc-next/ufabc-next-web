@@ -41,6 +41,7 @@ module.exports = {
       exposes: {
         './HelloWorld': './src/components/HelloWorld.tsx',
         './Test': './src/components/Test.tsx',
+        './QueryProvider': './src/components/QueryProvider.tsx',
       },
       shared: dependencies,
     }),

@@ -248,16 +248,17 @@
 <script setup lang="ts">
 import PaperCard from '@/components/PaperCard.vue';
 import TableComponent from '@/components/TableComponent.vue';
-import Enrollment, {
-  Concept,
+import {
+  Users,
+  Enrollments,
   Enrollment as EnrollmentType,
-} from '@/services/Enrollment';
-import User from '@/services/User';
-import useFetch from '@/composables/useFetch';
+  Concept,
+} from 'services';
 import { computed } from 'vue';
 import CenteredLoading from '@/components/CenteredLoading.vue';
 import FeedbackAlert from '@/components/FeedbackAlert.vue';
 import { ref } from 'vue';
+import { useQuery } from '@tanstack/vue-query';
 
 const tableHead = [
   'Disciplina',
@@ -309,9 +310,17 @@ const {
   data: enrollment,
   isLoading: isLoadingEnrollment,
   error: errorEnrollment,
-} = useFetch(Enrollment.list);
+} = useQuery({
+  queryKey: ['enrollments'],
+  queryFn: Enrollments.list,
+  select: (response) => response.data,
+});
 
-const { data: user, error: errorUser } = useFetch(User.info);
+const { data: user, error: errorUser } = useQuery({
+  queryKey: ['users', 'info'],
+  queryFn: Users.info,
+  select: (response) => response.data,
+});
 
 const enrollmentByDate = computed(() => {
   const enrollmentCopy = enrollment.value?.slice();

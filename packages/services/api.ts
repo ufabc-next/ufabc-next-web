@@ -1,11 +1,10 @@
-import { API_URL } from '@/environment';
 import axios from 'axios';
-import { auth } from 'stores';
+import { authStore } from 'stores';
 
-const api = axios.create({ baseURL: API_URL });
+const api = axios.create({ baseURL: 'https://api.ufabcnext.com/v1/' });
 
 api.interceptors.request.use(async (config) => {
-  const { token } = auth.getState();
+  const { token } = authStore.getState();
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
