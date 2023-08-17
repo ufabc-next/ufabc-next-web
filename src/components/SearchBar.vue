@@ -149,7 +149,6 @@ const useSearch = debounce(() => {
   refetchSubjects();
 }, 500);
 
-//receives InputEvent
 const search = (e) => {
   showResults.value = true;
   router.replace({
@@ -164,12 +163,12 @@ const search = (e) => {
 const processedResults = computed(() => {
   return [
     ...(searchResultsTeachers.value?.data.data.map((result) => ({
-      name: result.name,
+      name: result?.name,
       id: result._id,
       type: result._id && 'teacher',
     })) || []),
     ...(searchResultsSubjects.value?.data.data.map((result) => ({
-      name: result.name,
+      name: result?.name,
       id: result._id,
       type: 'subject',
     })) || []),
