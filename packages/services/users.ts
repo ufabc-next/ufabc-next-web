@@ -24,7 +24,7 @@ type User = {
   devices: Device[];
 };
 
-const user = {
+const userApi = {
   completeSignup: async (params = {}) => api.put('/users/complete', params),
   confirmSignup: async (params = {}) => api.post('/account/confirm', params),
   resendEmail: async () => api.post('/users/me/resend'),
@@ -33,4 +33,4 @@ const user = {
   info: async () => api.get<User>('/users/info'),
 };
 
-export default user;
+export default userApi;
