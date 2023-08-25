@@ -25,12 +25,12 @@ type User = {
 };
 
 const user = {
-  completeSignup: (params = {}) => api.put('/users/complete', params),
-  confirmSignup: (params = {}) => api.post('/account/confirm', params),
-  resendEmail: () => api.post('/users/me/resend'),
-  recovery: (email: string) => api.post('/users/me/recover', { email }),
-  delete: () => api.delete('/users/me/delete'),
-  info: () => api.get<User>('/users/info'),
+  completeSignup: async (params = {}) => api.put('/users/complete', params),
+  confirmSignup: async (params = {}) => api.post('/account/confirm', params),
+  resendEmail: async () => api.post('/users/me/resend'),
+  recovery: async (email: string) => api.post('/users/me/recover', { email }),
+  delete: async () => api.delete('/users/me/delete'),
+  info: async () => api.get<User>('/users/info'),
 };
 
 export default user;
