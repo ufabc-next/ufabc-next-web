@@ -3,6 +3,7 @@ import { createStore } from 'zustand/vanilla';
 
 type OAuth = {
   email: string;
+  google: string;
   facebook: string;
   picture: string;
   emailFacebook: string;
@@ -30,6 +31,7 @@ type UseAuthStore = {
   token: string | null;
   isLoggedIn: () => boolean;
   authenticate: (token: string) => void;
+  logOut: () => void;
 };
 
 const useAuthStore = createStore(
@@ -44,6 +46,7 @@ const useAuthStore = createStore(
           set({ token, user });
         }
       },
+      logOut: () => localStorage.clear(),
     }),
     {
       name: 'auth-storage',
