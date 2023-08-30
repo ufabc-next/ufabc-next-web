@@ -4,12 +4,24 @@ import { ElMessage } from 'element-plus';
 import useAuth from '@/store/useAuth'
 import { useAliasInitials }  from '@/utils/composables/aliasInitials'
 import api from 'services/api';
-import userApi from 'services/users';
+import userService from 'services/users';
+import { useQuery } from '@tanstack/vue-query';
 
 // import axios from 'axios';
 
 // ------- dados do usuário ---------- //
-const { user, logOut } = useAuth();
+
+const {
+  data: user,
+  isLoading: isLoadingUser,
+  // error: errorUser,
+} = useQuery({
+  queryKey: ['users', 'info'],
+  queryFn: userService.info,
+  select: (response) => response.data,
+});
+
+const { logOut } = useAuth();
 
 const userLogin = computed(() => {
   return user.value?.email.replace('@aluno.ufabc.edu.br', '');
@@ -45,11 +57,15 @@ const dialog = ref(false);
 // ------- Lógica de remoção do usuário ---------- //
 const loading = ref(false);
 
+const handleLogout = () => {
+  logOut.value();
+};
+
 async function removeUser(): Promise<void> {
     loading.value = true;
-    await userApi.delete().then((res) => {
+    await userService.delete().then((res) => {
       if (res.data) {
-      logOut;
+      logOut.value();
     }
     }).catch(() => {
       ElMessage({
@@ -72,7 +88,9 @@ async function removeAccount() {
   <section>
     <v-container>
       <div class="title-settings mb-7">Configurações da conta</div>
+      <p v-if="isLoadingUser">isLoading</p>
       <v-row
+        v-if="user && !isLoadingUser"
         class="mb-4 text-md-left text-center"
         style="
           border: 2px solid #f1f1f1;
@@ -160,6 +178,15 @@ async function removeAccount() {
             @click="dialog = true"
           >
             Desativar Conta
+          </v-btn>
+          <v-btn
+            class="settings-button error--text"
+            outlined
+            variant="outlined"
+            color="error"
+            @click="handleLogout"
+          >
+            logout
           </v-btn>
         </v-col>
       </v-row>
