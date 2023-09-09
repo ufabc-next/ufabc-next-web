@@ -1,4 +1,4 @@
-import api from '@/utils/api';
+import api from './api';
 
 type QuadInformation = {
   accumulated_credits: number;
@@ -20,9 +20,9 @@ type CrDistributionData = {
   _id: string;
 };
 
-const performance = {
+const performanceService = {
   getCrHistory: () => api.get<QuadInformation[]>('users/me/grades'),
   getCrDistribution: () => api.get<CrDistributionData[]>('stats/grades'),
 };
 
-export default performance;
+export default performanceService;
