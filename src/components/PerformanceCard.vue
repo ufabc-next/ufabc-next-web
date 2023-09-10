@@ -1,35 +1,35 @@
 <template>
-  <v-card class="pa-5 rounded-lg">
-    <slot />
-    <div class="stats-counter font-weight-bold">{{ cr.toFixed(2) }}</div>
-    <v-card-text class="stats-subtitle pl-0">
+  <v-card class="pa-5 rounded-lg w-100">
+    <!-- <slot /> -->
+    <v-icon
+      class="mb-1 mdi" :class="[props.icon, `text-${props.color}`]"
+    />
+    <div class="text-h5 font-weight-bold text-blue-grey-darken-2">
+      {{ props.value }}
+    </div>
+
+    <v-card-text class="text-subtitle-2 text-blue-grey-lighten-1 pl-0">
       <p>{{ title }}</p>
     </v-card-text>
+
     <div
       role="progressbar"
       aria-valuemin="0"
       aria-valuemax="100"
       aria-valuenow="100"
-      :class="['v-progress-linear', cor]"
+      :class="['v-progress-linear', `bg-${props.color}`]"
     ></div>
   </v-card>
 </template>
+
 <script setup lang="ts">
-defineProps({
-  cr: {
-    type: Number,
-    coerce: (value: string) => {
-      const parsedValue = parseFloat(value);
-      return parsedValue;
-    },
-    default: 0.0,
-  },
-  title: String,
-  cor: {
-    type: String,
-    required: true,
-  },
-});
+const props = defineProps<{
+  value: string | number;
+  title: string;
+  icon: string;
+  color: string;
+}>();
+
 </script>
 
 <style lang="scss" scoped>
