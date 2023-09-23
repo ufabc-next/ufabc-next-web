@@ -1941,17 +1941,12 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.0.0-beta.35.tgz#59dfeb1799ff9ca58fc17eeb40a657da3ed259d5"
   integrity sha512-UDFfBR+ncev2nte+nLsNTCX9Q06rfqADhTVnp5m43IdxFoXwy1qRVg3mBkMDZp+P2JHkKlRohYvZ+bUeuIwK2Q==
 
-"@tanstack/query-core@5.0.0-beta.9":
-  version "5.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.0.0-beta.9.tgz#3715379e7e83876bd974695318567f0b453f6cf2"
-  integrity sha512-SXaTZ+K/Gw4kd7ZAtHrc0AgffcdLVOHMX0ECgDbyZ8F5hxwS/Fi7F3r1FTiVBxDf1QW4oAiHQW65zhGWikRSng==
-
-"@tanstack/react-query@5.0.0-beta.9":
-  version "5.0.0-beta.9"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.0.0-beta.9.tgz#10768f2ec060bce7dfcfa228e9d5461cd16b89fd"
-  integrity sha512-9gCv+sKOrxUGshOeiQM+jlOvIvfnUPY4bjTpdsfim1wqoY5qjP+yw4KqHImP+t3gNRYgt2CpXsLaEkU3/2x8jg==
+"@tanstack/react-query@5.0.0-beta.35":
+  version "5.0.0-beta.35"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.0.0-beta.35.tgz#a07b5e6d62ceb89a05ce8fb092ac259548ea4a46"
+  integrity sha512-9hxP/DZbGucYFaHx6Njhkrbx32lNRk4QqqkGzyQ4IPaYfJTELE7urc9LBYRwrof211cj0W76IxmpjDwZ5ljZpQ==
   dependencies:
-    "@tanstack/query-core" "5.0.0-beta.9"
+    "@tanstack/query-core" "5.0.0-beta.35"
     client-only "0.0.1"
 
 "@tanstack/vue-query@5.0.0-beta.35":
