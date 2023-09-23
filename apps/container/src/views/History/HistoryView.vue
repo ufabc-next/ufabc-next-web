@@ -246,8 +246,8 @@
 }
 </style>
 <script setup lang="ts">
-import PaperCard from '@/components/PaperCard.vue';
-import TableComponent from '@/components/TableComponent.vue';
+import { PaperCard } from '@/components/PaperCard';
+import { TableComponent } from '@/components/TableComponent';
 import {
   Users,
   Enrollments,
@@ -255,8 +255,8 @@ import {
   Concept,
 } from 'services';
 import { computed } from 'vue';
-import CenteredLoading from '@/components/CenteredLoading.vue';
-import FeedbackAlert from '@/components/FeedbackAlert.vue';
+import { CenteredLoading } from '@/components/CenteredLoading';
+import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { ref } from 'vue';
 import { useQuery } from '@tanstack/vue-query';
 

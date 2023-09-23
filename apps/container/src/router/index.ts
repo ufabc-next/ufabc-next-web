@@ -1,12 +1,12 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
-import ReviewsView from '../views/ReviewsView.vue';
-import PerformanceView from '../views/PerformanceView.vue';
-import RelationshipView from '../views/RelationshipView.vue';
-import PlanningView from '../views/PlanningView.vue';
-import HistoryView from '../views/HistoryView.vue';
-import StatsView from '../views/StatsView.vue';
-import SettingsView from '../views/SettingsView.vue';
-import DonateView from '../views/DonateView.vue';
+import { ReviewsView } from '@/views/Reviews';
+import { PerformanceView } from '@/views/Performance';
+import { RelationshipView } from '@/views/Relationship';
+import { PlanningView } from '@/views/Planning';
+import { HistoryView } from '@/views/History';
+import { StatsView } from '@/views/Stats';
+import { SettingsView } from '@/views/Settings';
+import { DonateView } from '@/views/Donate';
 
 const routes: Array<RouteRecordRaw> = [
   {
