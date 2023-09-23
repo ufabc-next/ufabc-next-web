@@ -12,5 +12,5 @@
 </template>
 
 <script setup lang="ts">
-import ReviewsWelcome from '@/components/ReviewsWelcome.vue';
+import { ReviewsWelcome } from '@/components/ReviewsWelcome';
 </script>

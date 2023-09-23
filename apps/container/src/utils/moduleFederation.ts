@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineAsyncComponent, h } from 'vue';
-import Loading from '@/components/MFLoading.vue';
-import Error from '@/components/MFError.vue';
+import { MFLoading } from '@/components/MFLoading';
+import { MFError } from '@/components/MFError';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 
@@ -16,8 +16,8 @@ export function defineFederatedReactComponent({
         component: (await loader())[component],
         ...options,
       }),
-    loadingComponent: Loading,
-    errorComponent: Error,
+    loadingComponent: MFLoading,
+    errorComponent: MFError,
     timeout: 1000,
   });
 }
