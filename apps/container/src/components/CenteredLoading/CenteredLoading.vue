@@ -1,11 +1,11 @@
 <template>
   <div class="d-flex justify-center py-4">
-    <p
+    <v-progress-circular
       color="ufabcnext-green"
       indeterminate
       model-value="20"
       aria-label="Carregando"
-    ></p>
+    ></v-progress-circular>
   </div>
 </template>
 
