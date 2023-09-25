@@ -1,33 +1,27 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { ElMessage } from 'element-plus';
-import useAuth from '@/store/useAuth'
-import { useAliasInitials }  from '@/utils/composables/aliasInitials'
+import CenteredLoading from '@/components/CenteredLoading.vue';
+import useAuth from '@/store/useAuth';
+import { useAliasInitials } from '@/utils/composables/aliasInitials';
 import api from 'services/api';
 import userService from 'services/users';
+
+// dados do usuário
 import { useQuery } from '@tanstack/vue-query';
-
-// import axios from 'axios';
-
-// ------- dados do usuário ---------- //
-
 const {
   data: user,
   isLoading: isLoadingUser,
-  // error: errorUser,
+  error: isErrorUser,
 } = useQuery({
   queryKey: ['users', 'info'],
   queryFn: userService.info,
   select: (response) => response.data,
 });
 
-const { logOut } = useAuth();
-
 const userLogin = computed(() => {
   return user.value?.email.replace('@aluno.ufabc.edu.br', '');
 });
-
-const userInitials = useAliasInitials()
 
 const addGoogleAccount = computed(() => {
   const apiPath = api.defaults.baseURL?.replace('/v1', '');
@@ -48,39 +42,41 @@ const createdAt = computed(() => {
   }
   return ''; // Return a default value if createdAt is not defined
 });
-// ------------------------------------------------------- //
 
-// ------------ Modal ------------------ //
+const userInitials = useAliasInitials();
+
+// Modal 
 const dialog = ref(false);
-// ------------------------------------------------ //
 
-// ------- Lógica de remoção do usuário ---------- //
-const loading = ref(false);
-
+// Lógica de remoção do usuário
+const { logOut } = useAuth();
 const handleLogout = () => {
   logOut.value();
 };
 
 async function removeUser(): Promise<void> {
-    loading.value = true;
-    await userService.delete().then((res) => {
+  await userService
+    .delete()
+    .then((res) => {
       if (res.data) {
-      logOut.value();
-    }
-    }).catch(() => {
+        handleLogout()
+      }
+    })
+    .catch(() => {
       ElMessage({
-        message: "Ocorreu um erro ao tentar excluir sua conta",
+        message: 'Ocorreu um erro ao tentar excluir sua conta',
         type: 'error',
       });
     });
 
-    loading.value = false;
 }
 
 async function removeAccount() {
   dialog.value = false;
   await removeUser();
 }
+
+const reloadPage = () => window.location.reload();
 // ---------------------------------------------------- //
 </script>
 
@@ -88,16 +84,22 @@ async function removeAccount() {
   <section>
     <v-container>
       <div class="title-settings mb-7">Configurações da conta</div>
-      <p v-if="isLoadingUser">isLoading</p>
       <v-row
-        v-if="user && !isLoadingUser"
-        class="mb-4 text-md-left text-center"
-        style="
-          border: 2px solid #f1f1f1;
-          padding: 2rem;
-          border-radius: 3px;
-          background: white;
-        "
+        v-if="!user"
+        class="mb-4 justify-center pa-8 rounded-lg bg-white"
+        style="border: 2px solid #f1f1f1"
+      >
+        <CenteredLoading v-if="isLoadingUser"></CenteredLoading>
+        <div class="text-center" v-if="isErrorUser">
+          <p class="text-box-settings">Ocorreu um problema ao carregar as informações do seu perfil</p>
+          <p class="text-box-settings">Tente novamente <span @click="reloadPage" class="text-decoration-underline">clicando aqui</span></p>
+        </div>
+      </v-row>
+
+      <v-row
+        v-else
+        class="mb-4 text-md-left text-center rounded-lg pa-8 bg-white"
+        style="border: 2px solid #f1f1f1"
       >
         <v-col
           cols="12"
@@ -178,15 +180,6 @@ async function removeAccount() {
             @click="dialog = true"
           >
             Desativar Conta
-          </v-btn>
-          <v-btn
-            class="settings-button error--text"
-            outlined
-            variant="outlined"
-            color="error"
-            @click="handleLogout"
-          >
-            logout
           </v-btn>
         </v-col>
       </v-row>
