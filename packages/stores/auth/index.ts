@@ -46,7 +46,10 @@ const useAuthStore = createStore(
           set({ token, user });
         }
       },
-      logOut: () => set({ user: null, token: null }),
+      logOut: () => {
+        set({ user: null, token: null });
+        window.location.href = '/';
+      },
     }),
     {
       name: 'auth-storage',
