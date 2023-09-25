@@ -5,6 +5,7 @@ type Oauth = {
   facebook: string;
   picture: string;
   emailFacebook: string;
+  google: string;
 };
 
 type Device = {
@@ -20,7 +21,7 @@ type User = {
   confirmed: boolean;
   email: string;
   ra: number;
-  createAt: string;
+  createdAt: string;
   devices: Device[];
 };
 
