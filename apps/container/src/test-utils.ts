@@ -1,14 +1,14 @@
 import elementPlus from 'element-plus';
 import { vuetify } from './vuetify';
 
-export * from '@testing-library/vue';
-import { render as testingLibraryRender } from '@testing-library/vue';
+import { render } from '@testing-library/vue';
 
-export const render: typeof testingLibraryRender = (component, options) => {
-  return testingLibraryRender(component, {
-    global: {
-      plugins: [elementPlus, vuetify],
-    },
+const customRender: typeof render = (component, options) => {
+  return render(component, {
     ...options,
+    global: { plugins: [vuetify, elementPlus] },
   });
 };
+
+export { customRender as render };
+export * from '@testing-library/vue';

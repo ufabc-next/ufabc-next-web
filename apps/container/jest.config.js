@@ -1,20 +1,38 @@
 /** @type {import('jest').Config} */
+
 const config = {
-  preset: '@vue/cli-plugin-unit-jest/presets/typescript-and-babel',
   testMatch: ['<rootDir>/src/**/*.test.ts'],
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
-  transform: { '^.*\\.js$': 'babel-jest' },
-  transformIgnorePatterns: ['node_modules/(?!axios)'],
-  moduleNameMapper: {
-    '^vuetify/lib': 'vuetify/es5/entry-lib',
-    '^vuetify/lib/(.*)': 'vuetify/es5/$1',
+  transform: {
+    '.+\\.(css|styl|less|sass|scss|jpg|jpeg|png|svg|gif|eot|otf|webp|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga|avif)$':
+      'jest-transform-stub',
+    '^.+\\.(ts|js|mjs)x?$': 'babel-jest',
+    '^.+\\.vue$': '@vue/vue3-jest',
   },
-  collectCoverage: true,
-  collectCoverageFrom: [
-    '<rootDir>/src/**/*.{ts,vue}',
-    '!<rootDir>/src/mocks/*.ts',
+  moduleNameMapper: {
+    '^@/(.*)$': '<rootDir>/src/$1',
+    '^vuetify/components$':
+      '<rootDir>/../../node_modules/vuetify/lib/components/index.mjs',
+    '^vuetify/directives$':
+      '<rootDir>/../../node_modules/vuetify/lib/directives/index.mjs',
+  },
+  // watchPlugins: [
+  //   require.resolve('jest-watch-typeahead/filename'),
+  //   require.resolve('jest-watch-typeahead/testname'),
+  // ],
+  testEnvironment: 'jsdom',
+  testEnvironmentOptions: {
+    url: 'http://localhost/',
+    customExportConditions: ['node'],
+  },
+  moduleFileExtensions: ['js', 'json', 'vue', 'ts', 'mjs'],
+  transformIgnorePatterns: [
+    '<rootDir>/node_modules/(?!axios)',
+    '<rootDir>/node_modules/(?!vuetify)',
   ],
-  coverageReporters: ['text', 'html'],
+  // collectCoverage: true,
+  // collectCoverageFrom: ['<rootDir>/src/**/*.{ts}', '!<rootDir>/src/mocks/*.ts'],
+  // coverageReporters: ['text', 'lcov'],
 };
 
 module.exports = config;
