@@ -7,8 +7,8 @@
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "build:staging": "vue-cli-service build --mode staging",
-    "test": "vue-cli-service test:unit --passWithNoTests",
-    "test:watch": "vue-cli-service test:unit --passWithNoTests --watch",
+    "test": "jest --forceExit --maxWorkers=50% --detectOpenHandles",
+    "test:watch": "npm run test --watch",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
@@ -54,6 +54,8 @@
     "eslint-plugin-vue": "9.17.0",
     "husky": "8.0.3",
     "jest": "29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-transform-stub": "^2.0.0",
     "lint-staged": "14.0.1",
     "prettier": "3.0.3",
     "sass": "1.68.0",
