@@ -1,9 +1,9 @@
 import { render, screen } from '@/test-utils';
-import { CenteredLoading } from '.';
+import { HistoryView } from '.';
 
 describe('<CenteredLoading />', () => {
   test('render a loading', () => {
-    render(CenteredLoading);
+    render(HistoryView);
     expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
   });
 });

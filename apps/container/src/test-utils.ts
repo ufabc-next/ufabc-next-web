@@ -1,12 +1,21 @@
 import elementPlus from 'element-plus';
-import { vuetify } from './vuetify';
+import { createVuetify } from 'vuetify';
 
+import * as components from 'vuetify/components';
+import * as directives from 'vuetify/directives';
 import { render } from '@testing-library/vue';
+
+import { VueQueryPlugin } from '@tanstack/vue-query';
+
+const vuetify = createVuetify({
+  components,
+  directives,
+});
 
 const customRender: typeof render = (component, options) => {
   return render(component, {
     ...options,
-    global: { plugins: [vuetify, elementPlus] },
+    global: { plugins: [vuetify, elementPlus, VueQueryPlugin] },
   });
 };
 

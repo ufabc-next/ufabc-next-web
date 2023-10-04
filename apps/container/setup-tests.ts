@@ -15,8 +15,6 @@ class ResizeObserverStub {
 
 window.ResizeObserver = window.ResizeObserver || ResizeObserverStub;
 
-global.CSS = { supports: () => false };
-
 beforeAll(() => server.listen());
 
 afterEach(() => server.resetHandlers());
