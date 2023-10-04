@@ -21,7 +21,7 @@ const theme: ThemeDefinition = {
     'next-gray': '#404040',
     'next-light-gray': '#848687',
     error: '#f45576',
-    background: '#fffff````f',
+    background: '#ffffff',
   },
 };
 
