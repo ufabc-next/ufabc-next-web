@@ -40,6 +40,7 @@
           flat
           variant="text"
           size="x-small"
+          aria-labelledby="extension-dialog"
         >
           <v-dialog v-model="extensionDialog" width="360">
             <v-card class="pa-4">
@@ -71,7 +72,11 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-tooltip activator="parent" offset="1" location="bottom center"
+          <v-tooltip
+            id="extension-dialog"
+            activator="parent"
+            offset="1"
+            location="bottom center"
             >Atualizar o histórico</v-tooltip
           >
           <v-icon size="x-large" />
@@ -314,12 +319,14 @@ const {
   queryKey: ['enrollments'],
   queryFn: Enrollments.list,
   select: (response) => response.data,
+  retry: false,
 });
 
 const { data: user, error: errorUser } = useQuery({
   queryKey: ['users', 'info'],
   queryFn: Users.info,
   select: (response) => response.data,
+  retry: false,
 });
 
 const enrollmentByDate = computed(() => {
