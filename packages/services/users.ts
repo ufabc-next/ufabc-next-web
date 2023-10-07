@@ -5,7 +5,7 @@ type Oauth = {
   facebook: string;
   picture: string;
   emailFacebook: string;
-  google: string;
+  google?: string;
 };
 
 type Device = {
@@ -15,7 +15,7 @@ type Device = {
   phone: string;
 };
 
-type User = {
+export type User = {
   _id: string;
   oauth: Oauth;
   confirmed: boolean;

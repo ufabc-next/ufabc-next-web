@@ -1,3 +1,4 @@
+import { User } from 'services/users';
 import { persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
@@ -14,16 +15,6 @@ type Device = {
   deviceId: string;
   token: string;
   phone: string;
-};
-
-export type User = {
-  _id: string;
-  oauth: OAuth;
-  confirmed: boolean;
-  email: string;
-  ra: number;
-  createdAt: string;
-  devices: Device[];
 };
 
 type UseAuthStore = {
