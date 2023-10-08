@@ -20,9 +20,50 @@ type CrDistributionData = {
   _id: string;
 };
 
+type Disciplina = {
+  codigo: string;
+  categoria: string;
+  conceito: string;
+  creditos: number;
+  periodo: string;
+  ano: number;
+  situacao: string;
+  disciplina: string;
+};
+
+type Quads = 1 | 2 | 3;
+
+type CoefficientsByYear = {
+  [year: string]: Record<Quads, QuadInformation>;
+};
+
+type CourseInformation = {
+  _id: string;
+  curso: string;
+  grade: string;
+  ra: number;
+  __v: number;
+  coefficients: CoefficientsByYear;
+  createdAt: string;
+  disciplinas: Disciplina[];
+  graduation: string;
+  updatedAt: string;
+  id: string;
+};
+
+type HistoriesGraduations = {
+  docs: CourseInformation[];
+  total: number;
+  page: number;
+  limit: number;
+  pages: number;
+};
+
 const performanceService = {
   getCrHistory: () => api.get<QuadInformation[]>('users/me/grades'),
   getCrDistribution: () => api.get<CrDistributionData[]>('stats/grades'),
+  getHistoriesGraduations: () =>
+    api.get<HistoriesGraduations>('historiesGraduations'),
 };
 
 export default performanceService;
