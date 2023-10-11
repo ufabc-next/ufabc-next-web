@@ -23,7 +23,6 @@
             Todos nossos dados de comentários e conceitos estão armazenados em
             nuvem e estão criptografados.
           </p>
-
           <p class="welcome-subtitle">
             Interface responsiva, acesse pelo celular 😀
           </p>

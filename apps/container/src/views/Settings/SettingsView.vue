@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { ElMessage } from 'element-plus';
-import CenteredLoading from '@/components/CenteredLoading.vue';
+import { CenteredLoading } from '@/components/CenteredLoading';
 import useAuth from '@/store/useAuth';
 import { useAliasInitials } from '@/utils/composables/aliasInitials';
 import api from 'services/api';
@@ -45,7 +45,7 @@ const createdAt = computed(() => {
 
 const userInitials = useAliasInitials();
 
-// Modal 
+// Modal
 const dialog = ref(false);
 
 // Lógica de remoção do usuário
@@ -59,7 +59,7 @@ async function removeUser(): Promise<void> {
     .delete()
     .then((res) => {
       if (res.data) {
-        handleLogout()
+        handleLogout();
       }
     })
     .catch(() => {
@@ -68,7 +68,6 @@ async function removeUser(): Promise<void> {
         type: 'error',
       });
     });
-
 }
 
 async function removeAccount() {
@@ -91,8 +90,15 @@ const reloadPage = () => window.location.reload();
       >
         <CenteredLoading v-if="isLoadingUser"></CenteredLoading>
         <div class="text-center" v-if="isErrorUser">
-          <p class="text-box-settings">Ocorreu um problema ao carregar as informações do seu perfil</p>
-          <p class="text-box-settings">Tente novamente <span @click="reloadPage" class="text-decoration-underline">clicando aqui</span></p>
+          <p class="text-box-settings">
+            Ocorreu um problema ao carregar as informações do seu perfil
+          </p>
+          <p class="text-box-settings">
+            Tente novamente
+            <span @click="reloadPage" class="text-decoration-underline"
+              >clicando aqui</span
+            >
+          </p>
         </div>
       </v-row>
 

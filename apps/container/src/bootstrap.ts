@@ -5,11 +5,13 @@ import router from './router';
 import '@mdi/font/css/materialdesignicons.css';
 
 import 'vuetify/styles';
-import { ThemeDefinition, createVuetify } from 'vuetify';
+
+import { createVuetify } from 'vuetify';
+
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 
-const myCustomLightTheme: ThemeDefinition = {
+const theme: ThemeDefinition = {
   dark: false,
   colors: {
     navigation: '#215096',
@@ -22,6 +24,17 @@ const myCustomLightTheme: ThemeDefinition = {
     background: '#ffffff',
   },
 };
+
+const vuetify = createVuetify({
+  components,
+  directives,
+  theme: {
+    defaultTheme: 'theme',
+    themes: {
+      theme,
+    },
+  },
+});
 
 interface Device {
   cordova: string;
@@ -38,17 +51,6 @@ declare global {
   }
 }
 
-const vuetify = createVuetify({
-  components,
-  directives,
-  theme: {
-    defaultTheme: 'myCustomLightTheme',
-    themes: {
-      myCustomLightTheme,
-    },
-  },
-});
-
 import elementPlus from 'element-plus';
 import 'element-plus/dist/index.css';
 import {
@@ -57,6 +59,7 @@ import {
 } from '@tanstack/vue-query';
 import client from './queryClient';
 import { QueryClient } from '@tanstack/query-core';
+import { ThemeDefinition } from 'vuetify/lib/framework.mjs';
 
 const queryClient = new QueryClientVue({
   queryCache: client.getQueryCache(),
