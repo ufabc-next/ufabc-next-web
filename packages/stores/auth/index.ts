@@ -2,7 +2,7 @@ import { User } from 'services/users';
 import { persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 
-type OAuth = {
+export type OAuth = {
   email: string;
   google: string;
   facebook: string;
@@ -10,7 +10,7 @@ type OAuth = {
   emailFacebook: string;
 };
 
-type Device = {
+export type Device = {
   _id: string;
   deviceId: string;
   token: string;
