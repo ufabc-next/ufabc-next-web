@@ -1,5 +1,5 @@
 <template>
-  <v-card class="pa-5 rounded-lg w-100">
+  <v-card class="performance-card">
     <!-- <slot /> -->
     <v-icon
       class="mb-1 mdi" :class="[props.icon, `text-${props.color}`]"
@@ -36,6 +36,11 @@ const props = defineProps<{
 .v-progress-linear {
   height: 6px;
   border-radius: 0.25rem;
-  background: red;
+}
+.performance-card {
+  padding: 20px; /* Correspondente a pa-5 */
+  border-radius: 0.5rem; /* Correspondente a rounded-lg */
+  width: 100%; /* Correspondente a w-100 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 </style>

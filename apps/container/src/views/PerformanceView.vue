@@ -20,7 +20,7 @@ const userMaxCr = computed(() => {
   if (crAcumulados) {
     return Math.max(...crAcumulados).toFixed(2);
   } else {
-    return '';
+    return 'undefined';
   }
 });
 const crHistorySeries = computed(() => {
@@ -321,11 +321,10 @@ const bestQuad = computed(() => {
         >
         </PerformanceCard>
       </div>
+      <!-- {{ crHistoryData }} -->
+      {{ userMaxCr }}
 
-      <!-- VIRAR COMPONENTE DEPOIS!!! -->
-      <section
-        class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg"
-      >
+      <section class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg">
         <Chart :options="crHistoryOptions" />
       </section>
 
@@ -342,9 +341,7 @@ const bestQuad = computed(() => {
         <Chart :options="cpHistoryOptions" />
       </section>
 
-      <section
-        class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg"
-      >
+      <section class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg">
         <Chart :options="crDistributionOptions" />
       </section>
 
