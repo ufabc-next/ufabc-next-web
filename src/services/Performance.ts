@@ -37,7 +37,7 @@ type CoefficientsByYear = {
   [year: string]: Record<Quads, QuadInformation>;
 };
 
-type CourseInformation = {
+export type CourseInformation = {
   _id: string;
   curso: string;
   grade: string;

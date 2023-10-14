@@ -4,6 +4,7 @@ import { Chart } from 'highcharts-vue';
 import PerformanceCard from '@/components/PerformanceCard.vue';
 import { useQuery } from '@tanstack/vue-query';
 import performanceService from 'services/Performance';
+import { CourseInformation } from 'services/Performance';
 
 // DADOS SOBRE CR
 const {
@@ -27,7 +28,7 @@ const crHistorySeries = computed(() => {
     const roundedCr = parseFloat(quad.cr_acumulado.toFixed(2));
     return [quad.season, roundedCr];
   });
-  return arrCrHistory;  // criar condição de contorno
+  return arrCrHistory; // criar condição de contorno
 });
 // full highcharts options available on: https://api.highcharts.com/highcharts/
 const crHistoryOptions = ref({
@@ -82,19 +83,100 @@ const crHistoryOptions = ref({
     },
   ],
 });
-// ---------------------------------------------------
-// DISTRIBUIÇÃO DE CR
+
+// DADOS SOBRE CP
+const currentCpHistory = ref<CourseInformation>();
 const {
-  data: crDistributionData
+  data: cpHistoryData,
+  // isLoading: isLoadingCrHistory,
 } = useQuery({
+  queryKey: ['cpHistory'],
+  queryFn: performanceService.getHistoriesGraduations,
+  select: (response) => {
+    currentCpHistory.value = response.data.docs[0]; // updating v-select
+    return response.data.docs;
+  },
+});
+const updateCpSeries = computed(() => {
+  if(currentCpHistory.value) {
+    const result = []
+    const courseData = currentCpHistory.value.coefficients
+    
+    for (const year in courseData) {
+      for (const quadNumber in courseData[year]) {
+        const cpValue = courseData[year][quadNumber].cp_acumulado
+        result.push([`${year}:${quadNumber}`, cpValue])
+      }
+    }
+    return result
+  }
+  return []
+});
+const cpHistoryOptions = ref({
+  chart: {
+    type: 'area',
+    style: { fontFamily: 'Roboto, sans-serif' },
+  },
+
+  plotOptions: {
+    area: {
+      fillOpacity: 0.45,
+      lineWidth: 2,
+      marker: {
+        radius: 5,
+      },
+    },
+  },
+
+  colors: ['#2e7eed'], // o certo é utilizar o design token 'primary' do vuetify aqui
+
+  credits: {
+    enabled: false, // créditos de gráficos e outras libs estarão em "licenças"?
+  },
+
+  title: {
+    text: 'Seu CP ao longo do tempo',
+  },
+
+  tooltip: {
+    borderRadius: 10,
+    padding: 12,
+  },
+
+  yAxis: {
+    title: {
+      text: 'CP',
+    },
+  },
+
+  xAxis: {
+    title: {
+      text: 'Quadrimestre',
+    },
+    crosshair: true,
+    type: 'category',
+  },
+
+  series: [
+    {
+      name: 'Seu CP',
+      data: updateCpSeries,
+    },
+  ],
+});
+
+
+
+// DISTRIBUIÇÃO DE CR
+const { data: crDistributionData } = useQuery({
   queryKey: ['crDistribution'],
   queryFn: performanceService.getCrDistribution,
-  select: (response) => response.data
+  select: (response) => response.data,
 });
 
 const crDistributionSeries = computed(() => {
   const arrCrDistribution = crDistributionData.value?.map((element) => {
-    return [Number(element._id), element.total]
+    return [Number(element._id), element.total];
   });
   return arrCrDistribution;
 });
@@ -141,7 +223,7 @@ const crDistributionOptions = ref({
       text: 'CR',
     },
     crosshair: true,
-    type: 'category'
+    type: 'category',
   },
 
   series: [
@@ -151,8 +233,6 @@ const crDistributionOptions = ref({
     },
   ],
 });
-
-
 // ---------------------------------------------------
 // dados dos cards
 const maxCreditsQuad = computed(() => {
@@ -181,7 +261,6 @@ const bestQuad = computed(() => {
     return '';
   }
 });
-
 </script>
 
 <template>
@@ -217,9 +296,8 @@ const bestQuad = computed(() => {
         >
         </PerformanceCard>
       </div>
-      {{ crHistoryData }}
-      {{ userMaxCr }}
 
+      <!-- VIRAR COMPONENTE DEPOIS!!! -->
       <section
         class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg"
       >
@@ -230,6 +308,20 @@ const bestQuad = computed(() => {
         class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg"
       >
         <Chart :options="crDistributionOptions" />
+      </section>
+
+      <section
+        class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg"
+      >
+        <v-select
+          chips
+          :items="cpHistoryData"
+          :item-title="(course) => course.curso"
+          :item-value="(course) => course"
+          v-model="currentCpHistory"
+          variant="outlined"
+        ></v-select>
+        <Chart :options="cpHistoryOptions" />
       </section>
     </div>
   </section>
