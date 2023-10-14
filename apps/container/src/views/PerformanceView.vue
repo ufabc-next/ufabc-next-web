@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { Chart } from 'highcharts-vue';
-import PerformanceCard from '@/components/PerformanceCard.vue';
 import { useQuery } from '@tanstack/vue-query';
+import PerformanceCard from '@/components/PerformanceCard.vue';
 import performanceService from 'services/Performance';
 import { CourseInformation } from 'services/Performance';
 
@@ -32,6 +32,10 @@ const crHistorySeries = computed(() => {
 });
 // full highcharts options available on: https://api.highcharts.com/highcharts/
 const crHistoryOptions = ref({
+  accessibility: {
+    enabled: true,
+  },
+
   chart: {
     type: 'area',
     style: { fontFamily: 'Roboto, sans-serif' },
@@ -42,7 +46,7 @@ const crHistoryOptions = ref({
       fillOpacity: 0.45,
       lineWidth: 2,
       marker: {
-        radius: 5,
+        radius: 4,
       },
     },
   },
@@ -66,6 +70,7 @@ const crHistoryOptions = ref({
     title: {
       text: 'CR',
     },
+    tickInterval: 0.5,
   },
 
   xAxis: {
@@ -74,6 +79,10 @@ const crHistoryOptions = ref({
     },
     crosshair: true,
     type: 'category',
+  },
+
+  legend: {
+    verticalAlign: 'top',
   },
 
   series: [
@@ -98,21 +107,25 @@ const {
   },
 });
 const updateCpSeries = computed(() => {
-  if(currentCpHistory.value) {
-    const result = []
-    const courseData = currentCpHistory.value.coefficients
-    
+  if (currentCpHistory.value) {
+    const result = [];
+    const courseData = currentCpHistory.value.coefficients;
+
     for (const year in courseData) {
       for (const quadNumber in courseData[year]) {
-        const cpValue = courseData[year][quadNumber].cp_acumulado
-        result.push([`${year}:${quadNumber}`, cpValue])
+        const cpValue = courseData[year][quadNumber].cp_acumulado;
+        result.push([`${year}:${quadNumber}`, cpValue]);
       }
     }
-    return result
+    return result;
   }
-  return []
+  return [];
 });
 const cpHistoryOptions = ref({
+  accessibility: {
+    enabled: true,
+  },
+
   chart: {
     type: 'area',
     style: { fontFamily: 'Roboto, sans-serif' },
@@ -123,7 +136,7 @@ const cpHistoryOptions = ref({
       fillOpacity: 0.45,
       lineWidth: 2,
       marker: {
-        radius: 5,
+        radius: 4,
       },
     },
   },
@@ -147,6 +160,7 @@ const cpHistoryOptions = ref({
     title: {
       text: 'CP',
     },
+    tickInterval: 0.05,
   },
 
   xAxis: {
@@ -157,6 +171,10 @@ const cpHistoryOptions = ref({
     type: 'category',
   },
 
+  legend: {
+    verticalAlign: 'top',
+  },
+
   series: [
     {
       name: 'Seu CP',
@@ -164,8 +182,6 @@ const cpHistoryOptions = ref({
     },
   ],
 });
-
-
 
 // DISTRIBUIÇÃO DE CR
 const { data: crDistributionData } = useQuery({
@@ -182,6 +198,10 @@ const crDistributionSeries = computed(() => {
 });
 
 const crDistributionOptions = ref({
+  accessibility: {
+    enabled: true,
+  },
+
   chart: {
     type: 'area',
     style: { fontFamily: 'Roboto, sans-serif' },
@@ -192,7 +212,7 @@ const crDistributionOptions = ref({
       fillOpacity: 0.45,
       lineWidth: 2,
       marker: {
-        radius: 5,
+        radius: 4,
       },
     },
   },
@@ -216,6 +236,7 @@ const crDistributionOptions = ref({
     title: {
       text: 'Quantidade de alunos',
     },
+    tickInterval: 50,
   },
 
   xAxis: {
@@ -224,6 +245,10 @@ const crDistributionOptions = ref({
     },
     crosshair: true,
     type: 'category',
+  },
+
+  legend: {
+    verticalAlign: 'top',
   },
 
   series: [
@@ -307,14 +332,7 @@ const bestQuad = computed(() => {
       <section
         class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg"
       >
-        <Chart :options="crDistributionOptions" />
-      </section>
-
-      <section
-        class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg"
-      >
         <v-select
-          chips
           :items="cpHistoryData"
           :item-title="(course) => course.curso"
           :item-value="(course) => course"
@@ -323,6 +341,14 @@ const bestQuad = computed(() => {
         ></v-select>
         <Chart :options="cpHistoryOptions" />
       </section>
+
+      <section
+        class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg"
+      >
+        <Chart :options="crDistributionOptions" />
+      </section>
+
+      
     </div>
   </section>
 </template>
