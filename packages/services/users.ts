@@ -1,6 +1,6 @@
 import api from './api';
 
-type Oauth = {
+export type Oauth = {
   email: string;
   facebook: string;
   picture: string;
@@ -8,7 +8,7 @@ type Oauth = {
   google?: string;
 };
 
-type Device = {
+export type Device = {
   _id: string;
   deviceId: string;
   token: string;
