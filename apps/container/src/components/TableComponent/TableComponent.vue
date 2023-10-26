@@ -1,18 +1,20 @@
 <template>
-  <v-table hover density="comfortable" class="rounded-lg">
-    <thead class="table-head bg-ufabcnext-green">
-      <slot name="head"></slot>
-    </thead>
-    <tbody class="table-body bg-secondary">
-      <slot name="body" style=""></slot>
-    </tbody>
-  </v-table>
+  <div id="table-component">
+    <v-table hover density="comfortable" class="rounded-lg">
+      <thead class="table-head bg-ufabcnext-green">
+        <slot name="head"></slot>
+      </thead>
+      <tbody class="table-body bg-secondary">
+        <slot name="body" style=""></slot>
+      </tbody>
+    </v-table>
+  </div>
 </template>
 
 <script setup lang="ts" />
 
 <style lang="scss">
-.fixed-column {
+#table-component .fixed-column {
   position: sticky;
   left: 0;
   min-width: 200px;
@@ -21,7 +23,7 @@
   }
 }
 
-.v-table .v-table__wrapper > table {
+#table-component .v-table .v-table__wrapper > table {
   thead.table-head {
     & > tr > th {
       &:first-of-type {
