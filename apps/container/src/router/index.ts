@@ -20,11 +20,6 @@ const routes: Array<RouteRecordRaw> = [
     component: PerformanceView,
   },
   {
-    path: '/relationship',
-    name: 'relationship',
-    component: RelationshipView,
-  },
-  {
     path: '/planning',
     name: 'planning',
     component: PlanningView,
