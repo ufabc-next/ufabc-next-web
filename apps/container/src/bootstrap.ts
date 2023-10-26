@@ -2,14 +2,25 @@ import { createApp } from 'vue';
 import App from './App.vue';
 import router from './router';
 
-import '@mdi/font/css/materialdesignicons.css';
+import {
+  VueQueryPlugin,
+  QueryClient as QueryClientVue,
+} from '@tanstack/vue-query';
+import client from './queryClient';
+import { QueryClient } from '@tanstack/query-core';
 
-import 'vuetify/styles';
-
+import { ThemeDefinition } from 'vuetify/lib/framework.mjs';
 import { createVuetify } from 'vuetify';
-
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import 'vuetify/styles';
+
+import elementPlus from 'element-plus';
+import 'element-plus/dist/index.css';
+
+import '@mdi/font/css/materialdesignicons.css';
+
+import HighchartsVue from 'highcharts-vue'
 
 const theme: ThemeDefinition = {
   dark: false,
@@ -51,16 +62,6 @@ declare global {
   }
 }
 
-import elementPlus from 'element-plus';
-import 'element-plus/dist/index.css';
-import {
-  VueQueryPlugin,
-  QueryClient as QueryClientVue,
-} from '@tanstack/vue-query';
-import client from './queryClient';
-import { QueryClient } from '@tanstack/query-core';
-import { ThemeDefinition } from 'vuetify/lib/framework.mjs';
-
 const queryClient = new QueryClientVue({
   queryCache: client.getQueryCache(),
   defaultOptions: client.getDefaultOptions(),
@@ -73,4 +74,5 @@ createApp(App)
   .use(VueQueryPlugin, {
     queryClient,
   })
+  .use(HighchartsVue as never)
   .mount('#app');
