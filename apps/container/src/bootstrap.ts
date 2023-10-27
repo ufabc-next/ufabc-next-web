@@ -74,5 +74,6 @@ createApp(App)
   .use(VueQueryPlugin, {
     queryClient,
   })
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   .use(HighchartsVue as any)
   .mount('#app');

@@ -1,8 +1,8 @@
 import {
+  SearchSubjectItem,
+  SearchTeacherItem,
   SubjectInfo,
   TeacherReview,
-  SearchTeacherItem,
-  SearchSubjectItem,
 } from 'types';
 
 import api from './api';

@@ -1,5 +1,5 @@
-
 import { Comment } from 'types';
+
 import api from './api';
 
 type GetCommentResponse = {
@@ -8,36 +8,23 @@ type GetCommentResponse = {
 };
 
 type CreateCommentRequest = {
-  comment: string,
-  enrollment: string,
-  type: string
-};
-
-type CommentResponse = {
-  _id: string;
   comment: string;
-  createdAt: string;
-  enrollment: { _id: string; };
-  subject: string;
-  teacher: string;
-  updatedAt: string;
-}
-
-type CreateCommentResponse = CommentResponse
+  enrollment: string;
+  type: string;
+};
 
 type UpdateCommentRequest = {
   id: string;
   comment: string;
 };
 
-type UpdateCommentResponse = CommentResponse
-
 export const Comments = {
   get: (teacherId: string, subjectId: string, pageParam = 0) =>
     api.get<GetCommentResponse>(`/comments/${teacherId}/${subjectId}`, {
       params: { page: pageParam, limit: 10 },
     }),
-  getUserComment: (enrollmentId: string) => api.get<Comment>(`/comments/enrollment/${enrollmentId}`),
+  getUserComment: (enrollmentId: string) =>
+    api.get<Comment>(`/comments/enrollment/${enrollmentId}`),
   create: (data: CreateCommentRequest) => api.post('/comments/', data),
   update: ({ id, comment }: UpdateCommentRequest) =>
     api.put('/comments/' + id, { comment }),

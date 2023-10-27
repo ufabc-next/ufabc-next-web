@@ -3,19 +3,19 @@ import { Concept } from 'types';
 import api from './api';
 
 type EnrollmentTeacherComment = {
-  _id: string,
-  comment: string,
-  viewers: number,
-  enrollment: string,
-  type: string,
-  ra: string,
-  active: boolean,
-  teacher: string,
-  subject: string,
-  updatedAt: string,
-  createdAt: string,
-  __v: number
-}
+  _id: string;
+  comment: string;
+  viewers: number;
+  enrollment: string;
+  type: string;
+  ra: string;
+  active: boolean;
+  teacher: string;
+  subject: string;
+  updatedAt: string;
+  createdAt: string;
+  __v: number;
+};
 
 type EnrollmentTeacher = {
   _id: string;
@@ -23,7 +23,7 @@ type EnrollmentTeacher = {
   updatedAt: string;
   createdAt: string;
   __v: number;
-  comment?: EnrollmentTeacherComment
+  comment?: EnrollmentTeacherComment;
 };
 
 export type Subject = {
@@ -47,12 +47,10 @@ export type Enrollment = {
   quad: number;
   subject: Subject;
   year: number;
-  comments?: string[] 
+  comments?: string[];
 };
 
 export const Enrollments = {
   list: () => api.get<Enrollment[]>('/enrollments'),
   get: (id: string) => api.get<Enrollment>('/enrollments/' + id),
 };
-
-
