@@ -2,7 +2,7 @@
   <v-app>
     <AppBar />
     <v-main style="background-color: #f5f5f5">
-      <v-container fluid style="max-width: 1200px">
+      <v-container id="app-container">
         <router-view />
       </v-container>
     </v-main>
@@ -10,11 +10,13 @@
 </template>
 
 <script setup lang="ts">
-import AppBar from '@/layouts/AppBar.vue';
 import { authStore } from 'stores';
 import { onMounted } from 'vue';
 import create from 'vue-zustand';
+
 import router from './router';
+
+import AppBar from '@/layouts/AppBar.vue';
 
 const useAuth = create(authStore);
 const { authenticate } = useAuth();
@@ -36,13 +38,30 @@ onMounted(async () => {
 @import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,500,700,900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Ubuntu:100,300,400,500,700,900&display=swap');
+
+* {
+  font-family: Lato, sans-serif;
+}
 html {
   font-family: Lato, sans-serif;
 }
 #app {
   font-family: Lato, sans-serif;
 }
+#app-container {
+  max-width: 1200px;
+}
+
 a {
-  color: #1976d2;
+  text-decoration: none;
+  color: #56cdb7;
+}
+
+p, span {
+  font-size: 14px;
+}
+
+.el-message {
+  z-index: 9999999!important
 }
 </style>

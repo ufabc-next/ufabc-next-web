@@ -33,7 +33,7 @@
     </v-list>
   </v-navigation-drawer>
 
-  <v-app-bar elevation="1" app height="min-content" class="py-2">
+  <v-app-bar app height="min-content" class="py-2 header">
     <v-app-bar-nav-icon
       app
       variant="text"
@@ -89,11 +89,9 @@ import { computed, ref } from 'vue';
 const drawer = ref(true);
 const userLogin = computed(() => 'test.username');
 const userInitials = computed(() => 'tu');
-const user = computed(() => {
-  return {
-    ra: '1234567',
-  };
-});
+const user = computed(() => ({
+  ra: '1234567',
+}));
 const internalNavigationsItems = [
   {
     title: 'Reviews',
@@ -114,11 +112,6 @@ const internalNavigationsItems = [
     title: 'Dados da Matrícula',
     icon: 'mdi-book-multiple',
     route: '/stats',
-  },
-  {
-    title: 'Conexões',
-    icon: 'mdi-hubspot',
-    route: '/relationship',
   },
   {
     title: 'Apoie o UFABC next',
@@ -157,3 +150,9 @@ const externalNavigationsItems = [
   },
 ];
 </script>
+
+<style scoped lang="scss">
+.header {
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+</style>

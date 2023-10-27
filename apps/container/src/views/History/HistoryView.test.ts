@@ -44,7 +44,10 @@ describe('<CenteredLoading />', () => {
     server.use(
       rest.get(`*/users/info`, (_req, res, ctx) => res(ctx.status(500))),
     );
-    render(HistoryView);
+    render(HistoryView, {
+      // disable retry
+      
+    });
     expect(
       await screen.findByText(enrollments[0].disciplina),
     ).toBeInTheDocument();
