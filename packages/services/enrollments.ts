@@ -1,6 +1,21 @@
+import { Concept } from 'types';
+
 import api from './api';
 
-export type Concept = 'A' | 'B' | 'C' | 'D' | 'F' | 'O';
+type EnrollmentTeacherComment = {
+  _id: string;
+  comment: string;
+  viewers: number;
+  enrollment: string;
+  type: string;
+  ra: string;
+  active: boolean;
+  teacher: string;
+  subject: string;
+  updatedAt: string;
+  createdAt: string;
+  __v: number;
+};
 
 type EnrollmentTeacher = {
   _id: string;
@@ -8,9 +23,10 @@ type EnrollmentTeacher = {
   updatedAt: string;
   createdAt: string;
   __v: number;
+  comment?: EnrollmentTeacherComment;
 };
 
-type Subject = {
+export type Subject = {
   _id: string;
   name: string;
   search: string;
@@ -22,8 +38,8 @@ type Subject = {
 
 export type Enrollment = {
   _id: string;
-  pratica?: EnrollmentTeacher;
-  teoria?: EnrollmentTeacher;
+  pratica?: EnrollmentTeacher | null;
+  teoria?: EnrollmentTeacher | null;
   updatedAt: string;
   conceito: Concept;
   creditos: number;
@@ -31,11 +47,10 @@ export type Enrollment = {
   quad: number;
   subject: Subject;
   year: number;
+  comments?: string[];
 };
 
-const enrollment = {
+export const Enrollments = {
   list: () => api.get<Enrollment[]>('/enrollments'),
-  get: (id: string | number) => api.get<Enrollment>('/enrollments/' + id),
+  get: (id: string) => api.get<Enrollment>('/enrollments/' + id),
 };
-
-export default enrollment;

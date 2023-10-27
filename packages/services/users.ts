@@ -1,6 +1,6 @@
 import api from './api';
 
-type Oauth = {
+export type Oauth = {
   email: string;
   facebook: string;
   picture: string;
@@ -8,7 +8,7 @@ type Oauth = {
   google?: string;
 };
 
-type Device = {
+export type Device = {
   _id: string;
   deviceId: string;
   token: string;
@@ -25,7 +25,7 @@ export type User = {
   devices: Device[];
 };
 
-const user = {
+export const Users = {
   completeSignup: (params = {}) => api.put('/users/complete', params),
   confirmSignup: (params = {}) => api.post('/account/confirm', params),
   resendEmail: () => api.post('/users/me/resend'),
@@ -33,5 +33,3 @@ const user = {
   delete: () => api.delete('/users/me/delete'),
   info: () => api.get<User>('/users/info'),
 };
-
-export default user;

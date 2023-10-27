@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 import { ReviewsView } from '@/views/Reviews';
 import { PerformanceView } from '@/views/Performance';
-import { RelationshipView } from '@/views/Relationship';
 import { PlanningView } from '@/views/Planning';
 import { HistoryView } from '@/views/History';
 import { StatsView } from '@/views/Stats';
@@ -18,11 +17,6 @@ const routes: Array<RouteRecordRaw> = [
     path: '/performance',
     name: 'performance',
     component: PerformanceView,
-  },
-  {
-    path: '/relationship',
-    name: 'relationship',
-    component: RelationshipView,
   },
   {
     path: '/planning',

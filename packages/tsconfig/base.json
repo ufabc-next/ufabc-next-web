@@ -21,8 +21,7 @@
     "allowSyntheticDefaultImports": true,
     "useDefineForClassFields": true,
     "sourceMap": true,
-    "baseUrl": ".",
-    "allowJs": true
+    "baseUrl": "."
   },
   "exclude": ["node_modules"]
 }
