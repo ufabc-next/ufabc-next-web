@@ -1,37 +1,23 @@
-import { SubjectInfo, TeacherReview } from 'types';
+import {
+  SubjectInfo,
+  TeacherReview,
+  SearchTeacherItem,
+  SearchSubjectItem,
+} from 'types';
 
 import api from './api';
 
-export type SearchTeacherItem = {
-  _id: string;
-  name: string;
-  updatedAt?: string;
-  createdAt?: string;
-  __v?: number;
-  alias?: string[];
-};
-
-export type SearchTeacher = {
+type SearchTeacher = {
   data: SearchTeacherItem[];
   total: number;
 };
 
-export type SearchSubjectItem = {
-  _id: string;
-  name: string;
-  search: string;
-  updatedAt: string;
-  createdAt: string;
-  __v: number;
-  creditos: number;
-};
-
-export type SearchSubject = {
+type SearchSubject = {
   data: SearchSubjectItem[];
   total: number;
 };
 
-const reviews = {
+export const Reviews = {
   searchTeachers: async (q: string) =>
     api.get<SearchTeacher>('/teachers/search', {
       params: { q },
@@ -45,5 +31,3 @@ const reviews = {
   getSubject: async (id: string) =>
     api.get<SubjectInfo>(`/reviews/subjects/${id}`),
 };
-
-export default reviews;

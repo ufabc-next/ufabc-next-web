@@ -19,9 +19,7 @@
     >
     </v-text-field>
     <v-list
-      v-if="
-        processedResults.length && (router.currentRoute.value.query.q as string)
-      "
+      v-if="processedResults.length && router.currentRoute.value.query.q"
       class="results"
       elevation="1"
     >
@@ -71,6 +69,7 @@ import { Reviews } from 'services';
 import { computed, onMounted, ref, watch } from 'vue';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import router from '@/router';
+import { SearchTeacherItem, SearchSubjectItem } from 'types';
 
 const searchTerm = ref('');
 
@@ -81,12 +80,14 @@ const clear = () => {
   });
 };
 
+const query = computed(() => router.currentRoute.value.query.q as string);
+
 onMounted(() => {
-  searchTerm.value = router.currentRoute.value.query.q as string;
+  searchTerm.value = query.value;
 });
 
 watch(
-  () => router.currentRoute.value.query.q as string,
+  () => query.value,
   (q) => {
     searchTerm.value = q;
   },
@@ -113,15 +114,9 @@ const {
   refetch: refetchTeachers,
 } = useQuery({
   refetchOnWindowFocus: false,
-  queryKey: [
-    'reviews',
-    'search',
-    router.currentRoute.value.query.q as string,
-    'teachers',
-  ],
-  queryFn: () =>
-    Reviews.searchTeachers(router.currentRoute.value.query.q as string),
-  enabled: !!(router.currentRoute.value.query.q as string),
+  queryKey: ['reviews', 'search', query.value, 'teachers'],
+  queryFn: () => Reviews.searchTeachers(query.value),
+  enabled: !!query.value,
 });
 
 const {
@@ -131,15 +126,9 @@ const {
   refetch: refetchSubjects,
 } = useQuery({
   refetchOnWindowFocus: false,
-  queryKey: [
-    'reviews',
-    'search',
-    router.currentRoute.value.query.q as string,
-    'subjects',
-  ],
-  queryFn: () =>
-    Reviews.searchSubjects(router.currentRoute.value.query.q as string),
-  enabled: !!(router.currentRoute.value.query.q as string),
+  queryKey: ['reviews', 'search', query.value, 'subjects'],
+  queryFn: () => Reviews.searchSubjects(query.value),
+  enabled: !!query.value,
 });
 
 const useSearch = debounce(() => {
@@ -157,16 +146,19 @@ const search = (e: InputEvent) => {
   useSearch();
 };
 
+const mapSearchResults = (
+  type: string,
+  results?: SearchTeacherItem[] | SearchSubjectItem[],
+) => {
+  return results?.map((result: SearchTeacherItem | SearchSubjectItem) => ({
+    name: result.name,
+    id: result._id,
+    type: type,
+  })) || [];
+};
+
 const processedResults = computed(() => [
-  ...(searchResultsTeachers.value?.data.data.map((result) => ({
-    name: result?.name,
-    id: result._id,
-    type: result._id && 'teacher',
-  })) || []),
-  ...(searchResultsSubjects.value?.data.data.map((result) => ({
-    name: result?.name,
-    id: result._id,
-    type: 'subject',
-  })) || []),
+  ...mapSearchResults('teacher', searchResultsTeachers.value?.data.data),
+  ...mapSearchResults('subject', searchResultsSubjects.value?.data.data),
 ]);
 </script>

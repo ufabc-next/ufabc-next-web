@@ -39,9 +39,9 @@
             </template>
             <v-list>
               <v-list-item
-                v-for="(item, i) in orders"
+                v-for="item in orders"
                 @click="selectedOrder = item.value"
-                :key="i"
+                :key="item.title"
               >
                 <v-list-item-title>{{ item.title }}</v-list-item-title>
               </v-list-item>

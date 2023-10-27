@@ -14,7 +14,7 @@
           :class="`pa-0 py-2 ${index % 2 === 0 ? '' : 'pl-md-4'}`"
           :key="enrollment._id"
         >
-          <ToReviewEnrollment class="mt-4" :enrollment="enrollment" />
+          <PendingReviewEnrollment class="mt-4" :enrollment="enrollment" />
         </v-col>
       </v-row>
     </v-container>
@@ -25,7 +25,7 @@
 import { PaperCard } from '@/components/PaperCard';
 import { Enrollment, Enrollments } from 'services';
 import { useQuery } from '@tanstack/vue-query';
-import ToReviewEnrollment from './ToReviewEnrollment.vue';
+import PendingReviewEnrollment from './PendingReviewEnrollment.vue';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { computed } from 'vue';
 
@@ -70,7 +70,8 @@ const filteredAndSeparatedEnrollments = computed(() => {
           acc.push({ ...enrollment, pratica: null });
       }
       if (enrollment.pratica?.name) {
-        !enrollment.comments?.includes('pratica') && acc.push({ ...enrollment, teoria: null });
+        !enrollment.comments?.includes('pratica') &&
+          acc.push({ ...enrollment, teoria: null });
       }
       return acc;
     }, [] as Enrollment[])

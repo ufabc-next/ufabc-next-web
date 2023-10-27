@@ -14,4 +14,4 @@ export const checkEAD = (year: string | number, quad: string | number) => {
       );
 }
 
-export const formatSeason = (year: string | number, quad: string | number) => `Q${year} ${quad}`
+export const formatSeason = (quad: string | number, year: string | number) => `Q${quad} ${year}`

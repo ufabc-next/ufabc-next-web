@@ -1,6 +1,6 @@
 <template>
   <FeedbackAlert
-    v-if="isFetchingTearcherEnrollmentError"
+    v-if="isFetchingTeacherEnrollmentError"
     text="Erro ao carregar suas informações desta disciplina"
   />
   <v-dialog v-model="showDialog" maxWidth="1200">
@@ -55,7 +55,7 @@
               max-rows="5"
               no-resize
               auto-grow
-              :loading="isFetchingTearcherEnrollment"
+              :loading="isFetchingTeacherEnrollment"
             />
             <div class="w-100 d-flex justify-end">
               <v-btn
@@ -86,7 +86,7 @@ import { PropType, computed, ref } from 'vue';
 import { Comments, Enrollment, Enrollments } from 'services';
 
 import { PaperCard } from '@/components/PaperCard';
-import { conceptsColor } from 'consts';
+import { conceptsColor } from 'utils';
 import CommentsList from '@/components/CommentsList.vue';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
@@ -142,9 +142,9 @@ const showDialog = computed({
 });
 
 const {
-  data: tearcherEnrollment,
-  isFetching: isFetchingTearcherEnrollment,
-  isError: isFetchingTearcherEnrollmentError,
+  data: teacherEnrollment,
+  isFetching: isFetchingTeacherEnrollment,
+  isError: isFetchingTeacherEnrollmentError,
 } = useQuery({
   refetchOnWindowFocus: false,
   queryKey: ['enrollments', 'get', enrollmentId],
@@ -153,12 +153,18 @@ const {
 });
 
 const comment = ref<string>('');
+const teacherEnrollmentCommentTeoria = computed(
+  () => teacherEnrollment.value?.data.teoria?.comment?.comment,
+);
+const teacherEnrollmentCommentPratica = computed(
+  () => teacherEnrollment.value?.data.pratica?.comment?.comment,
+);
 const userCommentMessage = computed({
   get: () => {
     const currentComment =
       subjectType.value === 'prática'
-        ? tearcherEnrollment.value?.data.pratica?.comment?.comment
-        : tearcherEnrollment.value?.data.teoria?.comment?.comment;
+        ? teacherEnrollmentCommentPratica.value
+        : teacherEnrollmentCommentTeoria.value;
 
     return comment.value ? comment.value : currentComment ?? '';
   },
@@ -171,16 +177,16 @@ const disableMutateComment = computed(() => {
   return (
     !userCommentMessage.value ||
     [
-      tearcherEnrollment.value?.data.teoria?.comment?.comment,
-      tearcherEnrollment.value?.data.pratica?.comment?.comment,
+      teacherEnrollmentCommentTeoria.value,
+      teacherEnrollmentCommentPratica.value,
     ].includes(userCommentMessage.value)
   );
 });
 
 const hasUserComment = computed(() =>
   subjectType.value === 'prática'
-    ? !!tearcherEnrollment.value?.data.pratica?.comment?.comment
-    : !!tearcherEnrollment.value?.data.teoria?.comment?.comment,
+    ? !!teacherEnrollmentCommentPratica.value
+    : !!teacherEnrollmentCommentTeoria.value,
 );
 
 const queryClient = useQueryClient();
@@ -208,9 +214,10 @@ const { mutate: mutateCreate, isPending: isCreatingComment } = useMutation({
 const { mutate: mutateUpdate, isPending: isUpdatingComment } = useMutation({
   mutationFn: () =>
     Comments.update({
-      id: tearcherEnrollment.value?.data.teoria?.comment
-        ? tearcherEnrollment.value?.data.teoria?.comment?._id
-        : tearcherEnrollment.value?.data.pratica?.comment?._id ?? '',
+      id:
+        teacherEnrollment.value?.data.teoria?.comment?._id ??
+        teacherEnrollment.value?.data.pratica?.comment?._id ??
+        '',
       comment: comment.value,
     }),
   onSuccess: () => {

@@ -1,4 +1,4 @@
-export type SearchTeacher = {
+export type SearchTeacherItem = {
   _id: string;
   name: string;
   updatedAt: string;
@@ -7,7 +7,7 @@ export type SearchTeacher = {
   alias?: string[];
 }[];
 
-export type SearchSubject = {
+export type SearchSubjectItem = {
   _id: string;
   name: string;
   search: string;

@@ -50,9 +50,9 @@ export type Enrollment = {
   comments?: string[] 
 };
 
-const enrollment = {
+export const Enrollments = {
   list: () => api.get<Enrollment[]>('/enrollments'),
   get: (id: string) => api.get<Enrollment>('/enrollments/' + id),
 };
 
-export default enrollment;
+

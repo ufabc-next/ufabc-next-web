@@ -13,7 +13,7 @@
           {{ comment?.enrollment.conceito }}
         </div>
         <p class="text-primary" style="white-space: nowrap">
-          {{ `Q${season.split(':')[1]} ${season.split(':')[0]}` }}
+          {{ season }}
         </p>
       </v-col>
       <v-col
@@ -42,11 +42,11 @@
             {{ comment?.comment }}
           </p>
           <button
-            class="show-more text-primary text-subtitle-2"
+            class="show-more text-primary text-subtitle-2 text-uppercase"
             :style="`display:${expanded || smAndDown ? 'none' : 'block'}`"
             @click="showMore"
           >
-            MOSTRAR MAIS
+            mostrar mais
             <v-icon>mdi-chevron-down</v-icon>
           </button>
         </div>
@@ -67,7 +67,7 @@
             :color="like ? 'primary' : ''"
           >
             <v-icon size="small" class="mr-1" />
-            {{ `${likeCount || 0}` }}
+            {{ likeCount }}
           </v-btn>
           <v-btn
             :loading="isPendingRecommendation || isPendingRemoveRecommendation"
@@ -82,7 +82,7 @@
             :color="recommendation ? 'primary' : ''"
           >
             <v-icon size="small" class="mr-1" />
-            {{ `${recommendationCount || 0}` }}
+            {{ recommendationCount }}
           </v-btn>
         </div>
         Há {{ date }}
@@ -94,11 +94,10 @@
 <script lang="ts" setup>
 import { useMutation } from '@tanstack/vue-query';
 import { AxiosError } from 'axios';
-import { conceptsColor } from 'consts';
 import { ElMessage } from 'element-plus';
 import { Comments } from 'services';
 import { Comment, RequestError } from 'types';
-import { checkEAD, transformDataToTimeAgo } from 'utils';
+import { checkEAD, dateToTimeAgo, conceptsColor, formatSeason } from 'utils';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 
@@ -175,16 +174,17 @@ const {
   },
 });
 
-const date = computed(() => transformDataToTimeAgo(props.comment?.createdAt));
+const date = computed(() => dateToTimeAgo(props.comment?.createdAt));
 
 const season = computed(() => {
-  if (!props.comment || !props.comment.enrollment) return '';
-  if (!props.comment.enrollment.season && !props.comment.enrollment.year)
+  if (!props.comment?.enrollment?.season && !props.comment?.enrollment?.year)
     return '';
 
-  return (
-    props.comment.enrollment.season ??
-    props.comment.enrollment.year + ':' + props.comment.enrollment.quad
+  const [year, quad] = props.comment.enrollment.season?.split(':') ?? [];
+
+  return formatSeason(
+    quad ?? props.comment.enrollment.quad,
+    year ?? props.comment.enrollment.year,
   );
 });
 

@@ -113,11 +113,8 @@ const {
     Comments.get(teacherId.value, selectedSubjectId.value, pageParam),
   refetchOnWindowFocus: false,
   enabled: !!teacherId.value,
-  getNextPageParam: (lastPage, allPages) => {
-    if (
-      (lastPage as { data: { total: number } }).data.total >=
-      allPages.length * 10
-    ) {
+  getNextPageParam: (lastPage: { data: { total: number } }, allPages) => {
+    if (lastPage.data.total >= allPages.length * 10) {
       return allPages.length;
     }
   },

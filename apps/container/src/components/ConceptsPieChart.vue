@@ -5,26 +5,23 @@
 </template>
 
 <script setup lang="ts">
-import { conceptsColor } from 'consts';
+import { conceptsColor } from 'utils';
 import { Chart } from 'highcharts-vue';
 import { computed, PropType } from 'vue';
+import { Concept } from 'types';
 
-type Grades = {
-  [x: string]: number;
-};
-
+type Grades = Record<string, number>
 const props = defineProps({
   grades: { type: Object as PropType<Grades>, required: true },
 });
 
 const grades = computed(() => {
   const data = Object.keys(props.grades).map((key) => ({
-    name: key,
+    name: key as Concept,
     y: props.grades[key],
   }));
   return data;
 });
-
 const chartOptions = {
   chart: {
     plotBackgroundColor: null,
@@ -49,9 +46,7 @@ const chartOptions = {
         enabled: true,
         format: '<b>{point.name}</b>: {point.percentage:.1f} %',
       },
-      colors: grades.value.map(
-        (grade) => conceptsColor[grade.name as keyof typeof conceptsColor],
-      ),
+      colors: grades.value.map((grade) => conceptsColor[grade.name]),
       showInLegend: true,
     },
   },

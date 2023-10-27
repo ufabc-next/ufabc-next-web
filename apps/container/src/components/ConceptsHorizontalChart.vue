@@ -12,10 +12,10 @@
     >
       <span
         class="grading-segment"
-        :class="grade.count < unthrustableThreshold ? 'unthrustable' : ''"
+        :class="grade.count < untrustableThreshold ? 'unthrustable' : ''"
         :style="{
           background:
-            conceptsColor[grade.conceito as keyof typeof conceptsColor],
+            conceptsColor[grade.conceito],
           width: `${grades[grade.conceito]}%`,
         }"
       >
@@ -23,7 +23,7 @@
     </el-tooltip>
 
     <span
-      v-if="gradeData.count < unthrustableThreshold"
+      v-if="gradeData.count < untrustableThreshold"
       class="low-samples text-body-2"
       >Dados sem muitas amostras</span
     >
@@ -31,21 +31,18 @@
 </template>
 
 <script setup lang="ts">
-import { conceptsColor } from 'consts';
 import { ConceptData, SubjectSpecific } from 'types';
-import { transformConceptDataToObject } from 'utils';
+import { transformConceptDataToObject, conceptsColor } from 'utils';
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
   gradeData: { type: Object as PropType<SubjectSpecific>, required: true },
 });
 
-const unthrustableThreshold = 10;
+const untrustableThreshold = 10;
 
 const orderedDistribution = computed(() => {
-  const distribution: ConceptData[] = JSON.parse(
-    JSON.stringify(props.gradeData.distribution),
-  );
+  const distribution: ConceptData[] = props.gradeData.distribution;
   return distribution.sort((a, b) => a.conceito.localeCompare(b.conceito));
 });
 

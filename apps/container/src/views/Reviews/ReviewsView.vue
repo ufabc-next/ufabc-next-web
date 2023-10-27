@@ -3,17 +3,17 @@
     <SearchBar />
     <TeacherReview
       v-if="router.currentRoute.value.query.teacherId"
-      :teacher-id="router.currentRoute.value.query.teacherId.toString()"
+      :teacherId="router.currentRoute.value.query.teacherId.toString()"
       :key="router.currentRoute.value.query.teacherId.toString()"
     />
     <SubjectReview
       v-else-if="router.currentRoute.value.query.subjectId"
-      :subject-id="router.currentRoute.value.query.subjectId.toString()"
+      :subjectId="router.currentRoute.value.query.subjectId.toString()"
       :key="router.currentRoute.value.query.subjectId.toString()"
     />
     <div v-else class="w-100 d-flex flex-column align-center">
       <WelcomeMessage />
-      <ToReviewEnrollmentList />
+      <PendingReviewEnrollmentsList />
     </div>
   </v-layout>
 </template>
@@ -24,5 +24,5 @@ import SearchBar from '@/components/SearchBar.vue';
 import SubjectReview from '@/components/SubjectReview.vue';
 import TeacherReview from '@/components/TeacherReview.vue';
 import router from '@/router';
-import ToReviewEnrollmentList from '@/components/ToReviewEnrollmentList.vue';
+import PendingReviewEnrollmentsList from '@/components/PendingReviewEnrollmentsList.vue';
 </script>

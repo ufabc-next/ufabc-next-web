@@ -102,38 +102,24 @@ const chips = computed(() => {
   if (!teacherData.value?.data) {
     return [];
   }
+  const { general, specific } = teacherData.value.data;
+  const specificValid = specific.filter((subject) => subject._id);
+  const specificValidSelected = specificValid.find(
+    (subject) => subject._id.name === selectedSubject.value,
+  );
+  const toPlural = (value?: number) => (value == 1 ? '' : 's');
+  const isAllSubjects = selectedSubject.value === 'Todas as matérias';
   return [
     {
-      value: teacherData.value.data.specific.filter(
-        (subject) => subject._id,
-      ).length,
-      text:
-        teacherData.value.data.specific.filter(
-          (subject) => subject._id,
-        ).length == 1
-          ? 'disciplina'
-          : 'disciplinas',
+      value: specificValid.length,
+      text: `disciplina${toPlural(specificValid.length)}`,
       icon: 'mdi-human-male-board',
     },
     {
-      value:
-        selectedSubject.value === 'Todas as matérias'
-          ? teacherData.value.data.general.count
-          : teacherData.value.data.specific
-              .filter((subject) => subject._id)
-              .find((subject) => subject._id.name === selectedSubject.value)
-              ?.count,
-      text:
-        selectedSubject.value === 'Todas as matérias'
-          ? teacherData.value.data.general.count == 1
-            ? 'conceito'
-            : 'conceitos'
-          : teacherData.value.data.specific
-              .filter((subject) => subject._id)
-              .find((subject) => subject._id.name === selectedSubject.value)
-              ?.count == 1
-          ? 'conceito'
-          : 'conceitos',
+      value: isAllSubjects ? general.count : specificValidSelected?.count,
+      text: isAllSubjects
+        ? `conceito${toPlural(general.count)}`
+        : `conceito${toPlural(specificValidSelected?.count)}`,
       icon: 'mdi-format-annotation-plus',
     },
   ];

@@ -1,6 +1,6 @@
 <template>
-  <FeedbackAlert v-if="errorEnrollment" />
-  <FeedbackAlert v-if="errorUser" />
+  <FeedbackAlert v-if="isErrorEnrollments" />
+  <FeedbackAlert v-if="isErrorUser" />
   <ReviewDialog
     :enrollment="selectedEnrollment"
     :showDialog="showDialog"
@@ -182,13 +182,7 @@
                     @click="handleOpenDialog(item, 'pratica')"
                   >
                     <v-icon
-                      :color="
-                        item.comments?.includes('pratica') ||
-                        (item.pratica._id === item.teoria?._id &&
-                          item.comments?.includes('teoria'))
-                          ? 'ufabcnext-green'
-                          : ''
-                      "
+                      :color="hasCommented(item) ? 'ufabcnext-green' : ''"
                     />
                   </v-btn>
                   <span class="text-truncate">{{
@@ -212,7 +206,7 @@
     </div>
     <div
       class="mt-5 d-flex justify-center align-center flex-column"
-      v-else-if="!isLoadingEnrollment"
+      v-else-if="!isLoadingEnrollments"
     >
       <h2 class="mb-4">
         Parece que não encontramos os dados do seu histórico :( <br />
@@ -227,7 +221,7 @@
       </h2>
       <img src="@/assets/missing_history.svg" width="500" height="400" />
     </div>
-    <CenteredLoading v-if="isLoadingEnrollment" />
+    <CenteredLoading v-if="isLoadingEnrollments" />
   </PaperCard>
 </template>
 
@@ -267,8 +261,7 @@
 </style>
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
-import { conceptsColor } from 'consts';
-import { Enrollment, Enrollments, Users } from 'services';
+import { type Enrollment, Enrollments, Users } from 'services';
 import { Concept } from 'types';
 import { computed, ref } from 'vue';
 import ReviewDialog from '@/components/ReviewDialog.vue';
@@ -276,10 +269,16 @@ import { CenteredLoading } from '@/components/CenteredLoading';
 import { PaperCard } from '@/components/PaperCard';
 import { TableComponent } from '@/components/TableComponent';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
-import { checkEAD } from 'utils';
+import {
+  checkEAD,
+  conceptsColor,
+  extensionURL,
+  formatSeason,
+  studentRecordURL,
+} from 'utils';
 
 const showDialog = ref(false);
-const selectedEnrollment = ref<Enrollment | undefined>();
+const selectedEnrollment = ref<Enrollment>();
 
 const tags = ref<string[]>([]);
 const handleOpenDialog = (
@@ -288,23 +287,24 @@ const handleOpenDialog = (
 ) => {
   const processedEnrollment: Enrollment = {
     ...enrollment,
-    teoria: type !== 'pratica' ? enrollment.teoria : null,
-    pratica: type === 'pratica' ? enrollment.pratica : null,
+    [type]: enrollment[type],
   };
   selectedEnrollment.value = processedEnrollment;
 
-  const isEAD = checkEAD(enrollment.year || 0, enrollment.quad || 0);
+  const isEAD =
+    enrollment.year &&
+    enrollment.quad &&
+    checkEAD(enrollment.year, enrollment.quad);
 
-  const processedTags = [
+  tags.value = [
     enrollment.pratica?._id === enrollment.teoria?._id
       ? 'teoria e prática'
       : type === 'pratica'
       ? 'prática'
       : 'teoria',
-    `Q${processedEnrollment.quad} ${processedEnrollment.year}`,
-  ];
-  isEAD && processedTags.push('EAD');
-  tags.value = processedTags;
+    formatSeason(processedEnrollment.quad, processedEnrollment.year),
+    isEAD && 'EAD',
+  ].filter(Boolean) as string[];
 
   showDialog.value = true;
 };
@@ -327,11 +327,6 @@ const handleOpenExtensionDialog = () => {
   extensionDialog.value = true;
 };
 
-const extensionURL =
-  'https://chrome.google.com/webstore/detail/ufabc-matricula/gphjopenfpnlnffmhhhhdiecgdcopmhk';
-
-const studentRecordURL = 'https://aluno.ufabc.edu.br/fichas_individuais';
-
 const subjectConceptClass = {
   A: 'gray',
   B: 'gray',
@@ -345,15 +340,15 @@ const subjectConceptClass = {
 
 const {
   data: enrollments,
-  isLoading: isLoadingEnrollment,
-  isError: errorEnrollment,
+  isLoading: isLoadingEnrollments,
+  isError: isErrorEnrollments,
 } = useQuery({
   queryKey: ['enrollments', 'list'],
   queryFn: Enrollments.list,
   select: (response) => response.data,
 });
 
-const { data: user, isError: errorUser } = useQuery({
+const { data: user, isError: isErrorUser } = useQuery({
   queryKey: ['users', 'info'],
   queryFn: Users.info,
   select: (response) => response.data,
@@ -373,6 +368,10 @@ const enrollmentByDate = computed(() => {
     {} as Record<string, Enrollment[]>,
   );
 });
+
+const hasCommented = (item: Enrollment) =>
+  item.comments?.includes('pratica') ||
+  (item.pratica?._id === item.teoria?._id && item.comments?.includes('teoria'));
 
 const enrollmentByDateKeysSorted = computed(() =>
   Object.keys(enrollmentByDate.value || {}).sort(),
