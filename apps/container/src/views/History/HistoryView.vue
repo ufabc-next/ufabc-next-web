@@ -351,14 +351,12 @@ const {
   queryKey: ['enrollments', 'list'],
   queryFn: Enrollments.list,
   select: (response) => response.data,
-  retry: false,
 });
 
 const { data: user, isError: isErrorUser } = useQuery({
   queryKey: ['users', 'info'],
   queryFn: Users.info,
   select: (response) => response.data,
-  retry: false,
 });
 
 const enrollmentByDate = computed(() => {
