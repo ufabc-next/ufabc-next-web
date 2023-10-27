@@ -141,8 +141,8 @@ import { useDisplay } from 'vuetify';
 import ConceptsHorizontalChart from './ConceptsHorizontalChart.vue';
 import ConceptsPieChart from './ConceptsPieChart.vue';
 
-import CenteredLoading from '@/components/CenteredLoading.vue';
-import PaperCard from '@/components/PaperCard.vue';
+import { CenteredLoading } from '@/components/CenteredLoading';
+import { PaperCard } from '@/components/PaperCard';
 import { ElMessage } from 'element-plus';
 
 const props = defineProps({

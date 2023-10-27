@@ -59,8 +59,8 @@ import { useDisplay } from 'vuetify';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import { Reviews, Comments } from 'services';
 import SingleComment from './SingleComment.vue';
-import CenteredLoading from './CenteredLoading.vue';
-import FeedbackAlert from './FeedbackAlert.vue';
+import { CenteredLoading } from '@/components/CenteredLoading';
+import { FeedbackAlert } from '@/components/FeedbackAlert';
 const { smAndDown } = useDisplay();
 
 const props = defineProps({

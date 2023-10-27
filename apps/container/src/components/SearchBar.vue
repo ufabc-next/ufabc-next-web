@@ -69,7 +69,7 @@ import { useQuery } from '@tanstack/vue-query';
 import debounce from 'lodash.debounce';
 import { Reviews } from 'services';
 import { computed, onMounted, ref, watch } from 'vue';
-import FeedbackAlert from './FeedbackAlert.vue';
+import { FeedbackAlert } from '@/components/FeedbackAlert';
 import router from '@/router';
 
 const searchTerm = ref('');

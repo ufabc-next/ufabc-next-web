@@ -85,12 +85,12 @@
 import { PropType, computed, ref } from 'vue';
 import { Comments, Enrollment, Enrollments } from 'services';
 
-import PaperCard from '@/components/PaperCard.vue';
+import { PaperCard } from '@/components/PaperCard';
 import { conceptsColor } from 'consts';
 import CommentsList from '@/components/CommentsList.vue';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
-import FeedbackAlert from './FeedbackAlert.vue';
+import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { watch } from 'vue';
 const selectedSubject = ref<string>('Todas as matérias');
 
@@ -121,8 +121,7 @@ const teacherId = computed(() => {
   return props.enrollment?.teoria?._id || '';
 });
 
-const teacherName = computed(() =>
-{
+const teacherName = computed(() => {
   if (subjectType.value === 'teoria e prática')
     return (
       props.enrollment?.pratica?.name || props.enrollment?.teoria?.name || ''
@@ -130,8 +129,7 @@ const teacherName = computed(() =>
   if (subjectType.value === 'prática')
     return props.enrollment?.pratica?.name || '';
   return props.enrollment?.teoria?.name || '';
-}
-);
+});
 
 const subjectId = computed(() => props.enrollment?.subject._id ?? '');
 

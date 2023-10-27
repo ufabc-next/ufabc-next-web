@@ -1,12 +1,16 @@
 <template>
-  <FeedbackAlert v-if="!!errorEnrollment" />
-  <FeedbackAlert v-if="!!errorUser" />
-  <PaperCard title="Ficha individual do aluno" class="text-next-gray">
+  <FeedbackAlert v-if="errorEnrollment" />
+  <FeedbackAlert v-if="errorUser" />
+  <ReviewDialog
+    :enrollment="selectedEnrollment"
+    :showDialog="showDialog"
+    :tags="tags"
+    @update:showDialog="showDialog = $event"
+  />
+  <PaperCard title="Ficha individual do aluno" class="text-next-grey">
     <p class="mt-4">
       Esta ficha individual é uma réplica do que você pode encontrar no site do
-      <a class="text-decoration-none" :href="studentRecordURL"
-        >Portal do Aluno.</a
-      >
+      <a :href="studentRecordURL">Portal do Aluno.</a>
     </p>
     <p class="mt-4">
       Caso o seu histórico esteja desatualizado, basta acessar o portal
@@ -20,15 +24,15 @@
       Se o nome de algum professor estiver errado, você pode corrigir clicando
       no botão "Fazer comentário" ao lado do nome do professor.
     </p>
-    <div v-if="!!enrollment && !!user" class="chip-wrapper mt-4">
+    <div v-if="!!enrollments && !!user" class="chip-wrapper mt-4">
       <div class="chip">
         <span class="font-weight-bold">RA</span> {{ user.ra }}
       </div>
       <div class="chip">
         <v-icon icon="mdi-book-multiple" />
-        {{ enrollment?.length }}
+        {{ enrollments?.length }}
         {{
-          enrollment?.length === 1
+          enrollments?.length === 1
             ? 'Disciplina cursada'
             : 'Disciplinas cursadas'
         }}
@@ -40,7 +44,6 @@
           flat
           variant="text"
           size="x-small"
-          aria-labelledby="extension-dialog"
         >
           <v-dialog v-model="extensionDialog" width="360">
             <v-card class="pa-4">
@@ -72,11 +75,7 @@
               </v-card-actions>
             </v-card>
           </v-dialog>
-          <v-tooltip
-            id="extension-dialog"
-            activator="parent"
-            offset="1"
-            location="bottom center"
+          <v-tooltip activator="parent" offset="1" location="bottom center"
             >Atualizar o histórico</v-tooltip
           >
           <v-icon size="x-large" />
@@ -152,8 +151,15 @@
                     icon="mdi-message-draw"
                     class="text-subtitle-2"
                     size="x-small"
+                    @click="handleOpenDialog(item, 'teoria')"
                   >
-                    <v-icon size="small" />
+                    <v-icon
+                      :color="
+                        item.comments?.includes('teoria')
+                          ? 'ufabcnext-green'
+                          : ''
+                      "
+                    />
                   </v-btn>
                   <span class="text-truncate">{{
                     item.teoria?.name || '-'
@@ -173,8 +179,17 @@
                     icon="mdi-message-draw"
                     class="text-subtitle-2"
                     size="x-small"
+                    @click="handleOpenDialog(item, 'pratica')"
                   >
-                    <v-icon />
+                    <v-icon
+                      :color="
+                        item.comments?.includes('pratica') ||
+                        (item.pratica._id === item.teoria?._id &&
+                          item.comments?.includes('teoria'))
+                          ? 'ufabcnext-green'
+                          : ''
+                      "
+                    />
                   </v-btn>
                   <span class="text-truncate">{{
                     item.pratica?.name || '-'
@@ -251,19 +266,48 @@
 }
 </style>
 <script setup lang="ts">
+import { useQuery } from '@tanstack/vue-query';
+import { conceptsColor } from 'consts';
+import { Enrollment, Enrollments, Users } from 'services';
+import { Concept } from 'types';
+import { computed, ref } from 'vue';
+import ReviewDialog from '@/components/ReviewDialog.vue';
+import { CenteredLoading } from '@/components/CenteredLoading';
 import { PaperCard } from '@/components/PaperCard';
 import { TableComponent } from '@/components/TableComponent';
-import {
-  Users,
-  Enrollments,
-  Enrollment as EnrollmentType,
-  Concept,
-} from 'services';
-import { computed } from 'vue';
-import { CenteredLoading } from '@/components/CenteredLoading';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
-import { ref } from 'vue';
-import { useQuery } from '@tanstack/vue-query';
+import { checkEAD } from 'utils';
+
+const showDialog = ref(false);
+const selectedEnrollment = ref<Enrollment | undefined>();
+
+const tags = ref<string[]>([]);
+const handleOpenDialog = (
+  enrollment: Enrollment,
+  type: 'teoria' | 'pratica',
+) => {
+  const processedEnrollment: Enrollment = {
+    ...enrollment,
+    teoria: type !== 'pratica' ? enrollment.teoria : null,
+    pratica: type === 'pratica' ? enrollment.pratica : null,
+  };
+  selectedEnrollment.value = processedEnrollment;
+
+  const isEAD = checkEAD(enrollment.year || 0, enrollment.quad || 0);
+
+  const processedTags = [
+    enrollment.pratica?._id === enrollment.teoria?._id
+      ? 'teoria e prática'
+      : type === 'pratica'
+      ? 'prática'
+      : 'teoria',
+    `Q${processedEnrollment.quad} ${processedEnrollment.year}`,
+  ];
+  isEAD && processedTags.push('EAD');
+  tags.value = processedTags;
+
+  showDialog.value = true;
+};
 
 const tableHead = [
   'Disciplina',
@@ -288,20 +332,6 @@ const extensionURL =
 
 const studentRecordURL = 'https://aluno.ufabc.edu.br/fichas_individuais';
 
-const conceptsColor = {
-  A: 'rgb(63, 207, 140)',
-  B: 'rgb(184, 233, 134)',
-  C: 'rgb(248, 183, 76)',
-  D: 'rgb(255, 160, 4)',
-  F: 'rgb(249, 84, 105)',
-  O: 'rgb(169, 169, 169)',
-
-  // exceptions
-  I: 'rgb(25, 118, 210)',
-  E: 'rgb(25, 118, 210)',
-  null: 'rgb(0, 0, 0)',
-};
-
 const subjectConceptClass = {
   A: 'gray',
   B: 'gray',
@@ -309,28 +339,28 @@ const subjectConceptClass = {
   D: 'gray',
   O: 'error',
   F: 'error',
+  E: 'error',
+  I: 'error',
 } satisfies Record<Concept, string>;
 
 const {
-  data: enrollment,
+  data: enrollments,
   isLoading: isLoadingEnrollment,
-  error: errorEnrollment,
+  isError: errorEnrollment,
 } = useQuery({
-  queryKey: ['enrollments'],
+  queryKey: ['enrollments', 'list'],
   queryFn: Enrollments.list,
   select: (response) => response.data,
-  retry: false,
 });
 
-const { data: user, error: errorUser } = useQuery({
+const { data: user, isError: errorUser } = useQuery({
   queryKey: ['users', 'info'],
   queryFn: Users.info,
   select: (response) => response.data,
-  retry: false,
 });
 
 const enrollmentByDate = computed(() => {
-  const enrollmentCopy = enrollment.value?.slice();
+  const enrollmentCopy = enrollments.value?.slice();
   return enrollmentCopy?.reduce(
     (acc, enroll) => {
       const date = enroll.quad + enroll.year * 10;
@@ -340,16 +370,16 @@ const enrollmentByDate = computed(() => {
       acc[date].push(enroll);
       return acc;
     },
-    {} as Record<string, EnrollmentType[]>,
+    {} as Record<string, Enrollment[]>,
   );
 });
 
-const enrollmentByDateKeysSorted = computed(() => {
-  return Object.keys(enrollmentByDate.value || {}).sort();
-});
+const enrollmentByDateKeysSorted = computed(() =>
+  Object.keys(enrollmentByDate.value || {}).sort(),
+);
 
 const lastUpdate = computed(() => {
-  const date = enrollment.value?.[0]?.updatedAt;
+  const date = enrollments.value?.[0]?.updatedAt;
   return date && new Date(date);
 });
 </script>

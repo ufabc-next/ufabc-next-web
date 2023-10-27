@@ -1,16 +1,28 @@
 <template>
   <v-layout class="flex-column align-center justify-center">
-    <v-combobox
-      prepend-inner-icon="mdi-magnify"
-      bg-color="white"
-      placeholder="Digite o nome do professor ou disciplina"
-      class="w-100"
-    >
-    </v-combobox>
-    <ReviewsWelcome />
+    <SearchBar />
+    <TeacherReview
+      v-if="router.currentRoute.value.query.teacherId"
+      :teacher-id="router.currentRoute.value.query.teacherId.toString()"
+      :key="router.currentRoute.value.query.teacherId.toString()"
+    />
+    <SubjectReview
+      v-else-if="router.currentRoute.value.query.subjectId"
+      :subject-id="router.currentRoute.value.query.subjectId.toString()"
+      :key="router.currentRoute.value.query.subjectId.toString()"
+    />
+    <div v-else class="w-100 d-flex flex-column align-center">
+      <WelcomeMessage />
+      <ToReviewEnrollmentList />
+    </div>
   </v-layout>
 </template>
 
 <script setup lang="ts">
-import { ReviewsWelcome } from '@/components/ReviewsWelcome';
+import WelcomeMessage from '@/components/WelcomeMessage.vue';
+import SearchBar from '@/components/SearchBar.vue';
+import SubjectReview from '@/components/SubjectReview.vue';
+import TeacherReview from '@/components/TeacherReview.vue';
+import router from '@/router';
+import ToReviewEnrollmentList from '@/components/ToReviewEnrollmentList.vue';
 </script>

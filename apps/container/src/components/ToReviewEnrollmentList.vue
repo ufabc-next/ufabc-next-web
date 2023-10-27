@@ -22,11 +22,11 @@
 </template>
 
 <script setup lang="ts">
-import PaperCard from '@/components/PaperCard.vue';
+import { PaperCard } from '@/components/PaperCard';
 import { Enrollment, Enrollments } from 'services';
 import { useQuery } from '@tanstack/vue-query';
 import ToReviewEnrollment from './ToReviewEnrollment.vue';
-import FeedbackAlert from './FeedbackAlert.vue';
+import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { computed } from 'vue';
 
 const { data: enrollments, isError: isErrorEnrollment } = useQuery({
@@ -59,14 +59,18 @@ const filteredAndSeparatedEnrollments = computed(() => {
         return acc;
       }
       if (enrollment.teoria?.name === enrollment.pratica?.name) {
-        acc.push(enrollment);
+        !(
+          enrollment.comments?.includes('teoria') ||
+          enrollment.comments?.includes('pratica')
+        ) && acc.push(enrollment);
         return acc;
       }
       if (enrollment.teoria?.name) {
-        acc.push({ ...enrollment, pratica: null });
+        !enrollment.comments?.includes('teoria') &&
+          acc.push({ ...enrollment, pratica: null });
       }
       if (enrollment.pratica?.name) {
-        acc.push({ ...enrollment, teoria: null });
+        !enrollment.comments?.includes('pratica') && acc.push({ ...enrollment, teoria: null });
       }
       return acc;
     }, [] as Enrollment[])

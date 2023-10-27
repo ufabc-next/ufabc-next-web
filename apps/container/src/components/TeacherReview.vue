@@ -70,11 +70,11 @@ import { Reviews } from 'services';
 import { transformConceptDataToObject } from 'utils';
 import { computed, ref } from 'vue';
 import { useDisplay } from 'vuetify';
-import FeedbackAlert from './FeedbackAlert.vue';
+import { FeedbackAlert } from '@/components/FeedbackAlert';
 import ConceptsPieChart from './ConceptsPieChart.vue';
 
-import CenteredLoading from '@/components/CenteredLoading.vue';
-import PaperCard from '@/components/PaperCard.vue';
+import { CenteredLoading } from '@/components/CenteredLoading';
+import { PaperCard } from '@/components/PaperCard';
 import CommentsList from '@/components/CommentsList.vue';
 
 const props = defineProps({
