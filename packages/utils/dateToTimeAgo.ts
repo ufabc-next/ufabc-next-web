@@ -5,6 +5,4 @@ import relativeTime from 'dayjs/plugin/relativeTime';
 dayjs.extend(relativeTime);
 dayjs.locale(ptBr);
 
-const dateToTimeAgo = (date: string) => dayjs(date).fromNow(true);
-
-export default dateToTimeAgo;
+export const dateToTimeAgo = (date: string) => dayjs(date).fromNow(true);

@@ -1,6 +1,6 @@
 import { ConceptData } from 'types';
 
-const transformConceptDataToObject = (grades: ConceptData[], count: number) => {
+export const transformConceptDataToObject = (grades: ConceptData[], count: number) => {
   const result: { [x: string]: number } = {};
   grades.forEach((grade) => {
     result[grade.conceito] = grade.count;
@@ -13,5 +13,3 @@ const transformConceptDataToObject = (grades: ConceptData[], count: number) => {
     }, {});
   return ordered;
 };
-
-export default transformConceptDataToObject;
