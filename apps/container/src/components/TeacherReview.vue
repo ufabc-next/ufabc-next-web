@@ -105,11 +105,11 @@ const chips = computed(() => {
   return [
     {
       value: teacherData.value.data.specific.filter(
-        (subject) => subject._id !== null,
+        (subject) => subject._id,
       ).length,
       text:
         teacherData.value.data.specific.filter(
-          (subject) => subject._id !== null,
+          (subject) => subject._id,
         ).length == 1
           ? 'disciplina'
           : 'disciplinas',
@@ -120,7 +120,7 @@ const chips = computed(() => {
         selectedSubject.value === 'Todas as matérias'
           ? teacherData.value.data.general.count
           : teacherData.value.data.specific
-              .filter((subject) => subject._id !== null)
+              .filter((subject) => subject._id)
               .find((subject) => subject._id.name === selectedSubject.value)
               ?.count,
       text:
@@ -129,7 +129,7 @@ const chips = computed(() => {
             ? 'conceito'
             : 'conceitos'
           : teacherData.value.data.specific
-              .filter((subject) => subject._id !== null)
+              .filter((subject) => subject._id)
               .find((subject) => subject._id.name === selectedSubject.value)
               ?.count == 1
           ? 'conceito'
@@ -148,7 +148,7 @@ const grades = computed(() => {
     );
   }
   const data = teacherData.value.data.specific
-    .filter((subject) => subject._id !== null)
+    .filter((subject) => subject._id)
     .find((subject) => subject._id.name === selectedSubject.value);
   return transformConceptDataToObject(
     data?.distribution || [],

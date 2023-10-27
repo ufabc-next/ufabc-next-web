@@ -95,7 +95,7 @@ const {
 const selectedSubjectId = computed(
   () =>
     teacherData.value?.data.specific
-      .filter((subject) => subject._id !== null)
+      .filter((subject) => subject._id)
       .find((subject) => subject._id.name === selectedSubject.value)?._id._id ||
     '',
 );
@@ -142,7 +142,7 @@ const subjects = computed(() => {
   return [
     'Todas as matérias',
     ...teacherData.value.data.specific
-      .filter((subject) => subject._id !== null)
+      .filter((subject) => subject._id)
       .map((subject) => subject._id.name)
       .sort(),
   ];
