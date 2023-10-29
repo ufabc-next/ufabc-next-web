@@ -8,12 +8,12 @@
     "test": "turbo run test"
   },
   "devDependencies": {
-    "eslint": "^8.46.0",
+    "eslint": "^8.52.0",
     "eslint-config-custom": "*",
-    "prettier": "^3.0.0",
-    "turbo": "1.10.12",
-    "@commitlint/cli": "17.6.7",
-    "@commitlint/config-conventional": "17.6.7"
+    "prettier": "^3.0.3",
+    "turbo": "1.10.16",
+    "@commitlint/cli": "18.2.0",
+    "@commitlint/config-conventional": "18.1.0"
   },
   "name": "ufabc-next-web",
   "packageManager": "yarn@1.22.19",
