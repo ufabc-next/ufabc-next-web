@@ -130,16 +130,12 @@ const grades = computed(() => {
   if (selectedSubject.value === 'Todas as matérias') {
     return transformConceptDataToObject(
       teacherData.value.data.general.distribution,
-      teacherData.value.data.general.count,
     );
   }
   const data = teacherData.value.data.specific
     .filter((subject) => subject._id)
     .find((subject) => subject._id.name === selectedSubject.value);
-  return transformConceptDataToObject(
-    data?.distribution || [],
-    data?.count || 1,
-  );
+  return transformConceptDataToObject(data?.distribution || []);
 });
 
 const demandsAttendance = computed(() => {

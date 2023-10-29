@@ -14,8 +14,7 @@
         class="grading-segment"
         :class="grade.count < untrustableThreshold ? 'unthrustable' : ''"
         :style="{
-          background:
-            conceptsColor[grade.conceito],
+          background: conceptsColor[grade.conceito],
           width: `${grades[grade.conceito]}%`,
         }"
       >
@@ -47,10 +46,7 @@ const orderedDistribution = computed(() => {
 });
 
 const grades = computed(() =>
-  transformConceptDataToObject(
-    props.gradeData.distribution,
-    props.gradeData.count,
-  ),
+  transformConceptDataToObject(props.gradeData.distribution),
 );
 </script>
 
