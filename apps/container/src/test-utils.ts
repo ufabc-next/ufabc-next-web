@@ -5,7 +5,7 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import { render } from '@testing-library/vue';
 
-import { VueQueryPlugin } from '@tanstack/vue-query';
+import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 export { default as userEvent } from '@testing-library/user-event';
 
 const vuetify = createVuetify({
@@ -23,11 +23,13 @@ const customRender: typeof render = (component, options) => {
         [
           VueQueryPlugin,
           {
-            defaultOptions: {
-              queries: {
-                retry: false,
+            queryClient: new QueryClient({
+              defaultOptions: {
+                queries: {
+                  retry: false,
+                },
               },
-            },
+            }),
           },
         ],
       ],

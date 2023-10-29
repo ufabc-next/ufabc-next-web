@@ -1,1 +1,1 @@
-export { default as authStore } from './auth';
+export * from './src';

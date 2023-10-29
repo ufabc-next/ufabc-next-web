@@ -1,4 +1,4 @@
-import { User } from 'services/users';
+import { User } from 'services';
 import { persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 

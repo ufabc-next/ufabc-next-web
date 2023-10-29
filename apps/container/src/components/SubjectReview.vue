@@ -200,7 +200,6 @@ const generalGrades = computed(() => {
   if (!subjectData.value?.data) return {};
   return transformConceptDataToObject(
     subjectData.value.data.general.distribution,
-    subjectData.value.data.general.count,
   );
 });
 
