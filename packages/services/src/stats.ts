@@ -5,6 +5,7 @@ import type {
   StatsCourse,
   StatsSubject,
 } from 'types';
+
 import api from './api';
 
 export type StatsParams = {
