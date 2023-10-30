@@ -1,4 +1,4 @@
-import api from './api';
+import { api } from './api';
 
 type QuadInformation = {
   accumulated_credits: number;
@@ -59,7 +59,7 @@ type HistoriesGraduations = {
   pages: number;
 };
 
-export const performanceService = {
+export const Performance = {
   getCrHistory: () => api.get<QuadInformation[]>('users/me/grades'),
   getCrDistribution: () => api.get<CrDistributionData[]>('stats/grades'),
   getHistoriesGraduations: () =>

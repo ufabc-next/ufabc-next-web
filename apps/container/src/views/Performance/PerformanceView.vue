@@ -3,7 +3,7 @@ import { ref, computed } from 'vue';
 import { Chart } from 'highcharts-vue';
 import { useQuery } from '@tanstack/vue-query';
 import PerformanceCard from '@/components/PerformanceCard.vue';
-import { performanceService, type CourseInformation } from 'services';
+import { Performance, type CourseInformation } from 'services';
 import { PaperCard } from '@/components/PaperCard';
 import { theme } from '@/bootstrap';
 import { CenteredLoading } from '@/components/CenteredLoading';
@@ -11,7 +11,7 @@ import { formatSeason } from 'utils';
 
 const { data: crHistoryData, isPending: isPendingCrHistory } = useQuery({
   queryKey: ['crHistory'],
-  queryFn: performanceService.getCrHistory,
+  queryFn: Performance.getCrHistory,
   select: (response) => response.data,
 });
 
@@ -85,7 +85,7 @@ const crHistoryOptions = ref({
 const currentCpCourse = ref<CourseInformation>();
 const { data: cpHistoryData, isPending: isPendingCpHistory } = useQuery({
   queryKey: ['cpHistory'],
-  queryFn: performanceService.getHistoriesGraduations,
+  queryFn: Performance.getHistoriesGraduations,
   select: (response) => {
     currentCpCourse.value = response.data.docs[0];
     return response.data.docs;
@@ -169,7 +169,7 @@ const cpHistoryOptions = ref({
 const { data: crDistributionData, isPending: isPendingCrDistributionData } =
   useQuery({
     queryKey: ['crDistribution'],
-    queryFn: performanceService.getCrDistribution,
+    queryFn: Performance.getCrDistribution,
     select: (response) => response.data,
   });
 

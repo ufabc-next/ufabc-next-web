@@ -4,8 +4,7 @@ import { ElMessage } from 'element-plus';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import useAuth from '@/store/useAuth';
 import { useAliasInitials } from '@/utils/composables/aliasInitials';
-import api from 'services/api';
-import userService from 'services/users';
+import { Users, api } from 'services';
 
 // dados do usuário
 import { useQuery } from '@tanstack/vue-query';
@@ -55,8 +54,7 @@ const handleLogout = () => {
 };
 
 async function removeUser(): Promise<void> {
-  await userService
-    .delete()
+  await Users.delete()
     .then((res) => {
       if (res.data) {
         handleLogout();

@@ -6,7 +6,7 @@ import type {
   StatsSubject,
 } from 'types';
 
-import api from './api';
+import { api } from './api';
 
 export type StatsParams = {
   page: number;

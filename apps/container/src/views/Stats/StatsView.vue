@@ -88,7 +88,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { StatsSubjects, type StatsParams } from 'services';
-import type { StatsClass, StatsSubject, StatsCourse } from 'types';
+import type { StatsClass, StatsSubject, StatsCourse, PageableReturn } from 'types';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import { getSeason } from 'utils';
 import { PaperCard } from '@/components/PaperCard';
@@ -141,7 +141,7 @@ const subjects = useInfiniteQuery({
     orderBy,
     filterByPeriod,
   ],
-  getNextPageParam: (lastPage: { data: { total: number } }, allPages) => {
+  getNextPageParam: (lastPage: { data: PageableReturn<StatsSubject> }, allPages) => {
     if (lastPage.data.total >= allPages.length * 10) {
       return allPages.length;
     }
@@ -161,7 +161,7 @@ const courses = useInfiniteQuery({
     orderBy,
     filterByPeriod,
   ],
-  getNextPageParam: (lastPage: { data: { total: number } }, allPages) => {
+  getNextPageParam: (lastPage: { data: PageableReturn<StatsCourse> }, allPages) => {
     if (lastPage.data.total >= allPages.length * 10) {
       return allPages.length;
     }
@@ -181,7 +181,7 @@ const classes = useInfiniteQuery({
     orderBy,
     filterByPeriod,
   ],
-  getNextPageParam: (lastPage: { data: { total: number } }, allPages) => {
+  getNextPageParam: (lastPage: { data: PageableReturn<StatsClass> }, allPages) => {
     if (lastPage.data.total >= allPages.length * 10) {
       return allPages.length;
     }

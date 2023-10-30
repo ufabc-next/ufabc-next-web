@@ -15,4 +15,4 @@ export const checkEAD = (year: string | number, quad: string | number) => {
 export const formatSeason = (season: string) => {
   const [year, quad] = season.split(':');
   return `Q${quad} ${year}`;
-}
+};
