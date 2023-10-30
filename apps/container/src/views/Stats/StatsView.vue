@@ -90,7 +90,7 @@ import { ref, computed } from 'vue';
 import { StatsSubjects, type StatsParams } from 'services';
 import type { StatsClass, StatsSubject, StatsCourse } from 'types';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
-import { getSeason } from 'utils/season';
+import { getSeason } from 'utils';
 import { PaperCard } from '@/components/PaperCard';
 
 type Tab = 'classes' | 'courses' | 'subjects';
