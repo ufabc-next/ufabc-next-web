@@ -22,28 +22,28 @@ jobs:
 
       - uses: shinyinc/action-aws-cli@v1.2
       - name: sync static with s3
-        run: aws s3 sync apps/static s3://${{ secrets.AWS_S3_BUCKET_NAME }}
+        run: aws s3 sync apps/static s3://${{ secrets.AWS_S3_BUCKET_NAME_HOM }}
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
 
       - name: sync react with s3
-        run: aws s3 sync apps/react/dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/react
+        run: aws s3 sync apps/react/dist s3://${{ secrets.AWS_S3_BUCKET_NAME_HOM }}/react
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
 
       - name: sync container with s3
-        run: aws s3 sync apps/container/dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/app
+        run: aws s3 sync apps/container/dist s3://${{ secrets.AWS_S3_BUCKET_NAME_HOM }}/app
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
 
       - name: invalidate cloudfront cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID }} --paths "/*"
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID_HOM }} --paths "/*"
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
