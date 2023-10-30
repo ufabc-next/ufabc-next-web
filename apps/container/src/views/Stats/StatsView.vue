@@ -23,18 +23,20 @@
           <div>
             <button v-bind="props" class="text-body-2 order-button mr-2">
               <span class="font-weight-bold text-black"> Ordenar por: </span>
-              {{ orderByOptions.find((o) => o === orderBy) }}
+              {{ orderByOptionsLabel[orderByOptions.findIndex((o) => o === orderBy)] }}
               <v-icon class="text-ufabcnext-green"> mdi-menu-down </v-icon>
             </button>
           </div>
         </template>
         <v-list>
           <v-list-item
-            v-for="item in orderByOptions"
+            v-for="(item, index) in orderByOptions"
             @click="changeOrderBy(item)"
             :key="item"
           >
-            <v-list-item-title>{{ item }}</v-list-item-title>
+            <v-list-item-title>{{
+              orderByOptionsLabel[index]
+            }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
@@ -88,7 +90,12 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue';
 import { StatsSubjects, type StatsParams } from 'services';
-import type { StatsClass, StatsSubject, StatsCourse, PageableReturn } from 'types';
+import type {
+  StatsClass,
+  StatsSubject,
+  StatsCourse,
+  PageableReturn,
+} from 'types';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import { getSeason } from 'utils';
 import { PaperCard } from '@/components/PaperCard';
@@ -97,6 +104,12 @@ type Tab = 'classes' | 'courses' | 'subjects';
 type OrderBy = 'deficit' | 'ratio' | 'vagas' | 'requisicoes';
 
 const orderByOptions: OrderBy[] = ['deficit', 'ratio', 'vagas', 'requisicoes'];
+const orderByOptionsLabel = [
+  'Deficit',
+  'Pessoas por vaga',
+  'Vagas',
+  'Requisições',
+];
 
 const orderBy = ref<OrderBy>('deficit');
 
@@ -141,7 +154,10 @@ const subjects = useInfiniteQuery({
     orderBy,
     filterByPeriod,
   ],
-  getNextPageParam: (lastPage: { data: PageableReturn<StatsSubject> }, allPages) => {
+  getNextPageParam: (
+    lastPage: { data: PageableReturn<StatsSubject> },
+    allPages,
+  ) => {
     if (lastPage.data.total >= allPages.length * 10) {
       return allPages.length;
     }
@@ -161,7 +177,10 @@ const courses = useInfiniteQuery({
     orderBy,
     filterByPeriod,
   ],
-  getNextPageParam: (lastPage: { data: PageableReturn<StatsCourse> }, allPages) => {
+  getNextPageParam: (
+    lastPage: { data: PageableReturn<StatsCourse> },
+    allPages,
+  ) => {
     if (lastPage.data.total >= allPages.length * 10) {
       return allPages.length;
     }
@@ -181,7 +200,10 @@ const classes = useInfiniteQuery({
     orderBy,
     filterByPeriod,
   ],
-  getNextPageParam: (lastPage: { data: PageableReturn<StatsClass> }, allPages) => {
+  getNextPageParam: (
+    lastPage: { data: PageableReturn<StatsClass> },
+    allPages,
+  ) => {
     if (lastPage.data.total >= allPages.length * 10) {
       return allPages.length;
     }
