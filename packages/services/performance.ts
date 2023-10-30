@@ -59,11 +59,9 @@ type HistoriesGraduations = {
   pages: number;
 };
 
-const performanceService = {
+export const performanceService = {
   getCrHistory: () => api.get<QuadInformation[]>('users/me/grades'),
   getCrDistribution: () => api.get<CrDistributionData[]>('stats/grades'),
   getHistoriesGraduations: () =>
     api.get<HistoriesGraduations>('historiesGraduations'),
 };
-
-export default performanceService;

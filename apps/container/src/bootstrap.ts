@@ -21,8 +21,12 @@ import 'element-plus/dist/index.css';
 import '@mdi/font/css/materialdesignicons.css';
 
 import HighchartsVue from 'highcharts-vue'
+import Highcharts from "highcharts";
+import annotationsInit from "highcharts/modules/annotations";
 
-const theme: ThemeDefinition = {
+annotationsInit(Highcharts);
+
+export const theme: ThemeDefinition = {
   dark: false,
   colors: {
     navigation: '#215096',
@@ -31,6 +35,8 @@ const theme: ThemeDefinition = {
     'ufabcnext-green': '#56cdb7',
     'next-gray': '#404040',
     'next-light-gray': '#848687',
+    'ufabcnext-yellow': '#FFCB17',
+    'ufabcnext-red': '#E17472',
     error: '#f45576',
     background: '#ffffff',
   },
@@ -63,8 +69,8 @@ declare global {
 }
 
 const queryClient = new QueryClientVue({
-  queryCache: client.getQueryCache(),
-  defaultOptions: client.getDefaultOptions(),
+  queryCache: client.getQueryCache() as any,
+  defaultOptions: client.getDefaultOptions() as any,
 });
 
 createApp(App)

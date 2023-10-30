@@ -90,7 +90,7 @@ const subjectType = computed(() =>
 const tags = computed(() => {
   const tags = [
     subjectType.value,
-    formatSeason(props.enrollment.year, props.enrollment.quad),
+    formatSeason(props.enrollment.year + ":" + props.enrollment.quad),
   ];
   isEAD.value && tags.push('EAD');
   return tags;

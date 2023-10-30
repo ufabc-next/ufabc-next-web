@@ -12,5 +12,7 @@ export const checkEAD = (year: string | number, quad: string | number) => {
   return possibles.includes(`${year}:${quad}`);
 };
 
-export const formatSeason = (quad: string | number, year: string | number) =>
-  `Q${quad} ${year}`;
+export const formatSeason = (season: string) => {
+  const [year, quad] = season.split(':');
+  return `Q${quad} ${year}`;
+}

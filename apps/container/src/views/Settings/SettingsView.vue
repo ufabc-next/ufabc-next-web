@@ -1,3 +1,84 @@
+<script setup lang="ts">
+import { ref, computed } from 'vue';
+import { ElMessage } from 'element-plus';
+import { CenteredLoading } from '@/components/CenteredLoading';
+import useAuth from '@/store/useAuth';
+import { useAliasInitials } from '@/utils/composables/aliasInitials';
+import api from 'services/api';
+import userService from 'services/users';
+
+// dados do usuário
+import { useQuery } from '@tanstack/vue-query';
+const {
+  data: user,
+  isLoading: isLoadingUser,
+  error: isErrorUser,
+} = useQuery({
+  queryKey: ['users', 'info'],
+  queryFn: userService.info,
+  select: (response) => response.data,
+});
+
+const userLogin = computed(() => {
+  return user.value?.email.replace('@aluno.ufabc.edu.br', '');
+});
+
+const addGoogleAccount = computed(() => {
+  const apiPath = api.defaults.baseURL?.replace('/v1', '');
+  return apiPath + 'connect/google?userId=' + user.value?._id;
+});
+
+const addFacebookAccount = computed(() => {
+  const apiPath = api.defaults.baseURL?.replace('/v1', '');
+  return apiPath + 'connect/facebook?userId=' + user.value?._id;
+});
+
+const createdAt = computed(() => {
+  if (user.value?.createdAt) {
+    const parsedDate = new Date(user.value.createdAt);
+    return parsedDate.toLocaleDateString('pt-BR', {
+      timeZone: 'UTC',
+    });
+  }
+  return ''; // Return a default value if createdAt is not defined
+});
+
+const userInitials = useAliasInitials();
+
+// Modal
+const dialog = ref(false);
+
+// Lógica de remoção do usuário
+const { logOut } = useAuth();
+const handleLogout = () => {
+  logOut.value();
+};
+
+async function removeUser(): Promise<void> {
+  await userService
+    .delete()
+    .then((res) => {
+      if (res.data) {
+        handleLogout();
+      }
+    })
+    .catch(() => {
+      ElMessage({
+        message: 'Ocorreu um erro ao tentar excluir sua conta',
+        type: 'error',
+      });
+    });
+}
+
+async function removeAccount() {
+  dialog.value = false;
+  await removeUser();
+}
+
+const reloadPage = () => window.location.reload();
+// ---------------------------------------------------- //
+</script>
+
 <template>
   <section>
     <v-container>

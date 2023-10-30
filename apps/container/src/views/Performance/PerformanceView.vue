@@ -1,25 +1,380 @@
-<template>
-  <v-row>
-    <v-col cols="12">
-      <h1>Performance</h1>
-      <h2>Your info in Vue: {{ user?.email }}</h2>
-      <HelloWorld />
-    </v-col>
-  </v-row>
-</template>
 <script setup lang="ts">
-import { defineFederatedReactComponent } from '@/utils/moduleFederation';
+import { ref, computed } from 'vue';
+import { Chart } from 'highcharts-vue';
+import { useQuery } from '@tanstack/vue-query';
+import PerformanceCard from '@/components/PerformanceCard.vue';
+import { performanceService, type CourseInformation } from 'services';
+import { PaperCard } from '@/components/PaperCard';
+import { theme } from '@/bootstrap';
+import { CenteredLoading } from '@/components/CenteredLoading';
+import { formatSeason } from 'utils';
 
-import { authStore } from 'stores';
-import create from 'vue-zustand';
+const { data: crHistoryData, isPending: isPendingCrHistory } = useQuery({
+  queryKey: ['crHistory'],
+  queryFn: performanceService.getCrHistory,
+  select: (response) => response.data,
+});
 
-const useAuth = create(authStore);
-const { user } = useAuth();
+const crHistorySeries = computed(() => {
+  const arrCrHistory = crHistoryData.value?.map((quad) => {
+    const roundedCr = parseFloat(quad.cr_acumulado.toFixed(2));
+    return [formatSeason(quad.season), roundedCr];
+  });
+  return arrCrHistory;
+});
+const crHistoryOptions = ref({
+  accessibility: {
+    enabled: true,
+  },
 
-const HelloWorld = defineFederatedReactComponent({
-  loader: () => import('react/HelloWorld'),
-  props: {
-    name: { type: String, default: 'React' },
+  chart: {
+    type: 'area',
+    style: { fontFamily: 'Roboto, sans-serif' },
+  },
+
+  plotOptions: {
+    area: {
+      fillOpacity: 0.45,
+      lineWidth: 2,
+      marker: {
+        radius: 4,
+      },
+    },
+  },
+
+  colors: [theme.colors?.primary],
+
+  title: {
+    text: 'Seu CR ao longo do tempo',
+  },
+
+  tooltip: {
+    borderRadius: 10,
+    padding: 12,
+  },
+
+  yAxis: {
+    title: {
+      text: 'CR',
+    },
+    tickInterval: 0.5,
+    min: 0,
+    max: 4,
+  },
+
+  xAxis: {
+    title: {
+      text: 'Quadrimestre',
+    },
+    crosshair: true,
+    type: 'category',
+  },
+
+  legend: {
+    verticalAlign: 'top',
+  },
+
+  series: [
+    {
+      name: 'Seu CR',
+      data: crHistorySeries,
+    },
+  ],
+});
+
+const currentCpCourse = ref<CourseInformation>();
+const { data: cpHistoryData, isPending: isPendingCpHistory } = useQuery({
+  queryKey: ['cpHistory'],
+  queryFn: performanceService.getHistoriesGraduations,
+  select: (response) => {
+    currentCpCourse.value = response.data.docs[0];
+    return response.data.docs;
   },
 });
+
+const cpHistorySeries = computed(() => {
+  if (!currentCpCourse.value) return [];
+
+  const result = [];
+  const courseData = currentCpCourse.value.coefficients;
+
+  for (const year in courseData) {
+    for (const quadNumber in courseData[year]) {
+      const cpValue =
+        courseData[year][Number(quadNumber) as 1 | 2 | 3].cp_acumulado;
+      result.push([formatSeason(`${year}:${quadNumber}`), cpValue]);
+    }
+  }
+  return result;
+});
+const cpHistoryOptions = ref({
+  accessibility: {
+    enabled: true,
+  },
+
+  chart: {
+    type: 'area',
+    style: { fontFamily: 'Roboto, sans-serif' },
+  },
+
+  plotOptions: {
+    area: {
+      fillOpacity: 0.45,
+      lineWidth: 2,
+      marker: {
+        radius: 4,
+      },
+    },
+  },
+
+  colors: [theme.colors?.primary],
+
+  title: {
+    text: 'Seu CP ao longo do tempo',
+  },
+
+  tooltip: {
+    borderRadius: 10,
+    padding: 12,
+  },
+
+  yAxis: {
+    title: {
+      text: 'CP',
+    },
+    min: 0,
+    max: 1,
+  },
+
+  xAxis: {
+    title: {
+      text: 'Quadrimestre',
+    },
+    crosshair: true,
+    type: 'category',
+  },
+
+  legend: {
+    verticalAlign: 'top',
+  },
+
+  series: [
+    {
+      name: 'Seu CP',
+      data: cpHistorySeries,
+    },
+  ],
+});
+
+const { data: crDistributionData, isPending: isPendingCrDistributionData } =
+  useQuery({
+    queryKey: ['crDistribution'],
+    queryFn: performanceService.getCrDistribution,
+    select: (response) => response.data,
+  });
+
+const crDistributionSeries = computed(() => {
+  const arrCrDistribution = crDistributionData.value?.map((element) => {
+    return [Number(element._id), element.total];
+  });
+  return arrCrDistribution;
+});
+
+const userCr = computed(() => {
+  return crHistoryData.value?.[crHistoryData.value.length - 1].cr_acumulado;
+});
+
+const closeCrs = computed(
+  () =>
+    crDistributionSeries.value?.find(
+      (element) => element[0].toFixed(1) === userCr.value?.toFixed(1),
+    )?.[1] || '',
+);
+
+const crDistributionOptions = ref({
+  accessibility: {
+    enabled: true,
+  },
+
+  chart: {
+    type: 'area',
+    style: { fontFamily: 'Roboto, sans-serif' },
+  },
+
+  plotOptions: {
+    area: {
+      fillOpacity: 0.45,
+      lineWidth: 2,
+      marker: {
+        radius: 4,
+      },
+    },
+  },
+
+  colors: [theme.colors?.primary],
+
+  title: {
+    text: 'Distribuição de CR',
+  },
+
+  tooltip: {
+    borderRadius: 10,
+    padding: 12,
+  },
+
+  yAxis: {
+    title: {
+      text: 'Quantidade de alunos',
+    },
+    tickInterval: 50,
+  },
+
+  xAxis: {
+    title: {
+      text: 'CR',
+    },
+    crosshair: true,
+    type: 'category',
+    tickInterval: 0.5,
+  },
+
+  legend: {
+    verticalAlign: 'top',
+  },
+
+  series: [
+    {
+      name: 'Quantidade de alunos',
+      data: crDistributionSeries,
+    },
+  ],
+  annotations: [
+    {
+      labelOptions: {
+        crop: false,
+      },
+      labels: [
+        {
+          point: {
+            x: userCr,
+            y: closeCrs,
+            xAxis: 0,
+            yAxis: 0,
+          },
+          text: 'Seu está CR',
+        },
+      ],
+    },
+  ],
+});
+
+const userMaxCr = computed(() => {
+  const crAcumulados = crHistoryData.value?.map((quad) => quad.cr_acumulado);
+  if (crAcumulados) {
+    return Math.max(...crAcumulados).toFixed(2);
+  } else {
+    return 'undefined';
+  }
+});
+
+const maxCreditsQuad = computed(
+  () =>
+    crHistoryData.value?.reduce((previousQuad, currentQuad) => {
+      return previousQuad.period_credits > currentQuad.period_credits
+        ? previousQuad
+        : currentQuad;
+    }),
+);
+
+const bestQuad = computed(() => {
+  return crHistoryData.value?.reduce((previousQuad, currentQuad) => {
+    return previousQuad.cr_quad > currentQuad.cr_quad
+      ? previousQuad
+      : currentQuad;
+  });
+});
+
+const cards = computed(() => [
+  {
+    title: userMaxCr.value,
+    content: 'Seu maior CR até hoje',
+    color: 'ufabcnext-green',
+    icon: 'mdi-chart-line-variant',
+  },
+  {
+    title: closeCrs.value,
+    content: 'Possuem um CR muito próximo ao seu',
+    color: 'navigation',
+    icon: 'mdi-chart-bell-curve',
+  },
+  {
+    title: formatSeason(bestQuad.value?.season || ''),
+    subtitle: `/ ${bestQuad.value?.period_credits} créditos`,
+    content: 'Seu melhor quadrimestre',
+    color: 'primary',
+    icon: 'mdi-trophy-outline',
+    tooltip: 'Foi o quadrimestre em que você tirou suas melhores notas',
+  },
+  {
+    title: formatSeason(maxCreditsQuad.value?.season || ''),
+    subtitle: `/ ${maxCreditsQuad.value?.period_credits} créditos`,
+    content: 'Quadrimestre com mais créditos',
+    color: 'ufabcnext-yellow',
+    icon: 'mdi-fire',
+  },
+]);
 </script>
+
+<template>
+  <CenteredLoading
+    class="mt-10"
+    v-if="
+      isPendingCrHistory || isPendingCpHistory || isPendingCrDistributionData
+    "
+  />
+  <v-layout class="flex-column align-center justify-center" v-else>
+    <v-row align="stretch" no-gutters class="w-100">
+      <v-col
+        v-for="card in cards"
+        :key="card.title"
+        cols="12"
+        sm="3"
+        class="mb-2 mb-sm-0"
+      >
+        <PerformanceCard
+          :title="card.title"
+          :subTitle="card.subtitle"
+          :description="card.content"
+          :color="card.color"
+          :icon="card.icon"
+          :tooltip="card?.tooltip"
+        >
+        </PerformanceCard>
+      </v-col>
+    </v-row>
+    <PaperCard class="w-100 mt-4">
+      <Chart :options="crHistoryOptions" />
+    </PaperCard>
+    <PaperCard class="w-100 mt-4">
+      <div class="select-wrapper">
+        <v-select
+          :items="cpHistoryData"
+          :item-title="(course) => course.curso"
+          :item-value="(course) => course"
+          v-model="currentCpCourse"
+          variant="outlined"
+        />
+      </div>
+      <Chart :options="cpHistoryOptions" />
+    </PaperCard>
+    <PaperCard class="w-100 mt-4">
+      <Chart :options="crDistributionOptions" />
+    </PaperCard>
+  </v-layout>
+</template>
+
+<style scoped>
+.select-wrapper {
+  max-width: 'fit-content';
+}
+</style>

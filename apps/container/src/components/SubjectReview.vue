@@ -1,5 +1,5 @@
 <template>
-  <CenteredLoading v-if="isFetchingSubject" class="mt-5" />
+  <CenteredLoading v-if="isFetchingSubject" class="mt-10" />
   <PaperCard v-else class="w-100">
     <v-container style="max-width: none">
       <v-row v-if="Number(subjectData?.data.general.count) > 0">
