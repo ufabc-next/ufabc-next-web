@@ -1,5 +1,8 @@
 <template>
-  <CenteredLoading class="mt-10" v-if="isPendingCoursesNames" />
+  <CenteredLoading
+    class="mt-10"
+    v-if="isPendingUsage || isPendingDeficit || subjects.isLoading.value"
+  />
   <div v-else>
     <PaperCard>
       <v-menu transition="slide-y-transition">
@@ -66,15 +69,17 @@
         </el-checkbox-group>
         <v-menu transition="slide-y-transition">
           <template v-slot:activator="{ props }">
-            <button v-bind="props" class="text-body-2 order-button mr-2">
-              <span class="font-weight-bold text-black"> Ordenar por: </span>
-              {{
-                orderByOptionsLabel[
-                  orderByOptions.findIndex((o) => o === orderBy)
-                ]
-              }}
-              <v-icon class="text-ufabcnext-green"> mdi-menu-down </v-icon>
-            </button>
+            <div>
+              <button v-bind="props" class="text-body-2 order-button mr-2">
+                <span class="font-weight-bold text-black"> Ordenar por: </span>
+                {{
+                  orderByOptionsLabel[
+                    orderByOptions.findIndex((o) => o === orderBy)
+                  ]
+                }}
+                <v-icon class="text-ufabcnext-green"> mdi-menu-down </v-icon>
+              </button>
+            </div>
           </template>
           <v-list>
             <v-list-item
@@ -277,7 +282,7 @@ const classes = useInfiniteQuery({
   select: ({ pages }) => pages.flatMap((page) => page.data),
 });
 
-const { data: coursesNames, isPending: isPendingCoursesNames } = useQuery({
+const { data: coursesNames } = useQuery({
   queryFn: StatsSubjects.getAllCoursesNames,
   queryKey: ['histories', 'courses'],
   select: ({ data }) => data,
@@ -342,13 +347,13 @@ const matriculaNameLabel = (data: StatsClass | StatsSubject | StatsCourse) => {
   return `${info.disciplina} ${info.turma}-${mapTurnoLabel(info.turno)}`;
 };
 
-const { data: deficit } = useQuery({
+const { data: deficit, isPending: isPendingDeficit } = useQuery({
   queryFn: () => StatsSubjects.getOverview({ season: selectedSeason.value }),
   queryKey: ['stats', 'disciplinas', 'overview'],
   select: ({ data }) => -data.data[0]?.deficit,
 });
 
-const { data: usage } = useQuery({
+const { data: usage, isPending: isPendingUsage } = useQuery({
   queryFn: () => StatsSubjects.getUsage({ season: selectedSeason.value }),
   queryKey: ['stats', 'usage'],
   select: ({ data }) => data,
