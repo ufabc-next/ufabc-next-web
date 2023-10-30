@@ -11,7 +11,7 @@
     </span>
 
     <v-card-text
-      class="text-subtitle-2 px-0 d-flex flex-column justify-end pb-0"
+      class="text-subtitle-2 px-0 pb-0 pt-1 d-flex flex-column justify-end"
     >
       <p>
         {{ description }}
@@ -21,8 +21,8 @@
         </v-btn>
       </p>
       <v-progress-linear
-        :model-value="progressBarValue"
-        :model-total="progressBarMaxValue"
+        :model-value="100 * progressBarValue/progressBarMaxValue"
+        :model-total="100"
         height="6"
         :color="color"
         bg-color="pink-lighten-3"

@@ -37,3 +37,20 @@ export type CourseName = {
   curso_id: number;
   name: string;
 };
+
+export type StatsOverview = PageableReturn<{
+  _id: number;
+  vagas: number;
+  requisicoes: number;
+  deficit: number;
+}>;
+
+export type StatsUsage = {
+  teachers: number;
+  totalAlunos: number;
+  subjects: number;
+  users: number;
+  currentAlunos: number;
+  comments: number;
+  enrollments: number;
+};

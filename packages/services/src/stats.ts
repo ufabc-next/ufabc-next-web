@@ -3,7 +3,9 @@ import type {
   PageableReturn,
   StatsClass,
   StatsCourse,
+  StatsOverview,
   StatsSubject,
+  StatsUsage,
 } from 'types';
 
 import { api } from './api';
@@ -30,4 +32,8 @@ export const StatsSubjects = {
       params,
     }),
   getAllCoursesNames: () => api.get<CourseName[]>('/histories/courses'),
+  getOverview: (params: { season: string }) =>
+    api.get<StatsOverview>('/stats/disciplinas/overview', { params }),
+  getUsage: (params: { season: string }) =>
+    api.get<StatsUsage>('/stats/usage', { params }),
 };
