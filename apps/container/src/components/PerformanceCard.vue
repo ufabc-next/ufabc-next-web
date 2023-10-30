@@ -11,13 +11,13 @@
     </span>
 
     <v-card-text
-      class="text-subtitle-2 pl-0 d-flex flex-column justify-end pb-0"
+      class="text-subtitle-2 px-0 d-flex flex-column justify-end pb-0"
     >
       <p>
         {{ description }}
         <v-btn v-if="tooltip" density="compact" icon="mdi-information-outline" variant="text" class="pa-0 h-auto w-auto">
           <v-icon/>
-          <v-tooltip activator="parent" location="top" >{{tooltip}}</v-tooltip>
+          <v-tooltip open-on-click activator="parent" location="top" >{{tooltip}}</v-tooltip>
         </v-btn>
       </p>
       <v-progress-linear
@@ -26,7 +26,7 @@
         height="6"
         :color="color"
         bg-color="pink-lighten-3"
-        :class="`rounded-lg mt-2 d-none d-sm-block`"
+        class="rounded-lg mt-2 d-none d-sm-block"
       />
     </v-card-text>
   </v-card>

@@ -9,6 +9,30 @@ import { theme } from '@/bootstrap';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { formatSeason } from 'utils';
 
+const areaGraphOptions = {
+  accessibility: {
+    enabled: true,
+  },
+  chart: {
+    type: 'area',
+    style: { fontFamily: 'Roboto, sans-serif' },
+  },
+  plotOptions: {
+    area: {
+      fillOpacity: 0.45,
+      lineWidth: 2,
+      marker: {
+        radius: 4,
+      },
+    },
+  },
+  colors: [theme.colors?.primary],
+  tooltip: {
+    borderRadius: 10,
+    padding: 12,
+  },
+};
+
 const { data: crHistoryData, isPending: isPendingCrHistory } = useQuery({
   queryKey: ['crHistory'],
   queryFn: Performance.getCrHistory,
@@ -22,37 +46,12 @@ const crHistorySeries = computed(() => {
   });
   return arrCrHistory;
 });
+
 const crHistoryOptions = ref({
-  accessibility: {
-    enabled: true,
-  },
-
-  chart: {
-    type: 'area',
-    style: { fontFamily: 'Roboto, sans-serif' },
-  },
-
-  plotOptions: {
-    area: {
-      fillOpacity: 0.45,
-      lineWidth: 2,
-      marker: {
-        radius: 4,
-      },
-    },
-  },
-
-  colors: [theme.colors?.primary],
-
+  ...areaGraphOptions,
   title: {
     text: 'Seu CR ao longo do tempo',
   },
-
-  tooltip: {
-    borderRadius: 10,
-    padding: 12,
-  },
-
   yAxis: {
     title: {
       text: 'CR',
@@ -61,7 +60,6 @@ const crHistoryOptions = ref({
     min: 0,
     max: 4,
   },
-
   xAxis: {
     title: {
       text: 'Quadrimestre',
@@ -69,17 +67,15 @@ const crHistoryOptions = ref({
     crosshair: true,
     type: 'category',
   },
-
-  legend: {
-    verticalAlign: 'top',
-  },
-
   series: [
     {
       name: 'Seu CR',
       data: crHistorySeries,
     },
   ],
+  legend: {
+    verticalAlign: 'top',
+  },
 });
 
 const currentCpCourse = ref<CourseInformation>();
@@ -108,36 +104,10 @@ const cpHistorySeries = computed(() => {
   return result;
 });
 const cpHistoryOptions = ref({
-  accessibility: {
-    enabled: true,
-  },
-
-  chart: {
-    type: 'area',
-    style: { fontFamily: 'Roboto, sans-serif' },
-  },
-
-  plotOptions: {
-    area: {
-      fillOpacity: 0.45,
-      lineWidth: 2,
-      marker: {
-        radius: 4,
-      },
-    },
-  },
-
-  colors: [theme.colors?.primary],
-
+  ...areaGraphOptions,
   title: {
     text: 'Seu CP ao longo do tempo',
   },
-
-  tooltip: {
-    borderRadius: 10,
-    padding: 12,
-  },
-
   yAxis: {
     title: {
       text: 'CP',
@@ -145,7 +115,6 @@ const cpHistoryOptions = ref({
     min: 0,
     max: 1,
   },
-
   xAxis: {
     title: {
       text: 'Quadrimestre',
@@ -153,11 +122,6 @@ const cpHistoryOptions = ref({
     crosshair: true,
     type: 'category',
   },
-
-  legend: {
-    verticalAlign: 'top',
-  },
-
   series: [
     {
       name: 'Seu CP',
@@ -192,43 +156,16 @@ const closeCrs = computed(
 );
 
 const crDistributionOptions = ref({
-  accessibility: {
-    enabled: true,
-  },
-
-  chart: {
-    type: 'area',
-    style: { fontFamily: 'Roboto, sans-serif' },
-  },
-
-  plotOptions: {
-    area: {
-      fillOpacity: 0.45,
-      lineWidth: 2,
-      marker: {
-        radius: 4,
-      },
-    },
-  },
-
-  colors: [theme.colors?.primary],
-
+  ...areaGraphOptions,
   title: {
     text: 'Distribuição de CR',
   },
-
-  tooltip: {
-    borderRadius: 10,
-    padding: 12,
-  },
-
   yAxis: {
     title: {
       text: 'Quantidade de alunos',
     },
     tickInterval: 50,
   },
-
   xAxis: {
     title: {
       text: 'CR',
@@ -237,11 +174,6 @@ const crDistributionOptions = ref({
     type: 'category',
     tickInterval: 0.5,
   },
-
-  legend: {
-    verticalAlign: 'top',
-  },
-
   series: [
     {
       name: 'Quantidade de alunos',
@@ -250,6 +182,7 @@ const crDistributionOptions = ref({
   ],
   annotations: [
     {
+      draggable: '',
       labelOptions: {
         crop: false,
       },
@@ -356,15 +289,14 @@ const cards = computed(() => [
       <Chart :options="crHistoryOptions" />
     </PaperCard>
     <PaperCard class="w-100 mt-4">
-      <div class="select-wrapper">
-        <v-select
+      <v-select
           :items="cpHistoryData"
           :item-title="(course) => course.curso"
           :item-value="(course) => course"
           v-model="currentCpCourse"
           variant="outlined"
+          class="course-select"
         />
-      </div>
       <Chart :options="cpHistoryOptions" />
     </PaperCard>
     <PaperCard class="w-100 mt-4">
@@ -374,7 +306,7 @@ const cards = computed(() => [
 </template>
 
 <style scoped>
-.select-wrapper {
-  max-width: 'fit-content';
+.course-select {
+  width: 100%;
 }
 </style>
