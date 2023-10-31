@@ -1,14 +1,22 @@
-name: DeployAWS
+name: Deploy AWS
 
 on:
-  push:
-    branches: [develop]
-  pull_request:
-    branches: [develop]
+  workflow_run:
+    workflows: ['CI workflow']
+    branches: [main, develop]
+    types:
+      - completed
 
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_DEFAULT_REGION: us-east-1
+      AWS_S3_BUCKET_NAME: ${{ github.ref == 'refs/heads/main' && secrets.AWS_S3_BUCKET_NAME_PRD  || secrets.AWS_S3_BUCKET_NAME_HOM }}
+      AWS_DISTRIBUTION_ID: ${{ github.ref == 'refs/heads/main' && secrets.AWS_DISTRIBUTION_ID_PRD  || secrets.AWS_DISTRIBUTION_ID_HOM }}
     steps:
       - uses: actions/checkout@v3
       - name: setup node
@@ -22,29 +30,13 @@ jobs:
 
       - uses: shinyinc/action-aws-cli@v1.2
       - name: sync static with s3
-        run: aws s3 sync apps/static ${{ format('s3://{0}', secrets.AWS_S3_BUCKET_NAME_HOM) }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
+        run: aws s3 sync apps/static s3://$AWS_S3_BUCKET_NAME
 
       - name: sync react with s3
-        run: aws s3 sync apps/react/dist ${{ format('s3://{0}/react', secrets.AWS_S3_BUCKET_NAME_HOM) }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
+        run: aws s3 sync apps/react/dist s3://$AWS_S3_BUCKET_NAME/react
 
       - name: sync container with s3
-        run: aws s3 sync apps/container/dist ${{ format('s3://{0}/app', secrets.AWS_S3_BUCKET_NAME_HOM) }}
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
+        run: aws s3 sync apps/container/dist s3://$AWS_S3_BUCKET_NAME/app
 
       - name: invalidate cloudfront cache
-        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DISTRIBUTION_ID_HOM }} --paths "/*"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: us-east-1
+        run: aws cloudfront create-invalidation --distribution-id $AWS_DISTRIBUTION_ID --paths "/*"
