@@ -400,9 +400,7 @@ const cards = computed(() => [
 </script>
 
 <style scoped lang="scss">
-.order-button {
-  &:hover {
-    color: rgb(var(--v-theme-ufabcnext-green));
-  }
+.order-button:hover {
+  color: rgb(var(--v-theme-ufabcnext-green));
 }
 </style>

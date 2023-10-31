@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "lint": "eslint src/**/*",
-    "lint:fix": "eslint src/**/* --fix"
+    "lint:fix": "eslint src/**/* --fix",
+    "tsc": "tsc --noEmit"
   },
   "devDependencies": {
     "eslint-config-custom": "*",

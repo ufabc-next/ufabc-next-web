@@ -284,9 +284,8 @@ td {
   outline: 1px solid white;
 }
 
-.order-button {
-  &:hover {
-    color: #56cdb7;
+.order-button:hover {
+    color: rgb(var(--v-theme-ufabcnext-green));
   }
-}
+
 </style>

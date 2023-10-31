@@ -15,6 +15,7 @@
     },
     "lint": {},
     "lint:fix": {},
+    "tsc": {},
     "test": {},
     "test:watch": {
       "cache": false

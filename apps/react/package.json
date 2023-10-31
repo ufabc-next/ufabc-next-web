@@ -6,7 +6,8 @@
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix"
+    "lint:fix": "eslint . --fix",
+    "tsc": "tsc --noEmit"
   },
   "devDependencies": {
     "@babel/core": "^7.23.2",
@@ -33,7 +34,7 @@
   },
   "engineStrict": true,
   "dependencies": {
-    "@tanstack/react-query": "5.0.5",
+    "@tanstack/react-query": "5.4.3",
     "react": "^18.2.0",
     "store": "*",
     "services": "*",

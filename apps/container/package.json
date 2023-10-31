@@ -10,13 +10,14 @@
     "test": "vitest run --coverage",
     "test:watch": "vitest --coverage",
     "lint": "vue-cli-service lint",
-    "lint:fix": "vue-cli-service lint --fix"
+    "lint:fix": "vue-cli-service lint --fix",
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@amcharts/amcharts5": "^5.5.2",
     "@mdi/font": "^7.3.67",
-    "@tanstack/query-core": "^5.0.5",
-    "@tanstack/vue-query": "5.4.1",
+    "@tanstack/query-core": "5.4.3",
+    "@tanstack/vue-query": "5.4.3",
     "axios": "^1.6.0",
     "core-js": "3.33.1",
     "element-plus": "2.4.1",

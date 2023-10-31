@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        command: ['test', 'lint']
+        command: ['test', 'lint', 'tsc']
 
     steps:
       - uses: actions/checkout@v3

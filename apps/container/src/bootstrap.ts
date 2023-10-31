@@ -69,10 +69,8 @@ declare global {
 }
 
 const queryClient = new QueryClientVue({
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  queryCache: client.getQueryCache() as any,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  defaultOptions: client.getDefaultOptions() as any,
+  queryCache: client.getQueryCache(),
+  defaultOptions: client.getDefaultOptions(),
 });
 
 createApp(App)
