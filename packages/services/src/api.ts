@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { authStore } from 'stores';
 
-const api = axios.create({ baseURL: 'https://api.ufabcnext.com/v1/' });
+export const api = axios.create({ baseURL: 'https://api.ufabcnext.com/v1/' });
 
 api.interceptors.request.use(async (config) => {
   const { token } = authStore.getState();
@@ -10,5 +10,3 @@ api.interceptors.request.use(async (config) => {
   }
   return config;
 });
-
-export default api;

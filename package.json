@@ -5,7 +5,8 @@
     "dev": "turbo run dev",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint:fix",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "tsc": "turbo run tsc"
   },
   "devDependencies": {
     "eslint": "^8.52.0",

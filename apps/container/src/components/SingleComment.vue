@@ -183,8 +183,8 @@ const season = computed(() => {
   const [year, quad] = props.comment.enrollment.season?.split(':') ?? [];
 
   return formatSeason(
-    quad ?? props.comment.enrollment.quad,
-    year ?? props.comment.enrollment.year,
+    (year ?? props.comment.enrollment.year) + ':' +
+    (quad ?? props.comment.enrollment.quad)
   );
 });
 

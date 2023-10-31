@@ -3,7 +3,7 @@
     v-if="isFetchingTeacherError"
     text="Erro ao carregar dados do(a) professor(a)"
   />
-  <CenteredLoading v-if="isFetchingTeacher" class="mt-5" />
+  <CenteredLoading v-if="isFetchingTeacher" class="mt-10" />
   <PaperCard v-else class="w-100">
     <v-container style="max-width: none">
       <v-row class="pa-0" v-if="Number(teacherData?.data.general.count) > 0">
