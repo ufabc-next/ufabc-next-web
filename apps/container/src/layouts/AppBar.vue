@@ -123,13 +123,6 @@ const internalNavigationsItems = [
     icon: 'mdi-cog',
     route: '/settings',
   },
-  // {
-  //   title: 'Planejamento',
-  //   featured: false,
-  //   private: true,
-  //   icon: 'mdi-file-document-box-multiple',
-  //   route: '/planning',
-  // },
 ];
 
 const externalNavigationsItems = [

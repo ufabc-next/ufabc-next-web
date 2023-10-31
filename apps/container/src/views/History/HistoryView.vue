@@ -307,7 +307,7 @@ const handleOpenDialog = (
       : type === 'pratica'
       ? 'prática'
       : 'teoria',
-    formatSeason(processedEnrollment.quad, processedEnrollment.year),
+    formatSeason(processedEnrollment.year + ":" + processedEnrollment.quad),
     isEAD && 'EAD',
   ].filter(Boolean) as string[];
 
