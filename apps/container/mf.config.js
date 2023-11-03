@@ -1,4 +1,4 @@
-const env = process.env.MF_ENV;
+const env = process.env.VUE_APP_MF_ENV;
 
 const { dependencies } = require('./package.json');
 const remotes = require(`./remotes.hosts.${env}.js`);

@@ -1,3 +1,3 @@
 module.exports = {
-  react: 'react@https://d3f4tdqrlkywzs.cloudfront.net/react/remoteEntry.js',
+  react: 'react@https://ufabcnext.com/react/remoteEntry.js',
 };
