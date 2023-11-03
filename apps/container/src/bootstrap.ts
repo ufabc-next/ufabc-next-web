@@ -20,9 +20,9 @@ import 'element-plus/dist/index.css';
 
 import '@mdi/font/css/materialdesignicons.css';
 
-import HighchartsVue from 'highcharts-vue'
-import Highcharts from "highcharts";
-import annotationsInit from "highcharts/modules/annotations";
+import HighchartsVue from 'highcharts-vue';
+import Highcharts from 'highcharts';
+import annotationsInit from 'highcharts/modules/annotations';
 
 annotationsInit(Highcharts);
 

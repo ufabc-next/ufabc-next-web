@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <AppBar />
+    <AppBar v-if="!!token" />
     <v-main style="background-color: #f5f5f5">
       <v-container id="app-container">
         <router-view />
@@ -19,7 +19,7 @@ import router from './router';
 import AppBar from '@/layouts/AppBar.vue';
 
 const useAuth = create(authStore);
-const { authenticate } = useAuth();
+const { authenticate, token } = useAuth();
 
 onMounted(async () => {
   await router.isReady();
@@ -57,11 +57,12 @@ a {
   color: #56cdb7;
 }
 
-p, span {
+p,
+span {
   font-size: 14px;
 }
 
 .el-message {
-  z-index: 9999999!important
+  z-index: 9999999 !important;
 }
 </style>

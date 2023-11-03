@@ -47,7 +47,7 @@ jobs:
         run: yarn --frozen-lockfile
 
       - name: build projects
-        run: yarn build
+        run: yarn ${{ github.ref == 'refs/heads/main' && 'build' || 'build:staging'  }}
 
       - name: sync static with s3
         run: aws s3 sync apps/static s3://$AWS_S3_BUCKET_NAME
