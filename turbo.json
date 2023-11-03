@@ -4,12 +4,12 @@
   "globalDotEnv": [".env"],
   "pipeline": {
     "build": {
-      "env": ["MF_ENV", "BASE_URL"],
+      "env": ["VUE_APP_MF_ENV", "VUE_APP_BASE_URL"],
       "dependsOn": ["^build"],
       "outputs": ["dist/**"]
     },
     "build:staging": {
-      "env": ["MF_ENV", "BASE_URL"],
+      "env": ["VUE_APP_MF_ENV", "VUE_APP_BASE_URL"],
       "dependsOn": ["^build:staging"],
       "outputs": ["dist/**"]
     },
