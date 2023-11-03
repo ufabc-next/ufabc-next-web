@@ -42,11 +42,19 @@ const routes: Array<RouteRecordRaw> = [
     path: '/history',
     name: 'history',
     component: HistoryView,
+    meta: {
+      title: 'Meu Histórico',
+      auth: true,
+    },
   },
   {
     path: '/stats',
     name: 'stats',
     component: StatsView,
+    meta: {
+      title: 'Dados da Matrícula',
+      auth: true,
+    },
   },
   {
     path: '/settings',
