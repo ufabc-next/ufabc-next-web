@@ -6,7 +6,7 @@
       </div>
       <v-divider />
       <v-list-item
-        v-for="item in internalNavigationsItems"
+        v-for="item in internalNavigationItems"
         :to="item.route"
         :key="item.title"
       >
@@ -19,7 +19,7 @@
     <v-divider />
     <v-list>
       <v-list-item
-        v-for="item in externalNavigationsItems"
+        v-for="item in externalNavigationItems"
         :href="item.url"
         :target="item.url && '_blank'"
         :rel="item.url && 'noopener noreferrer'"
@@ -92,7 +92,7 @@ const userInitials = computed(() => 'tu');
 const user = computed(() => ({
   ra: '1234567',
 }));
-const internalNavigationsItems = [
+const internalNavigationItems = [
   {
     title: 'Reviews',
     icon: 'mdi-message-draw',
@@ -125,7 +125,7 @@ const internalNavigationsItems = [
   },
 ];
 
-const externalNavigationsItems = [
+const externalNavigationItems = [
   {
     title: 'Snapshot da Matrícula',
     icon: 'mdi-open-in-new',
