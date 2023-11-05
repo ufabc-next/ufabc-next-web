@@ -34,7 +34,7 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
     </v-row>
 
     <v-row>
-      <v-col xs="12" sm="6">
+      <v-col cols="12" md="6">
         <img
           style="max-width: 100%; height: auto"
           class="pa-6"
@@ -42,7 +42,7 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
         />
       </v-col>
 
-      <v-col xs="12" sm="6">
+      <v-col cols="12" md="6">
         <section v-if="recoveryStep === 0">
           <h1 style="font-size: 26px; font-weight: 700" class="mb-6">
             Criou uma conta no Next e não consegue acessar?
