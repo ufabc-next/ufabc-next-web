@@ -1,13 +1,13 @@
 <script setup lang="ts">
-const rules = {
-  required: (value: string) => !!value || 'Este campo é obrigatório',
-  validEmail: (email: string) => {
-    const regexStudentEmail = /^[A-Za-z0-9._%+-]+@aluno\.ufabc\.edu\.br$/;
-    return regexStudentEmail.test(email)
-      ? true
-      : 'Digite um email UFABC válido';
-  },
-};
+// const rules = {
+//   required: (value: string) => !!value || 'Este campo é obrigatório',
+//   validEmail: (email: string) => {
+//     const regexStudentEmail = /^[A-Za-z0-9._%+-]+@aluno\.ufabc\.edu\.br$/;
+//     return regexStudentEmail.test(email)
+//       ? true
+//       : 'Digite um email UFABC válido';
+//   },
+// };
 </script>
 
 <template>
@@ -26,7 +26,7 @@ const rules = {
       </v-col>
 
       <v-col xs="12" sm="6">
-        <section>
+        <!-- <section>
           <h1 style="font-size: 26px; font-weight: 700" class="mb-4">
             Criou uma conta no Next e não consegue acessar?
           </h1>
@@ -39,6 +39,34 @@ const rules = {
               :rules="[rules.required, rules.validEmail]"
             ></v-text-field>
           </v-form>
+        </section> -->
+
+        <section>
+          <h1 style="font-size: 26px; font-weight: 700" class="mb-4">
+            Não foi possível recuperar sua conta 😔
+          </h1>
+          <p class="mb-4">Mas calma, nem tudo está perdido!</p>
+          <div class="alert-wrapper">
+            <p class="mb-4">
+              O time do UFABC Next está trabalhando para resolver seu problema e
+              continuar te ajudando na sua jornada pela UFABC.
+            </p>
+            <p class="mb-4">
+              Envie uma DM para nosso
+              <a href="https://www.instagram.com/ufabc_next/?hl=pt-br"
+                >Instagram</a
+              >
+              e te atenderemos!
+            </p>
+            <p class="mb-4">
+              Não esqueça de informar RA e e-mail institucional.
+            </p>
+            <p>
+              Aproveite e conheça o projeto no
+              <a href="https://github.com/ufabc-next/ufabc-next-web">GitHub</a>,
+              sua ajuda será bem-vinda!
+            </p>
+          </div>
         </section>
 
         <v-btn
@@ -48,7 +76,7 @@ const rules = {
           size="large"
           @click="$router.push('/')"
         >
-          Voltar para a home >
+          Voltar para a home
         </v-btn>
       </v-col>
     </v-row>
@@ -58,5 +86,18 @@ const rules = {
 <style scoped>
 p {
   font-size: 16px;
+}
+
+a {
+  color: black;
+  text-decoration: underline;
+}
+
+.alert-wrapper {
+  background-color: #bbdefb;
+  color: #1565c0;
+  padding: 8px 16px;
+  border-radius: 4px;
+  overflow: hidden;
 }
 </style>
