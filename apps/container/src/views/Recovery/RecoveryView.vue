@@ -41,7 +41,7 @@
           </v-form>
         </section> -->
 
-        <section>
+        <!-- <section>
           <h1 style="font-size: 26px; font-weight: 700" class="mb-4">
             Não foi possível recuperar sua conta 😔
           </h1>
@@ -67,8 +67,32 @@
               sua ajuda será bem-vinda!
             </p>
           </div>
-        </section>
+        </section> -->
 
+        <section>
+          <h1 style="font-size: 26px; font-weight: 700" class="mb-4">
+            Sua conta será recuperada! 🎉
+          </h1>
+          <p class="mb-4">
+            Você recebeu um email para recuperar sua conta,
+            <span class="cursor-pointer ufabcnext-link--text">clique aqui</span>
+            para acessar seu email institucional.
+          </p>
+
+          <div class="alert-wrapper">
+            <p class="mb-4">
+              Caso você não tenha recebido o email de recuperação de conta,
+              envie uma DM para nosso
+              <a href="https://www.instagram.com/ufabc_next/?hl=pt-br"
+                >Instagram</a
+              >
+              e te atenderemos!
+            </p>
+            <p class="mb-4">
+              Não esqueça de informar seu RA e email institucional
+            </p>
+          </div>
+        </section>
         <v-btn
           color="#4a90e2"
           class="mt-3"
