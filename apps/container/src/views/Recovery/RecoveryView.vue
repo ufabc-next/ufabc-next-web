@@ -1,13 +1,30 @@
 <script setup lang="ts">
-// const rules = {
-//   required: (value: string) => !!value || 'Este campo é obrigatório',
-//   validEmail: (email: string) => {
-//     const regexStudentEmail = /^[A-Za-z0-9._%+-]+@aluno\.ufabc\.edu\.br$/;
-//     return regexStudentEmail.test(email)
-//       ? true
-//       : 'Digite um email UFABC válido';
-//   },
-// };
+import { ref } from 'vue';
+import { useMutation } from '@tanstack/vue-query';
+import { Users } from 'services';
+
+// recoveryStep === 0: enter email
+// recoveryStep === 1: recovery error
+// recoveryStep === 2: success
+const recoveryStep = ref(0);
+
+const email = ref('');
+const isFormValid = ref(false);
+const rules = {
+  required: (value: string) => !!value || 'Este campo é obrigatório',
+  validEmail: (email: string) => {
+    const regexStudentEmail = /^[A-Za-z0-9._%+-]+@aluno\.ufabc\.edu\.br$/;
+    return regexStudentEmail.test(email)
+      ? true
+      : 'Digite um email UFABC válido';
+  },
+};
+
+const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
+  mutationFn: () => Users.recovery(email.value),
+  onSuccess: () => (recoveryStep.value = 2),
+  onError: () => (recoveryStep.value = 1),
+});
 </script>
 
 <template>
@@ -26,22 +43,39 @@
       </v-col>
 
       <v-col xs="12" sm="6">
-        <!-- <section>
-          <h1 style="font-size: 26px; font-weight: 700" class="mb-4">
+        <section v-if="recoveryStep === 0">
+          <h1 style="font-size: 26px; font-weight: 700" class="mb-6">
             Criou uma conta no Next e não consegue acessar?
           </h1>
-          <v-form>
+          <v-form @submit.prevent v-model="isFormValid">
             <v-text-field
+              v-model="email"
               label="Insira seu email institucional"
               variant="solo"
+              class="mb-4"
               placeholder="seu.email@aluno.ufabc.edu.br"
               prepend-inner-icon="mdi-email"
               :rules="[rules.required, rules.validEmail]"
             ></v-text-field>
+            <div class="d-flex">
+              <v-btn class="mr-2" rounded size="large" @click="$router.go(-1)">
+                &#129052; Anterior
+              </v-btn>
+              <v-btn
+                color="#4a90e2"
+                rounded
+                size="large"
+                :loading="isLoadingSubmit"
+                :disabled="!isFormValid"
+                @click="mutateRecover()"
+              >
+                Próximo &#129050;
+              </v-btn>
+            </div>
           </v-form>
-        </section> -->
+        </section>
 
-        <!-- <section>
+        <section v-else-if="recoveryStep === 1">
           <h1 style="font-size: 26px; font-weight: 700" class="mb-4">
             Não foi possível recuperar sua conta 😔
           </h1>
@@ -67,9 +101,9 @@
               sua ajuda será bem-vinda!
             </p>
           </div>
-        </section> -->
+        </section>
 
-        <section>
+        <section v-else-if="recoveryStep === 2">
           <h1 style="font-size: 26px; font-weight: 700" class="mb-4">
             Sua conta será recuperada! 🎉
           </h1>
@@ -94,6 +128,7 @@
           </div>
         </section>
         <v-btn
+          v-show="recoveryStep === 1"
           color="#4a90e2"
           class="mt-3"
           rounded
