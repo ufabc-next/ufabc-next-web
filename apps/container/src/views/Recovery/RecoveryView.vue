@@ -87,7 +87,9 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
             </p>
             <p class="mb-4">
               Envie uma DM para nosso
-              <a href="https://www.instagram.com/ufabc_next/?hl=pt-br"
+              <a
+                href="https://www.instagram.com/ufabc_next/?hl=pt-br"
+                target="_blank"
                 >Instagram</a
               >
               e te atenderemos!
@@ -97,8 +99,11 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
             </p>
             <p>
               Aproveite e conheça o projeto no
-              <a href="https://github.com/ufabc-next/ufabc-next-web">GitHub</a>,
-              sua ajuda será bem-vinda!
+              <a
+                href="https://github.com/ufabc-next/ufabc-next-web"
+                target="_blank"
+                >GitHub</a
+              >, sua ajuda será bem-vinda!
             </p>
           </div>
         </section>
@@ -109,7 +114,9 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
           </h1>
           <p class="mb-4">
             Você recebeu um email para recuperar sua conta,
-            <span class="cursor-pointer ufabcnext-link--text">clique aqui</span>
+            <a href="https://www.outlook.com/aluno.ufabc.edu.br" target="_blank"
+              >clique aqui</a
+            >
             para acessar seu email institucional.
           </p>
 
@@ -117,7 +124,9 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
             <p class="mb-4">
               Caso você não tenha recebido o email de recuperação de conta,
               envie uma DM para nosso
-              <a href="https://www.instagram.com/ufabc_next/?hl=pt-br"
+              <a
+                href="https://www.instagram.com/ufabc_next/?hl=pt-br"
+                target="_blank"
                 >Instagram</a
               >
               e te atenderemos!
@@ -127,6 +136,7 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
             </p>
           </div>
         </section>
+
         <v-btn
           v-show="recoveryStep === 1"
           color="#4a90e2"
