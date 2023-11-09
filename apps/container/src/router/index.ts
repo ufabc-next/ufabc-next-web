@@ -98,6 +98,7 @@ const routes: Array<RouteRecordRaw> = [
     component: RecoveryView,
     meta: {
       title: 'Recuperar conta',
+      auth: false,
     },
   },
 
@@ -111,18 +112,20 @@ const router = createRouter({
 
 router.beforeEach(async (to, _from, next) => {
   document.title = (to.meta.title as string) || 'UFABC Next';
-  if (to.matched.some((record) => record.meta.auth)) {
+  if (to.matched.some((record) => record.meta.auth === true)) {
     if (authStore.getState().token) {
-      next();
-    } else {
-      if (process.env.VUE_APP_MF_ENV !== 'local') {
-        window.location.pathname = '/';
-      } else {
-        next();
-      }
+      return next();
     }
-  } else {
-    next();
+    if (process.env.VUE_APP_MF_ENV !== 'local') {
+      return (window.location.pathname = '/');
+    }
+    return next();
+  }
+  if (to.matched.some((record) => record.meta.auth === false)) {
+    if (!authStore.getState().token) {
+      return next();
+    }
+    return router.push('/reviews');
   }
 });
 
