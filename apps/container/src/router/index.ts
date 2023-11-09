@@ -9,6 +9,7 @@ import { DonateView } from '@/views/Donate';
 import { authStore } from 'stores';
 import { SignUpView } from '@/views/SignUp';
 import { ConfirmView } from '@/views/Confirm';
+import { RecoveryView } from '@/views/Recovery';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -90,6 +91,16 @@ const routes: Array<RouteRecordRaw> = [
       title: 'Confirmação da conta',
     },
   },
+
+  {
+    path: '/recovery',
+    name: 'recovery',
+    component: RecoveryView,
+    meta: {
+      title: 'Recuperar conta',
+    },
+  },
+
   { path: '/:pathMatch(.*)*', redirect: '/reviews' },
 ];
 
