@@ -2,43 +2,59 @@
 import { ref } from 'vue';
 import { useMutation } from '@tanstack/vue-query';
 import { Users } from 'services';
+import { z } from 'zod';
 
-// recoveryStep === 0: enter email
-// recoveryStep === 1: recovery error
-// recoveryStep === 2: success
+import { toTypedSchema } from '@vee-validate/zod';
+import { useForm, useField } from 'vee-validate';
+
+const validationSchema = toTypedSchema(
+  z.object({
+    email: z
+      .string({
+        required_error: 'Este campo é obrigatório',
+        invalid_type_error: 'Digite um email UFABC válido',
+      })
+      .refine(
+        (email) => /^[A-Za-z0-9._%+-]+@aluno\.ufabc\.edu\.br$/.test(email),
+        'Digite um email UFABC válido',
+      ),
+  }),
+);
+
+const { handleSubmit, meta } = useForm({
+  validationSchema,
+});
+
+const email = useField('email');
+
 const recoveryStep = ref(0);
 
-const email = ref('');
-const isFormValid = ref(false);
-const rules = {
-  required: (value: string) => !!value || 'Este campo é obrigatório',
-  validEmail: (email: string) => {
-    const regexStudentEmail = /^[A-Za-z0-9._%+-]+@aluno\.ufabc\.edu\.br$/;
-    return regexStudentEmail.test(email)
-      ? true
-      : 'Digite um email UFABC válido';
+const { mutate: mutateRecover, isPending: isPendingSubmit } = useMutation({
+  mutationFn: Users.recovery,
+  onSuccess: () => {
+    recoveryStep.value = 2;
   },
-};
-
-const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
-  mutationFn: () => Users.recovery(email.value),
-  onSuccess: () => (recoveryStep.value = 2),
-  onError: () => (recoveryStep.value = 1),
+  onError: () => {
+    recoveryStep.value = 1;
+  },
 });
+
+const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
 </script>
 
 <template>
   <v-container>
     <v-row>
-      <img style="max-width: 200px; height: auto" src="@/assets/logo.svg" />
+      <img width="200px" src="@/assets/logo.svg" alt="logo do UFABC Next" />
     </v-row>
 
     <v-row>
       <v-col cols="12" md="6">
         <img
-          style="max-width: 100%; height: auto"
+          width="100%"
           class="pa-6"
           src="@/assets/recovery.svg"
+          alt="Imagem minimalista de dois estudantes"
         />
       </v-col>
 
@@ -47,15 +63,15 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
           <h1 style="font-size: 26px; font-weight: 700" class="mb-6">
             Criou uma conta no Next e não consegue acessar?
           </h1>
-          <v-form @submit.prevent v-model="isFormValid">
+          <v-form @submit.prevent="onSubmit">
             <v-text-field
-              v-model="email"
+              v-model="email.value.value"
               label="Insira seu email institucional"
               variant="solo"
               class="mb-4"
               placeholder="seu.email@aluno.ufabc.edu.br"
               prepend-inner-icon="mdi-email"
-              :rules="[rules.required, rules.validEmail]"
+              :error-messages="email.errorMessage.value"
             ></v-text-field>
             <div class="d-flex">
               <v-btn class="mr-2" rounded size="large" @click="$router.go(-1)">
@@ -63,11 +79,11 @@ const { mutate: mutateRecover, isPending: isLoadingSubmit } = useMutation({
               </v-btn>
               <v-btn
                 color="#4a90e2"
+                type="submit"
                 rounded
                 size="large"
-                :loading="isLoadingSubmit"
-                :disabled="!isFormValid"
-                @click="mutateRecover()"
+                :loading="isPendingSubmit"
+                :disabled="!meta.valid"
               >
                 Próximo &#129050;
               </v-btn>
