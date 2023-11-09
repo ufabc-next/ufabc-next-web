@@ -45,15 +45,15 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
 <template>
   <v-container>
     <v-row>
-      <img width="200px" src="@/assets/logo.svg" alt="logo do UFABC Next" />
+      <img width="200" src="@/assets/logo.svg" alt="logo do UFABC Next" />
     </v-row>
 
     <v-row>
       <v-col cols="12" md="6">
         <img
-          width="100%"
           class="pa-6"
           src="@/assets/recovery.svg"
+          style="width: 100%"
           alt="Imagem minimalista de dois estudantes"
         />
       </v-col>
@@ -75,7 +75,7 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
             ></v-text-field>
             <div class="d-flex">
               <v-btn class="mr-2" rounded size="large" @click="$router.go(-1)">
-                &#129052; Anterior
+                <v-icon class="mr-1">mdi-arrow-left</v-icon> Anterior
               </v-btn>
               <v-btn
                 color="#4a90e2"
@@ -85,7 +85,7 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
                 :loading="isPendingSubmit"
                 :disabled="!meta.valid"
               >
-                Próximo &#129050;
+                Próximo <v-icon class="ml-1">mdi-arrow-right</v-icon>
               </v-btn>
             </div>
           </v-form>
