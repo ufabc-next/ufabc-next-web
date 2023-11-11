@@ -56,6 +56,14 @@ module.exports = {
           eager: true,
           requiredVersion: dependencies['react-dom'],
         },
+        '@tanstack/react-query': {
+          singleton: true,
+          requiredVersion: dependencies['@tanstack/react-query'],
+        },
+        '@tanstack/query-core': {
+          singleton: true,
+          requiredVersion: dependencies['@tanstack/query-core'],
+        },
       },
     }),
   ],
