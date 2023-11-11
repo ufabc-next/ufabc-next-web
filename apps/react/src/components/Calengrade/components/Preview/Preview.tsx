@@ -119,7 +119,16 @@ export const Preview = () => {
         <img src={calendarImage} alt="Calendário" />
       </div>
       <div>
-        <button onClick={() => setActiveScreen('summary')}>
+        <button
+          onClick={() => {
+            setActiveScreen('summary');
+            setCalengrade({
+              classes: [],
+              quarter: {},
+              summary: '',
+            });
+          }}
+        >
           Fazer novo Calengrade
         </button>
       </div>
