@@ -38,9 +38,9 @@ type Screen = 'preview' | 'welcome' | 'summary' | 'quarter';
 
 type CalengradeContextProps = {
   calengrade: CalengradeInfo;
-  setCalengrade: (calengrade: CalengradeInfo) => void;
+  setCalengrade: React.Dispatch<React.SetStateAction<CalengradeInfo>>;
   activeScreen: Screen;
-  setActiveScreen: (activeScreen: Screen) => void;
+  setActiveScreen: React.Dispatch<React.SetStateAction<Screen>>;
 };
 
 const CalengradeContext = createContext<CalengradeContextProps>({
@@ -49,9 +49,9 @@ const CalengradeContext = createContext<CalengradeContextProps>({
     quarter: {},
     summary: '',
   },
-  setCalengrade: (_calengrade: CalengradeInfo) => {},
+  setCalengrade: () => {},
   activeScreen: 'welcome',
-  setActiveScreen: (_activeScreen: Screen) => {},
+  setActiveScreen: () => {},
 });
 
 export const CalengradeProvider = ({ children }: PropsWithChildren) => {

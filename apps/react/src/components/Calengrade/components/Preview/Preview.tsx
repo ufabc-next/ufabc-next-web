@@ -28,7 +28,7 @@ export const Preview = () => {
     return () => {
       clearInterval(interval);
     };
-  }, []);
+  }, []); // eslint-disable-line
 
   useEffect(() => {
     if (classes.length <= 0 || !startDate || !endDate) {

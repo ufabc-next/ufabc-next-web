@@ -33,11 +33,11 @@ export const Summary = () => {
   });
 
   useEffect(() => {
-    setCalengrade({
+    setCalengrade((calengrade) => ({
       ...calengrade,
       quarter: definedQuarters[quarter],
-    });
-  }, [quarter]);
+    }));
+  }, [quarter, setCalengrade]);
 
   const handleChange = (value: string) => {
     setSummary(value);
