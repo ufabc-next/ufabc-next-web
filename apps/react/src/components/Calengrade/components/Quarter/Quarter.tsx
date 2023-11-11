@@ -96,7 +96,7 @@ export default function Quarter() {
             className="hint"
             rel="noopener noreferrer"
             target="_blank"
-            href="https://link.cariri.tech/calengrade-calendario-academico"
+            href="https://prograd.ufabc.edu.br/calendarios"
           >
             Calendário acadêmico
           </a>
@@ -142,10 +142,12 @@ export default function Quarter() {
         <button onClick={() => handleClick('back')}>Voltar</button>
       ) : (
         <>
-          <button onClick={() => setActiveScreen('summary')}>
+          <div>
             {calengrade.classes.length} disciplina(s) identificada(s){' '}
-            <u>(alterar)</u>
-          </button>
+            <button onClick={() => setActiveScreen('summary')}>
+              <u>(alterar)</u>
+            </button>
+          </div>
           <button onClick={() => handleClick('generate')}>
             Gerar Calengrade!
           </button>

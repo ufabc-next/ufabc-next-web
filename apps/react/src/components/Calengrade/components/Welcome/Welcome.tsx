@@ -1,6 +1,6 @@
 import React from 'react';
 
-import welcomeImage from '../../assets/welcome.svg';
+import welcomeImage from '../../assets/calendar.svg';
 import { useCalengradeContext } from '../../context/CalengradeContext';
 
 export const Welcome = () => {

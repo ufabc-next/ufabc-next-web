@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-import calendarImage from '../../assets/calendar.svg';
+import calendarImage from '../../assets/calendar_done.svg';
 import loadingImage from '../../assets/loading.svg';
 import { useCalengradeContext } from '../../context/CalengradeContext';
 import { handleCalendar } from '../../utils/calendar';
@@ -119,7 +119,9 @@ export const Preview = () => {
         <img src={calendarImage} alt="Calendário" />
       </div>
       <div>
-        <button>Fazer novo calengrade</button>
+        <button onClick={() => setActiveScreen('summary')}>
+          Fazer novo Calengrade
+        </button>
       </div>
     </>
   );

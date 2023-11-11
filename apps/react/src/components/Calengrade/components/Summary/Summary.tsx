@@ -104,17 +104,22 @@ export const Summary = () => {
             className="hint"
             rel="noopener noreferrer"
             target="_blank"
-            href="https://link.cariri.tech/calengrade-matriculas"
+            href="https://matricula.ufabc.edu.br/matricula/resumo"
           >
             Portal de Matrículas
           </a>
         </h2>
 
         <h3>
-          <button onClick={() => setActiveScreen('quarter')} className="quadri">
+          <div>
             <strong>Quadrimestre:</strong> {calengrade.quarter.title} (
-            <u>alterar</u>)
-          </button>
+            <button
+              onClick={() => setActiveScreen('quarter')}
+              className="quadri"
+            >
+              <u>alterar</u>)
+            </button>
+          </div>
         </h3>
 
         <textarea

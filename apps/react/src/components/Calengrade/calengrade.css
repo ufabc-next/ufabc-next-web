@@ -12,7 +12,6 @@
   flex-grow: 1;
   display: flex;
   flex-direction: column;
-  background: #006633;
   background-size: cover;
   -webkit-font-smoothing: antialiased !important;
 }
@@ -21,7 +20,7 @@
 #calengrade button {
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
   font-size: 14px;
-  color: #444444;
+  color: #fff;
 }
 
 #calengrade .logo {
@@ -79,7 +78,7 @@
 
 #calengrade .footerMessage a:hover {
   text-decoration: underline;
-  color: #ffcc00;
+  color: #2e7eed;
 }
 
 #calengrade img {
@@ -95,7 +94,7 @@
 
 #calengrade a:hover {
   text-decoration: none;
-  color: #ffcc00;
+  color: #2e7eed;
 }
 
 #calengrade h1 {
@@ -120,24 +119,14 @@
   padding: 0 20px;
   font-size: 16px;
   font-weight: bold;
-  background: #ffcc00;
-  color: #444444;
+  background: #2e7eed;
+  color: #fff;
   cursor: pointer;
 }
 
 #calengrade button:hover,
 #calengrade button:focus {
-  background: #dfb200;
-  color: #444;
-}
-
-#calengrade .twoButtons {
-  width: 100%;
-}
-
-#calengrade .twoButtons button:first-child {
-  margin-bottom: 8px;
-  background: #006633;
+  background: #35609f;
   color: #fff;
 }
 
@@ -219,15 +208,17 @@
   color: indianred;
 }
 
-#calengrade .quadri {
-  text-decoration: none !important;
-  color: #444;
-}
-
 #calengrade button.quadri {
+  color: #444;
   background: none;
   font-weight: normal;
   height: unset;
+  text-decoration: none;
+  display: contents;
+}
+
+#calengrade button.quadri:hover {
+  text-decoration: underline;
 }
 
 #calengrade input[type='date']::-webkit-calendar-picker-indicator {
