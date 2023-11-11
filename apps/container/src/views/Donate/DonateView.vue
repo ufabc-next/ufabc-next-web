@@ -94,7 +94,11 @@ const tableData = [
               >
                 <el-table-column prop="name" label="Nome" width="175">
                 </el-table-column>
-                <el-table-column prop="description" label="Descrição">
+                <el-table-column
+                  prop="description"
+                  label="Descrição"
+                  width="140"
+                >
                 </el-table-column>
                 <el-table-column prop="amount" label="Custo" width="180">
                 </el-table-column>

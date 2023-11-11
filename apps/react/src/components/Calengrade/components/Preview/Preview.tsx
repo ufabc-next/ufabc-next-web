@@ -21,7 +21,7 @@ export const Preview = () => {
     let interval: NodeJS.Timeout;
 
     if (!timer) {
-      interval = setInterval(() => setStep((s) => s + 1), 2500);
+      interval = setInterval(() => setStep((s) => s + 1), 1000);
       setTimer(interval);
     }
 
@@ -73,11 +73,11 @@ export const Preview = () => {
             URL.revokeObjectURL(downloadURL);
           } else {
             if (timer) clearInterval(timer);
-            alert('Não foi possível baixar seu Calengrade!');
+            window.Toaster.error('Não foi possível baixar seu Calengrade!');
           }
         } catch (e) {
           console.log('ERROR', e);
-          alert('Não foi possível baixar seu Calengrade!');
+          window.Toaster.error('Não foi possível baixar seu Calengrade!');
           if (timer) clearInterval(timer);
           setActiveScreen('summary');
         }
@@ -96,14 +96,8 @@ export const Preview = () => {
         <h2>...</h2>
       </div>
 
-      <img src={loadingImage} alt="Calendário acadêmico" />
-
-      <div>
-        <h1>Você sabia?</h1>
-        <h3>
-          O Calengrade foi desenvolvido em 2020 por Marcelo Farias, um ex aluno
-          da UFABC.
-        </h3>
+      <div className="flex-fill d-flex align-center">
+        <img src={loadingImage} alt="Calendário acadêmico" />
       </div>
     </>
   ) : (

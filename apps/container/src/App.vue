@@ -13,6 +13,7 @@
 import { authStore } from 'stores';
 import { onMounted } from 'vue';
 import create from 'vue-zustand';
+import { ElMessage } from 'element-plus';
 
 import router from './router';
 
@@ -31,6 +32,7 @@ onMounted(async () => {
       query: otherQueries,
     });
   }
+  window.Toaster = ElMessage;
 });
 </script>
 

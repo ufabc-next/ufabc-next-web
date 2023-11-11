@@ -15,6 +15,13 @@ const Calengrade = () => (
           <CalengradeScreens />
         </div>
       </CalengradeProvider>
+      <h3>
+        O Calengrade foi desenvolvido em 2020 por{' '}
+        <a href="https://link.cariri.tech/calengrade-linkedin">
+          Marcelo Farias
+        </a>
+        , um ex aluno da UFABC.
+      </h3>
     </div>
   </div>
 );

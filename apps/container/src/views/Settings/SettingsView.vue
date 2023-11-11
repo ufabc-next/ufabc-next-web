@@ -250,6 +250,7 @@ const reloadPage = () => window.location.reload();
   font-family: Lato, Roboto;
   color: #444;
   font-size: 26px;
+  line-height: 1.3;
 }
 .text-box-settings {
   color: #676767;
