@@ -53,6 +53,7 @@ html {
 
 #app-container {
   max-width: 1200px;
+  min-height: calc(100vh - 64px);
   min-height: calc(100svh - 64px);
   display: flex;
   flex-direction: column;
