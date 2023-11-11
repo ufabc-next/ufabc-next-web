@@ -23,13 +23,17 @@ module.exports = {
         },
       },
       {
-        test: /\.css$/,
-        use: { loader: 'css-loader', options: { modules: true } },
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.tsx?$/,
         exclude: /node_modules/,
         loader: 'ts-loader',
+      },
+      {
+        test: /\.(png|jpg|gif|svg)$/,
+        loader: 'url-loader',
       },
     ],
   },
@@ -39,8 +43,7 @@ module.exports = {
       name: 'react',
       filename: 'remoteEntry.js',
       exposes: {
-        './HelloWorld': './src/components/HelloWorld.tsx',
-        './Test': './src/components/Test.tsx',
+        './Calengrade': './src/components/Calengrade',
       },
       shared: dependencies,
     }),
@@ -50,5 +53,6 @@ module.exports = {
     headers: {
       'access-control-allow-origin': '*',
     },
+    hot: true,
   },
 };

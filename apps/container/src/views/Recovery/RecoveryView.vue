@@ -45,7 +45,11 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
 <template>
   <v-container>
     <v-row>
-      <img width="200" src="@/assets/logo.svg" alt="logo do UFABC Next" />
+      <img
+        style="max-width: 200px; height: auto"
+        src="@/assets/logo.svg"
+        alt="logo do UFABC Next"
+      />
     </v-row>
 
     <v-row>

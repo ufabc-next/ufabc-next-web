@@ -7,11 +7,10 @@
   "scripts": {
     "lint": "eslint src/**/*",
     "lint:fix": "eslint src/**/* --fix",
-    "tsc": "tsc --noEmit"    
+    "tsc": "tsc --noEmit"
   },
   "devDependencies": {
     "eslint-config-custom": "*",
-    "eslint-config-react-ts": "*",
     "tsconfig": "*",
     "typescript": "^5.2.2"
   },

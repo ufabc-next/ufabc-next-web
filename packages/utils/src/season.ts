@@ -25,7 +25,7 @@ export const getElapsedSeasons = ({
   endSeason,
 }: getElapsedSeasonsProps) => {
   let currentSeason = startSeason;
-  let seasons = [startSeason];
+  const seasons = [startSeason];
   while (currentSeason != endSeason) {
     let year = Number(currentSeason.split(':')[0]);
     let quad = Number(currentSeason.split(':')[1]);

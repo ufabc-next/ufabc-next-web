@@ -99,7 +99,7 @@
       </div>
     </div>
   </PaperCard>
-  <PaperCard class="mt-4 px-0 py-0 px-sm-4 py-sm-4">
+  <PaperCard class="mt-4">
     <div
       v-if="!!enrollmentByDateKeysSorted.length"
       class="horizontal-scroll-except-first-column"
@@ -224,7 +224,12 @@
           >Portal do Aluno.</a
         >
       </h2>
-      <img src="@/assets/missing_history.svg" width="500" height="400" />
+      <img
+        src="@/assets/missing_history.svg"
+        width="500"
+        height="400"
+        alt="Histórico não encontrado"
+      />
     </div>
     <CenteredLoading v-if="isLoadingEnrollments" />
   </PaperCard>
@@ -307,7 +312,7 @@ const handleOpenDialog = (
       : type === 'pratica'
       ? 'prática'
       : 'teoria',
-    formatSeason(processedEnrollment.year + ":" + processedEnrollment.quad),
+    formatSeason(processedEnrollment.year + ':' + processedEnrollment.quad),
     isEAD && 'EAD',
   ].filter(Boolean) as string[];
 

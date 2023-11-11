@@ -38,6 +38,13 @@ export function defineReactComponent({ component, ...options }: any = {}) {
             app?.unmount();
             app = null;
           },
+          style: {
+            width: '100%',
+            height: '100%',
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+          },
         });
     },
   };

@@ -48,6 +48,7 @@
       src="@/assets/comment_not_found.gif"
       style="width: 100%; max-width: 128px"
       class="mb-5"
+      alt="Nenhum comentário encontrado"
     />
     Infelizmente, nenhum comentário foi encontrado 😕
   </div>
@@ -113,7 +114,7 @@ const {
     Comments.get(teacherId.value, selectedSubjectId.value, pageParam),
   refetchOnWindowFocus: false,
   enabled: !!teacherId.value,
-  getNextPageParam: (lastPage: { data: { total: number } }, allPages) => {
+  getNextPageParam: (lastPage, allPages) => {
     if (lastPage.data.total >= allPages.length * 10) {
       return allPages.length;
     }
