@@ -109,7 +109,24 @@ const routes: Array<RouteRecordRaw> = [
       title: 'Calengrade',
     },
   },
-  { path: '/:pathMatch(.*)*', redirect: '/reviews' },
+  {
+    path: '/:pathMatch(.*)*',
+    redirect: (to) => {
+      if (to.hash) {
+        return {
+          path: to.hash.replace('#', ''),
+          hash: '',
+          query: to.query,
+        };
+      }
+
+      return {
+        path: '/reviews',
+        hash: '',
+        query: to.query,
+      };
+    },
+  },
 ];
 
 const router = createRouter({
