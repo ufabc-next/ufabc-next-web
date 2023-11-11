@@ -141,6 +141,7 @@ router.beforeEach(async (to, _from, next) => {
     }
     return router.push('/reviews');
   }
+  next();
 });
 
 export default router;
