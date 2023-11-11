@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import calendarImage from '../../assets/calendar.svg';
 import loadingImage from '../../assets/loading.svg';
 import { useCalengradeContext } from '../../context/CalengradeContext';
 import { handleCalendar } from '../../utils/calendar';
@@ -113,6 +114,12 @@ export const Preview = () => {
           Abra o arquivo com seu aplicativo de calendário favorito e aproveite
           :)
         </h2>
+      </div>
+      <div>
+        <img src={calendarImage} alt="Calendário" />
+      </div>
+      <div>
+        <button>Fazer novo calengrade</button>
       </div>
     </>
   );

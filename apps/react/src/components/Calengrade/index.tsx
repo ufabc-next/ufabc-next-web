@@ -9,7 +9,7 @@ import { CalengradeScreens } from './Screens';
 const Calengrade = () => (
   <div id="calengrade">
     <div className="app">
-      <img src={logo} alt="Calengrade" className="logo" />
+      <img src={logo} alt="logo do Calengrade" className="logo" />
       <CalengradeProvider>
         <div className="content">
           <CalengradeScreens />

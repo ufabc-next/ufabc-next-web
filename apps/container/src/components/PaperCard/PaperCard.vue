@@ -1,6 +1,6 @@
 <template>
   <v-card class="rounded-lg">
-    <v-card-text>
+    <v-card-text class="pa-sm-6">
       <p class="text-primary text-h4 font-weight-bold">{{ title }}</p>
       <slot />
     </v-card-text>

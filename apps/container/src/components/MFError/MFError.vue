@@ -1,5 +1,5 @@
 <template>
-  <h3>Error</h3>
+  <h3>Ocorreu um erro ao carregar, tente novamente</h3>
 </template>
 
 <style scoped>
