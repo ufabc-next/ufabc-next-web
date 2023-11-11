@@ -2,7 +2,12 @@
   <v-navigation-drawer v-model="drawer" color="navigation" width="240">
     <v-list>
       <div class="py-4 d-flex justify-center align-center">
-        <img class="logo-white" src="@/assets/logo_white.svg" height="44" />
+        <img
+          class="logo-white"
+          src="@/assets/logo_white.svg"
+          height="44"
+          alt="logo do UFABC Next"
+        />
       </div>
       <v-divider />
       <v-list-item
@@ -45,7 +50,12 @@
 
     <v-spacer></v-spacer>
 
-    <img class="logo-white" src="@/assets/logo.svg" height="32" />
+    <img
+      class="logo-white"
+      src="@/assets/logo.svg"
+      height="32"
+      alt="logo do UFABC Next"
+    />
 
     <v-spacer></v-spacer>
     <v-btn color="primary" icon="mdi-dots-vertical">
