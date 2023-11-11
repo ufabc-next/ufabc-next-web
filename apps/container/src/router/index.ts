@@ -10,6 +10,7 @@ import { authStore } from 'stores';
 import { SignUpView } from '@/views/SignUp';
 import { ConfirmView } from '@/views/Confirm';
 import { RecoveryView } from '@/views/Recovery';
+import { CalengradeView } from '@/views/Calengrade';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -91,7 +92,6 @@ const routes: Array<RouteRecordRaw> = [
       title: 'Confirmação da conta',
     },
   },
-
   {
     path: '/recovery',
     name: 'recovery',
@@ -101,7 +101,14 @@ const routes: Array<RouteRecordRaw> = [
       auth: false,
     },
   },
-
+  {
+    path: '/calengrade',
+    name: 'calengrade',
+    component: CalengradeView,
+    meta: {
+      title: 'Calengrade',
+    },
+  },
   { path: '/:pathMatch(.*)*', redirect: '/reviews' },
 ];
 

@@ -48,8 +48,12 @@ html {
 #app {
   font-family: Lato, sans-serif;
 }
+
 #app-container {
   max-width: 1200px;
+  min-height: calc(100svh - 64px);
+  display: flex;
+  flex-direction: column;
 }
 
 a {

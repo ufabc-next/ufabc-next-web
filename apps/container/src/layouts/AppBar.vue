@@ -10,9 +10,10 @@
         :to="item.route"
         :key="item.title"
       >
-        <v-layout>
+        <v-layout class="d-flex">
           <v-icon :icon="item.icon" class="mr-3" />
           <p class="font-weight-medium text-caption">{{ item.title }}</p>
+          <span v-if="item.featured" class="featured-chip">Novo</span>
         </v-layout>
       </v-list-item>
     </v-list>
@@ -76,7 +77,7 @@
       </v-menu>
     </v-btn>
   </v-app-bar>
-  <div style="height: 64px" />
+  <div style="height: 64px"></div>
 </template>
 <style scoped lang="scss">
 .v-list-item {
@@ -123,6 +124,12 @@ const internalNavigationItems = [
     icon: 'mdi-cog',
     route: '/settings',
   },
+  {
+    title: 'Calengrade',
+    icon: 'mdi-calendar',
+    route: '/calengrade',
+    featured: true,
+  },
 ];
 
 const externalNavigationItems = [
@@ -147,5 +154,16 @@ const externalNavigationItems = [
 <style scoped lang="scss">
 .header {
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05) !important;
+}
+.featured-chip {
+  background-color: #14e079;
+  border-radius: 4px;
+  color: #fff;
+  opacity: 1;
+  margin-left: auto;
+  font-weight: 400;
+  display: inline-block;
+  padding: 2px 4px;
+  font-size: 12px;
 }
 </style>
