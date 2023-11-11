@@ -1,5 +1,4 @@
 module.exports = {
-  root: true,
   settings: {
     react: {
       version: 'detect',
@@ -9,21 +8,28 @@ module.exports = {
     },
   },
   env: {
+    browser: true,
+    es2021: true,
     node: true,
+    jest: true,
   },
   extends: [
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
     'plugin:prettier/recommended',
-    'plugin:react-hooks/recommended',
+    'plugin:@typescript-eslint/recommended',
+    'plugin:jest/recommended',
+    'plugin:@tanstack/eslint-plugin-query/recommended',
+    'plugin:jsx-a11y/recommended',
   ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaFeatures: {
       jsx: true,
     },
-    ecmaVersion: 2020,
+    ecmaVersion: 12,
     sourceType: 'module',
+    extraFileExtensions: ['.json'],
   },
   plugins: [
     'react',
@@ -32,11 +38,35 @@ module.exports = {
     'unused-imports',
     'import',
     'prettier',
+    'jest',
+    '@tanstack/query',
   ],
   rules: {
+    'jest/no-disabled-tests': 'warn',
+    'jest/no-focused-tests': 'error',
+    'jest/no-identical-title': 'error',
+    'jest/prefer-to-have-length': 'warn',
+    'jest/valid-expect': 'error',
+    '@typescript-eslint/no-unused-vars': [
+      'error',
+      {
+        argsIgnorePattern: '^_',
+        varsIgnorePattern: '^_',
+        caughtErrorsIgnorePattern: '^_',
+      },
+    ],
+    'react/jsx-curly-brace-presence': [
+      'error',
+      {
+        props: 'never',
+        children: 'never',
+      },
+    ],
+    'react/jsx-boolean-value': ['error', 'never'],
     'no-prototype-builtins': 'off',
     'import/prefer-default-export': 'off',
     'import/no-default-export': 'off',
+    'import/no-unresolved': 'error',
     'dot-notation': 'off',
     '@typescript-eslint/dot-notation': ['error'],
     '@typescript-eslint/explicit-function-return-type': 'off',
@@ -113,11 +143,18 @@ module.exports = {
         '*.test.tsx',
         '*.test.ts',
         'test-utils.tsx',
+        'test-utils.ts',
       ],
       rules: {
         '@typescript-eslint/no-non-null-assertion': 'off',
         '@typescript-eslint/no-explicit-any': 'off',
         '@typescript-eslint/no-empty-function': 'off',
+      },
+    },
+    {
+      files: ['*.js'],
+      rules: {
+        '@typescript-eslint/no-var-requires': 'off',
       },
     },
   ],

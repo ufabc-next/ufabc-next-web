@@ -13,6 +13,7 @@
 import { authStore } from 'stores';
 import { onMounted } from 'vue';
 import create from 'vue-zustand';
+import { ElMessage } from 'element-plus';
 
 import router from './router';
 
@@ -31,6 +32,7 @@ onMounted(async () => {
       query: otherQueries,
     });
   }
+  window.Toaster = ElMessage;
 });
 </script>
 
@@ -48,8 +50,13 @@ html {
 #app {
   font-family: Lato, sans-serif;
 }
+
 #app-container {
   max-width: 1200px;
+  min-height: calc(100vh - 64px);
+  min-height: calc(100svh - 64px);
+  display: flex;
+  flex-direction: column;
 }
 
 a {

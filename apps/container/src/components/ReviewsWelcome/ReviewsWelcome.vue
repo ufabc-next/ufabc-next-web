@@ -7,6 +7,7 @@
           <img
             src="@/assets/review_info.gif"
             style="width: 100%; max-width: 275px"
+            alt="Animação de review"
           />
         </v-col>
         <v-col cols="12" xs="12" sm="7" class="text-center text-sm-left">

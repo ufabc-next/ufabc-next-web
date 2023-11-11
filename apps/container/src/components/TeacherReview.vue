@@ -51,6 +51,7 @@
           src="@/assets/comment_not_found.gif"
           style="width: 100%; max-width: 275px"
           class="mb-5"
+          alt="Nenhum comentário encontrado"
         />
         <p>Nenhum dado encontrado 😕</p>
         <p>

@@ -7,7 +7,6 @@ import {
   QueryClient as QueryClientVue,
 } from '@tanstack/vue-query';
 import client from './queryClient';
-import { QueryClient } from '@tanstack/query-core';
 
 import { ThemeDefinition } from 'vuetify/lib/framework.mjs';
 import { createVuetify } from 'vuetify';
@@ -15,7 +14,7 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import 'vuetify/styles';
 
-import elementPlus from 'element-plus';
+import elementPlus, { ElMessage } from 'element-plus';
 import 'element-plus/dist/index.css';
 
 import '@mdi/font/css/materialdesignicons.css';
@@ -23,6 +22,7 @@ import '@mdi/font/css/materialdesignicons.css';
 import HighchartsVue from 'highcharts-vue';
 import Highcharts from 'highcharts';
 import annotationsInit from 'highcharts/modules/annotations';
+import { QueryClient } from '@tanstack/query-core';
 
 annotationsInit(Highcharts);
 
@@ -53,6 +53,11 @@ const vuetify = createVuetify({
   },
 });
 
+const queryClient = new QueryClientVue({
+  queryCache: client.getQueryCache(),
+  defaultOptions: client.getDefaultOptions(),
+});
+
 interface Device {
   cordova: string;
   model: string;
@@ -63,15 +68,11 @@ interface Device {
 
 declare global {
   interface Window {
+    Toaster: typeof ElMessage;
     device: Device;
     queryClient: QueryClient;
   }
 }
-
-const queryClient = new QueryClientVue({
-  queryCache: client.getQueryCache(),
-  defaultOptions: client.getDefaultOptions(),
-});
 
 createApp(App)
   .use(router)
