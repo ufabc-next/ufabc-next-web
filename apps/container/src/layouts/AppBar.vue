@@ -1,5 +1,10 @@
 <template>
-  <v-navigation-drawer v-model="drawer" color="navigation" width="240">
+  <v-navigation-drawer
+    v-if="user && user.confirmed"
+    v-model="drawer"
+    color="navigation"
+    width="240"
+  >
     <v-list>
       <div class="py-4 d-flex justify-center align-center">
         <img
@@ -65,11 +70,11 @@
           <v-list-item>
             <v-layout>
               <v-avatar :size="38" color="primary">
-                {{ userInitials }}
+                {{ userInitials.toLocaleUpperCase() }}
               </v-avatar>
               <v-layout class="flex-column ml-4">
                 <p>{{ userLogin }}</p>
-                <p v-if="user.ra" class="text-caption text-medium-emphasis">
+                <p v-if="user?.ra" class="text-caption text-medium-emphasis">
                   RA: {{ user.ra }}
                 </p>
               </v-layout>
@@ -95,14 +100,31 @@
 }
 </style>
 <script setup lang="ts">
+import { useQuery } from '@tanstack/vue-query';
+import { Users } from 'services';
 import { computed, ref } from 'vue';
 
+const { data: user } = useQuery({
+  queryKey: ['users', 'info'],
+  queryFn: Users.info,
+  select: (response) => response.data,
+});
+
 const drawer = ref(true);
-const userLogin = computed(() => 'test.username');
-const userInitials = computed(() => 'tu');
-const user = computed(() => ({
-  ra: '1234567',
-}));
+const userLogin = computed(
+  () => user.value?.email.replace('@aluno.ufabc.edu.br', ''),
+);
+const userInitials = computed(() => {
+  if (userLogin.value) {
+    const names = userLogin.value.split('.');
+    if (names.length === 1) {
+      return userLogin.value[0] + userLogin.value[1];
+    }
+    return names[0][0] + names[1][0];
+  }
+  return '';
+});
+
 const internalNavigationItems = [
   {
     title: 'Reviews',
