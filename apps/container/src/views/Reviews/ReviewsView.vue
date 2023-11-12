@@ -1,5 +1,5 @@
 <template>
-  <v-layout class="flex-column align-center justify-center">
+  <v-layout class="flex-column align-center">
     <SearchBar />
     <TeacherReview
       v-if="router.currentRoute.value.query.teacherId"
