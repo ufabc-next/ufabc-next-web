@@ -23,7 +23,11 @@
         <v-layout class="d-flex">
           <v-icon :icon="item.icon" class="mr-3" />
           <p class="font-weight-medium text-caption">{{ item.title }}</p>
-          <span v-if="item.featured" class="featured-chip">Novo</span>
+          <span
+            v-if="item.releaseDate?.add(3, 'month').isAfter(dayjs())"
+            class="featured-chip"
+            >Novo</span
+          >
         </v-layout>
       </v-list-item>
     </v-list>
@@ -102,6 +106,7 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
 import { Users } from 'services';
+import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
 
 const { data: user } = useQuery({
@@ -147,6 +152,12 @@ const internalNavigationItems = [
     route: '/stats',
   },
   {
+    title: 'Calengrade',
+    icon: 'mdi-calendar',
+    route: '/calengrade',
+    releaseDate: dayjs('11/25/2023'),
+  },
+  {
     title: 'Apoie o UFABC next',
     icon: 'mdi-bank',
     route: '/donate',
@@ -155,12 +166,6 @@ const internalNavigationItems = [
     title: 'Configurações',
     icon: 'mdi-cog',
     route: '/settings',
-  },
-  {
-    title: 'Calengrade',
-    icon: 'mdi-calendar',
-    route: '/calengrade',
-    featured: true,
   },
 ];
 
