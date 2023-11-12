@@ -28,7 +28,7 @@
     & > tr > th {
       &:first-of-type {
         @extend .fixed-column;
-        background-color: #56cdb7;
+        background-color: #37bba3;
       }
     }
   }

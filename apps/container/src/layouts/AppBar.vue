@@ -1,10 +1,5 @@
 <template>
-  <v-navigation-drawer
-    v-if="user && user.confirmed"
-    v-model="drawer"
-    color="navigation"
-    width="240"
-  >
+  <v-navigation-drawer v-model="drawer" color="navigation" width="240">
     <v-list>
       <div class="py-4 d-flex justify-center align-center">
         <img
@@ -25,7 +20,7 @@
           <p class="font-weight-medium text-caption">{{ item.title }}</p>
           <span
             v-if="item.releaseDate?.add(3, 'month').isAfter(dayjs())"
-            class="featured-chip"
+            class="featured-chip font-weight-black"
             >Novo</span
           >
         </v-layout>
@@ -193,7 +188,7 @@ const externalNavigationItems = [
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05) !important;
 }
 .featured-chip {
-  background-color: #14e079;
+  background-color: #37bba3;
   border-radius: 4px;
   color: #fff;
   opacity: 1;

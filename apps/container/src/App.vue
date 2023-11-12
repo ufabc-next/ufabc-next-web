@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <AppBar v-if="!!token" />
+    <AppBar v-if="user && user.confirmed" />
     <v-main style="background-color: #f5f5f5">
       <v-container id="app-container">
         <router-view />
@@ -20,7 +20,7 @@ import router from './router';
 import AppBar from '@/layouts/AppBar.vue';
 
 const useAuth = create(authStore);
-const { authenticate, token } = useAuth();
+const { authenticate, user } = useAuth();
 
 onMounted(async () => {
   await router.isReady();
@@ -61,7 +61,7 @@ html {
 
 a {
   text-decoration: none;
-  color: #56cdb7;
+  color: #37bba3;
 }
 
 p,
