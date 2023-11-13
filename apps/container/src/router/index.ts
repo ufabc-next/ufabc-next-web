@@ -7,7 +7,8 @@ import { StatsView } from '@/views/Stats';
 import { SettingsView } from '@/views/Settings';
 import { DonateView } from '@/views/Donate';
 import { authStore } from 'stores';
-import { SignUpView, SignUpConfirmationView } from '@/views/SignUp';
+import { SignUpView } from '@/views/SignUp';
+import { ConfirmationView } from '@/views/Confirmation';
 import { RecoveryView } from '@/views/Recovery';
 import { CalengradeView } from '@/views/Calengrade';
 
@@ -17,8 +18,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'reviews',
     component: ReviewsView,
     meta: {
-      auth: true,
       title: 'Reviews',
+      auth: true,
     },
   },
   {
@@ -27,7 +28,6 @@ const routes: Array<RouteRecordRaw> = [
     component: PerformanceView,
     meta: {
       title: 'Performance',
-      auth: true,
       confirmed: true,
     },
   },
@@ -37,7 +37,6 @@ const routes: Array<RouteRecordRaw> = [
     component: PlanningView,
     meta: {
       title: 'Planejamento',
-      auth: true,
       confirmed: true,
     },
   },
@@ -47,7 +46,6 @@ const routes: Array<RouteRecordRaw> = [
     component: HistoryView,
     meta: {
       title: 'Meu Histórico',
-      auth: true,
       confirmed: true,
     },
   },
@@ -57,7 +55,6 @@ const routes: Array<RouteRecordRaw> = [
     component: StatsView,
     meta: {
       title: 'Dados da Matrícula',
-      auth: true,
       confirmed: true,
     },
   },
@@ -67,7 +64,6 @@ const routes: Array<RouteRecordRaw> = [
     component: SettingsView,
     meta: {
       title: 'Configurações',
-      auth: true,
       confirmed: true,
     },
   },
@@ -92,7 +88,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'confirm',
     path: '/confirm',
-    component: SignUpConfirmationView,
+    component: ConfirmationView,
     meta: {
       title: 'Confirmação da conta',
       auth: true,
@@ -104,6 +100,7 @@ const routes: Array<RouteRecordRaw> = [
     component: RecoveryView,
     meta: {
       title: 'Recuperar conta',
+      auth: false,
     },
   },
   {
@@ -148,32 +145,44 @@ router.beforeEach(async (to, _from, next) => {
     return next();
   }
 
-  if (to.matched.some((record) => record.meta.auth === true)) {
-    // if user doens't have a token, redirect
-    if (!authStore.getState().token) {
+  const requireAuth = to.matched.some(
+    (record) => record.meta.auth === true || record.meta.confirmed === true,
+  );
+  const requireConfirmed = to.matched.some(
+    (record) => record.meta.confirmed === true,
+  );
+  const dontRequireAuth = to.matched.some(
+    (record) => record.meta.auth === false,
+  );
+
+  const userToken = authStore.getState().token;
+  const userConfirmed = authStore.getState().user?.confirmed;
+
+  if (requireAuth) {
+    if (!userToken) {
       if (process.env.VUE_APP_MF_ENV !== 'local') {
         return (window.location.pathname = '/');
       }
       return next();
     }
 
-    // if user needs to be confirmed and it is, don't redirect
-    if (to.matched.some((record) => record.meta.confirmed === true)) {
-      if (authStore.getState().user?.confirmed) {
+    if (requireConfirmed) {
+      if (userConfirmed) {
         return next();
       }
       return next('/review');
-    }
-
-    // if user doesn't need to be confirmed and it is, redirect
-    if (authStore.getState().user?.confirmed && !to.matched.some((record) => record.path === '/reviews') ) {
+    } else if (
+      userConfirmed &&
+      !to.matched.some((record) => record.path === '/reviews')
+    ) {
       return next('/review');
     }
+
     return next();
   }
 
-  if (to.matched.some((record) => record.meta.auth === false)) {
-    if (!authStore.getState().token) {
+  if (dontRequireAuth) {
+    if (!userToken) {
       return next();
     }
     return next('/reviews');
