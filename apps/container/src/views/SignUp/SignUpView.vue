@@ -2,10 +2,18 @@
   <v-form @submit.prevent="onSubmit">
     <v-container class="container pt-md-10">
       <v-row class="d-flex mb-5 flex-grow-0">
-        <img 
-      height="32"
-        
-        src="@/assets/logo.svg" />
+        <v-col xs="12" class="d-flex align-center justify-space-between">
+          <img height="32" src="@/assets/logo.svg" />
+          <v-btn
+            v-if="!smAndDown"
+            @click="handleLogout"
+            prepend-icon="mdi-exit-to-app"
+            style="text-transform: unset !important"
+            color="ufabcnext-red"
+          >
+            Usar outra conta do google/facebook
+          </v-btn>
+        </v-col>
       </v-row>
       <v-row class="w-100 h-100 justify-center justify-md-start">
         <v-col cols="12" md="6" class="d-flex align-center justify-center">
@@ -127,7 +135,6 @@
               v-model="check.value.value"
               :error-messages="check.errorMessage.value"
               class="align-self-start"
-              
             >
               <template #label>
                 <span>
@@ -251,6 +258,23 @@
           </div>
         </v-col>
       </v-row>
+      <v-row v-if="smAndDown">
+        <v-col class="d-flex justify-end w-100">
+          <v-btn
+            label="Usar outra conta do google/facebook"
+            @click="handleLogout"
+            prepend-icon="mdi-exit-to-app"
+            style="text-transform: unset !important"
+            color="ufabcnext-red"
+            size="large"
+          >
+            <div>
+              <p>Usar outra conta do</p>
+              <p>google/facebook</p>
+            </div>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-container>
   </v-form>
 </template>
@@ -260,7 +284,6 @@ import { ref } from 'vue';
 import { useMutation, useQuery } from '@tanstack/vue-query';
 import { Users } from 'services';
 import { z } from 'zod';
-
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm, useField } from 'vee-validate';
 import { AxiosError } from 'axios';
@@ -268,6 +291,12 @@ import { RequestError } from 'types';
 import { ElMessage } from 'element-plus';
 import { useDisplay } from 'vuetify';
 import { watch } from 'vue';
+import useAuth from '@/store/useAuth';
+const { logOut } = useAuth();
+const handleLogout = () => {
+  logOut.value();
+};
+
 const { smAndDown } = useDisplay();
 const step = ref(1);
 const accountType = ref('student');
