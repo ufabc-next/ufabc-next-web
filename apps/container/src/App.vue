@@ -1,8 +1,13 @@
 <template>
   <v-app>
-    <AppBar v-if="user && user.confirmed" />
+    <AppBar v-if="confirmedUser" />
     <v-main style="background-color: #f5f5f5">
-      <v-container id="app-container">
+      <v-container
+        id="app-container"
+        :style="`min-height: calc(100vh${
+          confirmedUser ? '- 64px' : ''
+        }); min-height: calc(100svh${confirmedUser ? '- 64px' : ''})`"
+      >
         <router-view />
       </v-container>
     </v-main>
@@ -11,7 +16,7 @@
 
 <script setup lang="ts">
 import { authStore } from 'stores';
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import create from 'vue-zustand';
 import { ElMessage } from 'element-plus';
 
@@ -21,6 +26,8 @@ import AppBar from '@/layouts/AppBar.vue';
 
 const useAuth = create(authStore);
 const { authenticate, user } = useAuth();
+
+const confirmedUser = computed(() => user.value && user.value.confirmed);
 
 onMounted(async () => {
   await router.isReady();
@@ -53,8 +60,6 @@ html {
 
 #app-container {
   max-width: 1200px;
-  min-height: calc(100vh - 64px);
-  min-height: calc(100svh - 64px);
   display: flex;
   flex-direction: column;
 }
