@@ -1,2 +1,1 @@
-export { default as SignUpView } from './SignUpForm/SignUpFormView.vue';
-export { default as SignUpConfirmationView } from './SignUpConfirmation/SignUpConfirmationView.vue';
+export { default as SignUpView } from './SignUpView.vue';
