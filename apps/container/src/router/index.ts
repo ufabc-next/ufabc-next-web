@@ -7,8 +7,7 @@ import { StatsView } from '@/views/Stats';
 import { SettingsView } from '@/views/Settings';
 import { DonateView } from '@/views/Donate';
 import { authStore } from 'stores';
-import { SignUpView } from '@/views/SignUp';
-import { ConfirmView } from '@/views/Confirm';
+import { SignUpView, SignUpConfirmationView } from '@/views/SignUp';
 import { RecoveryView } from '@/views/Recovery';
 import { CalengradeView } from '@/views/Calengrade';
 
@@ -87,7 +86,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     name: 'confirm',
     path: '/confirm',
-    component: ConfirmView,
+    component: SignUpConfirmationView,
     meta: {
       title: 'Confirmação da conta',
     },

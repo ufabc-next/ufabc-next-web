@@ -30,9 +30,14 @@ export type UserSignup = {
   ra: number;
 };
 
+export type UserConfirmResponse = {
+  token: string;
+};
+
 export const Users = {
   completeSignup: (params: UserSignup) => api.put('/users/complete', params),
-  confirmSignup: (params = {}) => api.post('/account/confirm', params),
+  confirmSignup: (token: string) =>
+    api.post<UserConfirmResponse>('/account/confirm', { token }),
   resendEmail: () => api.post('/users/me/resend'),
   recovery: (email: string) => api.post('/users/me/recover', { email }),
   delete: () => api.delete('/users/me/delete'),

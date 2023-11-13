@@ -29,11 +29,14 @@ const { authenticate, user } = useAuth();
 
 const confirmedUser = computed(() => user.value && user.value.confirmed);
 
+const isJWT = (token: string) =>
+  /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
+
 onMounted(async () => {
   await router.isReady();
   const { query } = router.currentRoute.value;
   const { token: tokenParam, ...otherQueries } = query;
-  if (tokenParam) {
+  if (isJWT(tokenParam as string)) {
     authenticate.value(tokenParam as string);
     router.replace({
       query: otherQueries,

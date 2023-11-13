@@ -32,10 +32,8 @@ const useAuthStore = createStore(
       token: null,
       isLoggedIn: () => !!get().user,
       authenticate: (token) => {
-        if (token) {
-          const user = JSON.parse(atob(token.split('.')[1])) as User;
-          set({ token, user });
-        }
+        const user = JSON.parse(atob(token.split('.')[1])) as User;
+        set({ token, user });
       },
       logOut: () => {
         set({ user: null, token: null });
