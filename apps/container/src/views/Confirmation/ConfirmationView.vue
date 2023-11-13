@@ -70,7 +70,9 @@ const { mutate: mutateConfirmToken, isPending: isPendingConfirmToken } =
 onMounted(async () => {
   await router.isReady();
   const token = router.currentRoute.value.query.token as string;
-  mutateConfirmToken(token);
+  if (token) {
+    mutateConfirmToken(token);
+  } else ElMessage.error('Token de confirmação não encontrado');
 });
 </script>
 
