@@ -81,7 +81,7 @@ const routes: Array<RouteRecordRaw> = [
     component: SignUpView,
     meta: {
       title: 'Cadastro',
-      auth: true,
+      confirmed: false,
     },
     props: true,
   },
@@ -91,7 +91,7 @@ const routes: Array<RouteRecordRaw> = [
     component: ConfirmationView,
     meta: {
       title: 'Confirmação da conta',
-      auth: true,
+      confirmed: false,
     },
   },
   {
@@ -145,49 +145,43 @@ router.beforeEach(async (to, _from, next) => {
     return next();
   }
 
-  const requireAuth = to.matched.some(
-    (record) => record.meta.auth === true || record.meta.confirmed === true,
-  );
+  const requireAuth = to.matched.some((record) => record.meta.auth === true);
   const requireConfirmed = to.matched.some(
     (record) => record.meta.confirmed === true,
   );
-  const dontRequireAuth = to.matched.some(
-    (record) => record.meta.auth === false,
+  const notAllowAuth = to.matched.some((record) => record.meta.auth === false);
+  const notAllowConfirmed = to.matched.some(
+    (record) => record.meta.confirmed === false,
   );
 
   const userToken = authStore.getState().token;
   const userConfirmed = authStore.getState().user?.confirmed;
 
   if (requireAuth) {
-    if (!userToken) {
-      if (process.env.VUE_APP_MF_ENV !== 'local') {
-        return (window.location.pathname = '/');
-      }
-      return next();
+    if (userToken) return next();
+    else if (process.env.VUE_APP_MF_ENV !== 'local') {
+      return (window.location.pathname = '/');
     }
-
-    if (requireConfirmed) {
-      if (userConfirmed) {
-        return next();
-      }
-      return next('/review');
-    } else if (
-      userConfirmed &&
-      !to.matched.some((record) => record.path === '/reviews')
-    ) {
-      return next('/review');
-    }
-
     return next();
   }
-
-  if (dontRequireAuth) {
-    if (!userToken) {
-      return next();
+  if (requireConfirmed) {
+    if (userToken) {
+      if (userConfirmed) return next();
+      return next('/signup');
+    } else if (process.env.VUE_APP_MF_ENV !== 'local') {
+      return (window.location.pathname = '/');
     }
-    return next('/reviews');
+    next('/reviews')
   }
-  next();
+  if (notAllowAuth) {
+    if (userToken) return next('/reviews');
+    return next();
+  }
+  if (notAllowConfirmed) {
+    if (userConfirmed) return next('/reviews');
+    return next();
+  }
+  return next();
 });
 
 export default router;
