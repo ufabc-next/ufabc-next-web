@@ -81,6 +81,7 @@
           </v-list-item>
           <v-list-item>
             <v-btn
+              @click="handleLogout"
               prepend-icon="mdi-exit-to-app"
               variant="text"
               class="text-capitalize text-body-2"
@@ -103,6 +104,12 @@ import { useQuery } from '@tanstack/vue-query';
 import { Users } from 'services';
 import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
+import useAuth from '@/store/useAuth';
+
+const { logOut } = useAuth();
+const handleLogout = () => {
+  logOut.value();
+};
 
 const { data: user } = useQuery({
   queryKey: ['users', 'info'],
