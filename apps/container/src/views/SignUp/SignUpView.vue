@@ -2,7 +2,10 @@
   <v-form @submit.prevent="onSubmit">
     <v-container class="container pt-md-10">
       <v-row class="d-flex mb-5 flex-grow-0">
-        <img style="max-width: 200px" src="@/assets/logo.svg" />
+        <img 
+      height="32"
+        
+        src="@/assets/logo.svg" />
       </v-row>
       <v-row class="w-100 h-100 justify-center justify-md-start">
         <v-col cols="12" md="6" class="d-flex align-center justify-center">
@@ -124,6 +127,7 @@
               v-model="check.value.value"
               :error-messages="check.errorMessage.value"
               class="align-self-start"
+              
             >
               <template #label>
                 <span>
