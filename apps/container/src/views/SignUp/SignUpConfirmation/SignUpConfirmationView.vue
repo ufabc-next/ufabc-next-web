@@ -46,13 +46,12 @@
 import router from '@/router';
 import { useMutation } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
-import { computed, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { Users } from 'services';
 import { AxiosError } from 'axios';
 import { RequestError } from 'types';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import useAuth from '@/store/useAuth';
-const token = computed(() => router.currentRoute.value.query.token as string);
 const { authenticate } = useAuth();
 
 const { mutate: mutateConfirmToken, isPending: isPendingConfirmToken } =
@@ -70,11 +69,8 @@ const { mutate: mutateConfirmToken, isPending: isPendingConfirmToken } =
 
 onMounted(async () => {
   await router.isReady();
-  if (!token.value) {
-    ElMessage.error('Token de confirmação não encontrado');
-    return;
-  }
-  mutateConfirmToken(token.value as string);
+  const token = router.currentRoute.value.query.token as string;
+  mutateConfirmToken(token);
 });
 </script>
 

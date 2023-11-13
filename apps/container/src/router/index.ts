@@ -17,8 +17,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'reviews',
     component: ReviewsView,
     meta: {
-      title: 'Reviews',
       auth: true,
+      title: 'Reviews',
     },
   },
   {
@@ -28,6 +28,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Performance',
       auth: true,
+      confirmed: true,
     },
   },
   {
@@ -37,6 +38,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Planejamento',
       auth: true,
+      confirmed: true,
     },
   },
   {
@@ -46,6 +48,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Meu Histórico',
       auth: true,
+      confirmed: true,
     },
   },
   {
@@ -55,6 +58,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Dados da Matrícula',
       auth: true,
+      confirmed: true,
     },
   },
   {
@@ -64,6 +68,7 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Configurações',
       auth: true,
+      confirmed: true,
     },
   },
   {
@@ -80,6 +85,7 @@ const routes: Array<RouteRecordRaw> = [
     component: SignUpView,
     meta: {
       title: 'Cadastro',
+      auth: true,
     },
     props: true,
   },
@@ -89,6 +95,7 @@ const routes: Array<RouteRecordRaw> = [
     component: SignUpConfirmationView,
     meta: {
       title: 'Confirmação da conta',
+      auth: true,
     },
   },
   {
@@ -97,7 +104,6 @@ const routes: Array<RouteRecordRaw> = [
     component: RecoveryView,
     meta: {
       title: 'Recuperar conta',
-      auth: false,
     },
   },
   {
@@ -143,19 +149,26 @@ router.beforeEach(async (to, _from, next) => {
   }
 
   if (to.matched.some((record) => record.meta.auth === true)) {
-    if (authStore.getState().token) {
+    if (!authStore.getState().token) {
+      if (process.env.VUE_APP_MF_ENV !== 'local') {
+        return (window.location.pathname = '/');
+      }
       return next();
     }
-    if (process.env.VUE_APP_MF_ENV !== 'local') {
-      return (window.location.pathname = '/');
+    if (
+      to.matched.some((record) => record.meta.confirmed === true) &&
+      !authStore.getState().user?.confirmed
+    ) {
+      return next('/review');
     }
     return next();
   }
+
   if (to.matched.some((record) => record.meta.auth === false)) {
     if (!authStore.getState().token) {
       return next();
     }
-    return router.push('/reviews');
+    return next('/reviews');
   }
   next();
 });
