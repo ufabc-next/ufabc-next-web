@@ -32,7 +32,7 @@ export const theme: ThemeDefinition = {
     navigation: '#215096',
     primary: '#2e7eed',
     secondary: '#f3f6f7',
-    'ufabcnext-green': '#56cdb7',
+    'ufabcnext-green': '#37bba3',
     'next-gray': '#404040',
     'next-light-gray': '#848687',
     'ufabcnext-yellow': '#FFCB17',
