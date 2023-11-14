@@ -1,8 +1,13 @@
 <template>
   <v-app>
-    <AppBar v-if="!!token" />
+    <AppBar v-if="confirmedUser" />
     <v-main style="background-color: #f5f5f5">
-      <v-container id="app-container">
+      <v-container
+        id="app-container"
+        :style="`min-height: calc(100vh${
+          confirmedUser ? '- 64px' : ''
+        }); min-height: calc(100svh${confirmedUser ? '- 64px' : ''})`"
+      >
         <router-view />
       </v-container>
     </v-main>
@@ -11,7 +16,7 @@
 
 <script setup lang="ts">
 import { authStore } from 'stores';
-import { onMounted } from 'vue';
+import { computed, onMounted } from 'vue';
 import create from 'vue-zustand';
 import { ElMessage } from 'element-plus';
 
@@ -20,13 +25,18 @@ import router from './router';
 import AppBar from '@/layouts/AppBar.vue';
 
 const useAuth = create(authStore);
-const { authenticate, token } = useAuth();
+const { authenticate, user } = useAuth();
+
+const confirmedUser = computed(() => user.value && user.value.confirmed);
+
+const isJWT = (token: string) =>
+  /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
 
 onMounted(async () => {
   await router.isReady();
   const { query } = router.currentRoute.value;
   const { token: tokenParam, ...otherQueries } = query;
-  if (tokenParam) {
+  if (isJWT(tokenParam as string)) {
     authenticate.value(tokenParam as string);
     router.replace({
       query: otherQueries,
@@ -53,15 +63,13 @@ html {
 
 #app-container {
   max-width: 1200px;
-  min-height: calc(100vh - 64px);
-  min-height: calc(100svh - 64px);
   display: flex;
   flex-direction: column;
 }
 
 a {
   text-decoration: none;
-  color: #56cdb7;
+  color: #37bba3;
 }
 
 p,
