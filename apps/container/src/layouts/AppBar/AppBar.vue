@@ -1,6 +1,11 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-model="drawer" color="navigation" width="240">
+    <v-navigation-drawer
+      v-if="props.showAppBar"
+      v-model="drawer"
+      color="navigation"
+      width="240"
+    >
       <v-list>
         <div class="py-4 d-flex justify-center align-center">
           <img
@@ -44,7 +49,12 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar app height="min-content" class="py-2 header">
+    <v-app-bar
+      v-if="props.showAppBar"
+      app
+      height="min-content"
+      class="py-2 header"
+    >
       <v-app-bar-nav-icon
         app
         variant="text"
@@ -112,6 +122,13 @@ import { Users } from 'services';
 import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
 import { useAuth } from '@/stores/useAuth';
+
+const props = defineProps({
+  showAppBar: {
+    type: Boolean,
+    default: true,
+  },
+});
 
 const { logOut } = useAuth();
 const handleLogout = () => {

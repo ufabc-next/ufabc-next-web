@@ -1,5 +1,5 @@
 <template>
-  <AppBar v-if="confirmedUser">
+  <AppBar :showAppBar="confirmedUser">
     <v-main style="background-color: #f5f5f5">
       <v-container
         id="app-container"
