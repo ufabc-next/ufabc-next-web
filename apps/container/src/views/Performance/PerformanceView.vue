@@ -30,13 +30,13 @@
     </PaperCard>
     <PaperCard class="w-100 mt-4">
       <v-select
-          :items="cpHistoryData"
-          :item-title="(course) => course.curso"
-          :item-value="(course) => course"
-          v-model="currentCpCourse"
-          variant="outlined"
-          class="course-select"
-        />
+        :items="cpHistoryData"
+        :item-title="(course) => course.curso"
+        :item-value="(course) => course"
+        v-model="currentCpCourse"
+        variant="outlined"
+        class="course-select"
+      />
       <Chart :options="cpHistoryOptions" />
     </PaperCard>
     <PaperCard class="w-100 mt-4">
@@ -49,7 +49,7 @@
 import { ref, computed } from 'vue';
 import { Chart } from 'highcharts-vue';
 import { useQuery } from '@tanstack/vue-query';
-import PerformanceCard from '@/components/PerformanceCard.vue';
+import { PerformanceCard } from '@/components/PerformanceCard';
 import { Performance, type CourseInformation } from 'services';
 import { PaperCard } from '@/components/PaperCard';
 import { theme } from '@/bootstrap';

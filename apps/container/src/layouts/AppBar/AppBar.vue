@@ -107,7 +107,7 @@
         </v-menu>
       </v-btn>
     </v-app-bar>
-    <div style="height: 64px"></div>
+    <div v-if="props.showAppBar" style="height: 64px"></div>
     <slot />
   </v-app>
 </template>
@@ -126,6 +126,7 @@ import { useAuth } from '@/stores/useAuth';
 const props = defineProps({
   showAppBar: {
     type: Boolean,
+    required: false,
     default: true,
   },
 });

@@ -13,16 +13,16 @@
     />
     <div v-else class="w-100 d-flex flex-column align-center">
       <WelcomeMessage />
-      <PendingReviewEnrollmentsList />
+      <PendingReviewEnrollmentList />
     </div>
   </v-layout>
 </template>
 
 <script setup lang="ts">
-import WelcomeMessage from '@/components/WelcomeMessage.vue';
-import SearchBar from '@/components/SearchBar.vue';
-import SubjectReview from '@/components/SubjectReview.vue';
-import TeacherReview from '@/components/TeacherReview.vue';
+import { WelcomeMessage } from '@/components/WelcomeMessage';
+import { SearchBar } from '@/components/SearchBar';
+import { SubjectReview } from '@/components/SubjectReview';
+import { TeacherReview } from '@/components/TeacherReview';
 import router from '@/router';
-import PendingReviewEnrollmentsList from '@/components/PendingReviewEnrollmentsList.vue';
+import { PendingReviewEnrollmentList } from '@/components/PendingReviewEnrollmentList';
 </script>

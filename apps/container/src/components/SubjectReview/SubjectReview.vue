@@ -139,8 +139,8 @@ import { transformConceptDataToObject } from 'utils';
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 
-import ConceptsHorizontalChart from './ConceptsHorizontalChart.vue';
-import ConceptsPieChart from './ConceptsPieChart.vue';
+import { ConceptsHorizontalChart } from '@/components/ConceptsHorizontalChart';
+import { ConceptsPieChart } from '@/components/ConceptsPieChart';
 
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { PaperCard } from '@/components/PaperCard';
