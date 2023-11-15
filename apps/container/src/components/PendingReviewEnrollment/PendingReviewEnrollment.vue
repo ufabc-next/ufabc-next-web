@@ -59,7 +59,7 @@
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
 import { Enrollment } from 'services';
-import ReviewDialog from './ReviewDialog.vue';
+import { ReviewDialog } from '@/components/ReviewDialog';
 import { checkEAD, conceptsColor, formatSeason } from 'utils';
 const showDialog = ref(false);
 
@@ -90,7 +90,7 @@ const subjectType = computed(() =>
 const tags = computed(() => {
   const tags = [
     subjectType.value,
-    formatSeason(props.enrollment.year + ":" + props.enrollment.quad),
+    formatSeason(props.enrollment.year + ':' + props.enrollment.quad),
   ];
   isEAD.value && tags.push('EAD');
   return tags;

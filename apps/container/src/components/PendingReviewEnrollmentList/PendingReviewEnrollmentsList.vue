@@ -25,7 +25,7 @@
 import { PaperCard } from '@/components/PaperCard';
 import { Enrollment, Enrollments } from 'services';
 import { useQuery } from '@tanstack/vue-query';
-import PendingReviewEnrollment from './PendingReviewEnrollment.vue';
+import { PendingReviewEnrollment } from '@/components/PendingReviewEnrollment';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { computed } from 'vue';
 

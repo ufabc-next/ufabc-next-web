@@ -1,5 +1,5 @@
-import { ref } from 'vue'; // criar ou não o ref???
-import useAuth from '@/store/useAuth';
+import { ref } from 'vue';
+import useAuth from '@/stores/useAuth/useAuth';
 
 const { user } = useAuth();
 
@@ -8,7 +8,7 @@ const { user } = useAuth();
  * @returns - user initials with two characteres
  */
 export function useAliasInitials() {
-  const alias = ref('')
+  const alias = ref('');
 
   const userLogin = user.value?.email.replace('@aluno.ufabc.edu.br', '');
 
@@ -16,13 +16,12 @@ export function useAliasInitials() {
     const userSplited = userLogin.split('.');
 
     if (userSplited.length === 1) {
-      alias.value = `${userLogin[0]}${userLogin[1]}`
+      alias.value = `${userLogin[0]}${userLogin[1]}`;
       return alias;
     }
-    
-    alias.value = `${userLogin[0]}${userSplited[1][0]}`
-    return alias;
 
+    alias.value = `${userLogin[0]}${userSplited[1][0]}`;
+    return alias;
   } else {
     return alias;
   }

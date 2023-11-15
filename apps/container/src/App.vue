@@ -1,6 +1,5 @@
 <template>
-  <v-app>
-    <AppBar v-if="confirmedUser" />
+  <AppBar v-if="confirmedUser">
     <v-main style="background-color: #f5f5f5">
       <v-container
         id="app-container"
@@ -11,7 +10,7 @@
         <router-view />
       </v-container>
     </v-main>
-  </v-app>
+  </AppBar>
 </template>
 
 <script setup lang="ts">

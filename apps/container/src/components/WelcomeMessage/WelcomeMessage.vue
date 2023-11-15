@@ -1,6 +1,6 @@
 <template>
   <div style="max-width: 750px">
-    <div class="mb-6">Como funciona o UFABC Next e os Reviews?</div>
+    <h6 class="mb-6">Como funciona o UFABC Next e os Reviews?</h6>
     <v-layout row wrap>
       <v-row>
         <v-col cols="12" xs="12" sm="5" class="welcome-image">

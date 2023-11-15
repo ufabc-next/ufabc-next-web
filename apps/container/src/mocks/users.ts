@@ -13,5 +13,5 @@ export const user: User = {
     google: 'google',
   },
   ra: 123,
-  email: 'email@email.com',
+  email: 'email@aluno.ufabc.edu.br',
 };
