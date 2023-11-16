@@ -6,6 +6,7 @@ import * as directives from 'vuetify/directives';
 import { render } from '@testing-library/vue';
 
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
+import { Plugin } from 'vue';
 export { default as userEvent } from '@testing-library/user-event';
 
 const vuetify = createVuetify({
@@ -13,26 +14,29 @@ const vuetify = createVuetify({
   directives,
 });
 
+export const defaultPlugins: (Plugin | [Plugin, ...unknown[]])[] = [
+  vuetify,
+  elementPlus,
+  [
+    VueQueryPlugin,
+    {
+      queryClient: new QueryClient({
+        defaultOptions: {
+          queries: {
+            retry: false,
+          },
+        },
+      }),
+    },
+  ],
+];
+
 const customRender: typeof render = (component, options) => {
   return render(component, {
     ...options,
     global: {
-      plugins: [
-        vuetify,
-        elementPlus,
-        [
-          VueQueryPlugin,
-          {
-            queryClient: new QueryClient({
-              defaultOptions: {
-                queries: {
-                  retry: false,
-                },
-              },
-            }),
-          },
-        ],
-      ],
+      plugins: defaultPlugins,
+      ...options?.global,
     },
   });
 };

@@ -44,4 +44,5 @@ export const handlers = [
   http.get(`${baseUrl}/historiesGraduations`, () =>
     HttpResponse.json(historiesGraduations),
   ),
+  http.post(`${baseUrl}/account/confirm`, () => HttpResponse.json({})),
 ];

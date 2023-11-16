@@ -68,8 +68,10 @@ import debounce from 'lodash.debounce';
 import { Reviews } from 'services';
 import { computed, onMounted, ref, watch } from 'vue';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
-import router from '@/router';
 import type { SearchTeacherItem, SearchSubjectItem } from 'types';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const searchTerm = ref('');
 
