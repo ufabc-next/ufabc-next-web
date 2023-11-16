@@ -69,7 +69,7 @@ import { Reviews } from 'services';
 import { computed, onMounted, ref, watch } from 'vue';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import router from '@/router';
-import { SearchTeacherItem, SearchSubjectItem } from 'types';
+import type { SearchTeacherItem, SearchSubjectItem } from 'types';
 
 const searchTerm = ref('');
 
@@ -148,14 +148,13 @@ const search = (e: InputEvent) => {
 
 const mapSearchResults = (
   type: string,
-  results?: SearchTeacherItem[] | SearchSubjectItem[],
-) => {
-  return results?.map((result: SearchTeacherItem | SearchSubjectItem) => ({
+  results?: (SearchTeacherItem | SearchSubjectItem)[],
+) =>
+  results?.map((result) => ({
     name: result.name,
     id: result._id,
     type: type,
   })) || [];
-};
 
 const processedResults = computed(() => [
   ...mapSearchResults('teacher', searchResultsTeachers.value?.data.data),

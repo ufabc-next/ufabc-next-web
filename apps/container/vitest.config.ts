@@ -31,7 +31,7 @@ export default defineConfig({
       lines: 80,
     },
     alias: {
-      '@': './src',
+      '@': '/src',
     },
     server: {
       deps: {

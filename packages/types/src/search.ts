@@ -5,7 +5,7 @@ export type SearchTeacherItem = {
   createdAt: string;
   __v: number;
   alias?: string[];
-}[];
+};
 
 export type SearchSubjectItem = {
   _id: string;
@@ -15,4 +15,4 @@ export type SearchSubjectItem = {
   createdAt: string;
   __v: number;
   creditos: number;
-}[];
+};

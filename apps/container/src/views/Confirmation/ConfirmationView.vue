@@ -60,7 +60,7 @@ const { mutate: mutateConfirmToken, isPending: isPendingConfirmToken } =
     onSuccess: (data) => {
       ElMessage.success('Conta confirmada com sucesso');
       authenticate.value(data.data.token);
-      router.push('/');
+      // router.push('/');
     },
     onError: (error: AxiosError<RequestError>) => {
       ElMessage.error(error.response?.data.error);
