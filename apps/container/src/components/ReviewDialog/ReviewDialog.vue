@@ -87,7 +87,7 @@ import { Comments, Enrollment, Enrollments } from 'services';
 
 import { PaperCard } from '@/components/PaperCard';
 import { conceptsColor } from 'utils';
-import CommentsList from '@/components/CommentsList.vue';
+import { CommentsList } from '@/components/CommentsList';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
 import { FeedbackAlert } from '@/components/FeedbackAlert';

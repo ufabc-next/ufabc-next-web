@@ -158,7 +158,7 @@ import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import { getElapsedSeasons, getSeason, prettifySeason } from 'utils';
 import { PaperCard } from '@/components/PaperCard';
 import { CenteredLoading } from '@/components/CenteredLoading';
-import PerformanceCard from '@/components/PerformanceCard.vue';
+import { PerformanceCard } from '@/components/PerformanceCard';
 
 type Tab = 'classes' | 'courses' | 'subjects';
 type OrderBy = 'deficit' | 'ratio' | 'vagas' | 'requisicoes';

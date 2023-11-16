@@ -1,6 +1,5 @@
 <template>
-  <v-app>
-    <AppBar v-if="confirmedUser" />
+  <AppBar :showAppBar="confirmedUser ?? undefined">
     <v-main style="background-color: #f5f5f5">
       <v-container
         id="app-container"
@@ -11,7 +10,7 @@
         <router-view />
       </v-container>
     </v-main>
-  </v-app>
+  </AppBar>
 </template>
 
 <script setup lang="ts">
@@ -22,7 +21,7 @@ import { ElMessage } from 'element-plus';
 
 import router from './router';
 
-import AppBar from '@/layouts/AppBar.vue';
+import { AppBar } from '@/layouts/AppBar';
 
 const useAuth = create(authStore);
 const { authenticate, user } = useAuth();
