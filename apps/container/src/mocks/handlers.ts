@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { user } from './users';
+import { user, userGrades } from './users';
 import { enrollments } from './enrollments';
 import {
   usage,
@@ -9,7 +9,9 @@ import {
   courseNames,
   classesPage1,
   subjects,
+  grades,
 } from './stats';
+import { historiesGraduations } from './performance';
 
 const baseUrl = 'https://api.ufabcnext.com/v1';
 
@@ -36,5 +38,10 @@ export const handlers = [
   ),
   http.get(`${baseUrl}/histories/courses`, () =>
     HttpResponse.json(courseNames),
+  ),
+  http.get(`${baseUrl}/users/me/grades`, () => HttpResponse.json(userGrades)),
+  http.get(`${baseUrl}/stats/grades`, () => HttpResponse.json(grades)),
+  http.get(`${baseUrl}/historiesGraduations`, () =>
+    HttpResponse.json(historiesGraduations),
   ),
 ];
