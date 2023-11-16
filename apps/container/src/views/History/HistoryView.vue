@@ -274,7 +274,7 @@ import { useQuery } from '@tanstack/vue-query';
 import { type Enrollment, Enrollments, Users } from 'services';
 import { Concept } from 'types';
 import { computed, ref } from 'vue';
-import ReviewDialog from '@/components/ReviewDialog.vue';
+import { ReviewDialog } from '@/components/ReviewDialog';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { PaperCard } from '@/components/PaperCard';
 import { TableComponent } from '@/components/TableComponent';

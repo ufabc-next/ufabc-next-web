@@ -51,7 +51,7 @@ import { Users } from 'services';
 import { AxiosError } from 'axios';
 import { RequestError } from 'types';
 import { CenteredLoading } from '@/components/CenteredLoading';
-import useAuth from '@/store/useAuth';
+import { useAuth } from '@/stores/useAuth';
 const { authenticate } = useAuth();
 
 const { mutate: mutateConfirmToken, isPending: isPendingConfirmToken } =

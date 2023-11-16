@@ -148,7 +148,7 @@
 import { ref, computed } from 'vue';
 import { ElMessage } from 'element-plus';
 import { CenteredLoading } from '@/components/CenteredLoading';
-import useAuth from '@/store/useAuth';
+import { useAuth } from '@/stores/useAuth';
 import { useAliasInitials } from '@/utils/composables/aliasInitials';
 import { Users, api } from 'services';
 import { PaperCard } from '@/components/PaperCard';

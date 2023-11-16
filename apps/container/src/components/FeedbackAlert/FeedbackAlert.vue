@@ -1,14 +1,4 @@
-<template>
-  <v-alert
-    :type="type"
-    :title="title"
-    :text="text"
-    closable
-    variant="elevated"
-    position="fixed"
-    class="alert"
-  />
-</template>
+<template>{{}}</template>
 <style lang="scss" scoped>
 .alert {
   z-index: 1000;
@@ -17,26 +7,32 @@
   bottom: 15px;
 }
 </style>
-<script lang="ts">
+<script setup lang="ts">
 import { PropType } from 'vue';
-import { defineComponent } from 'vue';
+import { ElMessage } from 'element-plus';
+import { onMounted } from 'vue';
 
-export default defineComponent({
-  name: 'FeedbackAlert',
-  props: {
-    type: {
-      type: String as PropType<'error' | 'success' | 'warning' | 'info'>,
-      default: 'error',
-    },
-    title: {
-      type: String,
-      default: 'Ops, algo deu errado',
-    },
-    text: {
-      type: String,
-      default:
-        'Não foi possível buscar as informações, tente novamente mais tarde',
-    },
+const props = defineProps({
+  type: {
+    type: String as PropType<'error' | 'success' | 'warning' | 'info'>,
+    default: 'error',
   },
+  duration: {
+    type: Number,
+    default: 5000,
+  },
+  text: {
+    type: String,
+    default:
+      'Não foi possível buscar as informações, tente novamente mais tarde',
+  },
+});
+
+onMounted(() => {
+  ElMessage({
+    message: props.text,
+    type: props.type,
+    duration: props.duration,
+  });
 });
 </script>

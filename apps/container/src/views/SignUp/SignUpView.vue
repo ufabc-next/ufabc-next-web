@@ -291,7 +291,7 @@ import { RequestError } from 'types';
 import { ElMessage } from 'element-plus';
 import { useDisplay } from 'vuetify';
 import { watch } from 'vue';
-import useAuth from '@/store/useAuth';
+import { useAuth } from '@/stores/useAuth';
 const { logOut } = useAuth();
 const handleLogout = () => {
   logOut.value();

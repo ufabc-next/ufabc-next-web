@@ -72,11 +72,11 @@ import { transformConceptDataToObject } from 'utils';
 import { computed, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
-import ConceptsPieChart from './ConceptsPieChart.vue';
+import { ConceptsPieChart } from '@/components/ConceptsPieChart';
 
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { PaperCard } from '@/components/PaperCard';
-import CommentsList from '@/components/CommentsList.vue';
+import { CommentsList } from '@/components/CommentsList';
 
 const props = defineProps({
   teacherId: { type: String, required: true },

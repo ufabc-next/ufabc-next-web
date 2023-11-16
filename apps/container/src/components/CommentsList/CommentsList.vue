@@ -59,7 +59,7 @@ import { ref, computed, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import { Reviews, Comments } from 'services';
-import SingleComment from './SingleComment.vue';
+import { SingleComment } from '@/components/SingleComment';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 const { smAndDown } = useDisplay();
