@@ -1,4 +1,6 @@
-export const enrollments = [
+import { Enrollment } from 'types';
+
+export const enrollments: Enrollment[] = [
   {
     _id: '5f4db7d2a62affac151a1f4e',
     conceito: 'B',
