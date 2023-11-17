@@ -81,7 +81,7 @@ const routes: Array<RouteRecordRaw> = [
     component: SignUpView,
     meta: {
       title: 'Cadastro',
-      // confirmed: false,
+      confirmed: false,
     },
     props: true,
   },
