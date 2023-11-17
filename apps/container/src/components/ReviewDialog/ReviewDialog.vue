@@ -10,6 +10,7 @@
           @click="showDialog = false"
           variant="tonal"
           icon="mdi-window-close"
+          aria-label="Fechar"
         />
       </div>
       <v-container class="pa-0 my-2" style="max-width: none">
@@ -83,7 +84,7 @@
 
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
-import { Comments, Enrollment, Enrollments } from 'services';
+import { Comments, Enrollments } from 'services';
 
 import { PaperCard } from '@/components/PaperCard';
 import { conceptsColor } from 'utils';
@@ -92,6 +93,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { watch } from 'vue';
+import type { Enrollment } from 'types';
 const selectedSubject = ref<string>('Todas as matérias');
 
 const props = defineProps({

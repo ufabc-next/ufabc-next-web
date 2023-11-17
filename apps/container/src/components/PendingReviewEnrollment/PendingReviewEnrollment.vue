@@ -58,9 +58,9 @@
 
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
-import { Enrollment } from 'services';
 import { ReviewDialog } from '@/components/ReviewDialog';
 import { checkEAD, conceptsColor, formatSeason } from 'utils';
+import { Enrollment } from 'types';
 const showDialog = ref(false);
 
 const conceptStyle = computed(() => ({

@@ -117,11 +117,10 @@
 }
 </style>
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
-import { Users } from 'services';
 import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
 import { useAuth } from '@/stores/useAuth';
+import { useAliasInitials } from '@/utils/composables/aliasInitials';
 
 const props = defineProps({
   showAppBar: {
@@ -131,31 +130,16 @@ const props = defineProps({
   },
 });
 
-const { logOut } = useAuth();
+const { logOut, user } = useAuth();
 const handleLogout = () => {
   logOut.value();
 };
-
-const { data: user } = useQuery({
-  queryKey: ['users', 'info'],
-  queryFn: Users.info,
-  select: (response) => response.data,
-});
 
 const drawer = ref(true);
 const userLogin = computed(
   () => user.value?.email.replace('@aluno.ufabc.edu.br', ''),
 );
-const userInitials = computed(() => {
-  if (userLogin.value) {
-    const names = userLogin.value.split('.');
-    if (names.length === 1) {
-      return userLogin.value[0] + userLogin.value[1];
-    }
-    return names[0][0] + names[1][0];
-  }
-  return '';
-});
+const userInitials = useAliasInitials();
 
 const internalNavigationItems = [
   {

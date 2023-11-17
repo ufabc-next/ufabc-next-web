@@ -188,6 +188,13 @@ const pages = ref({
   classes: 0,
 });
 
+const fallbackValue = (
+  value: number | undefined | null,
+  fallback: number = 0,
+) => {
+  return value ?? fallback;
+};
+
 const selectedSeason = ref(getSeason());
 
 const changeSelectedSeason = (season: string) => {
@@ -361,14 +368,14 @@ const { data: usage, isPending: isPendingUsage } = useQuery({
 
 const currentAlunosPercentage = computed(() =>
   (
-    (100 * (usage.value?.currentAlunos || 0)) /
-    (usage.value?.totalAlunos || 1)
+    (100 * fallbackValue(usage.value?.currentAlunos)) /
+    fallbackValue(usage.value?.totalAlunos, 1)
   ).toFixed(),
 );
 
 const cards = computed(() => [
   {
-    title: usage.value?.currentAlunos || 0,
+    title: fallbackValue(usage.value?.currentAlunos),
     subtitle: '/' + usage.value?.totalAlunos,
     content: 'Alunos usando a extensão',
     color: 'ufabcnext-green',
@@ -379,19 +386,19 @@ const cards = computed(() => [
       currentAlunosPercentage.value + '% dos alunos estão usando a extensão',
   },
   {
-    title: usage.value?.subjects || 0,
+    title: fallbackValue(usage.value?.subjects),
     content: 'Turmas',
     color: 'navigation',
     icon: 'mdi-book-open-variant',
   },
   {
-    title: usage.value?.teachers || 0,
+    title: fallbackValue(usage.value?.teachers),
     content: 'Professores',
     color: 'primary',
     icon: 'mdi-human-male-board',
   },
   {
-    title: deficit.value || 0,
+    title: fallbackValue(deficit.value),
     content: 'Vagas que sobraram',
     color: 'ufabcnext-red',
     icon: 'mdi-import',

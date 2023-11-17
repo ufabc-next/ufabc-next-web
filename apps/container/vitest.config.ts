@@ -25,14 +25,13 @@ export default defineConfig({
       ],
       all: true,
       reportOnFailure: true,
-      thresholdAutoUpdate: true,
-      statements: 50,
-      branches: 57.6,
-      functions: 50,
-      lines: 50,
+      statements: 80,
+      branches: 80,
+      functions: 80,
+      lines: 80,
     },
     alias: {
-      '@': './src',
+      '@': '/src',
     },
     server: {
       deps: {

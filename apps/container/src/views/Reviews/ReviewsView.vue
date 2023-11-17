@@ -23,6 +23,8 @@ import { WelcomeMessage } from '@/components/WelcomeMessage';
 import { SearchBar } from '@/components/SearchBar';
 import { SubjectReview } from '@/components/SubjectReview';
 import { TeacherReview } from '@/components/TeacherReview';
-import router from '@/router';
 import { PendingReviewEnrollmentList } from '@/components/PendingReviewEnrollmentList';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 </script>

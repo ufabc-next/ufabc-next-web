@@ -19,7 +19,9 @@ import { computed, onMounted } from 'vue';
 import create from 'vue-zustand';
 import { ElMessage } from 'element-plus';
 
-import router from './router';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 import { AppBar } from '@/layouts/AppBar';
 

@@ -32,8 +32,8 @@ export const StatsSubjects = {
       params,
     }),
   getAllCoursesNames: () => api.get<CourseName[]>('/histories/courses'),
-  getOverview: (params: { season: string }) =>
+  getOverview: (params: Pick<StatsParams, 'season'>) =>
     api.get<StatsOverview>('/stats/disciplinas/overview', { params }),
-  getUsage: (params: { season: string }) =>
+  getUsage: (params: Pick<StatsParams, 'season'>) =>
     api.get<StatsUsage>('/stats/usage', { params }),
 };
