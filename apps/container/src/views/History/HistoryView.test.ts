@@ -1,18 +1,12 @@
-import {
-  render,
-  screen,
-  userEvent,
-  waitForElementToBeRemoved,
-} from '@/test-utils';
+import { render, screen, userEvent } from '@/test-utils';
 import { HistoryView } from '.';
 import { enrollments } from '@/mocks/enrollments';
 import { server } from '@/mocks/server';
 import { http, HttpResponse } from 'msw';
 
 describe('<CenteredLoading />', () => {
-  test('render a loading before show subjects table', async () => {
+  test('show subjects table', async () => {
     render(HistoryView);
-    expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
     expect(
       await screen.findByText(enrollments[0].disciplina),
     ).toBeInTheDocument();
@@ -21,7 +15,6 @@ describe('<CenteredLoading />', () => {
   test('show install extension warning if 0 enrollments', async () => {
     server.use(http.get(`*/enrollments`, () => HttpResponse.json([])));
     render(HistoryView);
-    expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
     expect(
       await screen.findByText(/É necessário instalar a/i),
     ).toBeInTheDocument();
@@ -31,7 +24,6 @@ describe('<CenteredLoading />', () => {
       http.get(`*/enrollments`, () => HttpResponse.json([enrollments[0]])),
     );
     render(HistoryView);
-    expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
     expect(await screen.findByText(/disciplina cursada/i)).toBeInTheDocument();
   });
   test('show alert error if 5xx request happens', async () => {
@@ -53,9 +45,7 @@ describe('<CenteredLoading />', () => {
 
     render(HistoryView);
 
-    await waitForElementToBeRemoved(screen.queryByLabelText('Carregando'));
-
-    await user.click(screen.getByLabelText(/Atualizar o histórico/));
+    await user.click(await screen.findByLabelText(/Atualizar o histórico/));
 
     expect(screen.getByText(/Já tenho instalado/i)).toBeVisible();
 

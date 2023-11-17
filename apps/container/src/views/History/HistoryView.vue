@@ -211,7 +211,7 @@
     </div>
     <div
       class="mt-5 d-flex justify-center align-center flex-column"
-      v-else-if="!isLoadingEnrollments"
+      v-else-if="!isPendingEnrollments"
     >
       <h2 class="mb-4">
         Parece que não encontramos os dados do seu histórico :( <br />
@@ -231,7 +231,7 @@
         alt="Histórico não encontrado"
       />
     </div>
-    <CenteredLoading v-if="isLoadingEnrollments" />
+    <CenteredLoading v-if="isPendingEnrollments" />
   </PaperCard>
 </template>
 
@@ -350,7 +350,7 @@ const subjectConceptClass = {
 
 const {
   data: enrollments,
-  isLoading: isLoadingEnrollments,
+  isPending: isPendingEnrollments,
   isError: isErrorEnrollments,
 } = useQuery({
   queryKey: ['enrollments', 'list'],

@@ -10,6 +10,8 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
+const redirectToHome = () => (window.location.pathname = '/');
+
 const validationSchema = toTypedSchema(
   z.object({
     email: z
@@ -166,7 +168,7 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
           class="mt-3"
           rounded
           size="large"
-          @click="router.push('/')"
+          @click="redirectToHome()"
         >
           Voltar para a home
         </v-btn>
