@@ -3,7 +3,6 @@ import { ConfirmationView } from '.';
 import { useRouter } from 'vue-router';
 import { server } from '@/mocks/server';
 import { HttpResponse, http } from 'msw';
-// import { useRouter, createRouter } from 'vue-router';
 
 vi.mock('@/views/Calengrade', () => ({
   CalengradeView: () => 'CalengradeView',
