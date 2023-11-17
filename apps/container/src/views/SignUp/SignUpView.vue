@@ -3,7 +3,7 @@
     <v-container class="container pt-md-10">
       <v-row class="d-flex mb-5 flex-grow-0">
         <v-col xs="12" class="d-flex align-center justify-space-between">
-          <img height="32" src="@/assets/logo.svg" />
+          <img height="32" src="@/assets/logo.svg" alt="logo do UFABC Next" />
           <v-btn
             v-if="!smAndDown"
             @click="handleLogout"
@@ -21,6 +21,7 @@
             src="@/assets/signup.svg"
             class="w-100"
             style="max-width: 400px"
+            alt="Pessoa meditando na frente do computador"
           />
         </v-col>
         <v-col
@@ -157,7 +158,7 @@
               Professor(a), estamos construindo algumas ferramentas especiais
               para você, por enquanto você pode verificar sua distribuição de
               notas por disciplinas
-              <router-link to="/reviews">aqui </router-link>
+              <router-link to="/reviews">aqui</router-link>
             </p>
           </div>
           <div
@@ -208,6 +209,7 @@
                     enableResendEmail ? 'ufabcnext-yellow' : 'next-light-gray'
                   "
                   :loading="isPendingResendEmail"
+                  aria-label="Reenviar email de confirmação"
                 >
                   <v-icon class="mr-2">{{
                     enableResendEmail ? 'mdi-email' : 'mdi-check-circle'
@@ -355,7 +357,7 @@ const validationSchema = toTypedSchema(
     }),
 );
 
-const { handleSubmit, meta } = useForm({
+const { handleSubmit, meta, setValues } = useForm({
   validationSchema,
 });
 
@@ -400,10 +402,14 @@ watch(
   () => {
     if (user.value?.ra && user.value?.email) {
       step.value = 3;
-      email.value.value = user.value.email.replace('@aluno.ufabc.edu.br', '');
-      ra.value.value = user.value.ra.toString();
-      raConfirm.value.value = user.value.ra.toString();
-      check.value.value = true;
+      setValues({
+        email: user.value.email.replace('@aluno.ufabc.edu.br', ''),
+        ra: {
+          ra: user.value.ra.toString(),
+          confirm: user.value.ra.toString(),
+        },
+        check: true,
+      });
     }
   },
 );

@@ -12,7 +12,7 @@ export const user: User = {
     picture: 'picture',
     google: 'google',
   },
-  ra: 123,
+  ra: 11201810622,
   email: 'email@aluno.ufabc.edu.br',
 };
 

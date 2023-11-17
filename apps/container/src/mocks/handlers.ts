@@ -17,7 +17,6 @@ const baseUrl = 'https://api.ufabcnext.com/v1';
 
 export const handlers = [
   http.get(`${baseUrl}/users/info`, () => HttpResponse.json(user)),
-  http.delete(`${baseUrl}/users/me/delete`, () => HttpResponse.json({})),
   http.get(`${baseUrl}/enrollments`, () => HttpResponse.json(enrollments)),
   http.get(`${baseUrl}/stats/usage`, () => HttpResponse.json(usage)),
   http.get(`${baseUrl}/stats/disciplinas/courses`, () =>
@@ -44,6 +43,9 @@ export const handlers = [
   http.get(`${baseUrl}/historiesGraduations`, () =>
     HttpResponse.json(historiesGraduations),
   ),
+  http.delete(`${baseUrl}/users/me/delete`, () => HttpResponse.json({})),
   http.post(`${baseUrl}/account/confirm`, () => HttpResponse.json({})),
   http.post(`${baseUrl}/users/me/recover`, () => HttpResponse.json({})),
+  http.post(`${baseUrl}/users/me/resend`, () => HttpResponse.json({})),
+  http.put(`${baseUrl}/users/complete`, () => HttpResponse.json({})),
 ];
