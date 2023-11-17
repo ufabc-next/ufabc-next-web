@@ -6,6 +6,11 @@ import { z } from 'zod';
 
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm, useField } from 'vee-validate';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
+const redirectToHome = () => (window.location.pathname = '/');
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -78,7 +83,7 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
               :error-messages="email.errorMessage.value"
             ></v-text-field>
             <div class="d-flex">
-              <v-btn class="mr-2" rounded size="large" @click="$router.go(-1)">
+              <v-btn class="mr-2" rounded size="large" @click="router.go(-1)">
                 <v-icon class="mr-1">mdi-arrow-left</v-icon> Anterior
               </v-btn>
               <v-btn
@@ -163,7 +168,7 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
           class="mt-3"
           rounded
           size="large"
-          @click="$router.push('/')"
+          @click="redirectToHome()"
         >
           Voltar para a home
         </v-btn>

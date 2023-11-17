@@ -20,7 +20,7 @@
       <PaperCard
         title="Configurações da conta"
         v-else
-        class="text-md-left text-cente"
+        class="text-md-left text-center"
       >
         <v-row class="mt-4">
           <v-col
@@ -45,11 +45,7 @@
                 Usuário desde {{ createdAt }}
               </div>
               <div style="display: flex; flex-direction: column; gap: 10px">
-                <a
-                  href="#"
-                  class="links-settings"
-                  v-if="user?.oauth && user?.oauth.facebook"
-                >
+                <a href="#" class="links-settings" v-if="user?.oauth?.facebook">
                   <v-icon color="ufabcnext-green">mdi-check</v-icon>
                   Conta do Facebook associada
                 </a>
@@ -66,11 +62,7 @@
                   Associar à uma conta do Facebook
                 </a>
 
-                <a
-                  href="#"
-                  class="links-settings"
-                  v-if="user?.oauth && user?.oauth.google"
-                >
+                <a href="#" class="links-settings" v-if="user?.oauth?.google">
                   <v-icon color="ufabcnext-green">mdi-check</v-icon>
                   Conta do Google associada
                 </a>
@@ -125,7 +117,7 @@
 
     <v-dialog v-model="dialog" width="450px">
       <v-card>
-        <v-card-title class="text-h5"> Excluir conta </v-card-title>
+        <v-card-title class="text-h5">Excluir conta</v-card-title>
         <v-card-text
           >Tem certeza que deseja excluir seu usuário? <br /><br />Caso deseje
           voltar, tudo estará aqui 😀</v-card-text
@@ -200,7 +192,6 @@ const handleLogout = () => {
 
 const { mutate: removeUser } = useMutation({
   mutationFn: () => Users.delete(),
-
   onSuccess: () => {
     handleLogout();
   },

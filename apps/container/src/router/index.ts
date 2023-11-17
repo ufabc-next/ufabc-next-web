@@ -171,7 +171,7 @@ router.beforeEach(async (to, _from, next) => {
     } else if (process.env.VUE_APP_MF_ENV !== 'local') {
       return (window.location.pathname = '/');
     }
-    next('/reviews')
+    next('/reviews');
   }
   if (notAllowAuth) {
     if (userToken) return next('/reviews');

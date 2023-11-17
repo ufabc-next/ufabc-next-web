@@ -1,9 +1,7 @@
 import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { AppBar } from '.';
-import { user as userMock } from '@/mocks/users';
+import { user as mockedUser } from '@/mocks/users';
 import { useAuth } from '@/stores/useAuth';
-import { HttpResponse, http } from 'msw';
-import { server } from '@/mocks/server';
 
 describe('<AppBar />', () => {
   const originalUseAuthValue = useAuth.getState();
@@ -11,7 +9,7 @@ describe('<AppBar />', () => {
     useAuth.setState({
       ...originalUseAuthValue,
       token: 'token',
-      user: userMock,
+      user: mockedUser,
     });
   });
   afterEach(() => {
@@ -38,23 +36,21 @@ describe('<AppBar />', () => {
     );
     expect(await screen.findByText(/sair/i)).toBeInTheDocument();
     expect(
-      await screen.findByText(userMock.email.replace(/(.*)@.*/, '$1')),
+      await screen.findByText(mockedUser.email.replace(/(.*)@.*/, '$1')),
     ).toBeInTheDocument();
     expect(
       screen.getByText(
-        new RegExp(`^${userMock.email[0]}${userMock.email[1]}$`, 'i'),
+        new RegExp(`^${mockedUser.email[0]}${mockedUser.email[1]}$`, 'i'),
       ),
     ).toBeInTheDocument();
   });
   test('render user initials if user email has two names', async () => {
-    server.use(
-      http.get(/.*\/users\/info/, () =>
-        HttpResponse.json({
-          ...userMock,
-          email: 'firstName.lastName@aluno.ufabc.edu.br',
-        }),
-      ),
-    );
+    useAuth.setState({
+      user: {
+        ...mockedUser,
+        email: 'firstName.lastName@aluno.ufabc.edu.br',
+      },
+    });
     const user = userEvent.setup();
 
     render(AppBar);

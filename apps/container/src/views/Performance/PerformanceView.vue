@@ -52,7 +52,7 @@ import { useQuery } from '@tanstack/vue-query';
 import { PerformanceCard } from '@/components/PerformanceCard';
 import { Performance, type CourseInformation } from 'services';
 import { PaperCard } from '@/components/PaperCard';
-import { theme } from '@/bootstrap';
+import { theme } from '@/theme';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { formatSeason } from 'utils';
 
@@ -241,7 +241,7 @@ const crDistributionOptions = ref({
             xAxis: 0,
             yAxis: 0,
           },
-          text: 'Seu está CR',
+          text: 'Seu CR está aqui',
         },
       ],
     },
@@ -252,9 +252,8 @@ const userMaxCr = computed(() => {
   const crAcumulados = crHistoryData.value?.map((quad) => quad.cr_acumulado);
   if (crAcumulados) {
     return Math.max(...crAcumulados).toFixed(2);
-  } else {
-    return 'undefined';
   }
+  return 'undefined';
 });
 
 const maxCreditsQuad = computed(
