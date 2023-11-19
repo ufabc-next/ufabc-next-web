@@ -3,7 +3,7 @@ import { createVuetify } from 'vuetify';
 
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
-import { render } from '@testing-library/vue';
+import { render, waitFor, within, screen } from '@testing-library/vue';
 
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
 import { Plugin } from 'vue';
@@ -43,3 +43,11 @@ const customRender: typeof render = (component, options) => {
 
 export { customRender as render };
 export * from '@testing-library/vue';
+
+export const expectToasterToHaveText = async (text: string) => {
+  await waitFor(() => {
+    expect(
+      within(screen.getAllByRole('alert').at(-1)!).getByText(RegExp(text, 'i')),
+    ).toBeInTheDocument();
+  });
+};

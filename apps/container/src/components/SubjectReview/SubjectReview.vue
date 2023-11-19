@@ -171,7 +171,11 @@ watch(
   () => isFetchingSubjectError.value,
   () => {
     isFetchingSubjectError.value &&
-      ElMessage.error('Erro ao carregar dados da disciplina');
+      ElMessage({
+        message: 'Erro ao carregar dados da disciplina',
+        type: 'error',
+        showClose: true,
+      });
   },
 );
 

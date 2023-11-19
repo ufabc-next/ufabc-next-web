@@ -26,7 +26,23 @@ export type Comment = {
     search: string;
     updatedAt: string;
   };
-  reactionsCount?: { like: number; recommendation: number };
+  reactionsCount?: { like?: number; recommendation?: number };
   teacher: string;
   updatedAt: string;
+};
+
+export type GetCommentResponse = {
+  data: Comment[];
+  total: number;
+};
+
+export type CreateCommentRequest = {
+  comment: string;
+  enrollment: string;
+  type: string;
+};
+
+export type UpdateCommentRequest = {
+  id: string;
+  comment: string;
 };

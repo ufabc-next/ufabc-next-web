@@ -1,21 +1,11 @@
 import {
-  SearchSubjectItem,
-  SearchTeacherItem,
+  SearchSubject,
+  SearchTeacher,
   SubjectInfo,
   TeacherReview,
 } from 'types';
 
 import { api } from './api';
-
-type SearchTeacher = {
-  data: SearchTeacherItem[];
-  total: number;
-};
-
-type SearchSubject = {
-  data: SearchSubjectItem[];
-  total: number;
-};
 
 export const Reviews = {
   searchTeachers: async (q: string) =>

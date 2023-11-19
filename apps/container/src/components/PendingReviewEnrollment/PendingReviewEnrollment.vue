@@ -64,7 +64,7 @@ import { Enrollment } from 'types';
 const showDialog = ref(false);
 
 const conceptStyle = computed(() => ({
-  backgroundColor: conceptsColor[props.enrollment.conceito ?? ''],
+  backgroundColor: conceptsColor[props.enrollment.conceito],
   height: '54px',
   width: '54px',
   fontSize: '34px',

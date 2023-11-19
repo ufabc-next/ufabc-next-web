@@ -23,9 +23,9 @@ describe('<RecoveryView />', () => {
 
   test('render recovery', () => {
     render(RecoveryView);
-    screen.getByAltText(/logo do UFABC Next/i);
-    screen.getByAltText(/Imagem minimalista de dois estudantes/i);
-    screen.getByRole('textbox', { name: /Insira seu email institucional/i });
+    expect(screen.getByAltText(/logo do UFABC Next/i)).toBeInTheDocument();
+    expect(screen.getByAltText(/Imagem minimalista de dois estudantes/i)).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /Insira seu email institucional/i })).toBeInTheDocument();
   });
   test('click go back button', async () => {
     const user = await userEvent.setup();

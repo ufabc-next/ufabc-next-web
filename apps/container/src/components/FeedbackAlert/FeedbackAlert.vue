@@ -30,6 +30,7 @@ const props = defineProps({
 
 onMounted(() => {
   ElMessage({
+    showClose: true,
     message: props.text,
     type: props.type,
     duration: props.duration,

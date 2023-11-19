@@ -2,6 +2,7 @@
   <FeedbackAlert v-if="isErrorEnrollments" />
   <FeedbackAlert v-if="isErrorUser" />
   <ReviewDialog
+    v-if="showDialog"
     :enrollment="selectedEnrollment"
     :showDialog="showDialog"
     :tags="tags"

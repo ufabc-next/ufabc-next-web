@@ -1,9 +1,11 @@
 import { Concept } from './concepts';
+import { SearchTeacherItem } from '.';
 
 export type ConceptData = {
   conceito: Concept;
+  weight?: number;
   cr_medio: number;
-  cr_professor: number;
+  cr_professor?: number;
   count: number;
   amount: number;
   numeric: number;
@@ -47,4 +49,9 @@ export type TeacherReview = {
     distribution: ConceptData[];
   };
   specific: TeacherReviewSubject[];
+};
+
+export type SearchTeacher = {
+  data: SearchTeacherItem[];
+  total: number;
 };
