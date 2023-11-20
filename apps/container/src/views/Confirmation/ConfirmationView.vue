@@ -60,12 +60,20 @@ const { mutate: mutateConfirmToken, isPending: isPendingConfirmToken } =
   useMutation({
     mutationFn: Users.confirmSignup,
     onSuccess: (data) => {
-      ElMessage.success('Conta confirmada com sucesso');
+      ElMessage({
+        message: 'Conta confirmada com sucesso',
+        type: 'success',
+        showClose: true,
+      });
       authenticate.value(data.data.token);
       router.push('/');
     },
     onError: (error: AxiosError<RequestError>) => {
-      ElMessage.error(error.response?.data.error);
+      ElMessage({
+        message: error.response?.data.error,
+        type: 'error',
+        showClose: true,
+      });
     },
   });
 
@@ -73,7 +81,12 @@ onMounted(async () => {
   await router.isReady();
   const token = router.currentRoute.value.query.token as string;
   if (!token) {
-    return ElMessage.error('Token de confirmação não encontrado');
+    ElMessage({
+      message: 'Token de confirmação não encontrado',
+      type: 'error',
+      showClose: true,
+    });
+    return;
   }
   mutateConfirmToken(token);
 });

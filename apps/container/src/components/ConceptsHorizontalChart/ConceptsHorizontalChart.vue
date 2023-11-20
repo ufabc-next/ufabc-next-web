@@ -6,9 +6,10 @@
       :key="grade.conceito"
       :hide-after="0"
       :content="`
-        ${grade.conceito}: ${grades[grade.conceito].toFixed(1)}% (${
-          grade.count
-        } notas)`"
+        ${grade.conceito}: ${(
+          (100 * grades[grade.conceito]) /
+          gradeData.count
+        ).toFixed(1)}% (${grade.count} notas)`"
     >
       <span
         class="grading-segment"

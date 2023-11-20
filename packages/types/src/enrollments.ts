@@ -13,6 +13,7 @@ type EnrollmentTeacherComment = {
   updatedAt: string;
   createdAt: string;
   __v: number;
+  reactionsCount?: { like?: number; recommendation?: number };
 };
 
 type EnrollmentTeacher = {
