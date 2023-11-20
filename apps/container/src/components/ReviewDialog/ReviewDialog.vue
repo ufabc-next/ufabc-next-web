@@ -1,7 +1,7 @@
 <template>
   <FeedbackAlert
-    v-if="isFetchingTeacherEnrollmentError"
-    text="Erro ao carregar suas informações desta disciplina"
+    v-if="isFetchingTeacherEnrollmentError || teacherIdError"
+    text="Erro ao carregar as informações do professor desta disciplina"
   />
   <v-dialog v-model="showDialog" maxWidth="1200">
     <PaperCard>
@@ -69,7 +69,7 @@
               </v-btn>
             </div>
           </v-col>
-          <v-col class="pa-0 pa-sm-3" cols="12" md="7">
+          <v-col v-if="teacherId" class="pa-0 pa-sm-3" cols="12" md="7">
             <CommentsList
               :teacherId="teacherId"
               :selectedSubject="selectedSubject"
@@ -112,16 +112,26 @@ const props = defineProps({
 
 const enrollmentId = computed(() => props.enrollment?._id || '');
 
-const subjectType = computed(() => props.tags[0]);
-const teacherId = computed(() => {
-  if (subjectType.value === 'teoria e prática')
-    return (
-      props.enrollment?.pratica?._id || props.enrollment?.teoria?._id || ''
-    );
-  if (subjectType.value === 'prática')
-    return props.enrollment?.pratica?._id || '';
-  return props.enrollment?.teoria?._id || '';
+const subjectType = computed(() => {
+  if (props.tags[0] === 'teoria e prática') return 'teoria';
+  return props.tags[0];
 });
+
+const teacherId = computed(() => {
+  let id = '';
+  if (subjectType.value === 'teoria e prática')
+    id = props.enrollment?.pratica?._id || props.enrollment?.teoria?._id || '';
+  else if (subjectType.value === 'prática')
+    id = props.enrollment?.pratica?._id || '';
+  else id = props.enrollment?.teoria?._id || '';
+
+  return id;
+});
+
+const teacherIdError = ref(false);
+if (!teacherId.value) {
+  teacherIdError.value = true;
+}
 
 const teacherName = computed(() => {
   if (subjectType.value === 'teoria e prática')
@@ -155,19 +165,15 @@ const {
 });
 
 const comment = ref<string>('');
-const teacherEnrollmentCommentTeoria = computed(
-  () => teacherEnrollment.value?.data.teoria?.comment?.comment,
-);
-const teacherEnrollmentCommentPratica = computed(
-  () => teacherEnrollment.value?.data.pratica?.comment?.comment,
-);
+const teacherEnrollmentComment = computed(() => ({
+  teoria: teacherEnrollment.value?.data.teoria?.comment?.comment,
+  prática: teacherEnrollment.value?.data.pratica?.comment?.comment,
+}));
+
 const userCommentMessage = computed({
   get: () => {
     const currentComment =
-      subjectType.value === 'prática'
-        ? teacherEnrollmentCommentPratica.value
-        : teacherEnrollmentCommentTeoria.value;
-
+      teacherEnrollmentComment.value[subjectType.value as 'teoria' | 'prática'];
     return comment.value ? comment.value : currentComment ?? '';
   },
   set: (value: string) => {
@@ -178,17 +184,15 @@ const userCommentMessage = computed({
 const disableMutateComment = computed(() => {
   return (
     !userCommentMessage.value ||
-    [
-      teacherEnrollmentCommentTeoria.value,
-      teacherEnrollmentCommentPratica.value,
-    ].includes(userCommentMessage.value)
+    teacherEnrollmentComment.value[
+      subjectType.value as 'teoria' | 'prática'
+    ] === userCommentMessage.value
   );
 });
 
-const hasUserComment = computed(() =>
-  subjectType.value === 'prática'
-    ? !!teacherEnrollmentCommentPratica.value
-    : !!teacherEnrollmentCommentTeoria.value,
+const hasUserComment = computed(
+  () =>
+    !!teacherEnrollmentComment.value[subjectType.value as 'teoria' | 'prática'],
 );
 
 const queryClient = useQueryClient();
@@ -206,10 +210,18 @@ const { mutate: mutateCreate, isPending: isCreatingComment } = useMutation({
     queryClient.invalidateQueries({
       queryKey: ['enrollments', 'get', subjectId],
     });
-    ElMessage.success('Comentário enviado com sucesso');
+    ElMessage({
+      message: 'Comentário enviado com sucesso',
+      type: 'success',
+      showClose: true,
+    });
   },
   onError: () => {
-    ElMessage.error('Ocorreu um erro ao enviar o comentário');
+    ElMessage({
+      message: 'Ocorreu um erro ao enviar o comentário',
+      type: 'error',
+      showClose: true,
+    });
   },
 });
 
@@ -229,10 +241,18 @@ const { mutate: mutateUpdate, isPending: isUpdatingComment } = useMutation({
     queryClient.invalidateQueries({
       queryKey: ['enrollments', 'get', enrollmentId],
     });
-    ElMessage.success('Comentário editado com sucesso');
+    ElMessage({
+      message: 'Comentário editado com sucesso',
+      type: 'success',
+      showClose: true,
+    });
   },
   onError: () => {
-    ElMessage.error('Ocorreu um erro ao editar o comentário');
+    ElMessage({
+      message: 'Ocorreu um erro ao editar o comentário',
+      type: 'error',
+      showClose: true,
+    });
   },
 });
 

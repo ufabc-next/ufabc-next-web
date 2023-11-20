@@ -1,4 +1,5 @@
 import { ConceptData } from './teachers';
+import { SearchSubjectItem } from '.';
 
 export type SubjectSpecific = {
   _id: { mainTeacher: string | null };
@@ -15,7 +16,7 @@ export type SubjectSpecific = {
     updatedAt: string;
     createdAt: string;
     __v: number;
-  };
+  } | null;
   cr_medio: number;
 };
 
@@ -39,4 +40,9 @@ export type SubjectInfo = {
     distribution: ConceptData[];
   };
   specific: SubjectSpecific[];
+};
+
+export type SearchSubject = {
+  data: SearchSubjectItem[];
+  total: number;
 };

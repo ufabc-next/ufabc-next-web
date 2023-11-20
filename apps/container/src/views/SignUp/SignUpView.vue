@@ -372,7 +372,11 @@ const { mutate: mutateSignUp, isPending: isPendingSubmit } = useMutation({
     step.value = 3;
   },
   onError: (error: AxiosError<RequestError>) => {
-    ElMessage.error(error.response?.data.error);
+    ElMessage({
+      message: error.response?.data.error,
+      type: 'error',
+      showClose: true,
+    });
   },
 });
 const onSubmit = handleSubmit(({ email, ra }) =>
@@ -383,11 +387,19 @@ const { mutate: mutateResendEmail, isPending: isPendingResendEmail } =
   useMutation({
     mutationFn: Users.resendEmail,
     onSuccess: () => {
-      ElMessage.success('Email reenviado com sucesso');
+      ElMessage({
+      message: 'Email reenviado com sucesso',
+      type: 'success',
+      showClose: true,
+    });
       enableResendEmail.value = false;
     },
     onError: (error: AxiosError<RequestError>) => {
-      ElMessage.error(error.response?.data.error);
+      ElMessage({
+      message: error.response?.data.error,
+      type: 'error',
+      showClose: true,
+    });
     },
   });
 

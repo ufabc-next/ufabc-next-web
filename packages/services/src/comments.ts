@@ -1,22 +1,11 @@
-import { Comment } from 'types';
+import {
+  Comment,
+  CreateCommentRequest,
+  GetCommentResponse,
+  UpdateCommentRequest,
+} from 'types';
 
 import { api } from './api';
-
-type GetCommentResponse = {
-  data: Comment[];
-  total: number;
-};
-
-type CreateCommentRequest = {
-  comment: string;
-  enrollment: string;
-  type: string;
-};
-
-type UpdateCommentRequest = {
-  id: string;
-  comment: string;
-};
 
 export const Comments = {
   get: (teacherId: string, subjectId: string, pageParam = 0) =>

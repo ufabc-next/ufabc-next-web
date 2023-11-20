@@ -29,6 +29,8 @@
         variant="plain"
         @click="enterSearch(item.id, item.type, item.name)"
         class="item"
+        role="button"
+        :name="item.name"
       >
         <v-icon
           v-if="item.type"

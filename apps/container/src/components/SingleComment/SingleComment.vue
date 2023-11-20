@@ -59,6 +59,7 @@
       >
         <div class="d-flex">
           <v-btn
+            :aria-label="(like ? 'Remover' : 'Deixar') + ' like'"
             :loading="isPendingLike || isPendingRemoveLike"
             @click="like ? mutateRemoveLike() : mutateLike()"
             class="icon-button text-subtitle-2"
@@ -70,6 +71,9 @@
             {{ likeCount }}
           </v-btn>
           <v-btn
+            :aria-label="
+              (recommendation ? 'Remover' : 'Deixar') + ' recomendação'
+            "
             :loading="isPendingRecommendation || isPendingRemoveRecommendation"
             @click="
               recommendation
@@ -132,7 +136,11 @@ const { mutate: mutateLike, isPending: isPendingLike } = useMutation({
     likeCount.value++;
   },
   onError: (error: AxiosError<RequestError>) => {
-    ElMessage.error(error.response?.data.error);
+    ElMessage({
+      message: error.response?.data.error,
+      type: 'error',
+      showClose: true,
+    });
   },
 });
 
@@ -144,7 +152,11 @@ const { mutate: mutateRecommendation, isPending: isPendingRecommendation } =
       recommendationCount.value++;
     },
     onError: (error: AxiosError<RequestError>) => {
-      ElMessage.error(error.response?.data.error);
+      ElMessage({
+        message: error.response?.data.error,
+        type: 'error',
+        showClose: true,
+      });
     },
   });
 
@@ -156,7 +168,11 @@ const { mutate: mutateRemoveLike, isPending: isPendingRemoveLike } =
       likeCount.value--;
     },
     onError: (error: AxiosError<RequestError>) => {
-      ElMessage.error(error.response?.data.error);
+      ElMessage({
+        message: error.response?.data.error,
+        type: 'error',
+        showClose: true,
+      });
     },
   });
 
@@ -170,7 +186,11 @@ const {
     recommendationCount.value--;
   },
   onError: (error: AxiosError<RequestError>) => {
-    ElMessage.error(error.response?.data.error);
+    ElMessage({
+      message: error.response?.data.error,
+      type: 'error',
+      showClose: true,
+    });
   },
 });
 
@@ -183,8 +203,9 @@ const season = computed(() => {
   const [year, quad] = props.comment.enrollment.season?.split(':') ?? [];
 
   return formatSeason(
-    (year ?? props.comment.enrollment.year) + ':' +
-    (quad ?? props.comment.enrollment.quad)
+    (year ?? props.comment.enrollment.year) +
+      ':' +
+      (quad ?? props.comment.enrollment.quad),
   );
 });
 
