@@ -68,7 +68,7 @@
 import { useQuery } from '@tanstack/vue-query';
 import debounce from 'lodash.debounce';
 import { Reviews } from 'services';
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import type { SearchTeacherItem, SearchSubjectItem } from 'types';
 import { useRouter } from 'vue-router';
@@ -124,6 +124,7 @@ const handleUpdateDebouncedQuery = debounce(() => {
   debouncedQuery.value = query.value;
 }, 500);
 
+
 const onChangeQuery = (e: InputEvent) => {
   router.replace({
     name: 'reviews',
@@ -133,6 +134,10 @@ const onChangeQuery = (e: InputEvent) => {
   });
   handleUpdateDebouncedQuery();
 };
+
+onMounted(() => {
+  debouncedQuery.value = query.value;
+});
 
 const mapSearchResults = (
   type: string,
