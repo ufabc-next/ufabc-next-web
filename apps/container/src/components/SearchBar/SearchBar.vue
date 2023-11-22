@@ -74,7 +74,10 @@ import type { SearchTeacherItem, SearchSubjectItem } from 'types';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-const query = computed(() => router.currentRoute.value.query.q as string);
+const query = computed({
+  get: () => router.currentRoute.value.query.q as string,
+  set: () => {},
+});
 
 const clear = () => {
   router.replace({
@@ -123,7 +126,6 @@ const {
 const handleUpdateDebouncedQuery = debounce(() => {
   debouncedQuery.value = query.value;
 }, 500);
-
 
 const onChangeQuery = (e: InputEvent) => {
   router.replace({
