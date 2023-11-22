@@ -3,10 +3,10 @@
   <FeedbackAlert v-if="isErrorSubjects" text="Erro ao buscar disciplinas" />
   <div class="wrapper w-100 mb-5">
     <v-text-field
+      v-model="query"
+      @input="onChangeQuery"
       variant="solo"
-      v-model="searchTerm"
       placeholder="Digite o nome do professor ou disciplina"
-      @input="search"
       class="mb-1"
       hide-details
       :prepend-inner-icon="
@@ -68,39 +68,23 @@
 import { useQuery } from '@tanstack/vue-query';
 import debounce from 'lodash.debounce';
 import { Reviews } from 'services';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import type { SearchTeacherItem, SearchSubjectItem } from 'types';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
-
-const searchTerm = ref('');
+const query = computed(() => router.currentRoute.value.query.q as string);
 
 const clear = () => {
-  searchTerm.value = '';
   router.replace({
     name: 'reviews',
   });
 };
 
-const query = computed(() => router.currentRoute.value.query.q as string);
-
-onMounted(() => {
-  searchTerm.value = query.value;
-});
-
-watch(
-  () => query.value,
-  (q) => {
-    searchTerm.value = q;
-  },
-);
-
 const enterSearch = (id: string, type: string, name: string) => {
   (document.activeElement as HTMLDivElement)?.blur();
 
-  searchTerm.value = name;
   router.replace({
     name: 'reviews',
     query: {
@@ -111,44 +95,49 @@ const enterSearch = (id: string, type: string, name: string) => {
   });
 };
 
+const debouncedQuery = ref('');
+const enableQuery = computed(() => !!debouncedQuery.value);
+
 const {
   isError: isErrorTeachers,
   isFetching: isFetchingTeachers,
   data: searchResultsTeachers,
-  refetch: refetchTeachers,
 } = useQuery({
   refetchOnWindowFocus: false,
-  queryKey: ['reviews', 'search', query.value, 'teachers'],
-  queryFn: () => Reviews.searchTeachers(query.value),
-  enabled: !!query.value,
+  queryKey: ['reviews', 'search', debouncedQuery, 'teachers'],
+  queryFn: () => Reviews.searchTeachers(debouncedQuery.value),
+  enabled: enableQuery,
 });
 
 const {
   isError: isErrorSubjects,
   isFetching: isFetchingSubjects,
   data: searchResultsSubjects,
-  refetch: refetchSubjects,
 } = useQuery({
   refetchOnWindowFocus: false,
-  queryKey: ['reviews', 'search', query.value, 'subjects'],
-  queryFn: () => Reviews.searchSubjects(query.value),
-  enabled: !!query.value,
+  queryKey: ['reviews', 'search', debouncedQuery, 'subjects'],
+  queryFn: () => Reviews.searchSubjects(debouncedQuery.value),
+  enabled: enableQuery,
 });
 
-const useSearch = debounce(() => {
-  refetchTeachers();
-  refetchSubjects();
+const handleUpdateDebouncedQuery = debounce(() => {
+  debouncedQuery.value = query.value;
 }, 500);
 
-const search = (e: InputEvent) => {
+
+const onChangeQuery = (e: InputEvent) => {
   router.replace({
     name: 'reviews',
     query: {
       q: (e.target as HTMLInputElement)?.value,
     },
   });
-  useSearch();
+  handleUpdateDebouncedQuery();
 };
+
+onMounted(() => {
+  debouncedQuery.value = query.value;
+});
 
 const mapSearchResults = (
   type: string,

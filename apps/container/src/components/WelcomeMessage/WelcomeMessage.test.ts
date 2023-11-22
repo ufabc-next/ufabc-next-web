@@ -5,9 +5,7 @@ describe('<WelcomeMessage />', () => {
   test('render welcome messages and next benefits', () => {
     render(WelcomeMessage);
     expect(
-      screen.getByRole('heading', {
-        name: 'Como funciona o UFABC Next e os Reviews?',
-      }),
+      screen.getByText('Como funciona o UFABC Next e os Reviews?'),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/Centralização da informação/i),

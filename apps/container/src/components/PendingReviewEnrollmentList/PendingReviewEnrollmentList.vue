@@ -32,7 +32,7 @@ import { Enrollment } from 'types';
 
 const { data: enrollments, isError: isErrorEnrollment } = useQuery({
   refetchOnWindowFocus: false,
-  queryKey: ['enrollment', 'list'],
+  queryKey: ['enrollments', 'list'],
   queryFn: Enrollments.list,
   select: (response) => response.data,
 });
