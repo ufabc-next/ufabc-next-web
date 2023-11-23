@@ -110,7 +110,13 @@ export const Preview = () => {
         </h2>
       </div>
       <div>
-        <img src={calendarImage} alt="Calendário" />
+        <img
+          src={calendarImage}
+          alt="Calendário"
+          style={{
+            margin: '32px 0',
+          }}
+        />
       </div>
       <div>
         <button

@@ -132,6 +132,10 @@ export const Summary = () => {
           NHT1057-15 - Genética II A-Noturno ..."
           value={summary}
           onChange={(event) => handleChange(event.target.value)}
+          style={{
+            minHeight: '400px',
+            margin: '32px 0 0',
+          }}
         />
         <p className={message[1]}>{message[0] ?? '. . .'}</p>
       </div>

@@ -18,7 +18,13 @@ export const Welcome = () => {
         </h2>
       </div>
 
-      <img src={welcomeImage} alt="Calendário acadêmico" />
+      <img
+        src={welcomeImage}
+        alt="Calendário acadêmico"
+        style={{
+          margin: '32px 0',
+        }}
+      />
 
       <button
         className=""

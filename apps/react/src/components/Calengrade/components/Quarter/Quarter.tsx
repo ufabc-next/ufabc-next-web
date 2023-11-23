@@ -101,41 +101,48 @@ export default function Quarter() {
             Calendário acadêmico
           </a>
         </h2>
-
-        <label htmlFor="quarter">Quadrimestre</label>
-        <select
-          id="quarter"
-          value={quarter}
-          onChange={(event) => handleQuarterChange(Number(event.target.value))}
+        <div
+          style={{
+            margin: '32px 0',
+          }}
         >
-          {(definedQuarters || []).map((quarter, i) => (
-            <option key={i} value={i}>
-              {quarter.title}
-            </option>
-          ))}
-        </select>
+          <label htmlFor="quarter">Quadrimestre</label>
+          <select
+            id="quarter"
+            value={quarter}
+            onChange={(event) =>
+              handleQuarterChange(Number(event.target.value))
+            }
+          >
+            {(definedQuarters || []).map((quarter, i) => (
+              <option key={i} value={i}>
+                {quarter.title}
+              </option>
+            ))}
+          </select>
 
-        <label htmlFor="startDate">Início</label>
-        <input
-          inputMode="numeric"
-          id="startDate"
-          type="date"
-          value={startDate}
-          onChange={(event) => handleStartDate(event.target.value)}
-          disabled={quarter !== 0}
-        />
-        {startDateError ?? <p>{startDateError}</p>}
+          <label htmlFor="startDate">Início</label>
+          <input
+            inputMode="numeric"
+            id="startDate"
+            type="date"
+            value={startDate}
+            onChange={(event) => handleStartDate(event.target.value)}
+            disabled={quarter !== 0}
+          />
+          {startDateError ?? <p>{startDateError}</p>}
 
-        <label htmlFor="endDate">Fim</label>
-        <input
-          inputMode="numeric"
-          id="endDate"
-          type="date"
-          value={endDate}
-          onChange={(event) => handleEndDate(event.target.value)}
-          disabled={quarter !== 0}
-        />
-        {endDateError ?? <p>{endDateError}</p>}
+          <label htmlFor="endDate">Fim</label>
+          <input
+            inputMode="numeric"
+            id="endDate"
+            type="date"
+            value={endDate}
+            onChange={(event) => handleEndDate(event.target.value)}
+            disabled={quarter !== 0}
+          />
+          {endDateError ?? <p>{endDateError}</p>}
+        </div>
       </div>
 
       {classesCount === 0 ? (
