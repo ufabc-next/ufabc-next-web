@@ -1,5 +1,5 @@
 <template>
-  <VueQueryDevtools />
+  <VueQueryDevtools v-if="isLocal" />
   <AppBar :showAppBar="confirmedUser ?? undefined">
     <v-main style="background-color: #f5f5f5">
       <v-container
@@ -19,9 +19,11 @@ import { authStore } from 'stores';
 import { computed, onMounted } from 'vue';
 import create from 'vue-zustand';
 import { ElMessage } from 'element-plus';
-import { VueQueryDevtools } from '@tanstack/vue-query-devtools'
+import { VueQueryDevtools } from '@tanstack/vue-query-devtools';
 
 import { useRouter } from 'vue-router';
+
+const isLocal = process.env.VUE_APP_MF_ENV === 'local';
 
 const router = useRouter();
 
