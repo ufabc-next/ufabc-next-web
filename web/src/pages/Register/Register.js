@@ -20,11 +20,12 @@ export default {
   },
   methods: {
     loginFacebook() {
-      const env = process.env.NODE_ENV
-      window.open(
-        (`${process.env.VUE_APP_API_URL}/connect/facebook?inApp=${this.inApp}&env=${env}`).replace('/v1', ''),
-        this.inApp ? '_system' : '_self'
-      );
+      window.location.href = 'https://ufabcnext.com/app/#/autenticar-facebook'
+      // const env = process.env.NODE_ENV
+      // window.open(
+      //   (`${process.env.VUE_APP_API_URL}/connect/facebook?inApp=${this.inApp}&env=${env}`).replace('/v1', ''),
+      //   this.inApp ? '_system' : '_self'
+      // );
     },
 
     loginGoogle() {
