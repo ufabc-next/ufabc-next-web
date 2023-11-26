@@ -20,7 +20,7 @@
     "@tanstack/vue-query": "5.4.3",
     "@tanstack/vue-query-devtools": "^5.8.4",
     "@vee-validate/zod": "4.11.8",
-    "axios": "1.6.0",
+    "axios": "1.6.2",
     "core-js": "3.33.1",
     "dayjs": "1.11.10",
     "element-plus": "2.4.1",
