@@ -2039,6 +2039,11 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.4.3.tgz#fbdd36ccf1acf70579980f2e7cf16d2c2aa2a5e9"
   integrity sha512-fnI9ORjcuLGm1sNrKatKIosRQUpuqcD4SV7RqRSVmj8JSicX2aoMyKryHEBpVQvf6N4PaBVgBxQomjsbsGPssQ==
 
+"@tanstack/query-core@5.8.7":
+  version "5.8.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.8.7.tgz#460137555565d478930690f2c992f414da3bec7b"
+  integrity sha512-58xOSkxxZK4SGQ/uzX8MDZHLGZCkxlgkPxnfhxUOL2uchnNHyay2UVcR3mQNMgaMwH1e2l+0n+zfS7+UJ/MAJw==
+
 "@tanstack/query-devtools@5.8.4":
   version "5.8.4"
   resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.8.4.tgz#88849bd27b7c8fa9034f95d24d58c3b82e182269"
@@ -2058,13 +2063,13 @@
   dependencies:
     "@tanstack/query-devtools" "5.8.4"
 
-"@tanstack/vue-query@5.4.3":
-  version "5.4.3"
-  resolved "https://registry.yarnpkg.com/@tanstack/vue-query/-/vue-query-5.4.3.tgz#1f93e1bbe1bac8765c70b5fc891a5f3ffd671660"
-  integrity sha512-mJDUrh0tDjqdFq6UPHUaxD2iGMNlhejoQnfv2d2dzdzXwCE58HETuqmmrPFD5D4trZamPlV8UoVtQh/cmkQglA==
+"@tanstack/vue-query@5.8.7":
+  version "5.8.7"
+  resolved "https://registry.yarnpkg.com/@tanstack/vue-query/-/vue-query-5.8.7.tgz#08ccafc161194200c959506bf29ba875cb3c249a"
+  integrity sha512-riuXxrwKq1eGjKidPWLnyHdi5Kp4ji4kfoSoJdJm5hX4pcdgm74BvtIn6vJ7IPg0BQvpmaBJAb1BJyduAN1JkA==
   dependencies:
     "@tanstack/match-sorter-utils" "^8.8.4"
-    "@tanstack/query-core" "5.4.3"
+    "@tanstack/query-core" "5.8.7"
     "@vue/devtools-api" "^6.5.0"
     vue-demi "^0.14.6"
 
