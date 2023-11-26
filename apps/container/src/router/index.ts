@@ -13,6 +13,9 @@ import { RecoveryView } from '@/views/Recovery';
 import { CalengradeView } from '@/views/Calengrade';
 import { FacebookView } from '@/views/Facebook';
 
+const isJWT = (token: string) =>
+  /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
+
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/reviews',
@@ -149,10 +152,13 @@ const router = createRouter({
 router.beforeEach(async (to, _from, next) => {
   document.title = (to.meta.title as string) || 'UFABC Next';
 
-  const params = new URLSearchParams(window.location.search);
+  const tokenParam = to.query.token;
 
-  if (params.get('token')) {
-    return next();
+  const { authenticate } = authStore.getState();
+
+  if (isJWT(tokenParam as string)) {
+    authenticate(tokenParam as string);
+    return next({ query: { token: undefined } });
   }
 
   const requireAuth = to.matched.some((record) => record.meta.auth === true);
@@ -164,31 +170,34 @@ router.beforeEach(async (to, _from, next) => {
     (record) => record.meta.confirmed === false,
   );
 
-  const userToken = authStore.getState().token;
-  const userConfirmed = authStore.getState().user?.confirmed;
+  const { isLoggedIn, user } = authStore.getState();
+
+  const userConfirmed = user?.confirmed;
+
+  const isLocal = process.env.VUE_APP_MF_ENV === 'local';
+
+  const notConfirmedRedirectPath = '/signup';
+  const authenticatedRedirectPath = '/reviews';
+  const notAuthenticatedRedirect = () =>
+    isLocal ? next(notConfirmedRedirectPath) : (window.location.pathname = '/');
 
   if (requireAuth) {
-    if (userToken) return next();
-    else if (process.env.VUE_APP_MF_ENV !== 'local') {
-      return (window.location.pathname = '/');
-    }
-    return next();
+    if (isLoggedIn()) return next();
+    return notAuthenticatedRedirect();
   }
   if (requireConfirmed) {
-    if (userToken) {
+    if (isLoggedIn()) {
       if (userConfirmed) return next();
-      return next('/signup');
-    } else if (process.env.VUE_APP_MF_ENV !== 'local') {
-      return (window.location.pathname = '/');
+      return next(notConfirmedRedirectPath);
     }
-    next('/reviews');
+    return notAuthenticatedRedirect();
   }
   if (notAllowAuth) {
-    if (userToken) return next('/reviews');
+    if (isLoggedIn()) return next(authenticatedRedirectPath);
     return next();
   }
   if (notAllowConfirmed) {
-    if (userConfirmed) return next('/reviews');
+    if (userConfirmed) return next(authenticatedRedirectPath);
     return next();
   }
   return next();
