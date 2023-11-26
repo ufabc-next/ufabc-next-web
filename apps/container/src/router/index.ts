@@ -11,6 +11,7 @@ import { SignUpView } from '@/views/SignUp';
 import { ConfirmationView } from '@/views/Confirmation';
 import { RecoveryView } from '@/views/Recovery';
 import { CalengradeView } from '@/views/Calengrade';
+import { FacebookView } from '@/views/Facebook';
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -19,7 +20,7 @@ const routes: Array<RouteRecordRaw> = [
     component: ReviewsView,
     meta: {
       title: 'Reviews',
-      auth: true,
+      confirmed: true,
     },
   },
   {
@@ -109,6 +110,15 @@ const routes: Array<RouteRecordRaw> = [
     component: CalengradeView,
     meta: {
       title: 'Calengrade',
+    },
+  },
+  {
+    path: '/autenticar-facebook',
+    name: 'Autenticar Facebook',
+    component: FacebookView,
+    meta: {
+      title: 'Autenticar Facebook',
+      auth: false,
     },
   },
   {
