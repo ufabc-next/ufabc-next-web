@@ -10,7 +10,7 @@
     "tsc": "turbo run tsc --parallel"
   },
   "devDependencies": {
-    "eslint": "^8.52.0",
+    "eslint": "^8.54.0",
     "eslint-config-custom": "*",
     "prettier": "^3.0.3",
     "turbo": "1.10.16",
