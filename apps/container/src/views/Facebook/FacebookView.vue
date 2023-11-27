@@ -53,8 +53,7 @@ const { mutate: mutateFacebook, isPending: isPendingSubmit } = useMutation({
     router.push('/reviews')
   },
   onError(error) {
-    console.log('mostra', error)
-    // redirectToHome();
+    redirectToHome();
   }
 })
 
@@ -76,17 +75,15 @@ const onSubmit = handleSubmit(({ email, ra }) => mutateFacebook({ email, ra }));
             alt="Pessoa meditando na frente do computador" />
         </v-col>
 
-
-
-        <v-col cols="12" md="6" class="mt-6 d-flex flex-column mb-4">
+        <v-col cols="12" md="6" class="mt-6 d-flex flex-column ga-4">
           <div class="d-flex align-center w-100 flex-column">
             <img style="width: 50px; height: 50px; "
               src="https://upload.wikimedia.org/wikipedia/en/0/04/Facebook_f_logo_%282021%29.svg"
               alt="Logo do Facebook" />
-            <h1 class="mb-2 text-center">
+            <h1 class="text-center">
               Houve um problema com seu login através do Facebook
             </h1>
-            <p class="step-subtitle mb-4 text-center">
+            <p class="step-subtitle text-center">
               Mas não se preocupe, estamos aqui para te ajudar a recuperar o
               acesso à sua conta.
             </p>
@@ -98,7 +95,7 @@ const onSubmit = handleSubmit(({ email, ra }) => mutateFacebook({ email, ra }));
 
           <v-text-field v-model="raField" label="Insira seu RA" variant="solo" class="w-100" placeholder="11201911111"
             prepend-inner-icon="mdi-school" :error-messages="raErrorMessage" />
-          <v-col cols="12" md="6" class="d-flex justify-center px-0 px-md-2">
+          <v-col md="6" class="d-flex justify-center px-0 px-md-2">
             <v-btn color="primary" type="submit" style="text-transform: unset !important" class="flex-grow-1"
               size="x-large" :loading="isPendingSubmit">Enviar</v-btn>
           </v-col>

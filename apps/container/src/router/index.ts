@@ -17,9 +17,6 @@ const FacebookView = () => import('@/views/Facebook/FacebookView.vue');
 const isJWT = (token: string) =>
   /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
 
-const isJWT = (token: string) =>
-  /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
-
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/reviews',
