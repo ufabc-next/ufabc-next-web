@@ -1,6 +1,4 @@
 <script setup lang="ts">
-/* eslint-disable */
-import { ref } from 'vue';
 import { useMutation } from '@tanstack/vue-query';
 
 import { Users } from 'services';
@@ -42,7 +40,6 @@ const { value: raField, errorMessage: raErrorMessage } = useField('ra');
 const { mutate: mutateFacebook, isPending: isPendingSubmit } = useMutation({
   mutationFn: Users.facebookAuth,
   onSuccess({ data }) {
-    // todo save token and redirect to /reviews
     ElMessage({
       message: 'Realizando seu login',
       type: 'success',
@@ -52,7 +49,7 @@ const { mutate: mutateFacebook, isPending: isPendingSubmit } = useMutation({
     authenticate.value(data.token)
     router.push('/reviews')
   },
-  onError(error) {
+  onError() {
     redirectToHome();
   }
 })
