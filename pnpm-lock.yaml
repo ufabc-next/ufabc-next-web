@@ -349,6 +349,9 @@ importers:
 
   packages/services:
     dependencies:
+      axios:
+        specifier: 1.6.2
+        version: 1.6.2
       stores:
         specifier: workspace:*
         version: link:../stores
