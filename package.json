@@ -18,9 +18,13 @@
     "@commitlint/config-conventional": "18.4.3"
   },
   "name": "ufabc-next-web",
-  "packageManager": "yarn@1.22.19",
+  "packageManager": "pnpm@8.11.0",
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "engines": {
+    "node": "^20",
+    "pnpm": "^8"
+  }
 }
