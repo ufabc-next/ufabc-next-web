@@ -7,16 +7,6 @@ export type UserSignup = {
   ra: number;
 };
 
-export type FacebookAuth = {
-  // user personal email `not` @aluno.ufabc.edu.br
-  email: string;
-  ra: string;
-};
-
-export type FacebookConfirmResponse = {
-  token: string;
-};
-
 export type UserConfirmResponse = {
   token: string;
 };
@@ -29,6 +19,4 @@ export const Users = {
   recovery: (email: string) => api.post('/users/me/recover', { email }),
   delete: () => api.delete('/users/me/delete'),
   info: () => api.get<User>('/users/info'),
-  facebookAuth: (params: FacebookAuth) =>
-    api.post<FacebookConfirmResponse>('/facebook/sync', params),
 };
