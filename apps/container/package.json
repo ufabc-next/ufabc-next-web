@@ -29,9 +29,9 @@
     "lodash.debounce": "4.0.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "services": "*",
-    "stores": "*",
-    "utils": "*",
+    "services": "workspace:*",
+    "stores": "workspace:*",
+    "utils": "workspace:*",
     "vee-validate": "4.12.0",
     "vue": "3.3.9",
     "vue-router": "4.2.5",
@@ -65,16 +65,17 @@
     "jsdom": "23.0.0",
     "lint-staged": "15.1.0",
     "msw": "^2.0.9",
-    "types": "*",
+    "types": "workspace:*",
     "typescript": "5.3.2",
-    "vitest": "0.34.6"
+    "vitest": "0.34.6",
+    "tsconfig": "workspace:*"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
   },
   "engines": {
-    "node": ">=v18.4.0",
-    "npm": ">=8.12.0"
+    "node": "^v20",
+    "pnpm": "^8"
   },
   "lint-staged": {
     "*.{js,jsx,vue,ts,tsx}": "vue-cli-service lint"
