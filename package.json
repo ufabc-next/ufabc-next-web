@@ -26,5 +26,13 @@
   "engines": {
     "node": "^20",
     "pnpm": "^8"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "consolidate>react-dom": "18",
+        "consolidate>react": "18"
+      }
+    }
   }
 }
