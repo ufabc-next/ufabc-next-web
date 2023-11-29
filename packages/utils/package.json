@@ -15,6 +15,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "dayjs": "^1.11.10",
     "types": "workspace:*"
   }
 }
