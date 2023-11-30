@@ -1,9 +1,9 @@
-import { render, screen } from '@/test-utils';
-import { SubjectReview } from '.';
 import { useRouter } from 'vue-router';
+import { HttpResponse, http } from 'msw';
+import { SubjectReview } from '.';
+import { render, screen } from '@/test-utils';
 import { subjectSearch } from '@/mocks/reviews';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 
 vi.mock('vue-router', async () => ({
   useRouter: vi.fn(),
@@ -32,7 +32,7 @@ describe('<SubjectReview />', () => {
     } as unknown as ReturnType<typeof useRouter>);
   });
 
-  test('render subject review', async () => {
+  it('render subject review', async () => {
     vi.mocked(useRouter).mockReturnValue({
       useRouter: vi.fn(),
       createRouter: vi.fn(() => ({
@@ -59,7 +59,7 @@ describe('<SubjectReview />', () => {
     ).toBeInTheDocument();
     expect(await screen.findByText(/Nome do Professor/i)).toBeInTheDocument();
   });
-  test('render subject that demands review', async () => {
+  it('render subject that demands review', async () => {
     vi.mocked(useRouter).mockReturnValue({
       useRouter: vi.fn(),
       createRouter: vi.fn(() => ({
@@ -86,7 +86,7 @@ describe('<SubjectReview />', () => {
     ).toBeInTheDocument();
     expect(await screen.findByText(/Nome do Professor/i)).toBeInTheDocument();
   });
-  test('fetching teacher error toaster', async () => {
+  it('fetching teacher error toaster', async () => {
     server.use(
       http.get(`*/reviews/subjects/*`, () =>
         HttpResponse.json(null, { status: 500 }),

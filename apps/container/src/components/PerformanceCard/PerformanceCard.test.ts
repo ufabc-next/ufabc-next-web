@@ -1,8 +1,8 @@
-import { render, screen } from '@/test-utils';
 import { PerformanceCard } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<PerformanceCard />', () => {
-  test('render a performance card title, subtitle and description', () => {
+  it('render a performance card title, subtitle and description', () => {
     render(PerformanceCard, {
       props: {
         title: 'title',

@@ -1,11 +1,11 @@
-import { render, screen, userEvent } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { PendingReviewEnrollmentList } from '.';
+import { render, screen, userEvent } from '@/test-utils';
 import { enrollments } from '@/mocks/enrollments';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 
 describe('<PendingReviewEnrollmentList />', () => {
-  test('render Pending Review Enrollments List with a reviewable subjects', async () => {
+  it('render Pending Review Enrollments List with a reviewable subjects', async () => {
     render(PendingReviewEnrollmentList);
     expect(
       await screen.findByText(/Seus professores para avaliar/i),
@@ -19,7 +19,7 @@ describe('<PendingReviewEnrollmentList />', () => {
     expect(screen.getByText(enrollments[28].subject.name)).toBeInTheDocument();
     expect(screen.getByText('teoria e prática')).toBeInTheDocument();
   });
-  test('render Pending Review Enrollments List with error', async () => {
+  it('render Pending Review Enrollments List with error', async () => {
     server.use(
       http.get(`*/enrollments`, () => HttpResponse.json(null, { status: 500 })),
     );
@@ -28,7 +28,7 @@ describe('<PendingReviewEnrollmentList />', () => {
       await screen.findByText('Erro ao buscar suas disciplinas cursadas'),
     ).toBeInTheDocument();
   });
-  test('open Review Dialog when click on Enrollment and close when click on clos', async () => {
+  it('open Review Dialog when click on Enrollment and close when click on clos', async () => {
     render(PendingReviewEnrollmentList);
     await userEvent.click(
       screen.getByRole('button', {

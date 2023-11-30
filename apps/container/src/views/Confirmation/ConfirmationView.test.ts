@@ -1,8 +1,8 @@
-import { render, screen } from '@/test-utils';
-import { ConfirmationView } from '.';
 import { useRouter } from 'vue-router';
-import { server } from '@/mocks/server';
 import { HttpResponse, http } from 'msw';
+import { ConfirmationView } from '.';
+import { render, screen } from '@/test-utils';
+import { server } from '@/mocks/server';
 
 vi.mock('@/views/Calengrade', () => ({
   CalengradeView: () => 'CalengradeView',
@@ -17,7 +17,7 @@ vi.mock('vue-router', async () => ({
 }));
 
 describe('<ConfirmationView />', () => {
-  test('render confirmation view with error message when token is null', async () => {
+  it('render confirmation view with error message when token is null', async () => {
     vi.mocked(useRouter).mockReturnValue({
       isReady: vi.fn(() => true),
       currentRoute: {
@@ -32,7 +32,7 @@ describe('<ConfirmationView />', () => {
       await screen.findByText('Erro ao confirmar sua conta'),
     ).toBeInTheDocument();
   });
-  test('show loading and success message when validating token', async () => {
+  it('show loading and success message when validating token', async () => {
     vi.mocked(useRouter).mockReturnValue({
       isReady: vi.fn(() => true),
       currentRoute: {
@@ -54,7 +54,7 @@ describe('<ConfirmationView />', () => {
       await screen.findByText('Conta confirmada com sucesso'),
     ).toBeInTheDocument();
   });
-  test('show error when validating and confirmation fails', async () => {
+  it('show error when validating and confirmation fails', async () => {
     const message = 'Ocorreu um erro';
     server.use(
       http.post(/.*\/account\/confirm/, () =>

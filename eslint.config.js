@@ -15,6 +15,7 @@ export default jsvEslintConfig(
         'vue/html-indent': 'off',
         'vue/html-closing-bracket-newline': 'off',
         'vue/operator-linebreak': 'off',
+        'vue/block-tag-newline': 'off',
       },
       typescript: {
         'ts/consistent-type-definitions': ['off', 'type'],

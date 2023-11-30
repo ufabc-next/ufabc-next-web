@@ -1,5 +1,5 @@
-import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { AppBar } from '.';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { user as mockedUser } from '@/mocks/users';
 import { useAuth } from '@/stores/useAuth';
 
@@ -16,7 +16,7 @@ describe('<AppBar />', () => {
     useAuth.setState(originalUseAuthValue);
   });
 
-  test('render app bar', () => {
+  it('render app bar', () => {
     render(AppBar);
     expect(
       screen.getAllByRole('img', { name: 'logo do UFABC Next' }),
@@ -26,7 +26,7 @@ describe('<AppBar />', () => {
     expect(screen.getByText('Snapshot da Matrícula')).toBeInTheDocument();
     expect(screen.getByText('Grupos no WhatsApp')).toBeInTheDocument();
   });
-  test('render user info in app bar dropdown', async () => {
+  it('render user info in app bar dropdown', async () => {
     const user = userEvent.setup();
 
     render(AppBar);
@@ -44,7 +44,7 @@ describe('<AppBar />', () => {
       ),
     ).toBeInTheDocument();
   });
-  test('render user initials if user email has two names', async () => {
+  it('render user initials if user email has two names', async () => {
     useAuth.setState({
       user: {
         ...mockedUser,
@@ -60,7 +60,7 @@ describe('<AppBar />', () => {
     );
     expect(await screen.findByText(/FL/)).toBeInTheDocument();
   });
-  test('click on logout button to logout', async () => {
+  it('click on logout button to logout', async () => {
     const user = userEvent.setup();
 
     render(AppBar);

@@ -1,8 +1,8 @@
-import { render, screen } from '@/test-utils';
 import { ReviewsWelcome } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<ReviewsWelcome />', () => {
-  test('render Reviews Welcome', () => {
+  it('render Reviews Welcome', () => {
     render(ReviewsWelcome);
     expect(
       screen.getByRole('img', { name: /Animação de review/i }),
@@ -13,7 +13,9 @@ describe('<ReviewsWelcome />', () => {
       ),
     ).toBeInTheDocument();
     expect(
-      screen.getByText(/Todos nossos dados de comentários e conceitos estão armazenados em nuvem e estão criptografados./i),
+      screen.getByText(
+        /Todos nossos dados de comentários e conceitos estão armazenados em nuvem e estão criptografados./i,
+      ),
     ).toBeInTheDocument();
     expect(
       screen.getByText(/Interface responsiva, acesse pelo celular/i),

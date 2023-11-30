@@ -1,8 +1,12 @@
 {
   "name": "ufabc-next-web-container",
   "version": "2.0.0",
-  "license": "AGPL-3.0",
   "private": true,
+  "license": "AGPL-3.0",
+  "engines": {
+    "node": "^v20",
+    "pnpm": "^8"
+  },
   "scripts": {
     "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
@@ -68,10 +72,6 @@
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
-  },
-  "engines": {
-    "node": "^v20",
-    "pnpm": "^8"
   },
   "lint-staged": {
     "*.{js,jsx,vue,ts,tsx}": "vue-cli-service lint"

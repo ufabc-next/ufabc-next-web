@@ -1,8 +1,8 @@
-import { render, screen } from '@/test-utils';
 import { FeedbackAlert } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<FeedbackAlert />', () => {
-  test('call ElMessage on mount', () => {
+  it('call ElMessage on mount', () => {
     render(FeedbackAlert);
     expect(
       screen.getByText(

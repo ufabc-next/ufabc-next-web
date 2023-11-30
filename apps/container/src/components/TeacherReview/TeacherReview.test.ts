@@ -1,8 +1,8 @@
-import { render, screen } from '@/test-utils';
-import { TeacherReview } from '.';
 import { useRouter } from 'vue-router';
-import { teacherSearch } from '@/mocks/reviews';
 import { HttpResponse, http } from 'msw';
+import { TeacherReview } from '.';
+import { render, screen } from '@/test-utils';
+import { teacherSearch } from '@/mocks/reviews';
 import { server } from '@/mocks/server';
 
 vi.mock('vue-router', async () => ({
@@ -31,7 +31,7 @@ describe('<TeacherReview />', () => {
       },
     } as unknown as ReturnType<typeof useRouter>);
   });
-  test('fetching teacher error toaster', async () => {
+  it('fetching teacher error toaster', async () => {
     server.use(
       http.get(`*/reviews/teachers/*`, () =>
         HttpResponse.json(null, { status: 500 }),

@@ -1,11 +1,11 @@
-import { render, screen, userEvent, waitFor } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { SingleComment } from '.';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { comments } from '@/mocks/reviews';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 
 describe('<SingleComment />', () => {
-  test('render Comment, give like and recommendation, them remove like and recomendation', async () => {
+  it('render Comment, give like and recommendation, them remove like and recomendation', async () => {
     server.use(
       http.post(`*/reactions/*`, () => HttpResponse.json(), {
         once: true,
@@ -56,7 +56,7 @@ describe('<SingleComment />', () => {
       expect(screen.getByText('150')).toBeInTheDocument();
     });
   });
-  test('render Comment, give like and recommendation and show error toaster', async () => {
+  it('render Comment, give like and recommendation and show error toaster', async () => {
     server.use(
       http.post(
         `*/reactions/*`,
@@ -121,7 +121,7 @@ describe('<SingleComment />', () => {
       await screen.findByText('Reaction recommendation error'),
     ).toBeInTheDocument();
   });
-  test('render Comment, remove like and recommendation and show error toaster', async () => {
+  it('render Comment, remove like and recommendation and show error toaster', async () => {
     server.use(
       http.delete(
         `*/reactions/*`,

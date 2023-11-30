@@ -1,9 +1,9 @@
-import { render, screen } from '@/test-utils';
 import { PendingReviewEnrollment } from '.';
+import { render, screen } from '@/test-utils';
 import { enrollments } from '@/mocks/enrollments';
 
 describe('<PendingReviewEnrollment />', () => {
-  test('render the Pending Review Enrollment with a theorical only subject', async () => {
+  it('render the Pending Review Enrollment with a theorical only subject', async () => {
     render(PendingReviewEnrollment, {
       props: {
         enrollment: enrollments[1],
@@ -14,7 +14,7 @@ describe('<PendingReviewEnrollment />', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('teoria')).toBeInTheDocument();
   });
-  test('render the Pending Review Enrollment with a pratical only subject', async () => {
+  it('render the Pending Review Enrollment with a pratical only subject', async () => {
     render(PendingReviewEnrollment, {
       props: {
         enrollment: enrollments[30],
@@ -25,7 +25,7 @@ describe('<PendingReviewEnrollment />', () => {
     ).toBeInTheDocument();
     expect(screen.getByText('prática')).toBeInTheDocument();
   });
-  test('render the Pending Review Enrollment with a theorical and pratical subject', async () => {
+  it('render the Pending Review Enrollment with a theorical and pratical subject', async () => {
     render(PendingReviewEnrollment, {
       props: {
         enrollment: enrollments[0],

@@ -1,22 +1,22 @@
-import { render, screen, userEvent } from '@/test-utils';
+import { getSeason, prettifySeason } from 'utils';
 import { StatsView } from '.';
+import { render, screen, userEvent } from '@/test-utils';
 import {
+  classes,
+  classesPage1,
   courseNames,
   courses,
   overview,
-  classes,
-  classesPage1,
-  usage,
   subjects,
+  usage,
 } from '@/mocks/stats';
-import { getSeason, prettifySeason } from 'utils';
 
 describe('<StatsView />', () => {
-  test('render loading', () => {
+  it('render loading', () => {
     render(StatsView);
     expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
   });
-  test('render overview info', async () => {
+  it('render overview info', async () => {
     render(StatsView);
     expect(
       await screen.findByText('Alunos usando a extensão'),
@@ -25,12 +25,12 @@ describe('<StatsView />', () => {
     expect(screen.getByText('Professores')).toBeInTheDocument();
     expect(screen.getByText('Vagas que sobraram')).toBeInTheDocument();
     expect(screen.getByText(usage.currentAlunos)).toBeInTheDocument();
-    expect(screen.getByText('/' + usage.totalAlunos)).toBeInTheDocument();
+    expect(screen.getByText(`/${usage.totalAlunos}`)).toBeInTheDocument();
     expect(screen.getByText(usage.subjects)).toBeInTheDocument();
     expect(screen.getByText(usage.teachers)).toBeInTheDocument();
     expect(screen.getByText(-overview.data[0].deficit)).toBeInTheDocument();
   });
-  test('render classes table', async () => {
+  it('render classes table', async () => {
     render(StatsView);
     expect(
       await screen.findByText(
@@ -50,7 +50,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(classes.data[0].ratio.toFixed(2)).length,
     ).toBeGreaterThan(0);
   });
-  test('render classes table load more', async () => {
+  it('render classes table load more', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -90,7 +90,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(classesPage1.data[0].ratio.toFixed(2)).length,
     ).toBeGreaterThan(0);
   });
-  test('render courses table', async () => {
+  it('render courses table', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -114,7 +114,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(courses.data[0].ratio.toFixed(2)).length,
     ).toBeGreaterThan(0);
   });
-  test('render subjects table', async () => {
+  it('render subjects table', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -140,7 +140,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(subjects.data[0].ratio.toFixed(2)).length,
     ).toBeGreaterThan(0);
   });
-  test('change order by', async () => {
+  it('change order by', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -161,7 +161,7 @@ describe('<StatsView />', () => {
     await user.click(screen.getAllByText('Deficit')[0]);
     expect(screen.getAllByText('Deficit')).toHaveLength(3);
   });
-  test('change season by', async () => {
+  it('change season by', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -177,7 +177,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(prettifySeason('2020:1')).length,
     ).toBeGreaterThan(0);
   });
-  test('change period', async () => {
+  it('change period', async () => {
     const user = userEvent.setup();
 
     render(StatsView);

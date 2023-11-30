@@ -1,9 +1,9 @@
-import { render, screen, userEvent, waitFor } from '@/test-utils';
-import { SignUpView } from '.';
-import { user as mockedUser } from '@/mocks/users';
 import * as vuetify from 'vuetify';
-import { server } from '@/mocks/server';
 import { HttpResponse, http } from 'msw';
+import { SignUpView } from '.';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
+import { user as mockedUser } from '@/mocks/users';
+import { server } from '@/mocks/server';
 import { useAuth } from '@/stores/useAuth';
 
 describe('<SignUpView />', () => {
@@ -18,7 +18,7 @@ describe('<SignUpView />', () => {
   afterEach(() => {
     useAuth.setState(originalUseAuthValue);
   });
-  test('render sign up page', () => {
+  it('render sign up page', () => {
     render(SignUpView, {
       global: {
         stubs: ['router-link'],
@@ -32,8 +32,8 @@ describe('<SignUpView />', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/O que você faz na UFABC\?/)).toBeInTheDocument();
   });
-  test('logout when click to change account', async () => {
-    const user = await userEvent.setup();
+  it('logout when click to change account', async () => {
+    const user = userEvent.setup();
     render(SignUpView, {
       global: {
         stubs: ['router-link'],
@@ -47,7 +47,7 @@ describe('<SignUpView />', () => {
       expect(useAuth.getState().user).toBeNull();
     });
   });
-  test('render sm and down screen', async () => {
+  it('render sm and down screen', async () => {
     vi.spyOn(vuetify, 'useDisplay').mockImplementation(
       () =>
         ({
@@ -66,8 +66,8 @@ describe('<SignUpView />', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/O que você faz na UFABC\?/)).toBeInTheDocument();
   });
-  test('fill form as teacher', async () => {
-    const user = await userEvent.setup();
+  it('fill form as teacher', async () => {
+    const user = userEvent.setup();
     render(SignUpView, {
       global: {
         stubs: ['router-link'],
@@ -78,8 +78,8 @@ describe('<SignUpView />', () => {
 
     expect(screen.getByText(/Estamos trabalhando nisso!/i)).toBeInTheDocument();
   });
-  test('fill form as student', async () => {
-    const user = await userEvent.setup();
+  it('fill form as student', async () => {
+    const user = userEvent.setup();
     render(SignUpView, {
       global: {
         stubs: ['router-link'],
@@ -111,7 +111,9 @@ describe('<SignUpView />', () => {
       await screen.findByText(/Os campos RA devem ser iguais/),
     ).toBeInTheDocument();
   });
-  test('fill form as student', async () => {
+
+  // eslint-disable-next-line test/no-identical-title
+  it('fill form as student', async () => {
     const user = await userEvent.setup();
     render(SignUpView, {
       global: {
@@ -159,14 +161,15 @@ describe('<SignUpView />', () => {
       await screen.findByText(/Email reenviado com sucesso/),
     ).toBeInTheDocument();
   });
-  test('fill form as student but get error when submit form', async () => {
+
+  it('fill form as student but get error when submit form', async () => {
     server.use(
       http.put('*/users/complete', () =>
         HttpResponse.json({ error: 'Erro ao se cadastrar' }, { status: 500 }),
       ),
     );
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
     render(SignUpView, {
       global: {
         stubs: ['router-link'],
@@ -201,14 +204,15 @@ describe('<SignUpView />', () => {
 
     expect(await screen.findByText(/Erro ao se cadastrar/)).toBeInTheDocument();
   });
-  test('fill form as student and get error to resend email', async () => {
+
+  it('fill form as student and get error to resend email', async () => {
     server.use(
       http.post('*/users/me/resend', () =>
         HttpResponse.json({ error: 'Erro ao reenviar email' }, { status: 500 }),
       ),
     );
 
-    const user = await userEvent.setup();
+    const user = userEvent.setup();
     render(SignUpView, {
       global: {
         stubs: ['router-link'],

@@ -1,6 +1,6 @@
-import { render, screen } from '@/test-utils';
-import { ReviewsView } from '.';
 import { useRouter } from 'vue-router';
+import { ReviewsView } from '.';
+import { render, screen } from '@/test-utils';
 import { subjectSearch } from '@/mocks/reviews';
 
 vi.mock('vue-router', async () => ({
@@ -32,7 +32,7 @@ describe('<ReviewsView />', () => {
     } as unknown as ReturnType<typeof useRouter>);
   });
 
-  test('render reviews', async () => {
+  it('render reviews', async () => {
     render(ReviewsView);
 
     expect(
@@ -47,7 +47,7 @@ describe('<ReviewsView />', () => {
       await screen.findByText(/Seus professores para avaliar/i),
     ).toBeInTheDocument();
   });
-  test('render subject search', async () => {
+  it('render subject search', async () => {
     vi.mocked(useRouter).mockReturnValue({
       useRouter: vi.fn(),
       createRouter: vi.fn(() => ({

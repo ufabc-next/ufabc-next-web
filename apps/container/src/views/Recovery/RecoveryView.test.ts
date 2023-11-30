@@ -1,8 +1,8 @@
-import { render, screen, userEvent } from '@/test-utils';
-import { RecoveryView } from '.';
 import { useRouter } from 'vue-router';
-import { user as mockedUser } from '@/mocks/users';
 import { HttpResponse, http } from 'msw';
+import { RecoveryView } from '.';
+import { render, screen, userEvent } from '@/test-utils';
+import { user as mockedUser } from '@/mocks/users';
 import { server } from '@/mocks/server';
 
 vi.mock('vue-router', async () => ({
@@ -21,13 +21,17 @@ describe('<RecoveryView />', () => {
     } as unknown as ReturnType<typeof useRouter>);
   });
 
-  test('render recovery', () => {
+  it('render recovery', () => {
     render(RecoveryView);
     expect(screen.getByAltText(/logo do UFABC Next/i)).toBeInTheDocument();
-    expect(screen.getByAltText(/Imagem minimalista de dois estudantes/i)).toBeInTheDocument();
-    expect(screen.getByRole('textbox', { name: /Insira seu email institucional/i })).toBeInTheDocument();
+    expect(
+      screen.getByAltText(/Imagem minimalista de dois estudantes/i),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('textbox', { name: /Insira seu email institucional/i }),
+    ).toBeInTheDocument();
   });
-  test('click go back button', async () => {
+  it('click go back button', async () => {
     const user = await userEvent.setup();
     render(RecoveryView);
 
@@ -35,7 +39,7 @@ describe('<RecoveryView />', () => {
 
     expect(useRouter().go).toHaveBeenCalledWith(-1);
   });
-  test('should submit recovery form', async () => {
+  it('should submit recovery form', async () => {
     const user = await userEvent.setup();
     render(RecoveryView);
 
@@ -54,7 +58,7 @@ describe('<RecoveryView />', () => {
 
     expect(window.location.pathname).toBe('/');
   });
-  test('should submit and show error', async () => {
+  it('should submit and show error', async () => {
     server.use(
       http.post(`*/users/me/recover`, () =>
         HttpResponse.json({ error: 'error' }, { status: 500 }),

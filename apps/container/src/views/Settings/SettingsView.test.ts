@@ -1,8 +1,8 @@
-import { render, screen, userEvent, waitFor } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { SettingsView } from '.';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { user as mockedUser } from '@/mocks/users';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 import { useAuth } from '@/stores/useAuth';
 
 describe('<SettingsView />', () => {
@@ -17,11 +17,11 @@ describe('<SettingsView />', () => {
   afterEach(() => {
     useAuth.setState(originalUseAuthValue);
   });
-  test('render settings loading when user info not loaded', () => {
+  it('render settings loading when user info not loaded', () => {
     render(SettingsView);
     expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
   });
-  test('render user info', async () => {
+  it('render user info', async () => {
     render(SettingsView);
     expect(
       await screen.findByText(mockedUser.email.replace(/(.*)@.*/, '$1')),
@@ -38,7 +38,7 @@ describe('<SettingsView />', () => {
       ),
     ).toBeInTheDocument();
   });
-  test('render user without associated accounts', async () => {
+  it('render user without associated accounts', async () => {
     server.use(
       http.get(/.*\/users\/info/, () =>
         HttpResponse.json({
@@ -57,7 +57,7 @@ describe('<SettingsView />', () => {
       await screen.findByText('Associar à uma conta do Google'),
     ).toBeInTheDocument();
   });
-  test('deactivate user', async () => {
+  it('deactivate user', async () => {
     const user = userEvent.setup();
 
     render(SettingsView);
@@ -73,7 +73,7 @@ describe('<SettingsView />', () => {
       expect(useAuth.getState().user).toBeNull();
     });
   });
-  test('show toast if error when deactivate user', async () => {
+  it('show toast if error when deactivate user', async () => {
     const user = userEvent.setup();
 
     render(SettingsView);
@@ -85,7 +85,9 @@ describe('<SettingsView />', () => {
     expect(useAuth.getState().user).not.toBeNull();
     user.click(screen.getByRole('button', { name: 'Excluir conta' }));
   });
-  test('show toast if error when deactivate user', async () => {
+
+  // eslint-disable-next-line test/no-identical-title
+  it('show toast if error when deactivate user', async () => {
     server.use(
       http.delete(/.*\/users\/me\/delete/, () => HttpResponse.error()),
     );

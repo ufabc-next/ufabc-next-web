@@ -1,32 +1,32 @@
-import { render, screen, userEvent } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { HistoryView } from '.';
+import { render, screen, userEvent } from '@/test-utils';
 import { enrollments } from '@/mocks/enrollments';
 import { server } from '@/mocks/server';
-import { http, HttpResponse } from 'msw';
 
 describe('<CenteredLoading />', () => {
-  test('show subjects table', async () => {
+  it('show subjects table', async () => {
     render(HistoryView);
     expect(
       await screen.findByText(enrollments[0].disciplina),
     ).toBeInTheDocument();
     expect(screen.getByText(/disciplinas cursadas/i)).toBeInTheDocument();
   });
-  test('show install extension warning if 0 enrollments', async () => {
+  it('show install extension warning if 0 enrollments', async () => {
     server.use(http.get(`*/enrollments`, () => HttpResponse.json([])));
     render(HistoryView);
     expect(
       await screen.findByText(/É necessário instalar a/i),
     ).toBeInTheDocument();
   });
-  test('show install extension warning if only 1 enrollment', async () => {
+  it('show install extension warning if only 1 enrollment', async () => {
     server.use(
       http.get(`*/enrollments`, () => HttpResponse.json([enrollments[0]])),
     );
     render(HistoryView);
     expect(await screen.findByText(/disciplina cursada/i)).toBeInTheDocument();
   });
-  test('show alert error if 5xx request happens', async () => {
+  it('show alert error if 5xx request happens', async () => {
     server.use(
       http.get(`*/users/info`, () => HttpResponse.json(null, { status: 500 })),
     );
@@ -40,7 +40,7 @@ describe('<CenteredLoading />', () => {
       ),
     ).toBeInTheDocument();
   });
-  test('open extension dialog when click on extension button then close it', async () => {
+  it('open extension dialog when click on extension button then close it', async () => {
     const user = userEvent.setup();
 
     render(HistoryView);

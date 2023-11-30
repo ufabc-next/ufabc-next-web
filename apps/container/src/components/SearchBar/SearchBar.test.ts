@@ -1,9 +1,9 @@
-import { render, screen, userEvent } from '@/test-utils';
-import { SearchBar } from '.';
 import { useRouter } from 'vue-router';
+import { HttpResponse, http } from 'msw';
+import { SearchBar } from '.';
+import { render, screen, userEvent } from '@/test-utils';
 import { subjectSearch, teacherSearch } from '@/mocks/reviews';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 
 vi.mock('vue-router', async () => ({
   useRouter: vi.fn(),
@@ -29,7 +29,7 @@ describe('<SearchBar />', () => {
     } as unknown as ReturnType<typeof useRouter>);
   });
 
-  test('type must replace current route', async () => {
+  it('type must replace current route', async () => {
     render(SearchBar);
     await userEvent.type(
       await screen.findByPlaceholderText(
@@ -42,7 +42,7 @@ describe('<SearchBar />', () => {
       query: { q: 'teste' },
     });
   });
-  test('render SearchBar, type something, and click on teacher result', async () => {
+  it('render SearchBar, type something, and click on teacher result', async () => {
     vi.mocked(useRouter).mockReturnValue({
       replace: replaceMock,
       currentRoute: {
@@ -68,10 +68,13 @@ describe('<SearchBar />', () => {
     );
     expect(replaceMock).toHaveBeenCalledWith({
       name: 'reviews',
-      query: { q: teacherSearch.data[0].name, teacherId: teacherSearch.data[0]._id },
+      query: {
+        q: teacherSearch.data[0].name,
+        teacherId: teacherSearch.data[0]._id,
+      },
     });
   });
-  test('render SearchBar, type something, and click on subject result', async () => {
+  it('render SearchBar, type something, and click on subject result', async () => {
     vi.mocked(useRouter).mockReturnValue({
       replace: replaceMock,
       currentRoute: {
@@ -97,13 +100,20 @@ describe('<SearchBar />', () => {
     );
     expect(replaceMock).toHaveBeenCalledWith({
       name: 'reviews',
-      query: { q: subjectSearch.data[0].name, subjectId: subjectSearch.data[0]._id },
+      query: {
+        q: subjectSearch.data[0].name,
+        subjectId: subjectSearch.data[0]._id,
+      },
     });
   });
-  test('show Error Teachers and Error Subjects toasters', async () => {
+  it('show Error Teachers and Error Subjects toasters', async () => {
     server.use(
-      http.get(`*/teachers/search`, () => HttpResponse.json(null, { status: 500 })),
-      http.get(`*/subjects/search`, () => HttpResponse.json(null, { status: 500 })),
+      http.get(`*/teachers/search`, () =>
+        HttpResponse.json(null, { status: 500 }),
+      ),
+      http.get(`*/subjects/search`, () =>
+        HttpResponse.json(null, { status: 500 }),
+      ),
     );
     vi.mocked(useRouter).mockReturnValue({
       replace: replaceMock,

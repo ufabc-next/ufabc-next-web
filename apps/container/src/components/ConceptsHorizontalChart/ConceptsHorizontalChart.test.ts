@@ -1,9 +1,9 @@
-import { render, screen } from '@/test-utils';
 import { ConceptsHorizontalChart } from '.';
+import { render, screen } from '@/test-utils';
 import { subjectInfo } from '@/mocks/reviews';
 
 describe('<ConceptsHorizontalChart />', () => {
-  test('render Concepts Horizontal Chart with regular found teacher', async () => {
+  it('render Concepts Horizontal Chart with regular found teacher', async () => {
     render(ConceptsHorizontalChart, {
       props: {
         gradeData: subjectInfo.specific[2],
@@ -26,7 +26,7 @@ describe('<ConceptsHorizontalChart />', () => {
     ).toBeInTheDocument();
   });
 
-  test('render Concepts Horizontal Chart with untrustable threshold ', async () => {
+  it('render Concepts Horizontal Chart with untrustable threshold ', async () => {
     render(ConceptsHorizontalChart, {
       props: {
         gradeData: subjectInfo.specific[1],
