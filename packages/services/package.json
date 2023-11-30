@@ -10,7 +10,6 @@
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {
-    "eslint-config-custom": "workspace:*",
     "tsconfig": "workspace:*",
     "typescript": "^5.2.2"
   },
