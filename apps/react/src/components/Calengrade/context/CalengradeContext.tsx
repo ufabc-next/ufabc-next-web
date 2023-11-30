@@ -1,4 +1,9 @@
-import { createContext, PropsWithChildren, useContext, useState } from 'react';
+import {
+  type PropsWithChildren,
+  createContext,
+  useContext,
+  useState,
+} from 'react';
 
 export type Classes = {
   title: string | null;
@@ -79,4 +84,5 @@ export const CalengradeProvider = ({ children }: PropsWithChildren) => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useCalengradeContext = () => useContext(CalengradeContext);
