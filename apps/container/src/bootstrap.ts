@@ -1,19 +1,16 @@
 import { createApp } from 'vue';
-import App from './App.vue';
-import router from './router';
 
 import {
-  VueQueryPlugin,
   QueryClient as QueryClientVue,
+  VueQueryPlugin,
 } from '@tanstack/vue-query';
-import client from './queryClient';
 
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import 'vuetify/styles';
 
-import elementPlus, { ElMessage } from 'element-plus';
+import elementPlus, { type ElMessage } from 'element-plus';
 import 'element-plus/dist/index.css';
 
 import '@mdi/font/css/materialdesignicons.css';
@@ -21,9 +18,13 @@ import '@mdi/font/css/materialdesignicons.css';
 import HighchartsVue from 'highcharts-vue';
 import Highcharts from 'highcharts';
 import annotationsInit from 'highcharts/modules/annotations';
-import accessibility from "highcharts/modules/accessibility";
-import { QueryClient } from '@tanstack/query-core';
+import accessibility from 'highcharts/modules/accessibility';
+import type { QueryClient } from '@tanstack/query-core';
+
+import client from './queryClient';
+import router from './router';
 import { theme } from './theme';
+import App from './App.vue';
 
 accessibility(Highcharts);
 annotationsInit(Highcharts);
@@ -67,6 +68,5 @@ createApp(App)
   .use(VueQueryPlugin, {
     queryClient,
   })
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   .use(HighchartsVue as any)
   .mount('#app');

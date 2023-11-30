@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { defineAsyncComponent, h } from 'vue';
-import { MFLoading } from '@/components/MFLoading';
-import { MFError } from '@/components/MFError';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { MFLoading } from '@/components/MFLoading';
+import { MFError } from '@/components/MFError';
 
 export function defineFederatedReactComponent({
   loader = async () => ({ default: null }),
