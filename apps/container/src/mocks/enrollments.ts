@@ -1,4 +1,4 @@
-import { Enrollment } from 'types';
+import type { Enrollment } from 'types';
 
 export const enrollments: Enrollment[] = [
   {
