@@ -1,100 +1,14 @@
-<template>
-  <FeedbackAlert
-    v-if="isFetchingTeacherEnrollmentError || teacherIdError"
-    text="Erro ao carregar as informações do professor desta disciplina"
-  />
-  <v-dialog v-model="showDialog" maxWidth="1200">
-    <PaperCard>
-      <div class="w-100 d-flex justify-end">
-        <v-btn
-          @click="showDialog = false"
-          variant="tonal"
-          icon="mdi-window-close"
-          aria-label="Fechar"
-        />
-      </div>
-      <v-container class="pa-0 my-2" style="max-width: none">
-        <v-row class="ma-0">
-          <v-col class="pa-0 pb-5 pa-sm-3" cols="12" md="5">
-            <p class="text-h4 font-weight-bold text-primary mb-2">
-              {{ teacherName }}
-            </p>
-            <p>
-              <span class="item-name"> Disciplina:</span>
-              {{ enrollment?.subject.name }}
-            </p>
-            <div class="d-flex align-center">
-              <span class="item-name"> Conceito:</span>
-              <div
-                class="text-white d-flex align-center justify-center rounded ml-1"
-                :style="
-                  enrollment?.conceito &&
-                  `background-color:${
-                    conceptsColor[enrollment.conceito]
-                  }; width: 20px; height: 20px;`
-                "
-              >
-                {{ enrollment?.conceito }}
-              </div>
-              <span class="font-weight-bold ml-1"></span>
-            </div>
-            <v-chip
-              v-for="tag in tags"
-              :key="tag"
-              density="compact"
-              class="px-2 mr-1 rounded-sm"
-              style="font-size: 12px"
-            >
-              {{ tag }}
-            </v-chip>
-            <p class="text-subtitle-1 pt-3">Seu comentário:</p>
-            <v-textarea
-              v-model="userCommentMessage"
-              variant="solo"
-              placeholder="Faça aqui um comentário em relação ao docente e sua disciplina."
-              rows="3"
-              max-rows="5"
-              no-resize
-              auto-grow
-              :loading="isFetchingTeacherEnrollment"
-            />
-            <div class="w-100 d-flex justify-end">
-              <v-btn
-                @click="submit"
-                color="primary"
-                :disabled="disableMutateComment"
-                :loading="isCreatingComment || isUpdatingComment"
-              >
-                {{ hasUserComment ? 'Atualizar comentário' : 'Enviar' }}
-              </v-btn>
-            </div>
-          </v-col>
-          <v-col v-if="teacherId" class="pa-0 pa-sm-3" cols="12" md="7">
-            <CommentsList
-              :teacherId="teacherId"
-              :selectedSubject="selectedSubject"
-              @update:selectedSubject="selectedSubject = $event"
-            />
-          </v-col>
-        </v-row>
-      </v-container>
-    </PaperCard>
-  </v-dialog>
-</template>
-
 <script setup lang="ts">
-import { PropType, computed, ref } from 'vue';
+import { type PropType, computed, ref, watch } from 'vue';
 import { Comments, Enrollments } from 'services';
 
-import { PaperCard } from '@/components/PaperCard';
 import { conceptsColor } from 'utils';
-import { CommentsList } from '@/components/CommentsList';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
-import { FeedbackAlert } from '@/components/FeedbackAlert';
-import { watch } from 'vue';
 import type { Enrollment } from 'types';
-const selectedSubject = ref<string>('Todas as matérias');
+import { FeedbackAlert } from '@/components/FeedbackAlert';
+import { CommentsList } from '@/components/CommentsList';
+import { PaperCard } from '@/components/PaperCard';
 
 const props = defineProps({
   enrollment: {
@@ -109,6 +23,10 @@ const props = defineProps({
     required: true,
   },
 });
+
+const emit = defineEmits(['update:showDialog']);
+
+const selectedSubject = ref<string>('Todas as matérias');
 
 const enrollmentId = computed(() => props.enrollment?._id || '');
 
@@ -145,7 +63,6 @@ const teacherName = computed(() => {
 
 const subjectId = computed(() => props.enrollment?.subject._id ?? '');
 
-const emit = defineEmits(['update:showDialog']);
 const showDialog = computed({
   get: () => props.showDialog,
   set: (value: boolean) => {
@@ -271,6 +188,90 @@ watch(
   },
 );
 </script>
+
+<template>
+  <FeedbackAlert
+    v-if="isFetchingTeacherEnrollmentError || teacherIdError"
+    text="Erro ao carregar as informações do professor desta disciplina"
+  />
+  <v-dialog v-model="showDialog" max-width="1200">
+    <PaperCard>
+      <div class="w-100 d-flex justify-end">
+        <v-btn
+          variant="tonal"
+          icon="mdi-window-close"
+          aria-label="Fechar"
+          @click="showDialog = false"
+        />
+      </div>
+      <v-container class="pa-0 my-2" style="max-width: none">
+        <v-row class="ma-0">
+          <v-col class="pa-0 pb-5 pa-sm-3" cols="12" md="5">
+            <p class="text-h4 font-weight-bold text-primary mb-2">
+              {{ teacherName }}
+            </p>
+            <p>
+              <span class="item-name"> Disciplina:</span>
+              {{ enrollment?.subject.name }}
+            </p>
+            <div class="d-flex align-center">
+              <span class="item-name"> Conceito:</span>
+              <div
+                class="text-white d-flex align-center justify-center rounded ml-1"
+                :style="
+                  enrollment?.conceito &&
+                  `background-color:${
+                    conceptsColor[enrollment.conceito]
+                  }; width: 20px; height: 20px;`
+                "
+              >
+                {{ enrollment?.conceito }}
+              </div>
+              <span class="font-weight-bold ml-1"></span>
+            </div>
+            <v-chip
+              v-for="tag in tags"
+              :key="tag"
+              density="compact"
+              class="px-2 mr-1 rounded-sm"
+              style="font-size: 12px"
+            >
+              {{ tag }}
+            </v-chip>
+            <p class="text-subtitle-1 pt-3">Seu comentário:</p>
+            <v-textarea
+              v-model="userCommentMessage"
+              variant="solo"
+              placeholder="Faça aqui um comentário em relação ao docente e sua disciplina."
+              rows="3"
+              max-rows="5"
+              no-resize
+              auto-grow
+              :loading="isFetchingTeacherEnrollment"
+            />
+            <div class="w-100 d-flex justify-end">
+              <v-btn
+                color="primary"
+                :disabled="disableMutateComment"
+                :loading="isCreatingComment || isUpdatingComment"
+                @click="submit"
+              >
+                {{ hasUserComment ? 'Atualizar comentário' : 'Enviar' }}
+              </v-btn>
+            </div>
+          </v-col>
+          <v-col v-if="teacherId" class="pa-0 pa-sm-3" cols="12" md="7">
+            <CommentsList
+              :teacher-id="teacherId"
+              :selected-subject="selectedSubject"
+              @update:selected-subject="selectedSubject = $event"
+            />
+          </v-col>
+        </v-row>
+      </v-container>
+    </PaperCard>
+  </v-dialog>
+</template>
 
 <style scoped>
 .item-name {

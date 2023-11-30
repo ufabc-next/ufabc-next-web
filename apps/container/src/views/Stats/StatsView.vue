@@ -1,8 +1,5 @@
 <template>
-  <CenteredLoading
-    class="mt-10"
-    v-if="isPendingUsage || isPendingDeficit || subjects.isLoading.value"
-  />
+  <CenteredLoading class="mt-10" v-if="isPendingUsage || isPendingDeficit || subjects.isLoading.value" />
   <div v-else>
     <PaperCard>
       <v-menu transition="slide-y-transition">
@@ -17,34 +14,17 @@
           </div>
         </template>
         <v-list>
-          <v-list-item
-            v-for="season in elapsedSeasons"
-            :key="season"
-            @click="changeSelectedSeason(season)"
-          >
+          <v-list-item v-for="season in elapsedSeasons" :key="season" @click="changeSelectedSeason(season)">
             <v-list-item-title>{{ prettifySeason(season) }}</v-list-item-title>
           </v-list-item>
         </v-list>
       </v-menu>
     </PaperCard>
     <v-row align="stretch" no-gutters class="w-100 mt-4">
-      <v-col
-        v-for="card in cards"
-        :key="card.title"
-        cols="12"
-        sm="3"
-        class="mb-2 mb-sm-0"
-      >
-        <PerformanceCard
-          :title="card.title"
-          :subTitle="card.subtitle"
-          :description="card.content"
-          :color="card.color"
-          :icon="card.icon"
-          :progressBarValue="card.progressBarValue"
-          :progressBarMaxValue="card.progressBarMaxValue"
-          :tooltip="card.tooltip"
-        >
+      <v-col v-for="card in cards" :key="card.title" cols="12" sm="3" class="mb-2 mb-sm-0">
+        <PerformanceCard :title="card.title" :subTitle="card.subtitle" :description="card.content" :color="card.color"
+          :icon="card.icon" :progressBarValue="card.progressBarValue" :progressBarMaxValue="card.progressBarMaxValue"
+          :tooltip="card.tooltip">
         </PerformanceCard>
       </v-col>
     </v-row>
@@ -55,15 +35,9 @@
         <el-tab-pane label="Disciplinas" name="subjects"></el-tab-pane>
       </el-tabs>
 
-      <div
-        class="d-flex justify-space-between flex-column flex-md-row align-md-center mb-4"
-      >
+      <div class="d-flex justify-space-between flex-column flex-md-row align-md-center mb-4">
         <p>{{ total }} resultados encontrados</p>
-        <el-checkbox-group
-          v-model="filterByPeriod"
-          style="min-width: 200px"
-          class="my-2 my-md-0"
-        >
+        <el-checkbox-group v-model="filterByPeriod" style="min-width: 200px" class="my-2 my-md-0">
           <el-checkbox label="diurno">Matutino</el-checkbox>
           <el-checkbox label="noturno">Noturno</el-checkbox>
         </el-checkbox-group>
@@ -82,11 +56,7 @@
             </div>
           </template>
           <v-list>
-            <v-list-item
-              v-for="(item, index) in orderByOptions"
-              @click="changeOrderBy(item)"
-              :key="item"
-            >
+            <v-list-item v-for="(item, index) in orderByOptions" @click="changeOrderBy(item)" :key="item">
               <v-list-item-title>{{
                 orderByOptionsLabel[index]
               }}</v-list-item-title>
@@ -95,13 +65,8 @@
         </v-menu>
       </div>
 
-      <el-table
-        empty-text="Nenhum dado encontrado"
-        ref="disciplinas"
-        v-loading="isLoadingCurrentInfo"
-        :data="disciplinas"
-        style="width: 100%"
-      >
+      <el-table empty-text="Nenhum dado encontrado" ref="disciplinas" v-loading="isLoadingCurrentInfo" :data="disciplinas"
+        style="width: 100%">
         <el-table-column fixed="left" min-width="200" label="Nome">
           <template #default="scope">
             {{ matriculaNameLabel(scope.row) }}
@@ -109,36 +74,17 @@
         </el-table-column>
         <el-table-column prop="vagas" label="Vagas" align="center" width="150">
         </el-table-column>
-        <el-table-column
-          prop="requisicoes"
-          label="Requisições"
-          align="center"
-          width="150"
-        >
+        <el-table-column prop="requisicoes" label="Requisições" align="center" width="150">
         </el-table-column>
-        <el-table-column
-          prop="deficit"
-          label="Deficit"
-          align="center"
-          width="150"
-        >
+        <el-table-column prop="deficit" label="Deficit" align="center" width="150">
         </el-table-column>
-        <el-table-column
-          prop="ratio"
-          label="Pessoas por vaga"
-          align="center"
-          width="160"
-        >
+        <el-table-column prop="ratio" label="Pessoas por vaga" align="center" width="160">
           <template #default="scope">
             {{ scope.row.ratio.toFixed(2) }}
           </template>
         </el-table-column>
       </el-table>
-      <el-button
-        v-if="hasMoreItems"
-        @click="fetchMoreItems()"
-        class="w-100 mt-2"
-      >
+      <el-button v-if="hasMoreItems" @click="fetchMoreItems()" class="w-100 mt-2">
         Carregar mais <i class="el-icon-arrow-down el-icon-right"></i>
       </el-button>
     </PaperCard>

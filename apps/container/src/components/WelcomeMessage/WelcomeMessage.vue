@@ -49,5 +49,3 @@
   margin-top: 0;
 }
 </style>
-
-<script lang="ts" setup />
