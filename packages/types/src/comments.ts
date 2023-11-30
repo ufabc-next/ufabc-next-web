@@ -1,4 +1,4 @@
-import { Concept } from './concepts';
+import type { Concept } from './concepts';
 
 export type Comment = {
   _id: string;

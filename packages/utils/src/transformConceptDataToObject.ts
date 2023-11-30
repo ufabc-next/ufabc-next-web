@@ -1,4 +1,4 @@
-import { ConceptData } from 'types';
+import type { ConceptData } from 'types';
 
 export const transformConceptDataToObject = (grades: ConceptData[]) => {
   const result: Record<string, number> = {};
