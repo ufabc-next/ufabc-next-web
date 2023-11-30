@@ -10,12 +10,13 @@
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
-    "tsconfig": "*",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "stores": "*",
-    "types": "*"
+    "axios": "1.6.2",
+    "stores": "workspace:*",
+    "types": "workspace:*"
   }
 }

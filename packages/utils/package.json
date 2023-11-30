@@ -10,11 +10,12 @@
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
-    "tsconfig": "*",
+    "eslint-config-custom": "workspace:*",
+    "tsconfig": "workspace:*",
     "typescript": "^5.2.2"
   },
   "dependencies": {
-    "types": "*"
+    "dayjs": "^1.11.10",
+    "types": "workspace:*"
   }
 }
