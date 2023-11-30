@@ -191,9 +191,7 @@ const mapTurnoLabel = (turno: NonNullable<StatsParams['turno']>) => {
 };
 
 const matriculaNameLabel = (data: StatsClass | StatsSubject | StatsCourse) => {
-  if (!data) {
-    return;
-  }
+  if (!data) return;
   if (tab.value === 'courses') {
     return mapCourseName((data as StatsCourse)._id);
   }
