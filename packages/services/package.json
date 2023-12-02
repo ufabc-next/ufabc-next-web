@@ -1,5 +1,5 @@
 {
-  "name": "services",
+  "name": "@next/services",
   "type": "module",
   "version": "0.0.0",
   "license": "MIT",
@@ -10,12 +10,12 @@
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "axios": "1.6.2",
-    "stores": "workspace:*",
-    "types": "workspace:*"
+    "@next/stores": "workspace:*",
+    "@next/types": "workspace:*",
+    "axios": "1.6.2"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
+    "@next/tsconfig": "workspace:*",
     "typescript": "^5.2.2"
   }
 }

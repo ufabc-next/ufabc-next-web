@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMutation } from '@tanstack/vue-query';
 
-import { Users } from 'services';
+import { Users } from '@next/services';
 import { z } from 'zod';
 
 import { toTypedSchema } from '@vee-validate/zod';

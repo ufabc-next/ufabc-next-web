@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type PropType, computed, ref } from 'vue';
-import { checkEAD, conceptsColor, formatSeason } from 'utils';
-import type { Enrollment } from 'types';
+import { checkEAD, conceptsColor, formatSeason } from '@next/utils';
+import type { Enrollment } from '@next/types';
 import { ReviewDialog } from '@/components/ReviewDialog';
 
 const props = defineProps({

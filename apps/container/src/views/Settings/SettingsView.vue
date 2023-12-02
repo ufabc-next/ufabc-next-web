@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import { ElMessage } from 'element-plus';
-import { Users, api } from 'services';
+import { Users, api } from '@next/services';
 import { useMutation, useQuery } from '@tanstack/vue-query';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { useAuth } from '@/stores/useAuth';

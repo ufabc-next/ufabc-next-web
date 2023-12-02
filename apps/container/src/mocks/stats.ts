@@ -5,7 +5,7 @@ import type {
   StatsCourse,
   StatsOverview,
   StatsSubject,
-} from 'types';
+} from '@next/types';
 
 export const classes: PageableReturn<StatsClass> = {
   total: 1022,

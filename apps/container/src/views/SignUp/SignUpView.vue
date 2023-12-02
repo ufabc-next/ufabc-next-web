@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue';
 import { useMutation, useQuery } from '@tanstack/vue-query';
-import { Users } from 'services';
+import { Users } from '@next/services';
 import { z } from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useField, useForm } from 'vee-validate';
 import type { AxiosError } from 'axios';
-import type { RequestError } from 'types';
+import type { RequestError } from '@next/types';
 import { ElMessage } from 'element-plus';
 import { useDisplay } from 'vuetify';
 import { useAuth } from '@/stores/useAuth';

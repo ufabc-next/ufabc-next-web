@@ -1,9 +1,9 @@
 <!-- eslint-disable ts/no-non-null-asserted-optional-chain -->
 <script lang="ts" setup>
 import { useQuery } from '@tanstack/vue-query';
-import { Reviews } from 'services';
-import type { Concept, SubjectSpecific } from 'types';
-import { transformConceptDataToObject } from 'utils';
+import { Reviews } from '@next/services';
+import type { Concept, SubjectSpecific } from '@next/types';
+import { transformConceptDataToObject } from '@next/utils';
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 

@@ -2,8 +2,8 @@
 import { computed, ref } from 'vue';
 import { Chart } from 'highcharts-vue';
 import { useQuery } from '@tanstack/vue-query';
-import { type CourseInformation, Performance } from 'services';
-import { formatSeason } from 'utils';
+import { type CourseInformation, Performance } from '@next/services';
+import { formatSeason } from '@next/utils';
 import { PerformanceCard } from '@/components/PerformanceCard';
 import { PaperCard } from '@/components/PaperCard';
 import { theme } from '@/theme';

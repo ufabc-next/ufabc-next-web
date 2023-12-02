@@ -32,6 +32,15 @@ importers:
       '@mdi/font':
         specifier: 7.3.67
         version: 7.3.67
+      '@next/services':
+        specifier: workspace:*
+        version: link:../../packages/services
+      '@next/stores':
+        specifier: workspace:*
+        version: link:../../packages/stores
+      '@next/utils':
+        specifier: workspace:*
+        version: link:../../packages/utils
       '@tanstack/query-core':
         specifier: 5.8.7
         version: 5.8.7
@@ -71,15 +80,6 @@ importers:
       react-dom:
         specifier: 18.2.0
         version: 18.2.0(react@18.2.0)
-      services:
-        specifier: workspace:*
-        version: link:../../packages/services
-      stores:
-        specifier: workspace:*
-        version: link:../../packages/stores
-      utils:
-        specifier: workspace:*
-        version: link:../../packages/utils
       vee-validate:
         specifier: 4.12.0
         version: 4.12.0(vue@3.3.9)
@@ -108,6 +108,12 @@ importers:
       '@babel/preset-env':
         specifier: 7.23.3
         version: 7.23.3(@babel/core@7.23.5)
+      '@next/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
+      '@next/types':
+        specifier: workspace:*
+        version: link:../../packages/types
       '@testing-library/jest-dom':
         specifier: 6.1.4
         version: 6.1.4(vitest@0.34.6)
@@ -162,12 +168,6 @@ importers:
       msw:
         specifier: ^2.0.9
         version: 2.0.9(typescript@5.3.2)
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../packages/tsconfig
-      types:
-        specifier: workspace:*
-        version: link:../../packages/types
       typescript:
         specifier: 5.3.2
         version: 5.3.2
@@ -177,6 +177,12 @@ importers:
 
   apps/react:
     dependencies:
+      '@next/services':
+        specifier: workspace:*
+        version: link:../../packages/services
+      '@next/stores':
+        specifier: workspace:*
+        version: link:../../packages/stores
       '@tanstack/query-core':
         specifier: 5.8.7
         version: 5.8.7
@@ -192,12 +198,6 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.2.0
-      services:
-        specifier: workspace:*
-        version: link:../../packages/services
-      stores:
-        specifier: workspace:*
-        version: link:../../packages/stores
       zustand:
         specifier: ^4.4.6
         version: 4.4.7(@types/react@18.2.38)(react@18.2.0)
@@ -211,6 +211,9 @@ importers:
       '@babel/preset-react':
         specifier: ^7.23.3
         version: 7.23.3(@babel/core@7.23.5)
+      '@next/tsconfig':
+        specifier: workspace:*
+        version: link:../../packages/tsconfig
       '@types/jest':
         specifier: 29.5.10
         version: 29.5.10
@@ -259,9 +262,6 @@ importers:
       ts-loader:
         specifier: ^9.5.1
         version: 9.5.1(typescript@5.3.2)(webpack@5.89.0)
-      tsconfig:
-        specifier: workspace:*
-        version: link:../../packages/tsconfig
       typescript:
         specifier: ^5.3.2
         version: 5.3.2
@@ -280,17 +280,17 @@ importers:
 
   packages/services:
     dependencies:
+      '@next/stores':
+        specifier: workspace:*
+        version: link:../stores
+      '@next/types':
+        specifier: workspace:*
+        version: link:../types
       axios:
         specifier: 1.6.2
         version: 1.6.2
-      stores:
-        specifier: workspace:*
-        version: link:../stores
-      types:
-        specifier: workspace:*
-        version: link:../types
     devDependencies:
-      tsconfig:
+      '@next/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       typescript:
@@ -303,10 +303,10 @@ importers:
         specifier: ^4.4.4
         version: 4.4.7(@types/react@18.2.38)(react@18.2.0)
     devDependencies:
-      tsconfig:
+      '@next/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
-      types:
+      '@next/types':
         specifier: workspace:*
         version: link:../types
       typescript:
@@ -317,7 +317,7 @@ importers:
 
   packages/types:
     devDependencies:
-      tsconfig:
+      '@next/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       typescript:
@@ -326,14 +326,14 @@ importers:
 
   packages/utils:
     dependencies:
+      '@next/types':
+        specifier: workspace:*
+        version: link:../types
       dayjs:
         specifier: ^1.11.10
         version: 1.11.10
-      types:
-        specifier: workspace:*
-        version: link:../types
     devDependencies:
-      tsconfig:
+      '@next/tsconfig':
         specifier: workspace:*
         version: link:../tsconfig
       typescript:

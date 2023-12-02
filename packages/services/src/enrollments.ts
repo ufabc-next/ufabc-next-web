@@ -1,4 +1,4 @@
-import type { Enrollment } from 'types';
+import type { Enrollment } from '@next/types';
 
 import { api } from './api';
 

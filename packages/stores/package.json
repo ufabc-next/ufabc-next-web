@@ -1,5 +1,5 @@
 {
-  "name": "stores",
+  "name": "@next/stores",
   "type": "module",
   "version": "0.0.0",
   "license": "MIT",
@@ -13,8 +13,8 @@
     "zustand": "^4.4.4"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
-    "types": "workspace:*",
+    "@next/tsconfig": "workspace:*",
+    "@next/types": "workspace:*",
     "typescript": "^5.2.2"
   }
 }

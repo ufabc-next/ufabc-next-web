@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { authStore } from 'stores';
+import { authStore } from '@next/stores';
 import { computed, onMounted } from 'vue';
 import create from 'vue-zustand';
 import { ElMessage } from 'element-plus';

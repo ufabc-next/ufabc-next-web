@@ -3,7 +3,7 @@ import {
   createRouter,
   createWebHistory,
 } from 'vue-router';
-import { authStore } from 'stores';
+import { authStore } from '@next/stores';
 
 const ReviewsView = () => import('@/views/Reviews/ReviewsView.vue');
 const PerformanceView = () => import('@/views/Performance/PerformanceView.vue');

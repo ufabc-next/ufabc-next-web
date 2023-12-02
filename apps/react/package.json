@@ -1,5 +1,5 @@
 {
-  "name": "ufabc-next-web-react",
+  "name": "@next/react",
   "version": "1.0.0",
   "license": "AGPL-3.0",
   "engines": {
@@ -15,19 +15,20 @@
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
+    "@next/services": "workspace:*",
+    "@next/stores": "workspace:*",
     "@tanstack/query-core": "5.8.7",
     "@tanstack/react-query": "5.8.7",
     "dayjs": "^1.11.10",
     "ics": "^3.5.0",
     "react": "^18.2.0",
-    "services": "workspace:*",
-    "stores": "workspace:*",
     "zustand": "^4.4.6"
   },
   "devDependencies": {
     "@babel/core": "^7.23.3",
     "@babel/preset-env": "^7.23.3",
     "@babel/preset-react": "^7.23.3",
+    "@next/tsconfig": "workspace:*",
     "@types/jest": "29.5.10",
     "@types/node": "^20.10.0",
     "@types/react": "^18.2.38",
@@ -44,7 +45,6 @@
     "sass-loader": "13.3.2",
     "style-loader": "^3.3.3",
     "ts-loader": "^9.5.1",
-    "tsconfig": "workspace:*",
     "typescript": "^5.3.2",
     "url-loader": "^4.1.1",
     "webpack": "^5.89.0",

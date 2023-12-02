@@ -2,9 +2,14 @@
 import { useMutation } from '@tanstack/vue-query';
 import type { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
-import { Comments } from 'services';
-import type { Comment, RequestError } from 'types';
-import { checkEAD, conceptsColor, dateToTimeAgo, formatSeason } from 'utils';
+import { Comments } from '@next/services';
+import type { Comment, RequestError } from '@next/types';
+import {
+  checkEAD,
+  conceptsColor,
+  dateToTimeAgo,
+  formatSeason,
+} from '@next/utils';
 import { type PropType, computed, onMounted, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 

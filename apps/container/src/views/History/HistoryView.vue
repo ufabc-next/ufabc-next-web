@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
-import { Enrollments, Users } from 'services';
-import type { Concept, Enrollment } from 'types';
+import { Enrollments, Users } from '@next/services';
+import type { Concept, Enrollment } from '@next/types';
 import { computed, ref } from 'vue';
 import {
   checkEAD,
@@ -9,7 +9,7 @@ import {
   extensionURL,
   formatSeason,
   studentRecordURL,
-} from 'utils';
+} from '@next/utils';
 import { ReviewDialog } from '@/components/ReviewDialog';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { PaperCard } from '@/components/PaperCard';
