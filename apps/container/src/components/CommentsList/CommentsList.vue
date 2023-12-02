@@ -2,7 +2,7 @@
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
-import { Comments, Reviews } from 'services';
+import { Comments, Reviews } from '@next/services';
 import { SingleComment } from '@/components/SingleComment';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { FeedbackAlert } from '@/components/FeedbackAlert';

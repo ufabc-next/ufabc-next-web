@@ -3,7 +3,7 @@ import type {
   SearchTeacher,
   SubjectInfo,
   TeacherReview,
-} from 'types';
+} from '@next/types';
 
 import { api } from './api';
 

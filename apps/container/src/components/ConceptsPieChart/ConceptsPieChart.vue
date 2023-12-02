@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { conceptsColor } from 'utils';
+import { conceptsColor } from '@next/utils';
 import { Chart } from 'highcharts-vue';
 import { type PropType, computed } from 'vue';
-import type { Concept } from 'types';
+import type { Concept } from '@next/types';
 
 type Grades = Record<string, number>;
 const props = defineProps({

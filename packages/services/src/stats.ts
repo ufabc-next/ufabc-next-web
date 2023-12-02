@@ -6,7 +6,7 @@ import type {
   StatsOverview,
   StatsSubject,
   StatsUsage,
-} from 'types';
+} from '@next/types';
 
 import { api } from './api';
 

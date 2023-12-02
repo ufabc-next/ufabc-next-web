@@ -2,9 +2,9 @@
 import { useMutation } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
 import { onMounted } from 'vue';
-import { Users } from 'services';
+import { Users } from '@next/services';
 import type { AxiosError } from 'axios';
-import type { RequestError } from 'types';
+import type { RequestError } from '@next/types';
 import { useRouter } from 'vue-router';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { useAuth } from '@/stores/useAuth';

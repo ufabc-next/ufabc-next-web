@@ -3,7 +3,7 @@ import type {
   CreateCommentRequest,
   GetCommentResponse,
   UpdateCommentRequest,
-} from 'types';
+} from '@next/types';
 
 import { api } from './api';
 

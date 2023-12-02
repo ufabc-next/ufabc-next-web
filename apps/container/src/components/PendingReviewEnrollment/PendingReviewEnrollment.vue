@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { type PropType, computed, ref } from 'vue';
-import { checkEAD, conceptsColor, formatSeason } from 'utils';
-import type { Enrollment } from 'types';
+import { checkEAD, conceptsColor, formatSeason } from '@next/utils';
+import type { Enrollment } from '@next/types';
 import { ReviewDialog } from '@/components/ReviewDialog';
 
 const props = defineProps({
@@ -92,7 +92,9 @@ const tags = computed(() => {
       </v-col>
       <v-col cols="12" sm="auto" class="d-flex justify-end align-end pa-0">
         AVALIAR
-        <v-icon class="ml-1"> mdi-plus-circle-outline </v-icon>
+        <v-icon class="ml-1">
+mdi-plus-circle-outline
+</v-icon>
       </v-col>
     </v-row>
   </v-container>

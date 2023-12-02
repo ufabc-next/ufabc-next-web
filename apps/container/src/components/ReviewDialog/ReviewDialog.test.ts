@@ -1,4 +1,4 @@
-import { formatSeason } from 'utils';
+import { formatSeason } from '@next/utils';
 import { HttpResponse, http } from 'msw';
 import { ElMessage } from 'element-plus';
 import { ReviewDialog } from '.';

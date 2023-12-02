@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { Enrollments } from 'services';
+import { Enrollments } from '@next/services';
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
-import type { Enrollment } from 'types';
+import type { Enrollment } from '@next/types';
 import { PendingReviewEnrollment } from '@/components/PendingReviewEnrollment';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { PaperCard } from '@/components/PaperCard';

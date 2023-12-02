@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import { type StatsParams, StatsSubjects } from 'services';
+import { type StatsParams, StatsSubjects } from '@next/services';
 import type {
   PageableReturn,
   StatsClass,
   StatsCourse,
   StatsSubject,
-} from 'types';
+} from '@next/types';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
-import { getElapsedSeasons, getSeason, prettifySeason } from 'utils';
+import { getElapsedSeasons, getSeason, prettifySeason } from '@next/utils';
 import { PaperCard } from '@/components/PaperCard';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { PerformanceCard } from '@/components/PerformanceCard';

@@ -1,4 +1,4 @@
 {
-  "extends": "tsconfig/react.json",
+  "extends": "@next/tsconfig/react.json",
   "include": ["."]
 }

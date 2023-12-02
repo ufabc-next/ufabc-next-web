@@ -1,4 +1,4 @@
-import { getSeason, prettifySeason } from 'utils';
+import { getSeason, prettifySeason } from '@next/utils';
 import { StatsView } from '.';
 import { render, screen, userEvent } from '@/test-utils';
 import {

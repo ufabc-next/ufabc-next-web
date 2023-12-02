@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { useQuery } from '@tanstack/vue-query';
 import debounce from 'lodash.debounce';
-import { Reviews } from 'services';
+import { Reviews } from '@next/services';
 import { computed, onMounted, ref } from 'vue';
-import type { SearchSubjectItem, SearchTeacherItem } from 'types';
+import type { SearchSubjectItem, SearchTeacherItem } from '@next/types';
 import { useRouter } from 'vue-router';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 

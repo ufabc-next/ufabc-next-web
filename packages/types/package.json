@@ -1,5 +1,5 @@
 {
-  "name": "types",
+  "name": "@next/types",
   "type": "module",
   "version": "0.0.0",
   "license": "MIT",
@@ -10,7 +10,7 @@
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {
-    "tsconfig": "workspace:*",
+    "@next/tsconfig": "workspace:*",
     "typescript": "^5.2.2"
   }
 }

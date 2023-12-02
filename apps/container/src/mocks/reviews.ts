@@ -6,7 +6,7 @@ import type {
   SubjectInfo,
   TeacherReview,
   UpdateCommentRequest,
-} from 'types';
+} from '@next/types';
 
 export const subjectInfo = {
   subject: {

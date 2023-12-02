@@ -68,5 +68,6 @@ createApp(App)
   .use(VueQueryPlugin, {
     queryClient,
   })
-  .use(HighchartsVue as unknown)
+  // @ts-expect-error Library types problem
+  .use(HighchartsVue)
   .mount('#app');

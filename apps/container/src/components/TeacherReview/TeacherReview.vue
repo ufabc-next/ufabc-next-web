@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useQuery } from '@tanstack/vue-query';
-import { Reviews } from 'services';
-import { transformConceptDataToObject } from 'utils';
+import { Reviews } from '@next/services';
+import { transformConceptDataToObject } from '@next/utils';
 import { computed, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 import { FeedbackAlert } from '@/components/FeedbackAlert';

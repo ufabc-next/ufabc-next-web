@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { type PropType, computed, ref, watch } from 'vue';
-import { Comments, Enrollments } from 'services';
+import { Comments, Enrollments } from '@next/services';
 
-import { conceptsColor } from 'utils';
+import { conceptsColor } from '@next/utils';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
-import type { Enrollment } from 'types';
+import type { Enrollment } from '@next/types';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { CommentsList } from '@/components/CommentsList';
 import { PaperCard } from '@/components/PaperCard';

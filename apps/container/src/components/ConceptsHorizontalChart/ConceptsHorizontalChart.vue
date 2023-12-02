@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import type { ConceptData, SubjectSpecific } from 'types';
-import { conceptsColor, transformConceptDataToObject } from 'utils';
+import type { ConceptData, SubjectSpecific } from '@next/types';
+import { conceptsColor, transformConceptDataToObject } from '@next/utils';
 import { type PropType, computed } from 'vue';
 
 const props = defineProps({
