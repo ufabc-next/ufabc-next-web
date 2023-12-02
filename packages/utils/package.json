@@ -10,8 +10,8 @@
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
-    "dayjs": "^1.11.10",
-    "@next/types": "workspace:*"
+    "@next/types": "workspace:*",
+    "dayjs": "^1.11.10"
   },
   "devDependencies": {
     "@next/tsconfig": "workspace:*",
