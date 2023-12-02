@@ -1,15 +1,15 @@
-import { render, screen, userEvent } from '@/test-utils';
+import { getSeason, prettifySeason } from 'utils';
 import { StatsView } from '.';
+import { render, screen, userEvent } from '@/test-utils';
 import {
+  classes,
+  classesPage1,
   courseNames,
   courses,
   overview,
-  classes,
-  classesPage1,
-  usage,
   subjects,
+  usage,
 } from '@/mocks/stats';
-import { getSeason, prettifySeason } from 'utils';
 
 describe('<StatsView />', () => {
   test('render loading', () => {
@@ -25,7 +25,7 @@ describe('<StatsView />', () => {
     expect(screen.getByText('Professores')).toBeInTheDocument();
     expect(screen.getByText('Vagas que sobraram')).toBeInTheDocument();
     expect(screen.getByText(usage.currentAlunos)).toBeInTheDocument();
-    expect(screen.getByText('/' + usage.totalAlunos)).toBeInTheDocument();
+    expect(screen.getByText(`/${usage.totalAlunos}`)).toBeInTheDocument();
     expect(screen.getByText(usage.subjects)).toBeInTheDocument();
     expect(screen.getByText(usage.teachers)).toBeInTheDocument();
     expect(screen.getByText(-overview.data[0].deficit)).toBeInTheDocument();

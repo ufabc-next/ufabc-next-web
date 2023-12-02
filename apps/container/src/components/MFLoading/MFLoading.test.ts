@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { MFLoading } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<MFLoading />', () => {
   test('render a loading', () => {

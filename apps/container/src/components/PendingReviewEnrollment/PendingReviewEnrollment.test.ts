@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { PendingReviewEnrollment } from '.';
+import { render, screen } from '@/test-utils';
 import { enrollments } from '@/mocks/enrollments';
 
 describe('<PendingReviewEnrollment />', () => {

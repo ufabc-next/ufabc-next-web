@@ -1,5 +1,5 @@
-import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { AppBar } from '.';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { user as mockedUser } from '@/mocks/users';
 import { useAuth } from '@/stores/useAuth';
 

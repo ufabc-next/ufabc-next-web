@@ -3,7 +3,7 @@ import { useAuth } from '@/stores/useAuth';
 
 /**
  * Composable used by v-avatar (Vuetify component) to pass the initials of the username
- * @returns - user initials with two characteres
+ * @returns - user initials with two characters
  */
 export function useAliasInitials() {
   const { user } = useAuth();

@@ -1,158 +1,11 @@
-<template>
-  <CenteredLoading
-    class="mt-10"
-    v-if="isPendingUsage || isPendingDeficit || subjects.isLoading.value"
-  />
-  <div v-else>
-    <PaperCard>
-      <v-menu transition="slide-y-transition">
-        <template v-slot:activator="{ props }">
-          <div class="w-100 d-flex align-center justify-center">
-            <button v-bind="props" class="text-h6 text-sm-h4 font-weight-bold">
-              {{ prettifySeason(selectedSeason) }}
-              <v-icon size="x-small" class="text-ufabcnext-green">
-                mdi-menu-down
-              </v-icon>
-            </button>
-          </div>
-        </template>
-        <v-list>
-          <v-list-item
-            v-for="season in elapsedSeasons"
-            :key="season"
-            @click="changeSelectedSeason(season)"
-          >
-            <v-list-item-title>{{ prettifySeason(season) }}</v-list-item-title>
-          </v-list-item>
-        </v-list>
-      </v-menu>
-    </PaperCard>
-    <v-row align="stretch" no-gutters class="w-100 mt-4">
-      <v-col
-        v-for="card in cards"
-        :key="card.title"
-        cols="12"
-        sm="3"
-        class="mb-2 mb-sm-0"
-      >
-        <PerformanceCard
-          :title="card.title"
-          :subTitle="card.subtitle"
-          :description="card.content"
-          :color="card.color"
-          :icon="card.icon"
-          :progressBarValue="card.progressBarValue"
-          :progressBarMaxValue="card.progressBarMaxValue"
-          :tooltip="card.tooltip"
-        >
-        </PerformanceCard>
-      </v-col>
-    </v-row>
-    <PaperCard class="mt-4">
-      <el-tabs v-model="tab">
-        <el-tab-pane label="Turmas" name="classes"></el-tab-pane>
-        <el-tab-pane label="Cursos" name="courses"></el-tab-pane>
-        <el-tab-pane label="Disciplinas" name="subjects"></el-tab-pane>
-      </el-tabs>
-
-      <div
-        class="d-flex justify-space-between flex-column flex-md-row align-md-center mb-4"
-      >
-        <p>{{ total }} resultados encontrados</p>
-        <el-checkbox-group
-          v-model="filterByPeriod"
-          style="min-width: 200px"
-          class="my-2 my-md-0"
-        >
-          <el-checkbox label="diurno">Matutino</el-checkbox>
-          <el-checkbox label="noturno">Noturno</el-checkbox>
-        </el-checkbox-group>
-        <v-menu transition="slide-y-transition">
-          <template v-slot:activator="{ props }">
-            <div>
-              <button v-bind="props" class="text-body-2 order-button mr-2">
-                <span class="font-weight-bold text-black"> Ordenar por: </span>
-                {{
-                  orderByOptionsLabel[
-                    orderByOptions.findIndex((o) => o === orderBy)
-                  ]
-                }}
-                <v-icon class="text-ufabcnext-green"> mdi-menu-down </v-icon>
-              </button>
-            </div>
-          </template>
-          <v-list>
-            <v-list-item
-              v-for="(item, index) in orderByOptions"
-              @click="changeOrderBy(item)"
-              :key="item"
-            >
-              <v-list-item-title>{{
-                orderByOptionsLabel[index]
-              }}</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </div>
-
-      <el-table
-        empty-text="Nenhum dado encontrado"
-        ref="disciplinas"
-        v-loading="isLoadingCurrentInfo"
-        :data="disciplinas"
-        style="width: 100%"
-      >
-        <el-table-column fixed="left" min-width="200" label="Nome">
-          <template #default="scope">
-            {{ matriculaNameLabel(scope.row) }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="vagas" label="Vagas" align="center" width="150">
-        </el-table-column>
-        <el-table-column
-          prop="requisicoes"
-          label="Requisições"
-          align="center"
-          width="150"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="deficit"
-          label="Deficit"
-          align="center"
-          width="150"
-        >
-        </el-table-column>
-        <el-table-column
-          prop="ratio"
-          label="Pessoas por vaga"
-          align="center"
-          width="160"
-        >
-          <template #default="scope">
-            {{ scope.row.ratio.toFixed(2) }}
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-button
-        v-if="hasMoreItems"
-        @click="fetchMoreItems()"
-        class="w-100 mt-2"
-      >
-        Carregar mais <i class="el-icon-arrow-down el-icon-right"></i>
-      </el-button>
-    </PaperCard>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from 'vue';
-import { StatsSubjects, type StatsParams } from 'services';
+import { computed, ref } from 'vue';
+import { type StatsParams, StatsSubjects } from 'services';
 import type {
-  StatsClass,
-  StatsSubject,
-  StatsCourse,
   PageableReturn,
+  StatsClass,
+  StatsCourse,
+  StatsSubject,
 } from 'types';
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import { getElapsedSeasons, getSeason, prettifySeason } from 'utils';
@@ -172,21 +25,18 @@ const orderByOptionsLabel = [
 ];
 
 const orderBy = ref<OrderBy>('deficit');
-
 const tab = ref<Tab>('classes');
-
 const filterByPeriod = ref<StatsParams['turno'][]>(['diurno', 'noturno']);
-
-const changeOrderBy = (item: OrderBy) => {
-  orderBy.value = item;
-  pages.value[tab.value] = 0;
-};
-
 const pages = ref({
   subjects: 0,
   courses: 0,
   classes: 0,
 });
+
+const changeOrderBy = (item: OrderBy) => {
+  orderBy.value = item;
+  pages.value[tab.value] = 0;
+};
 
 const fallbackValue = (
   value: number | undefined | null,
@@ -342,10 +192,10 @@ const mapTurnoLabel = (turno: NonNullable<StatsParams['turno']>) => {
 
 const matriculaNameLabel = (data: StatsClass | StatsSubject | StatsCourse) => {
   if (!data) return;
-  if (tab.value == 'courses') {
+  if (tab.value === 'courses') {
     return mapCourseName((data as StatsCourse)._id);
   }
-  if (tab.value == 'subjects') {
+  if (tab.value === 'subjects') {
     return (data as StatsSubject).disciplina;
   }
 
@@ -376,14 +226,13 @@ const currentAlunosPercentage = computed(() =>
 const cards = computed(() => [
   {
     title: fallbackValue(usage.value?.currentAlunos),
-    subtitle: '/' + usage.value?.totalAlunos,
+    subtitle: `/${usage.value?.totalAlunos}`,
     content: 'Alunos usando a extensão',
     color: 'ufabcnext-green',
     icon: 'mdi-account-group',
     progressBarValue: usage.value?.currentAlunos,
     progressBarMaxValue: usage.value?.totalAlunos,
-    tooltip:
-      currentAlunosPercentage.value + '% dos alunos estão usando a extensão',
+    tooltip: `${currentAlunosPercentage.value}% dos alunos estão usando a extensão`,
   },
   {
     title: fallbackValue(usage.value?.subjects),
@@ -405,6 +254,153 @@ const cards = computed(() => [
   },
 ]);
 </script>
+
+<template>
+  <CenteredLoading
+    v-if="isPendingUsage || isPendingDeficit || subjects.isLoading.value"
+    class="mt-10"
+  />
+  <div v-else>
+    <PaperCard>
+      <v-menu transition="slide-y-transition">
+        <template #activator="{ props }">
+          <div class="w-100 d-flex align-center justify-center">
+            <button v-bind="props" class="text-h6 text-sm-h4 font-weight-bold">
+              {{ prettifySeason(selectedSeason) }}
+              <v-icon size="x-small" class="text-ufabcnext-green">
+                mdi-menu-down
+              </v-icon>
+            </button>
+          </div>
+        </template>
+        <v-list>
+          <v-list-item
+            v-for="season in elapsedSeasons"
+            :key="season"
+            @click="changeSelectedSeason(season)"
+          >
+            <v-list-item-title>{{ prettifySeason(season) }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </PaperCard>
+    <v-row align="stretch" no-gutters class="w-100 mt-4">
+      <v-col
+        v-for="card in cards"
+        :key="card.title"
+        cols="12"
+        sm="3"
+        class="mb-2 mb-sm-0"
+      >
+        <PerformanceCard
+          :title="card.title"
+          :sub-title="card.subtitle"
+          :description="card.content"
+          :color="card.color"
+          :icon="card.icon"
+          :progress-bar-value="card.progressBarValue"
+          :progress-bar-max-value="card.progressBarMaxValue"
+          :tooltip="card.tooltip"
+        >
+        </PerformanceCard>
+      </v-col>
+    </v-row>
+    <PaperCard class="mt-4">
+      <el-tabs v-model="tab">
+        <el-tab-pane label="Turmas" name="classes"></el-tab-pane>
+        <el-tab-pane label="Cursos" name="courses"></el-tab-pane>
+        <el-tab-pane label="Disciplinas" name="subjects"></el-tab-pane>
+      </el-tabs>
+
+      <div
+        class="d-flex justify-space-between flex-column flex-md-row align-md-center mb-4"
+      >
+        <p>{{ total }} resultados encontrados</p>
+        <el-checkbox-group
+          v-model="filterByPeriod"
+          style="min-width: 200px"
+          class="my-2 my-md-0"
+        >
+          <el-checkbox label="diurno"> Matutino </el-checkbox>
+          <el-checkbox label="noturno"> Noturno </el-checkbox>
+        </el-checkbox-group>
+        <v-menu transition="slide-y-transition">
+          <template #activator="{ props }">
+            <div>
+              <button v-bind="props" class="text-body-2 order-button mr-2">
+                <span class="font-weight-bold text-black"> Ordenar por: </span>
+                {{
+                  orderByOptionsLabel[
+                    orderByOptions.findIndex((o) => o === orderBy)
+                  ]
+                }}
+                <v-icon class="text-ufabcnext-green"> mdi-menu-down </v-icon>
+              </button>
+            </div>
+          </template>
+          <v-list>
+            <v-list-item
+              v-for="(item, index) in orderByOptions"
+              :key="item"
+              @click="changeOrderBy(item)"
+            >
+              <v-list-item-title>
+                {{ orderByOptionsLabel[index] }}
+              </v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </div>
+
+      <el-table
+        ref="disciplinas"
+        v-loading="isLoadingCurrentInfo"
+        empty-text="Nenhum dado encontrado"
+        :data="disciplinas"
+        style="width: 100%"
+      >
+        <el-table-column fixed="left" min-width="200" label="Nome">
+          <template #default="scope">
+            {{ matriculaNameLabel(scope.row) }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="vagas" label="Vagas" align="center" width="150">
+        </el-table-column>
+        <el-table-column
+          prop="requisicoes"
+          label="Requisições"
+          align="center"
+          width="150"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="deficit"
+          label="Deficit"
+          align="center"
+          width="150"
+        >
+        </el-table-column>
+        <el-table-column
+          prop="ratio"
+          label="Pessoas por vaga"
+          align="center"
+          width="160"
+        >
+          <template #default="scope">
+            {{ scope.row.ratio.toFixed(2) }}
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-button
+        v-if="hasMoreItems"
+        class="w-100 mt-2"
+        @click="fetchMoreItems()"
+      >
+        Carregar mais <i class="el-icon-arrow-down el-icon-right"></i>
+      </el-button>
+    </PaperCard>
+  </div>
+</template>
 
 <style scoped lang="scss">
 .order-button:hover {

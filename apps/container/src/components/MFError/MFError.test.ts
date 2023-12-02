@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { MFError } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<MFError />', () => {
   test('render error text', () => {

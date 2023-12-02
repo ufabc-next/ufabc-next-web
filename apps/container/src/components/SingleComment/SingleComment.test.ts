@@ -1,8 +1,8 @@
-import { render, screen, userEvent, waitFor } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { SingleComment } from '.';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { comments } from '@/mocks/reviews';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 
 describe('<SingleComment />', () => {
   test('render Comment, give like and recommendation, them remove like and recomendation', async () => {

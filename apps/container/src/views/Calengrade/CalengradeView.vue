@@ -7,6 +7,7 @@ const Calengrade = defineFederatedReactComponent({
   props: {},
 });
 </script>
+
 <template>
   <PaperCard class="flex flex-column flex-fill">
     <Calengrade />

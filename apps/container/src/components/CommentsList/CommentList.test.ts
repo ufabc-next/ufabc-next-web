@@ -1,8 +1,8 @@
-import { render, screen } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { CommentsList } from '.';
+import { render, screen } from '@/test-utils';
 import { comments } from '@/mocks/reviews';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 
 describe('<CommentsList />', () => {
   test('render Comments List', async () => {
@@ -52,7 +52,7 @@ describe('<CommentsList />', () => {
         HttpResponse.json(null, { status: 500 }),
       ),
     );
-   
+
     render(CommentsList, {
       props: {
         teacherId: '111',

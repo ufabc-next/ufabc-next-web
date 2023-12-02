@@ -1,5 +1,5 @@
-import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { DonateView } from '.';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
 
 describe('<DonateView />', () => {
   test('render donate view', () => {

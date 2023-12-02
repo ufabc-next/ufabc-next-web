@@ -28,7 +28,7 @@ export const Preview = () => {
     return () => {
       clearInterval(interval);
     };
-  }, []); // eslint-disable-line
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (classes.length <= 0 || !startDate || !endDate) {
@@ -37,18 +37,20 @@ export const Preview = () => {
 
     switch (step) {
       case 0: // Gerar
-        const newCalendar = calendar
-          ? calendar
-          : handleCalendar({
+        {
+          const newCalendar =
+            calendar ||
+            handleCalendar({
               classes,
               startDate,
               endDate,
             });
 
-        setCalengrade({
-          ...calengrade,
-          calendar: newCalendar,
-        });
+          setCalengrade({
+            ...calengrade,
+            calendar: newCalendar,
+          });
+        }
         break;
 
       case 1: // Download
@@ -76,7 +78,6 @@ export const Preview = () => {
             window.Toaster.error('Não foi possível baixar seu Calengrade!');
           }
         } catch (e) {
-          console.log('ERROR', e);
           window.Toaster.error('Não foi possível baixar seu Calengrade!');
           if (timer) clearInterval(timer);
           setActiveScreen('summary');
@@ -87,7 +88,7 @@ export const Preview = () => {
         if (timer) clearInterval(timer);
         break;
     }
-  }, [step]); // eslint-disable-line
+  }, [step]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return step <= 1 ? (
     <>

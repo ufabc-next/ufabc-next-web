@@ -1,7 +1,7 @@
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs, { type Dayjs } from 'dayjs';
 import * as ics from 'ics';
 
-import { Calendar } from '../context/CalengradeContext';
+import type { Calendar } from '../context/CalengradeContext';
 
 const dayOfWeekReturnMappings = {
   Domingo: {
@@ -88,7 +88,7 @@ export const handleCalendar = ({ classes, startDate, endDate }: Calendar) => {
         recurrenceRule += `INTERVAL=1;`;
       else if (
         time.repeat?.indexOf('quinzenal (I)') !== -1 ||
-        time.repeat.indexOf('quinzenal (II)') !== -1
+        time.repeat.includes('quinzenal (II)')
       )
         recurrenceRule += `INTERVAL=2;`;
 
@@ -121,7 +121,6 @@ export const handleCalendar = ({ classes, startDate, endDate }: Calendar) => {
   const { error, value } = ics.createEvents(calendar);
 
   if (error) {
-    console.log('ERROR: ', error);
     return undefined;
   } else {
     return value;

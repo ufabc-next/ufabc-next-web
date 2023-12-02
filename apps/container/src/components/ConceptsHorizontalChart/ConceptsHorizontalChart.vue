@@ -1,9 +1,30 @@
+<script setup lang="ts">
+import type { ConceptData, SubjectSpecific } from 'types';
+import { conceptsColor, transformConceptDataToObject } from 'utils';
+import { type PropType, computed } from 'vue';
+
+const props = defineProps({
+  gradeData: { type: Object as PropType<SubjectSpecific>, required: true },
+});
+
+const untrustableThreshold = 10;
+
+const orderedDistribution = computed(() => {
+  const distribution: ConceptData[] = props.gradeData.distribution;
+  return distribution.sort((a, b) => a.conceito.localeCompare(b.conceito));
+});
+
+const grades = computed(() =>
+  transformConceptDataToObject(props.gradeData.distribution),
+);
+</script>
+
 <template>
   <div class="grading">
     <el-tooltip
       v-for="grade in orderedDistribution"
-      placement="top"
       :key="grade.conceito"
+      placement="top"
       :hide-after="0"
       :content="`
         ${grade.conceito}: ${(
@@ -29,27 +50,6 @@
     >
   </div>
 </template>
-
-<script setup lang="ts">
-import { ConceptData, SubjectSpecific } from 'types';
-import { transformConceptDataToObject, conceptsColor } from 'utils';
-import { computed, PropType } from 'vue';
-
-const props = defineProps({
-  gradeData: { type: Object as PropType<SubjectSpecific>, required: true },
-});
-
-const untrustableThreshold = 10;
-
-const orderedDistribution = computed(() => {
-  const distribution: ConceptData[] = props.gradeData.distribution;
-  return distribution.sort((a, b) => a.conceito.localeCompare(b.conceito));
-});
-
-const grades = computed(() =>
-  transformConceptDataToObject(props.gradeData.distribution),
-);
-</script>
 
 <style scoped>
 .unthrustable {

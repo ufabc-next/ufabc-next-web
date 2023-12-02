@@ -1,60 +1,13 @@
-<template>
-  <CenteredLoading
-    class="mt-10"
-    v-if="
-      isPendingCrHistory || isPendingCpHistory || isPendingCrDistributionData
-    "
-  />
-  <v-layout class="flex-column align-center justify-center" v-else>
-    <v-row align="stretch" no-gutters class="w-100">
-      <v-col
-        v-for="card in cards"
-        :key="card.title"
-        cols="12"
-        sm="3"
-        class="mb-2 mb-sm-0"
-      >
-        <PerformanceCard
-          :title="card.title"
-          :subTitle="card.subtitle"
-          :description="card.content"
-          :color="card.color"
-          :icon="card.icon"
-          :tooltip="card?.tooltip"
-        >
-        </PerformanceCard>
-      </v-col>
-    </v-row>
-    <PaperCard class="w-100 mt-4">
-      <Chart :options="crHistoryOptions" />
-    </PaperCard>
-    <PaperCard class="w-100 mt-4">
-      <v-select
-        :items="cpHistoryData"
-        :item-title="(course) => course.curso"
-        :item-value="(course) => course"
-        v-model="currentCpCourse"
-        variant="outlined"
-        class="course-select"
-      />
-      <Chart :options="cpHistoryOptions" />
-    </PaperCard>
-    <PaperCard class="w-100 mt-4">
-      <Chart :options="crDistributionOptions" />
-    </PaperCard>
-  </v-layout>
-</template>
-
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { computed, ref } from 'vue';
 import { Chart } from 'highcharts-vue';
 import { useQuery } from '@tanstack/vue-query';
+import { type CourseInformation, Performance } from 'services';
+import { formatSeason } from 'utils';
 import { PerformanceCard } from '@/components/PerformanceCard';
-import { Performance, type CourseInformation } from 'services';
 import { PaperCard } from '@/components/PaperCard';
 import { theme } from '@/theme';
 import { CenteredLoading } from '@/components/CenteredLoading';
-import { formatSeason } from 'utils';
 
 const areaGraphOptions = {
   accessibility: {
@@ -88,7 +41,7 @@ const { data: crHistoryData, isPending: isPendingCrHistory } = useQuery({
 
 const crHistorySeries = computed(() => {
   const arrCrHistory = crHistoryData.value?.map((quad) => {
-    const roundedCr = parseFloat(quad.cr_acumulado.toFixed(2));
+    const roundedCr = Number.parseFloat(quad.cr_acumulado.toFixed(2));
     return [formatSeason(quad.season), roundedCr];
   });
   return arrCrHistory;
@@ -303,6 +256,53 @@ const cards = computed(() => [
   },
 ]);
 </script>
+
+<template>
+  <CenteredLoading
+    v-if="
+      isPendingCrHistory || isPendingCpHistory || isPendingCrDistributionData
+    "
+    class="mt-10"
+  />
+  <v-layout v-else class="flex-column align-center justify-center">
+    <v-row align="stretch" no-gutters class="w-100">
+      <v-col
+        v-for="card in cards"
+        :key="card.title"
+        cols="12"
+        sm="3"
+        class="mb-2 mb-sm-0"
+      >
+        <PerformanceCard
+          :title="card.title"
+          :sub-title="card.subtitle"
+          :description="card.content"
+          :color="card.color"
+          :icon="card.icon"
+          :tooltip="card?.tooltip"
+        >
+        </PerformanceCard>
+      </v-col>
+    </v-row>
+    <PaperCard class="w-100 mt-4">
+      <Chart :options="crHistoryOptions" />
+    </PaperCard>
+    <PaperCard class="w-100 mt-4">
+      <v-select
+        v-model="currentCpCourse"
+        :items="cpHistoryData"
+        :item-title="(course) => course.curso"
+        :item-value="(course) => course"
+        variant="outlined"
+        class="course-select"
+      />
+      <Chart :options="cpHistoryOptions" />
+    </PaperCard>
+    <PaperCard class="w-100 mt-4">
+      <Chart :options="crDistributionOptions" />
+    </PaperCard>
+  </v-layout>
+</template>
 
 <style scoped>
 .course-select {
