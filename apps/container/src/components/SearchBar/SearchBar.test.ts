@@ -29,7 +29,7 @@ describe('<SearchBar />', () => {
     } as unknown as ReturnType<typeof useRouter>);
   });
 
-  it('type must replace current route', async () => {
+  test('type must replace current route', async () => {
     render(SearchBar);
     await userEvent.type(
       await screen.findByPlaceholderText(
@@ -42,7 +42,7 @@ describe('<SearchBar />', () => {
       query: { q: 'teste' },
     });
   });
-  it('render SearchBar, type something, and click on teacher result', async () => {
+  test('render SearchBar, type something, and click on teacher result', async () => {
     vi.mocked(useRouter).mockReturnValue({
       replace: replaceMock,
       currentRoute: {
@@ -74,7 +74,7 @@ describe('<SearchBar />', () => {
       },
     });
   });
-  it('render SearchBar, type something, and click on subject result', async () => {
+  test('render SearchBar, type something, and click on subject result', async () => {
     vi.mocked(useRouter).mockReturnValue({
       replace: replaceMock,
       currentRoute: {
@@ -106,7 +106,7 @@ describe('<SearchBar />', () => {
       },
     });
   });
-  it('show Error Teachers and Error Subjects toasters', async () => {
+  test('show Error Teachers and Error Subjects toasters', async () => {
     server.use(
       http.get(`*/teachers/search`, () =>
         HttpResponse.json(null, { status: 500 }),

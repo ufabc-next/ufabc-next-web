@@ -2,13 +2,13 @@ import { DonateView } from '.';
 import { render, screen, userEvent, waitFor } from '@/test-utils';
 
 describe('<DonateView />', () => {
-  it('render donate view', () => {
+  test('render donate view', () => {
     render(DonateView);
     expect(
       screen.getByRole('heading', { name: 'Ajude o UFABC Next' }),
     ).toBeInTheDocument();
   });
-  it('open donate dialog', async () => {
+  test('open donate dialog', async () => {
     const user = userEvent.setup();
 
     render(DonateView);
@@ -17,7 +17,7 @@ describe('<DonateView />', () => {
 
     expect(await screen.findByAltText('PIX do UFABC Next')).toBeInTheDocument();
   });
-  it('close donate dialog', async () => {
+  test('close donate dialog', async () => {
     const user = userEvent.setup();
 
     render(DonateView);

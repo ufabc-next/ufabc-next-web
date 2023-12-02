@@ -1,3 +1,4 @@
+/* eslint-disable ts/no-explicit-any */
 import { defineAsyncComponent, h } from 'vue';
 import React from 'react';
 import ReactDOM from 'react-dom/client';

@@ -16,7 +16,7 @@ describe('<AppBar />', () => {
     useAuth.setState(originalUseAuthValue);
   });
 
-  it('render app bar', () => {
+  test('render app bar', () => {
     render(AppBar);
     expect(
       screen.getAllByRole('img', { name: 'logo do UFABC Next' }),
@@ -26,7 +26,7 @@ describe('<AppBar />', () => {
     expect(screen.getByText('Snapshot da Matrícula')).toBeInTheDocument();
     expect(screen.getByText('Grupos no WhatsApp')).toBeInTheDocument();
   });
-  it('render user info in app bar dropdown', async () => {
+  test('render user info in app bar dropdown', async () => {
     const user = userEvent.setup();
 
     render(AppBar);
@@ -44,7 +44,7 @@ describe('<AppBar />', () => {
       ),
     ).toBeInTheDocument();
   });
-  it('render user initials if user email has two names', async () => {
+  test('render user initials if user email has two names', async () => {
     useAuth.setState({
       user: {
         ...mockedUser,
@@ -60,7 +60,7 @@ describe('<AppBar />', () => {
     );
     expect(await screen.findByText(/FL/)).toBeInTheDocument();
   });
-  it('click on logout button to logout', async () => {
+  test('click on logout button to logout', async () => {
     const user = userEvent.setup();
 
     render(AppBar);

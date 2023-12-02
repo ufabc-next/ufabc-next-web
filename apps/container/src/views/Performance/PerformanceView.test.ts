@@ -2,11 +2,11 @@ import { PerformanceView } from '.';
 import { render, screen } from '@/test-utils';
 
 describe('<PerformanceView />', () => {
-  it('render loading', () => {
+  test('render loading', () => {
     render(PerformanceView);
     expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
   });
-  it('render performance page', async () => {
+  test('render performance page', async () => {
     render(PerformanceView);
 
     expect(

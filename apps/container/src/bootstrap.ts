@@ -68,5 +68,5 @@ createApp(App)
   .use(VueQueryPlugin, {
     queryClient,
   })
-  .use(HighchartsVue as any)
+  .use(HighchartsVue as unknown)
   .mount('#app');

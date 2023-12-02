@@ -2,7 +2,7 @@ import { TableComponent } from '.';
 import { render, screen } from '@/test-utils';
 
 describe('<TableComponent />', () => {
-  it('render a table with head and body', () => {
+  test('render a table with head and body', () => {
     render(TableComponent, {
       slots: {
         head: 'head',

@@ -21,7 +21,7 @@ describe('<RecoveryView />', () => {
     } as unknown as ReturnType<typeof useRouter>);
   });
 
-  it('render recovery', () => {
+  test('render recovery', () => {
     render(RecoveryView);
     expect(screen.getByAltText(/logo do UFABC Next/i)).toBeInTheDocument();
     expect(
@@ -31,7 +31,7 @@ describe('<RecoveryView />', () => {
       screen.getByRole('textbox', { name: /Insira seu email institucional/i }),
     ).toBeInTheDocument();
   });
-  it('click go back button', async () => {
+  test('click go back button', async () => {
     const user = await userEvent.setup();
     render(RecoveryView);
 
@@ -39,7 +39,7 @@ describe('<RecoveryView />', () => {
 
     expect(useRouter().go).toHaveBeenCalledWith(-1);
   });
-  it('should submit recovery form', async () => {
+  test('should submit recovery form', async () => {
     const user = await userEvent.setup();
     render(RecoveryView);
 
@@ -58,7 +58,7 @@ describe('<RecoveryView />', () => {
 
     expect(window.location.pathname).toBe('/');
   });
-  it('should submit and show error', async () => {
+  test('should submit and show error', async () => {
     server.use(
       http.post(`*/users/me/recover`, () =>
         HttpResponse.json({ error: 'error' }, { status: 500 }),

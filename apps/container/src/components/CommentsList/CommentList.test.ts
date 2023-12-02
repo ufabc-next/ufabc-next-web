@@ -5,7 +5,7 @@ import { comments } from '@/mocks/reviews';
 import { server } from '@/mocks/server';
 
 describe('<CommentsList />', () => {
-  it('render Comments List', async () => {
+  test('render Comments List', async () => {
     render(CommentsList, {
       props: {
         teacherId: '111',
@@ -25,7 +25,7 @@ describe('<CommentsList />', () => {
       screen.getAllByText(RegExp(comments.data[1].subject.name, 'i'))[0],
     ).toBeInTheDocument();
   });
-  it('render empty Comments List', async () => {
+  test('render empty Comments List', async () => {
     server.use(
       http.get(`*/comments/*`, () =>
         HttpResponse.json({
@@ -46,7 +46,7 @@ describe('<CommentsList />', () => {
       ),
     ).toBeInTheDocument();
   });
-  it('show toaster when Fetching Teacher Data Error', async () => {
+  test('show toaster when Fetching Teacher Data Error', async () => {
     server.use(
       http.get(`*/reviews/teachers/*`, () =>
         HttpResponse.json(null, { status: 500 }),
@@ -63,7 +63,7 @@ describe('<CommentsList />', () => {
       await screen.findByText('Erro ao carregar o(a) professor(a)'),
     ).toBeInTheDocument();
   });
-  it('show toaster when Fetching Comments Error', async () => {
+  test('show toaster when Fetching Comments Error', async () => {
     server.use(
       http.get(`*/comments/*`, () => HttpResponse.json(null, { status: 500 })),
     );

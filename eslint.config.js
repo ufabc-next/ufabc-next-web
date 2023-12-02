@@ -24,5 +24,14 @@ export default jsvEslintConfig({
         { fixStyle: 'inline-type-imports' },
       ],
     },
+    test: {
+      'test/consistent-test-it': [
+        'error',
+        {
+          fn: 'it',
+          withinDescribe: 'test',
+        },
+      ],
+    },
   },
 });

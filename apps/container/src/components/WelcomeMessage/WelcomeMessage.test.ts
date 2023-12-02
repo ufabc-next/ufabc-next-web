@@ -2,7 +2,7 @@ import { WelcomeMessage } from '.';
 import { render, screen } from '@/test-utils';
 
 describe('<WelcomeMessage />', () => {
-  it('render welcome messages and next benefits', () => {
+  test('render welcome messages and next benefits', () => {
     render(WelcomeMessage);
     expect(
       screen.getByText('Como funciona o UFABC Next e os Reviews?'),

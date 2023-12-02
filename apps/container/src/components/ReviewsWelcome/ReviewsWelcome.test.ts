@@ -2,7 +2,7 @@ import { ReviewsWelcome } from '.';
 import { render, screen } from '@/test-utils';
 
 describe('<ReviewsWelcome />', () => {
-  it('render Reviews Welcome', () => {
+  test('render Reviews Welcome', () => {
     render(ReviewsWelcome);
     expect(
       screen.getByRole('img', { name: /Animação de review/i }),

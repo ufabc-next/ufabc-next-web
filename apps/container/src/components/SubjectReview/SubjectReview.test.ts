@@ -32,7 +32,7 @@ describe('<SubjectReview />', () => {
     } as unknown as ReturnType<typeof useRouter>);
   });
 
-  it('render subject review', async () => {
+  test('render subject review', async () => {
     vi.mocked(useRouter).mockReturnValue({
       useRouter: vi.fn(),
       createRouter: vi.fn(() => ({
@@ -59,7 +59,7 @@ describe('<SubjectReview />', () => {
     ).toBeInTheDocument();
     expect(await screen.findByText(/Nome do Professor/i)).toBeInTheDocument();
   });
-  it('render subject that demands review', async () => {
+  test('render subject that demands review', async () => {
     vi.mocked(useRouter).mockReturnValue({
       useRouter: vi.fn(),
       createRouter: vi.fn(() => ({
@@ -86,7 +86,7 @@ describe('<SubjectReview />', () => {
     ).toBeInTheDocument();
     expect(await screen.findByText(/Nome do Professor/i)).toBeInTheDocument();
   });
-  it('fetching teacher error toaster', async () => {
+  test('fetching teacher error toaster', async () => {
     server.use(
       http.get(`*/reviews/subjects/*`, () =>
         HttpResponse.json(null, { status: 500 }),

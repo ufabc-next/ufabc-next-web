@@ -23,7 +23,7 @@ describe('<ReviewDialog />', () => {
     ElMessage('');
   });
 
-  it.each([
+  test.each([
     { tagName: 'teoria', subjectType: 'teoria' },
     { tagName: 'prática', subjectType: 'pratica' },
   ])(
@@ -63,7 +63,7 @@ describe('<ReviewDialog />', () => {
       await expectToasterToHaveText('Comentário enviado com sucesso');
     },
   );
-  it.each([
+  test.each([
     { tagName: 'teoria', commentAvaliable: ['teoria'] },
     { tagName: 'prática', commentAvaliable: ['pratica'] },
     { tagName: 'teoria e prática', commentAvaliable: ['teoria', 'pratica'] },
@@ -120,7 +120,7 @@ describe('<ReviewDialog />', () => {
       await expectToasterToHaveText('Comentário editado com sucesso');
     },
   );
-  it.each([
+  test.each([
     { tagName: 'teoria', commentAvaliable: ['teoria'] },
     { tagName: 'prática', commentAvaliable: ['pratica'] },
     { tagName: 'teoria e prática', commentAvaliable: ['teoria', 'pratica'] },
@@ -158,7 +158,7 @@ describe('<ReviewDialog />', () => {
       );
     },
   );
-  it('show error alert when fetching Teacher Enrollment Error', async () => {
+  test('show error alert when fetching Teacher Enrollment Error', async () => {
     server.use(
       http.get(`*/enrollments/*`, () =>
         HttpResponse.json(null, { status: 500 }),
@@ -177,7 +177,7 @@ describe('<ReviewDialog />', () => {
       'Erro ao carregar as informações do professor desta disciplina',
     );
   });
-  it('show error alert when create comment error', async () => {
+  test('show error alert when create comment error', async () => {
     server.use(
       http.get(`*/enrollments/*`, () => {
         return HttpResponse.json({
@@ -205,7 +205,7 @@ describe('<ReviewDialog />', () => {
     await userEvent.click(screen.getByRole('button', { name: /Enviar/i }));
     await expectToasterToHaveText('Ocorreu um erro ao enviar o comentário');
   });
-  it('show error alert when update comment error', async () => {
+  test('show error alert when update comment error', async () => {
     server.use(
       http.put(`*/comments/*`, () => HttpResponse.json(null, { status: 500 })),
       http.get(`*/enrollments/*`, () => {
@@ -249,7 +249,7 @@ describe('<ReviewDialog />', () => {
 
     await expectToasterToHaveText('Ocorreu um erro ao editar o comentário');
   });
-  it('not render Dialog if props is false', async () => {
+  test('not render Dialog if props is false', async () => {
     render(ReviewDialog, {
       props: {
         enrollment,

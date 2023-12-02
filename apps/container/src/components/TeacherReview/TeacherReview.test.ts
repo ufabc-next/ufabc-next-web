@@ -31,7 +31,7 @@ describe('<TeacherReview />', () => {
       },
     } as unknown as ReturnType<typeof useRouter>);
   });
-  it('fetching teacher error toaster', async () => {
+  test('fetching teacher error toaster', async () => {
     server.use(
       http.get(`*/reviews/teachers/*`, () =>
         HttpResponse.json(null, { status: 500 }),

@@ -18,7 +18,7 @@ describe('<SignUpView />', () => {
   afterEach(() => {
     useAuth.setState(originalUseAuthValue);
   });
-  it('render sign up page', () => {
+  test('render sign up page', () => {
     render(SignUpView, {
       global: {
         stubs: ['router-link'],
@@ -32,7 +32,7 @@ describe('<SignUpView />', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/O que você faz na UFABC\?/)).toBeInTheDocument();
   });
-  it('logout when click to change account', async () => {
+  test('logout when click to change account', async () => {
     const user = userEvent.setup();
     render(SignUpView, {
       global: {
@@ -47,7 +47,7 @@ describe('<SignUpView />', () => {
       expect(useAuth.getState().user).toBeNull();
     });
   });
-  it('render sm and down screen', async () => {
+  test('render sm and down screen', async () => {
     vi.spyOn(vuetify, 'useDisplay').mockImplementation(
       () =>
         ({
@@ -66,7 +66,7 @@ describe('<SignUpView />', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/O que você faz na UFABC\?/)).toBeInTheDocument();
   });
-  it('fill form as teacher', async () => {
+  test('fill form as teacher', async () => {
     const user = userEvent.setup();
     render(SignUpView, {
       global: {
@@ -78,7 +78,7 @@ describe('<SignUpView />', () => {
 
     expect(screen.getByText(/Estamos trabalhando nisso!/i)).toBeInTheDocument();
   });
-  it('fill form as student', async () => {
+  test('fill form as student', async () => {
     const user = userEvent.setup();
     render(SignUpView, {
       global: {
@@ -113,7 +113,7 @@ describe('<SignUpView />', () => {
   });
 
   // eslint-disable-next-line test/no-identical-title
-  it('fill form as student', async () => {
+  test('fill form as student', async () => {
     const user = await userEvent.setup();
     render(SignUpView, {
       global: {
@@ -162,7 +162,7 @@ describe('<SignUpView />', () => {
     ).toBeInTheDocument();
   });
 
-  it('fill form as student but get error when submit form', async () => {
+  test('fill form as student but get error when submit form', async () => {
     server.use(
       http.put('*/users/complete', () =>
         HttpResponse.json({ error: 'Erro ao se cadastrar' }, { status: 500 }),
@@ -205,7 +205,7 @@ describe('<SignUpView />', () => {
     expect(await screen.findByText(/Erro ao se cadastrar/)).toBeInTheDocument();
   });
 
-  it('fill form as student and get error to resend email', async () => {
+  test('fill form as student and get error to resend email', async () => {
     server.use(
       http.post('*/users/me/resend', () =>
         HttpResponse.json({ error: 'Erro ao reenviar email' }, { status: 500 }),

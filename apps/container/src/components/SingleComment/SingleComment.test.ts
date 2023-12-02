@@ -5,7 +5,7 @@ import { comments } from '@/mocks/reviews';
 import { server } from '@/mocks/server';
 
 describe('<SingleComment />', () => {
-  it('render Comment, give like and recommendation, them remove like and recomendation', async () => {
+  test('render Comment, give like and recommendation, them remove like and recomendation', async () => {
     server.use(
       http.post(`*/reactions/*`, () => HttpResponse.json(), {
         once: true,
@@ -56,7 +56,7 @@ describe('<SingleComment />', () => {
       expect(screen.getByText('150')).toBeInTheDocument();
     });
   });
-  it('render Comment, give like and recommendation and show error toaster', async () => {
+  test('render Comment, give like and recommendation and show error toaster', async () => {
     server.use(
       http.post(
         `*/reactions/*`,
@@ -121,7 +121,7 @@ describe('<SingleComment />', () => {
       await screen.findByText('Reaction recommendation error'),
     ).toBeInTheDocument();
   });
-  it('render Comment, remove like and recommendation and show error toaster', async () => {
+  test('render Comment, remove like and recommendation and show error toaster', async () => {
     server.use(
       http.delete(
         `*/reactions/*`,

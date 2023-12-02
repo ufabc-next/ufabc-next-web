@@ -32,7 +32,7 @@ describe('<ReviewsView />', () => {
     } as unknown as ReturnType<typeof useRouter>);
   });
 
-  it('render reviews', async () => {
+  test('render reviews', async () => {
     render(ReviewsView);
 
     expect(
@@ -47,7 +47,7 @@ describe('<ReviewsView />', () => {
       await screen.findByText(/Seus professores para avaliar/i),
     ).toBeInTheDocument();
   });
-  it('render subject search', async () => {
+  test('render subject search', async () => {
     vi.mocked(useRouter).mockReturnValue({
       useRouter: vi.fn(),
       createRouter: vi.fn(() => ({

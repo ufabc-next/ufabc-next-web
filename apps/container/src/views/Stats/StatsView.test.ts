@@ -12,11 +12,11 @@ import {
 } from '@/mocks/stats';
 
 describe('<StatsView />', () => {
-  it('render loading', () => {
+  test('render loading', () => {
     render(StatsView);
     expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
   });
-  it('render overview info', async () => {
+  test('render overview info', async () => {
     render(StatsView);
     expect(
       await screen.findByText('Alunos usando a extensão'),
@@ -30,7 +30,7 @@ describe('<StatsView />', () => {
     expect(screen.getByText(usage.teachers)).toBeInTheDocument();
     expect(screen.getByText(-overview.data[0].deficit)).toBeInTheDocument();
   });
-  it('render classes table', async () => {
+  test('render classes table', async () => {
     render(StatsView);
     expect(
       await screen.findByText(
@@ -50,7 +50,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(classes.data[0].ratio.toFixed(2)).length,
     ).toBeGreaterThan(0);
   });
-  it('render classes table load more', async () => {
+  test('render classes table load more', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -90,7 +90,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(classesPage1.data[0].ratio.toFixed(2)).length,
     ).toBeGreaterThan(0);
   });
-  it('render courses table', async () => {
+  test('render courses table', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -114,7 +114,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(courses.data[0].ratio.toFixed(2)).length,
     ).toBeGreaterThan(0);
   });
-  it('render subjects table', async () => {
+  test('render subjects table', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -140,7 +140,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(subjects.data[0].ratio.toFixed(2)).length,
     ).toBeGreaterThan(0);
   });
-  it('change order by', async () => {
+  test('change order by', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -161,7 +161,7 @@ describe('<StatsView />', () => {
     await user.click(screen.getAllByText('Deficit')[0]);
     expect(screen.getAllByText('Deficit')).toHaveLength(3);
   });
-  it('change season by', async () => {
+  test('change season by', async () => {
     const user = userEvent.setup();
 
     render(StatsView);
@@ -177,7 +177,7 @@ describe('<StatsView />', () => {
       screen.getAllByText(prettifySeason('2020:1')).length,
     ).toBeGreaterThan(0);
   });
-  it('change period', async () => {
+  test('change period', async () => {
     const user = userEvent.setup();
 
     render(StatsView);

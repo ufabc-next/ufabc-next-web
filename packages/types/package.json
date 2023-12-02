@@ -1,12 +1,12 @@
 {
   "name": "types",
-  "version": "0.0.0",
-  "main": "./index.ts",
-  "license": "MIT",
   "type": "module",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "./index.ts",
   "scripts": {
-    "lint": "eslint src/**/*",
-    "lint:fix": "eslint src/**/* --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {

@@ -17,7 +17,7 @@ vi.mock('vue-router', async () => ({
 }));
 
 describe('<ConfirmationView />', () => {
-  it('render confirmation view with error message when token is null', async () => {
+  test('render confirmation view with error message when token is null', async () => {
     vi.mocked(useRouter).mockReturnValue({
       isReady: vi.fn(() => true),
       currentRoute: {
@@ -32,7 +32,7 @@ describe('<ConfirmationView />', () => {
       await screen.findByText('Erro ao confirmar sua conta'),
     ).toBeInTheDocument();
   });
-  it('show loading and success message when validating token', async () => {
+  test('show loading and success message when validating token', async () => {
     vi.mocked(useRouter).mockReturnValue({
       isReady: vi.fn(() => true),
       currentRoute: {
@@ -54,7 +54,7 @@ describe('<ConfirmationView />', () => {
       await screen.findByText('Conta confirmada com sucesso'),
     ).toBeInTheDocument();
   });
-  it('show error when validating and confirmation fails', async () => {
+  test('show error when validating and confirmation fails', async () => {
     const message = 'Ocorreu um erro';
     server.use(
       http.post(/.*\/account\/confirm/, () =>

@@ -5,7 +5,7 @@ import { concepts } from '@/mocks/reviews';
 const total = Object.values(concepts).reduce((acc, curr) => acc + curr, 0);
 
 describe('<ConceptsPieChart />', () => {
-  it('render Concepts Pie Highchart', async () => {
+  test('render Concepts Pie Highchart', async () => {
     render(ConceptsPieChart, {
       props: {
         grades: concepts,

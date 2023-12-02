@@ -17,11 +17,11 @@ describe('<SettingsView />', () => {
   afterEach(() => {
     useAuth.setState(originalUseAuthValue);
   });
-  it('render settings loading when user info not loaded', () => {
+  test('render settings loading when user info not loaded', () => {
     render(SettingsView);
     expect(screen.getByLabelText('Carregando')).toBeInTheDocument();
   });
-  it('render user info', async () => {
+  test('render user info', async () => {
     render(SettingsView);
     expect(
       await screen.findByText(mockedUser.email.replace(/(.*)@.*/, '$1')),
@@ -38,7 +38,7 @@ describe('<SettingsView />', () => {
       ),
     ).toBeInTheDocument();
   });
-  it('render user without associated accounts', async () => {
+  test('render user without associated accounts', async () => {
     server.use(
       http.get(/.*\/users\/info/, () =>
         HttpResponse.json({
@@ -57,7 +57,7 @@ describe('<SettingsView />', () => {
       await screen.findByText('Associar à uma conta do Google'),
     ).toBeInTheDocument();
   });
-  it('deactivate user', async () => {
+  test('deactivate user', async () => {
     const user = userEvent.setup();
 
     render(SettingsView);
@@ -73,7 +73,7 @@ describe('<SettingsView />', () => {
       expect(useAuth.getState().user).toBeNull();
     });
   });
-  it('show toast if error when deactivate user', async () => {
+  test('show toast if error when deactivate user', async () => {
     const user = userEvent.setup();
 
     render(SettingsView);
@@ -87,7 +87,7 @@ describe('<SettingsView />', () => {
   });
 
   // eslint-disable-next-line test/no-identical-title
-  it('show toast if error when deactivate user', async () => {
+  test('show toast if error when deactivate user', async () => {
     server.use(
       http.delete(/.*\/users\/me\/delete/, () => HttpResponse.error()),
     );

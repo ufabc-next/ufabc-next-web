@@ -2,12 +2,16 @@
   "name": "ufabc-next-web-react",
   "version": "1.0.0",
   "license": "AGPL-3.0",
+  "engines": {
+    "node": "^20",
+    "pnpm": "^8"
+  },
   "scripts": {
     "dev": "webpack serve --mode development",
     "build": "webpack --mode production",
     "build:staging": "webpack --mode production",
-    "lint": "eslint src/**/*",
-    "lint:fix": "eslint src/**/* --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "tsc": "tsc --noEmit"
   },
   "dependencies": {
@@ -46,10 +50,6 @@
     "webpack": "^5.89.0",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
-  },
-  "engines": {
-    "node": "^20",
-    "pnpm": "^8"
   },
   "engineStrict": true
 }
