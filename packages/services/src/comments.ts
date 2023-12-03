@@ -1,9 +1,9 @@
-import {
+import type {
   Comment,
   CreateCommentRequest,
   GetCommentResponse,
   UpdateCommentRequest,
-} from 'types';
+} from '@next/types';
 
 import { api } from './api';
 
@@ -16,7 +16,7 @@ export const Comments = {
     api.get<Comment>(`/comments/enrollment/${enrollmentId}`),
   create: (data: CreateCommentRequest) => api.post('/comments/', data),
   update: ({ id, comment }: UpdateCommentRequest) =>
-    api.put('/comments/' + id, { comment }),
+    api.put(`/comments/${id}`, { comment }),
   like: (id: string) => api.post(`/reactions/${id}`, { kind: 'like' }),
   recommendation: (id: string) =>
     api.post(`/reactions/${id}`, { kind: 'recommendation' }),

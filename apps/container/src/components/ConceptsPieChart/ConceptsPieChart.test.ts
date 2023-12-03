@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { ConceptsPieChart } from '.';
+import { render, screen } from '@/test-utils';
 import { concepts } from '@/mocks/reviews';
 
 const total = Object.values(concepts).reduce((acc, curr) => acc + curr, 0);

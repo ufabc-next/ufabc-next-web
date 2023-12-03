@@ -1,9 +1,9 @@
-import {
+import type {
   SearchSubject,
   SearchTeacher,
   SubjectInfo,
   TeacherReview,
-} from 'types';
+} from '@next/types';
 
 import { api } from './api';
 

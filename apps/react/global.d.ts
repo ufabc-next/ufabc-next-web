@@ -1,3 +1,4 @@
+/* eslint-disable ts/consistent-type-imports */
 declare module '*.svg' {
   const content: string;
   export default content;

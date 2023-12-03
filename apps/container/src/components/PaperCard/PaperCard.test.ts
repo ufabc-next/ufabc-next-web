@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { PaperCard } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<PaperCard />', () => {
   test('render a paper card title', () => {

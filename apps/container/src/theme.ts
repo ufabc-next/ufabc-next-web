@@ -1,4 +1,4 @@
-import { ThemeDefinition } from 'vuetify/lib/framework.mjs';
+import type { ThemeDefinition } from 'vuetify/lib/framework.mjs';
 
 export const theme: ThemeDefinition = {
   dark: false,

@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { ConceptsHorizontalChart } from '.';
+import { render, screen } from '@/test-utils';
 import { subjectInfo } from '@/mocks/reviews';
 
 describe('<ConceptsHorizontalChart />', () => {

@@ -1,16 +1,10 @@
-<template>
-  <div class="chartWrapper">
-    <Chart :options="chartOptions"></Chart>
-  </div>
-</template>
-
 <script setup lang="ts">
-import { conceptsColor } from 'utils';
+import { conceptsColor } from '@next/utils';
 import { Chart } from 'highcharts-vue';
-import { computed, PropType } from 'vue';
-import { Concept } from 'types';
+import { type PropType, computed } from 'vue';
+import type { Concept } from '@next/types';
 
-type Grades = Record<string, number>
+type Grades = Record<string, number>;
 const props = defineProps({
   grades: { type: Object as PropType<Grades>, required: true },
 });
@@ -52,6 +46,12 @@ const chartOptions = {
   },
 };
 </script>
+
+<template>
+  <div class="chartWrapper">
+    <Chart :options="chartOptions"></Chart>
+  </div>
+</template>
 
 <style scoped>
 .chartWrapper {

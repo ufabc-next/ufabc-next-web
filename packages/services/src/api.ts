@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { authStore } from 'stores';
+import { authStore } from '@next/stores';
 
 export const api = axios.create({ baseURL: 'https://api.ufabcnext.com/v1/' });
 

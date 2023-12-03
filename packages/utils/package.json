@@ -1,20 +1,20 @@
 {
-  "name": "utils",
-  "version": "0.0.0",
-  "main": "./index.ts",
-  "license": "MIT",
+  "name": "@next/utils",
   "type": "module",
+  "version": "0.0.0",
+  "license": "MIT",
+  "main": "./index.ts",
   "scripts": {
-    "lint": "eslint src/**/*",
-    "lint:fix": "eslint src/**/* --fix",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
     "tsc": "tsc --noEmit"
   },
-  "devDependencies": {
-    "eslint-config-custom": "*",
-    "tsconfig": "*",
-    "typescript": "^5.2.2"
-  },
   "dependencies": {
-    "types": "*"
+    "@next/types": "workspace:*",
+    "dayjs": "^1.11.10"
+  },
+  "devDependencies": {
+    "@next/tsconfig": "workspace:*",
+    "typescript": "^5.2.2"
   }
 }

@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { authStore } from '@next/stores';
+import { computed, onMounted } from 'vue';
+import create from 'vue-zustand';
+import { ElMessage } from 'element-plus';
+import { VueQueryDevtools } from '@tanstack/vue-query-devtools';
+
+import { AppBar } from '@/layouts/AppBar';
+
+const isLocal = process.env.VUE_APP_MF_ENV === 'local';
+
+const useAuth = create(authStore);
+const { user } = useAuth();
+
+const confirmedUser = computed(() => !!user.value?.confirmed);
+
+onMounted(async () => {
+  window.Toaster = ElMessage;
+});
+</script>
+
 <template>
   <VueQueryDevtools v-if="isLocal" />
   <AppBar>
@@ -14,27 +35,6 @@
   </AppBar>
 </template>
 
-<script setup lang="ts">
-import { authStore } from 'stores';
-import { computed, onMounted } from 'vue';
-import create from 'vue-zustand';
-import { ElMessage } from 'element-plus';
-import { VueQueryDevtools } from '@tanstack/vue-query-devtools';
-
-const isLocal = process.env.VUE_APP_MF_ENV === 'local';
-
-import { AppBar } from '@/layouts/AppBar';
-
-const useAuth = create(authStore);
-const { user } = useAuth();
-
-const confirmedUser = computed(() => !!user.value?.confirmed);
-
-onMounted(async () => {
-  window.Toaster = ElMessage;
-});
-</script>
-
 <style>
 @import url('https://fonts.googleapis.com/css?family=Lato:100,300,400,500,700,900&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900&display=swap');
@@ -43,9 +43,11 @@ onMounted(async () => {
 * {
   font-family: Lato, sans-serif;
 }
+
 html {
   font-family: Lato, sans-serif;
 }
+
 #app {
   font-family: Lato, sans-serif;
 }

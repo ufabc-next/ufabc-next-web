@@ -103,7 +103,7 @@ const tableData = [
             min-width="170"
           />
           <el-table-column prop="amount" label="Custo" />
-          <template v-slot:append>
+          <template #append>
             <div class="summary">
               <div class="summary-text flex">Total de aproximadamente</div>
               <div class="summary-total">~R$ 1200,00/ano 😬</div>
@@ -117,8 +117,9 @@ const tableData = [
           class="dialog-open-btn bg-primary"
           size="x-large"
           @click="handleOpenDialog()"
-          >Quero ajudar!</v-btn
         >
+          Quero ajudar!
+        </v-btn>
       </v-col>
     </v-row>
     <v-dialog v-model="dialog" width="700px" transition="scroll-y-transition">
@@ -129,10 +130,10 @@ const tableData = [
           </v-card-title>
           <v-card-actions class="dialog-close-btn">
             <v-btn
-              @click="handleCloseDialog()"
               variant="tonal"
               icon="mdi-window-close"
               aria-label="Fechar"
+              @click="handleCloseDialog()"
             />
           </v-card-actions>
         </div>

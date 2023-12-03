@@ -1,4 +1,4 @@
-import { Concept } from './concepts';
+import type { Concept } from './concepts';
 
 type EnrollmentTeacherComment = {
   _id: string;

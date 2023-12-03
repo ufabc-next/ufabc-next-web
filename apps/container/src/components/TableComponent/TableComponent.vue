@@ -11,8 +11,6 @@
   </div>
 </template>
 
-<script setup lang="ts" />
-
 <style lang="scss">
 #table-component .fixed-column {
   position: sticky;

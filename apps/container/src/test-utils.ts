@@ -3,10 +3,11 @@ import { createVuetify } from 'vuetify';
 
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
-import { render, waitFor, within, screen } from '@testing-library/vue';
+import { render, screen, waitFor, within } from '@testing-library/vue';
 
 import { QueryClient, VueQueryPlugin } from '@tanstack/vue-query';
-import { Plugin } from 'vue';
+import type { Plugin } from 'vue';
+
 export { default as userEvent } from '@testing-library/user-event';
 
 const vuetify = createVuetify({
