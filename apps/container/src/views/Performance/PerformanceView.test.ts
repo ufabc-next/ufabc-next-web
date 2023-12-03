@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { PerformanceView } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<PerformanceView />', () => {
   test('render loading', () => {

@@ -1,8 +1,8 @@
-import { render, screen, userEvent } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { PendingReviewEnrollmentList } from '.';
+import { render, screen, userEvent } from '@/test-utils';
 import { enrollments } from '@/mocks/enrollments';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 
 describe('<PendingReviewEnrollmentList />', () => {
   test('render Pending Review Enrollments List with a reviewable subjects', async () => {

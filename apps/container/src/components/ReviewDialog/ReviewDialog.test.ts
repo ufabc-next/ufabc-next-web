@@ -1,17 +1,17 @@
+import { formatSeason } from '@next/utils';
+import { HttpResponse, http } from 'msw';
+import { ElMessage } from 'element-plus';
+import { ReviewDialog } from '.';
 import {
+  expectToasterToHaveText,
   render,
   screen,
   userEvent,
   waitFor,
-  expectToasterToHaveText,
 } from '@/test-utils';
-import { ReviewDialog } from '.';
 import { userCreateComment, userUpdateComment } from '@/mocks/reviews';
 import { enrollment } from '@/mocks/enrollments';
-import { formatSeason } from 'utils';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
-import { ElMessage } from 'element-plus';
 
 const commentAreaPlaceholder =
   'Faça aqui um comentário em relação ao docente e sua disciplina.';
@@ -45,11 +45,11 @@ describe('<ReviewDialog />', () => {
       );
       render(ReviewDialog, {
         props: {
-          enrollment: enrollment,
+          enrollment,
           showDialog: true,
           tags: [
             tagName,
-            formatSeason(enrollment.year + ':' + enrollment.quad),
+            formatSeason(`${enrollment.year}:${enrollment.quad}`),
           ],
         },
       });
@@ -91,11 +91,11 @@ describe('<ReviewDialog />', () => {
 
       render(ReviewDialog, {
         props: {
-          enrollment: enrollment,
+          enrollment,
           showDialog: true,
           tags: [
             tagName,
-            formatSeason(enrollment.year + ':' + enrollment.quad),
+            formatSeason(`${enrollment.year}:${enrollment.quad}`),
           ],
         },
       });
@@ -166,7 +166,7 @@ describe('<ReviewDialog />', () => {
     );
     render(ReviewDialog, {
       props: {
-        enrollment: enrollment,
+        enrollment,
         showDialog: true,
         tags: [],
       },
@@ -191,9 +191,9 @@ describe('<ReviewDialog />', () => {
     );
     render(ReviewDialog, {
       props: {
-        enrollment: enrollment,
+        enrollment,
         showDialog: true,
-        tags: ['teoria', formatSeason(enrollment.year + ':' + enrollment.quad)],
+        tags: ['teoria', formatSeason(`${enrollment.year}:${enrollment.quad}`)],
       },
     });
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
@@ -226,9 +226,9 @@ describe('<ReviewDialog />', () => {
     );
     render(ReviewDialog, {
       props: {
-        enrollment: enrollment,
+        enrollment,
         showDialog: true,
-        tags: ['teoria', formatSeason(enrollment.year + ':' + enrollment.quad)],
+        tags: ['teoria', formatSeason(`${enrollment.year}:${enrollment.quad}`)],
       },
     });
     expect(await screen.findByRole('dialog')).toBeInTheDocument();
@@ -252,9 +252,9 @@ describe('<ReviewDialog />', () => {
   test('not render Dialog if props is false', async () => {
     render(ReviewDialog, {
       props: {
-        enrollment: enrollment,
+        enrollment,
         showDialog: false,
-        tags: ['teoria', formatSeason(enrollment.year + ':' + enrollment.quad)],
+        tags: ['teoria', formatSeason(`${enrollment.year}:${enrollment.quad}`)],
       },
     });
     expect(screen.queryByRole('dialog')).not.toBeInTheDocument();

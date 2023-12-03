@@ -1,8 +1,8 @@
-import { render, screen, userEvent } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { HistoryView } from '.';
+import { render, screen, userEvent } from '@/test-utils';
 import { enrollments } from '@/mocks/enrollments';
 import { server } from '@/mocks/server';
-import { http, HttpResponse } from 'msw';
 
 describe('<CenteredLoading />', () => {
   test('show subjects table', async () => {

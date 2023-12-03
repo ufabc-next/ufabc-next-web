@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { PlanningView } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<PlanningView />', () => {
   test('render admin view', () => {

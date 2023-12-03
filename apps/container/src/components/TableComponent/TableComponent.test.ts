@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { TableComponent } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<TableComponent />', () => {
   test('render a table with head and body', () => {

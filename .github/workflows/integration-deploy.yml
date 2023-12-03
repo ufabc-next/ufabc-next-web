@@ -19,6 +19,7 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v2
       - uses: actions/setup-node@v3
         with:
           node-version: 20.x
@@ -42,9 +43,9 @@ jobs:
         run: pnpm i
 
       - name: Run tests and lint
-        uses: borales/actions-yarn@v4
-        with:
-          cmd: ${{ matrix.command }}
+        shell: bash
+        run: |
+          pnpm ${{ matrix.command }}
   build:
     if: github.event_name == 'push'
     runs-on: ubuntu-latest

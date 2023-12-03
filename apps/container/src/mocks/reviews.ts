@@ -1,4 +1,4 @@
-import {
+import type {
   CreateCommentRequest,
   GetCommentResponse,
   SearchSubject,
@@ -6,7 +6,8 @@ import {
   SubjectInfo,
   TeacherReview,
   UpdateCommentRequest,
-} from 'types';
+} from '@next/types';
+
 export const subjectInfo = {
   subject: {
     _id: '5bf5fbdb436c414f35a8ef48',

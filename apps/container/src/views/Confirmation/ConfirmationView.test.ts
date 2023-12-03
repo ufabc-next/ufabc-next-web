@@ -1,8 +1,8 @@
-import { render, screen } from '@/test-utils';
-import { ConfirmationView } from '.';
 import { useRouter } from 'vue-router';
-import { server } from '@/mocks/server';
 import { HttpResponse, http } from 'msw';
+import { ConfirmationView } from '.';
+import { render, screen } from '@/test-utils';
+import { server } from '@/mocks/server';
 
 vi.mock('@/views/Calengrade', () => ({
   CalengradeView: () => 'CalengradeView',

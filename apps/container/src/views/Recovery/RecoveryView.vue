@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import { useMutation } from '@tanstack/vue-query';
-import { Users } from 'services';
+import { Users } from '@next/services';
 import { z } from 'zod';
 
 import { toTypedSchema } from '@vee-validate/zod';
-import { useForm, useField } from 'vee-validate';
+import { useField, useForm } from 'vee-validate';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -84,7 +84,7 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
             ></v-text-field>
             <div class="d-flex">
               <v-btn class="mr-2" rounded size="large" @click="router.go(-1)">
-                <v-icon class="mr-1">mdi-arrow-left</v-icon> Anterior
+                <v-icon class="mr-1"> mdi-arrow-left </v-icon> Anterior
               </v-btn>
               <v-btn
                 color="#4a90e2"
@@ -94,7 +94,7 @@ const onSubmit = handleSubmit(({ email }) => mutateRecover(email));
                 :loading="isPendingSubmit"
                 :disabled="!meta.valid"
               >
-                Próximo <v-icon class="ml-1">mdi-arrow-right</v-icon>
+                Próximo <v-icon class="ml-1"> mdi-arrow-right </v-icon>
               </v-btn>
             </div>
           </v-form>

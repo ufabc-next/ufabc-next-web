@@ -1,15 +1,57 @@
+<script setup lang="ts">
+import { type PropType, computed, ref } from 'vue';
+import { checkEAD, conceptsColor, formatSeason } from '@next/utils';
+import type { Enrollment } from '@next/types';
+import { ReviewDialog } from '@/components/ReviewDialog';
+
+const props = defineProps({
+  enrollment: {
+    type: Object as PropType<Enrollment>,
+    required: true,
+  },
+});
+
+const showDialog = ref(false);
+
+const conceptStyle = computed(() => ({
+  backgroundColor: conceptsColor[props.enrollment.conceito],
+  height: '54px',
+  width: '54px',
+  fontSize: '34px',
+}));
+
+const isEAD = computed(() =>
+  checkEAD(props.enrollment.year, props.enrollment.quad),
+);
+const subjectType = computed(() =>
+  props.enrollment.teoria
+    ? props.enrollment.pratica
+      ? 'teoria e prática'
+      : 'teoria'
+    : 'prática',
+);
+const tags = computed(() => {
+  const tags = [
+    subjectType.value,
+    formatSeason(`${props.enrollment.year}:${props.enrollment.quad}`),
+  ];
+  isEAD.value && tags.push('EAD');
+  return tags;
+});
+</script>
+
 <template>
   <ReviewDialog
     :enrollment="enrollment"
-    :showDialog="showDialog"
+    :show-dialog="showDialog"
     :tags="tags"
-    @update:showDialog="showDialog = $event"
+    @update:show-dialog="showDialog = $event"
   />
   <v-container
-    @click="showDialog = true"
     class="pa-3 bg-secondary rounded-lg"
     style="max-width: none"
     role="button"
+    @click="showDialog = true"
   >
     <v-row class="ma-0">
       <v-col class="d-flex align-center text-primary pa-0 font-weight-bold">
@@ -50,52 +92,12 @@
       </v-col>
       <v-col cols="12" sm="auto" class="d-flex justify-end align-end pa-0">
         AVALIAR
-        <v-icon class="ml-1">mdi-plus-circle-outline</v-icon>
+        <v-icon class="ml-1"> mdi-plus-circle-outline </v-icon>
       </v-col>
     </v-row>
   </v-container>
 </template>
 
-<script setup lang="ts">
-import { PropType, computed, ref } from 'vue';
-import { ReviewDialog } from '@/components/ReviewDialog';
-import { checkEAD, conceptsColor, formatSeason } from 'utils';
-import { Enrollment } from 'types';
-const showDialog = ref(false);
-
-const conceptStyle = computed(() => ({
-  backgroundColor: conceptsColor[props.enrollment.conceito],
-  height: '54px',
-  width: '54px',
-  fontSize: '34px',
-}));
-
-const props = defineProps({
-  enrollment: {
-    type: Object as PropType<Enrollment>,
-    required: true,
-  },
-});
-
-const isEAD = computed(() =>
-  checkEAD(props.enrollment.year, props.enrollment.quad),
-);
-const subjectType = computed(() =>
-  props.enrollment.teoria
-    ? props.enrollment.pratica
-      ? 'teoria e prática'
-      : 'teoria'
-    : 'prática',
-);
-const tags = computed(() => {
-  const tags = [
-    subjectType.value,
-    formatSeason(props.enrollment.year + ':' + props.enrollment.quad),
-  ];
-  isEAD.value && tags.push('EAD');
-  return tags;
-});
-</script>
 <style scoped>
 .line-clamp {
   display: -webkit-box;

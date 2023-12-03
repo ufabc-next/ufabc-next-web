@@ -1,8 +1,8 @@
-import { render, screen, userEvent, waitFor } from '@/test-utils';
+import { HttpResponse, http } from 'msw';
 import { SettingsView } from '.';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { user as mockedUser } from '@/mocks/users';
 import { server } from '@/mocks/server';
-import { HttpResponse, http } from 'msw';
 import { useAuth } from '@/stores/useAuth';
 
 describe('<SettingsView />', () => {
@@ -85,6 +85,8 @@ describe('<SettingsView />', () => {
     expect(useAuth.getState().user).not.toBeNull();
     user.click(screen.getByRole('button', { name: 'Excluir conta' }));
   });
+
+  // eslint-disable-next-line test/no-identical-title
   test('show toast if error when deactivate user', async () => {
     server.use(
       http.delete(/.*\/users\/me\/delete/, () => HttpResponse.error()),

@@ -1,18 +1,24 @@
-import { http, HttpResponse } from 'msw';
+import { HttpResponse, http } from 'msw';
 import { user, userGrades } from './users';
 import { enrollment, enrollments } from './enrollments';
 import {
-  usage,
-  courses,
   classes,
-  overview,
-  courseNames,
   classesPage1,
-  subjects,
+  courseNames,
+  courses,
   grades,
+  overview,
+  subjects,
+  usage,
 } from './stats';
 import { historiesGraduations } from './performance';
-import { comments, subject, subjectSearch, teacher, teacherSearch } from './reviews';
+import {
+  comments,
+  subject,
+  subjectSearch,
+  teacher,
+  teacherSearch,
+} from './reviews';
 
 const baseUrl = 'https://api.ufabcnext.com/v1';
 

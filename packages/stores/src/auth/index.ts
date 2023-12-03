@@ -1,4 +1,4 @@
-import type { User } from 'types';
+import type { User } from '@next/types';
 import { persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
 

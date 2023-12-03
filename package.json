@@ -1,21 +1,21 @@
 {
   "private": true,
+  "type": "module",
   "scripts": {
     "build": "turbo run build",
     "build:staging": "turbo run build:staging",
     "dev": "turbo run dev",
-    "lint": "turbo run lint",
-    "lint:fix": "turbo run lint:fix",
-    "test": "turbo run test",
+    "lint": "turbo run lint --parallel",
+    "lint:fix": "turbo run lint:fix --parallel",
+    "test": "turbo run test --parallel",
     "tsc": "turbo run tsc --parallel"
   },
   "devDependencies": {
-    "eslint": "^8.54.0",
-    "eslint-config-custom": "*",
-    "prettier": "^3.1.0",
-    "turbo": "1.10.16",
     "@commitlint/cli": "18.4.3",
-    "@commitlint/config-conventional": "18.4.3"
+    "@commitlint/config-conventional": "18.4.3",
+    "@joabesv/eslint-config": "^3.1.2",
+    "prettier": "^3.1.0",
+    "turbo": "1.10.16"
   },
   "name": "ufabc-next-web",
   "packageManager": "pnpm@8.11.0",
@@ -26,5 +26,13 @@
   "engines": {
     "node": "^20",
     "pnpm": "^8"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "allowedVersions": {
+        "consolidate>react-dom": "18",
+        "consolidate>react": "18"
+      }
+    }
   }
 }

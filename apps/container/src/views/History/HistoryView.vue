@@ -1,12 +1,136 @@
+<script setup lang="ts">
+import { useQuery } from '@tanstack/vue-query';
+import { Enrollments, Users } from '@next/services';
+import type { Concept, Enrollment } from '@next/types';
+import { computed, ref } from 'vue';
+import {
+  checkEAD,
+  conceptsColor,
+  extensionURL,
+  formatSeason,
+  studentRecordURL,
+} from '@next/utils';
+import { ReviewDialog } from '@/components/ReviewDialog';
+import { CenteredLoading } from '@/components/CenteredLoading';
+import { PaperCard } from '@/components/PaperCard';
+import { TableComponent } from '@/components/TableComponent';
+import { FeedbackAlert } from '@/components/FeedbackAlert';
+
+const showDialog = ref(false);
+const selectedEnrollment = ref<Enrollment>();
+
+const tags = ref<string[]>([]);
+const handleOpenDialog = (
+  enrollment: Enrollment,
+  type: 'teoria' | 'pratica',
+) => {
+  const processedEnrollment: Enrollment = {
+    ...enrollment,
+    [type]: enrollment[type],
+  };
+  selectedEnrollment.value = processedEnrollment;
+
+  const isEAD =
+    enrollment.year &&
+    enrollment.quad &&
+    checkEAD(enrollment.year, enrollment.quad);
+
+  tags.value = [
+    enrollment.pratica?._id === enrollment.teoria?._id
+      ? 'teoria e prática'
+      : type === 'pratica'
+        ? 'prática'
+        : 'teoria',
+    formatSeason(`${processedEnrollment.year}:${processedEnrollment.quad}`),
+    isEAD && 'EAD',
+  ].filter(Boolean) as string[];
+
+  showDialog.value = true;
+};
+
+const tableHead = [
+  'Disciplina',
+  'Professor de Teoria',
+  'Professor de Prática',
+  'Conceito',
+  'Créditos',
+];
+
+const extensionDialog = ref(false);
+
+const handleCloseExtensionDialog = () => {
+  extensionDialog.value = false;
+};
+
+const handleOpenExtensionDialog = () => {
+  extensionDialog.value = true;
+};
+
+const subjectConceptClass = {
+  A: 'gray',
+  B: 'gray',
+  C: 'gray',
+  D: 'gray',
+  O: 'error',
+  F: 'error',
+  E: 'error',
+  I: 'error',
+} satisfies Record<Concept, string>;
+
+const {
+  data: enrollments,
+  isPending: isPendingEnrollments,
+  isError: isErrorEnrollments,
+} = useQuery({
+  queryKey: ['enrollments', 'list'],
+  queryFn: Enrollments.list,
+  select: (response) => response.data,
+});
+
+const { data: user, isError: isErrorUser } = useQuery({
+  queryKey: ['users', 'info'],
+  queryFn: Users.info,
+  select: (response) => response.data,
+});
+
+const enrollmentByDate = computed(() => {
+  const enrollmentCopy = enrollments.value?.slice();
+  return enrollmentCopy?.reduce(
+    (acc, enroll) => {
+      const date = enroll.quad + enroll.year * 10;
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(enroll);
+      return acc;
+    },
+    {} as Record<string, Enrollment[]>,
+  );
+});
+
+const hasCommented = (item: Enrollment) =>
+  item.comments?.includes('pratica') ||
+  (item.pratica?._id === item.teoria?._id && item.comments?.includes('teoria'));
+
+const enrollmentByDateKeysSorted = computed(() =>
+  Object.keys(enrollmentByDate.value || {}).sort(),
+);
+
+const lastUpdate = computed(() => {
+  const date = enrollments.value?.[0]?.updatedAt;
+  return date && new Date(date);
+});
+</script>
+
 <template>
   <FeedbackAlert v-if="isErrorEnrollments" />
   <FeedbackAlert v-if="isErrorUser" />
   <ReviewDialog
     v-if="showDialog"
     :enrollment="selectedEnrollment"
-    :showDialog="showDialog"
+    :show-dialog="showDialog"
     :tags="tags"
-    @update:showDialog="showDialog = $event"
+    @update:show-dialog="showDialog = $event"
   />
   <PaperCard title="Ficha individual do aluno" class="text-next-grey">
     <p class="mt-4">
@@ -41,11 +165,11 @@
       <div class="chip">
         <v-btn
           icon="mdi-refresh"
-          @click="handleOpenExtensionDialog"
           flat
           variant="text"
           size="x-small"
           aria-labelledby="extension-dialog"
+          @click="handleOpenExtensionDialog"
         >
           <v-dialog v-model="extensionDialog" width="360">
             <v-card class="pa-4">
@@ -64,16 +188,18 @@
                   target="_blank"
                   :href="extensionURL"
                   @click="handleCloseExtensionDialog"
-                  >Não tenho</v-btn
                 >
+                  Não tenho
+                </v-btn>
                 <v-btn
                   color="success"
                   class="text-subtitle"
                   target="_blank"
                   :href="studentRecordURL"
                   @click="handleCloseExtensionDialog"
-                  >Já tenho instalado</v-btn
                 >
+                  Já tenho instalado
+                </v-btn>
               </v-card-actions>
             </v-card>
           </v-dialog>
@@ -82,8 +208,9 @@
             activator="parent"
             offset="1"
             location="bottom center"
-            >Atualizar o histórico</v-tooltip
           >
+            Atualizar o histórico
+          </v-tooltip>
           <v-icon size="x-large" />
         </v-btn>
         {{
@@ -211,8 +338,8 @@
       </TableComponent>
     </div>
     <div
-      class="mt-5 d-flex justify-center align-center flex-column"
       v-else-if="!isPendingEnrollments"
+      class="mt-5 d-flex justify-center align-center flex-column"
     >
       <h2 class="mb-4">
         Parece que não encontramos os dados do seu histórico :( <br />
@@ -270,126 +397,3 @@
   }
 }
 </style>
-<script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
-import { Enrollments, Users } from 'services';
-import type { Concept, Enrollment } from 'types';
-import { computed, ref } from 'vue';
-import { ReviewDialog } from '@/components/ReviewDialog';
-import { CenteredLoading } from '@/components/CenteredLoading';
-import { PaperCard } from '@/components/PaperCard';
-import { TableComponent } from '@/components/TableComponent';
-import { FeedbackAlert } from '@/components/FeedbackAlert';
-import {
-  checkEAD,
-  conceptsColor,
-  extensionURL,
-  formatSeason,
-  studentRecordURL,
-} from 'utils';
-
-const showDialog = ref(false);
-const selectedEnrollment = ref<Enrollment>();
-
-const tags = ref<string[]>([]);
-const handleOpenDialog = (
-  enrollment: Enrollment,
-  type: 'teoria' | 'pratica',
-) => {
-  const processedEnrollment: Enrollment = {
-    ...enrollment,
-    [type]: enrollment[type],
-  };
-  selectedEnrollment.value = processedEnrollment;
-
-  const isEAD =
-    enrollment.year &&
-    enrollment.quad &&
-    checkEAD(enrollment.year, enrollment.quad);
-
-  tags.value = [
-    enrollment.pratica?._id === enrollment.teoria?._id
-      ? 'teoria e prática'
-      : type === 'pratica'
-      ? 'prática'
-      : 'teoria',
-    formatSeason(processedEnrollment.year + ':' + processedEnrollment.quad),
-    isEAD && 'EAD',
-  ].filter(Boolean) as string[];
-
-  showDialog.value = true;
-};
-
-const tableHead = [
-  'Disciplina',
-  'Professor de Teoria',
-  'Professor de Prática',
-  'Conceito',
-  'Créditos',
-];
-
-const extensionDialog = ref(false);
-
-const handleCloseExtensionDialog = () => {
-  extensionDialog.value = false;
-};
-
-const handleOpenExtensionDialog = () => {
-  extensionDialog.value = true;
-};
-
-const subjectConceptClass = {
-  A: 'gray',
-  B: 'gray',
-  C: 'gray',
-  D: 'gray',
-  O: 'error',
-  F: 'error',
-  E: 'error',
-  I: 'error',
-} satisfies Record<Concept, string>;
-
-const {
-  data: enrollments,
-  isPending: isPendingEnrollments,
-  isError: isErrorEnrollments,
-} = useQuery({
-  queryKey: ['enrollments', 'list'],
-  queryFn: Enrollments.list,
-  select: (response) => response.data,
-});
-
-const { data: user, isError: isErrorUser } = useQuery({
-  queryKey: ['users', 'info'],
-  queryFn: Users.info,
-  select: (response) => response.data,
-});
-
-const enrollmentByDate = computed(() => {
-  const enrollmentCopy = enrollments.value?.slice();
-  return enrollmentCopy?.reduce(
-    (acc, enroll) => {
-      const date = enroll.quad + enroll.year * 10;
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(enroll);
-      return acc;
-    },
-    {} as Record<string, Enrollment[]>,
-  );
-});
-
-const hasCommented = (item: Enrollment) =>
-  item.comments?.includes('pratica') ||
-  (item.pratica?._id === item.teoria?._id && item.comments?.includes('teoria'));
-
-const enrollmentByDateKeysSorted = computed(() =>
-  Object.keys(enrollmentByDate.value || {}).sort(),
-);
-
-const lastUpdate = computed(() => {
-  const date = enrollments.value?.[0]?.updatedAt;
-  return date && new Date(date);
-});
-</script>

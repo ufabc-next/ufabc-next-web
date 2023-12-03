@@ -1,4 +1,4 @@
-import type { User } from 'types';
+import type { User } from '@next/types';
 
 export const user = {
   _id: '123',

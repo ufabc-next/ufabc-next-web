@@ -1,16 +1,6 @@
-<template>{{}}</template>
-<style lang="scss" scoped>
-.alert {
-  z-index: 1000;
-  right: 15px;
-  width: 350px;
-  bottom: 15px;
-}
-</style>
 <script setup lang="ts">
-import { PropType } from 'vue';
+import { type PropType, onMounted } from 'vue';
 import { ElMessage } from 'element-plus';
-import { onMounted } from 'vue';
 
 const props = defineProps({
   type: {
@@ -37,3 +27,14 @@ onMounted(() => {
   });
 });
 </script>
+
+<template>{{}}</template>
+
+<style lang="scss" scoped>
+.alert {
+  z-index: 1000;
+  right: 15px;
+  width: 350px;
+  bottom: 15px;
+}
+</style>

@@ -1,5 +1,5 @@
-import { render, screen } from '@/test-utils';
 import { WelcomeMessage } from '.';
+import { render, screen } from '@/test-utils';
 
 describe('<WelcomeMessage />', () => {
   test('render welcome messages and next benefits', () => {
