@@ -68,8 +68,7 @@
     "lint-staged": "15.1.0",
     "msw": "^2.0.9",
     "typescript": "5.3.2",
-    "vitest": "0.34.6",
-    "tsconfig": "workspace:*"
+    "vitest": "0.34.6"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"
