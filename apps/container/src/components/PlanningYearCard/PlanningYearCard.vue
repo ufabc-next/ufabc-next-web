@@ -1,13 +1,13 @@
 <template>
   <v-card class="planning-year-card align-center">
   <v-card-text class="year">
-      <p>{{ props.year }}° ano</p>
+      <p>{{ props.index + 1 }}° ano</p>
   </v-card-text>
     <section class="d-flex flex-column mb-4 elevation-2 pa-3 bg-white rounded-lg">
       <div class="grid-container">
           <PlanningQuadCard
           :quadri="1"
-          :year="2019"
+          :year=props.year
           :credits="17"
           />
           
@@ -38,7 +38,8 @@
 import { PlanningQuadCard } from '@/components/PlanningQuadCard';
 const props = defineProps<{
   value: string | number;
-  year: string;
+  index: number;
+  year: number;
   icon: string;
   color: string;
 }>();
@@ -63,6 +64,11 @@ gap: 20px; /* Espaçamento entre os itens */
 }
 .year {
   background-color: #07060686;
+  border-radius: 0.5rem;
+  width: 7%;
+  text-align: center;
+  color: white;
+  padding: 3px;
 }
 .grid-item {
 background-color: #ddd;
