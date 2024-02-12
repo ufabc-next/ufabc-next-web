@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@tanstack/query-core": "5.8.7",
-    "@tanstack/react-query": "5.8.7",
+    "@tanstack/react-query": "5.20.1",
     "dayjs": "^1.11.10",
     "ics": "^3.5.0",
     "react": "^18.2.0",
