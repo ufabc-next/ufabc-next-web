@@ -143,7 +143,7 @@ const onSubmit = handleSubmit(({ email, ra }) => mutateFacebook({ email, ra }));
           <p class="step-subtitle text-center mb-5">
             Identificamos que você não tem um cadastro no UFABC Next através do
             Facebook. <br />
-            Para continuar, volte para a home e
+            Para continuar, volte para a página inicial e
             <strong>crie uma conta</strong> utilizando o
             <strong>Google</strong>.
           </p>
@@ -162,7 +162,7 @@ const onSubmit = handleSubmit(({ email, ra }) => mutateFacebook({ email, ra }));
               style="text-transform: unset !important"
               class="flex-grow-1"
               size="x-large"
-              >Voltar para a home</v-btn
+              >Voltar para a página inicial</v-btn
             >
           </div>
         </div>
