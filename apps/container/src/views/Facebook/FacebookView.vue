@@ -1,20 +1,19 @@
 <script setup lang="ts">
-import { useMutation } from '@tanstack/vue-query';
 import { ref } from 'vue';
-
-import { Users } from 'services';
+import { useRouter } from 'vue-router';
+import { useMutation } from '@tanstack/vue-query';
 import { z } from 'zod';
-
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm, useField } from 'vee-validate';
-import { useRouter } from 'vue-router';
-import { useAuth } from '@/stores/useAuth';
 import { ElMessage } from 'element-plus';
-const redirectToHome = () => (windowLocation.pathname = '/');
+
+import { useAuth } from '@/stores/useAuth';
+import { Users } from 'services';
+
+const facebookNotFound = ref(false);
 
 const { authenticate } = useAuth();
 const router = useRouter();
-const windowLocation = window.location;
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -29,15 +28,13 @@ const validationSchema = toTypedSchema(
     ra: z.string({ required_error: 'Este campo é obrigatório' }),
   }),
 );
-
 const { handleSubmit } = useForm({
   validationSchema,
 });
+
 const { value: emailField, errorMessage: emailErrorMessage } =
   useField('email');
 const { value: raField, errorMessage: raErrorMessage } = useField('ra');
-
-const facebookNotFound = ref(false);
 const { mutate: mutateFacebook, isPending: isPendingSubmit } = useMutation({
   mutationFn: Users.facebookAuth,
   onSuccess({ data }) {
@@ -56,6 +53,8 @@ const { mutate: mutateFacebook, isPending: isPendingSubmit } = useMutation({
   },
 });
 
+const windowLocation = window.location;
+const redirectToHome = () => (windowLocation.pathname = '/');
 const onSubmit = handleSubmit(({ email, ra }) => mutateFacebook({ email, ra }));
 </script>
 
