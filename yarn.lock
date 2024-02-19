@@ -12464,9 +12464,9 @@ zod@3.22.4, zod@^3.22.4:
   resolved "https://registry.yarnpkg.com/zod/-/zod-3.22.4.tgz#f31c3a9386f61b1f228af56faa9255e845cf3fff"
   integrity sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==
 
-zustand@^4.4.4, zustand@^4.4.6:
-  version "4.4.6"
-  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.4.6.tgz#03c78e3e2686c47095c93714c0c600b72a6512bd"
-  integrity sha512-Rb16eW55gqL4W2XZpJh0fnrATxYEG3Apl2gfHTyDSE965x/zxslTikpNch0JgNjJA9zK6gEFW8Fl6d1rTZaqgg==
+zustand@^4.5.1:
+  version "4.5.1"
+  resolved "https://registry.yarnpkg.com/zustand/-/zustand-4.5.1.tgz#2088956ee454759fb8b866ca335a2373e76736c5"
+  integrity sha512-XlauQmH64xXSC1qGYNv00ODaQ3B+tNPoy22jv2diYiP4eoDKr9LA+Bh5Bc3gplTrFdb6JVI+N4kc1DZ/tbtfPg==
   dependencies:
     use-sync-external-store "1.2.0"
