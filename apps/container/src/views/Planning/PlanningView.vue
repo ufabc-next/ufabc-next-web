@@ -41,21 +41,13 @@
         >
         </PlanningCard>
       </div>
-
-
-      
-      <div class="planning" v-for="(year, index) in enrollmentByYearKeysSorted" :key="year">
-        <PlanningYearCard
-          :value="userMaxCr"
-          :year="year"
-          :index="index"
-          color="ufabcnext-green"
-          :quadrimestres="getQuadrimestersOfYear(year)"
-          :materias="teste"
-        >
+      {{ cursos }}
+      <PlanningYearCard
+        :materias="teste"
+        :grade="cpHistoryData"
+      >
       </PlanningYearCard>
 
-      </div>
       
 
       
@@ -122,7 +114,19 @@ import type { Enrollment } from 'types';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { PaperCard } from '@/components/PaperCard';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
-import { Enrollments } from 'services';
+import { Enrollments, Performance, Graduations } from 'services';
+
+const { data: cursos } = useQuery({
+  queryKey: ['graduation'],
+  queryFn: async () => {
+    try {
+      const response = await Graduations.list1();
+      return response.data;
+    } catch (error) {
+      throw new Error('Erro ao obter dados de graduação');
+    }
+  },
+});
 
 const courseOptions = [
   'Minha Graduação',
@@ -156,22 +160,31 @@ const courseOptions = [
 const teste = {
   "20202": [
     {
-      "_id": "6005b8f1c4941ebd70f977eb",
-      "conceito": "A",
+      // "_id": "6005b8f1c4941ebd70f977eb",
+      "conceito": "O",
       "creditos": 2,
       "disciplina": "Bases Conceituais da Energia",
       "quad": 2,
-      "subject": {
-        "_id": "5bf5fbdb436c414f35a8ef82",
-        "name": "Bases Conceituais da Energia",
-        "search": "Bases Conceituais Da Energia",
-        "updatedAt": "2018-11-22T00:44:12.263Z",
-        "createdAt": "2018-11-22T00:44:12.263Z",
-        "__v": 0,
-        "creditos": 2
-      },
-      "updatedAt": "2024-01-11T09:12:11.508Z",
-      "year": 2020
+      // "subject": {
+      //   "_id": "5bf5fbdb436c414f35a8ef82",
+      //   "name": "Bases Conceituais da Energia",
+      //   "search": "Bases Conceituais Da Energia",
+      //   "updatedAt": "2018-11-22T00:44:12.263Z",
+      //   "createdAt": "2018-11-22T00:44:12.263Z",
+      //   "__v": 0,
+      //   "creditos": 2
+      // },
+      // "updatedAt": "2024-01-11T09:12:11.508Z",
+      "year": 2020,
+      
+      // "creditos":2,
+      // "disciplina":"Bases Conceituais da Energia",
+      "codigo":"BIJ0207-15",
+      // "ano":2020,
+      // "periodo":"2",
+      "categoria":"Obrigatória",
+      // "conceito":"A",
+      // "situacao":"Aprovado"
     },
     {
       "_id": "6005b8f1c4941ebd70f977ed",
@@ -1653,50 +1666,6 @@ const enrollmentByDateKeysSorted = computed(() =>
   Object.keys(enrollmentByDate.value || {}).sort(),
 );
 
-const enrollmentByYearKeysSorted = computed(() => {
-  const sortedKeys = Object.keys(enrollmentByDate.value || {}).sort();
-  const firstFourDigits = sortedKeys.map(date => date.substring(0, 4));
-
-  // Remover valores duplicados utilizando Set
-  const uniqueYears = [...new Set(firstFourDigits)];
-
-  return uniqueYears; // Retorna um array com valores únicos
-});
-const enrollmentQuadrimestersOfYear = computed(() => (yearToFilter: string) => {
-  const sortedKeys = Object.keys(enrollmentByDate.value || {}).sort();
-  
-  const quadrimesters = sortedKeys
-    .filter(date => date.startsWith(yearToFilter)) // Filtra os quadrimestres do ano desejado
-    .map(date => date.substring(4)); // Extrai apenas os quadrimestres
-
-  // Remove valores duplicados utilizando Set
-  const uniqueQuadrimesters = [...new Set(quadrimesters)];
-
-  return uniqueQuadrimesters; // Retorna um array com valores únicos de quadrimestres do ano específico
-});
-const getQuadrimestersOfYear = (yearToFilter: string) => {
-      return enrollmentQuadrimestersOfYear.value(yearToFilter);
-};
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // DADOS SOBRE CR
 const {
   data: crHistoryData,
@@ -1715,6 +1684,20 @@ const userMaxCr = computed(() => {
   }
 });
 
+
+// const cpHistoryData = ref([]);
+
+const { data: cpHistoryData } = useQuery({
+  queryKey: ['historiesGraduations'],
+  queryFn: Performance.getHistoriesGraduations,
+  select: (response) => {
+    const disciplinas = response.data.docs.map((curso) => curso.disciplinas);
+    return disciplinas[0];
+  }
+});
+
+
+
 // DADOS SOBRE CP
 // const currentCpHistory = ref<CourseInformation>();
 // const {
@@ -1729,6 +1712,7 @@ const userMaxCr = computed(() => {
 //   },
 // });
 </script>
+
     
 <style scoped>
 .meu-layout {

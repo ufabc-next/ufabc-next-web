@@ -25,6 +25,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "vue-smooth-dnd": "^0.8.1",
     "vuedraggable": "^2.24.3"
   }
 }
