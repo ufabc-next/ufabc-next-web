@@ -2021,10 +2021,10 @@
   resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.8.7.tgz#460137555565d478930690f2c992f414da3bec7b"
   integrity sha512-58xOSkxxZK4SGQ/uzX8MDZHLGZCkxlgkPxnfhxUOL2uchnNHyay2UVcR3mQNMgaMwH1e2l+0n+zfS7+UJ/MAJw==
 
-"@tanstack/query-devtools@5.8.4":
-  version "5.8.4"
-  resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.8.4.tgz#88849bd27b7c8fa9034f95d24d58c3b82e182269"
-  integrity sha512-F1dRbITNt9tMUoM9WCH8WQ2c54116hv52m/PKK8ZiN/pO2wGVzTZtKuLanF8pFpwmNchjIixcMw/a57HY5ivcw==
+"@tanstack/query-devtools@5.15.0":
+  version "5.15.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-devtools/-/query-devtools-5.15.0.tgz#46fe98491be19cbbce8e2f4bb56190f94913ebec"
+  integrity sha512-oz+xBIf+fanmAQ3CZrV4t+1VZiK2nyTcH3zY3G8ukzw+LwX2QGa04ZfF+OCOVF6tPZ2dn1cekMibUb4tevf/aw==
 
 "@tanstack/react-query@5.8.7":
   version "5.8.7"
@@ -2033,12 +2033,12 @@
   dependencies:
     "@tanstack/query-core" "5.8.7"
 
-"@tanstack/vue-query-devtools@5.8.4":
-  version "5.8.4"
-  resolved "https://registry.yarnpkg.com/@tanstack/vue-query-devtools/-/vue-query-devtools-5.8.4.tgz#4f30fe0726658fae5bf32bdeefd938770937cc46"
-  integrity sha512-5hgGOuA4e0WYV0yGHaBMO9FFnQCmp4MYjJg02nC2OjW5i7rtLu8VzYVQmbjhNZsBKs7083ZCCC5a077gZm50ew==
+"@tanstack/vue-query-devtools@5.15.0":
+  version "5.15.0"
+  resolved "https://registry.yarnpkg.com/@tanstack/vue-query-devtools/-/vue-query-devtools-5.15.0.tgz#746fabc11b3786df0388e867d7fc991e3b5d4873"
+  integrity sha512-BxpOrzrEHenbk+vBpsPJh+d+WSFoLxwD43lZVLAKJn+b+nG6jTncqXG+likke4SE4GxB+bQ/defhMvf/JBUOVQ==
   dependencies:
-    "@tanstack/query-devtools" "5.8.4"
+    "@tanstack/query-devtools" "5.15.0"
 
 "@tanstack/vue-query@5.8.7":
   version "5.8.7"
