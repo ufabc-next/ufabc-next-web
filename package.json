@@ -15,7 +15,7 @@
     "prettier": "^3.1.0",
     "turbo": "1.10.16",
     "@commitlint/cli": "18.4.3",
-    "@commitlint/config-conventional": "18.4.3"
+    "@commitlint/config-conventional": "19.1.0"
   },
   "name": "ufabc-next-web",
   "packageManager": "yarn@1.22.19",
