@@ -2083,10 +2083,10 @@
   resolved "https://registry.yarnpkg.com/@testing-library/user-event/-/user-event-14.5.1.tgz#27337d72046d5236b32fd977edee3f74c71d332f"
   integrity sha512-UCcUKrUYGj7ClomOo2SpNVvx4/fkd/2BbIHDCle8A0ax+P3bU7yJwDBDrS6ZwdTMARWTGODX1hEsCcO+7beJjg==
 
-"@testing-library/vue@8.0.1":
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/@testing-library/vue/-/vue-8.0.1.tgz#3def5854daa7e5f98a9d05ecf65a2d84ca551b02"
-  integrity sha512-l51ZEpjTQ6glq3wM+asQ1GbKJMGcxwgHEygETx0aCRN4TjFEGvMZy4YdWKs/y7bu4bmLrxcxhbEPP7iPSW/2OQ==
+"@testing-library/vue@8.0.3":
+  version "8.0.3"
+  resolved "https://registry.yarnpkg.com/@testing-library/vue/-/vue-8.0.3.tgz#088bd8e6272fd5e38e9bf40cc195a1c346c314a6"
+  integrity sha512-wSsbNlZ69ZFQgVlHMtc/ZC/g9BHO7MhyDrd4nHyfEubtMr3kToN/w4/BsSBknGIF8w9UmPbsgbIuq/CbdBHzCA==
   dependencies:
     "@babel/runtime" "^7.23.2"
     "@testing-library/dom" "^9.3.3"
