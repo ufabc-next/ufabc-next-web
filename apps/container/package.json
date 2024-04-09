@@ -33,7 +33,7 @@
     "stores": "*",
     "utils": "*",
     "vee-validate": "4.12.0",
-    "vue": "3.3.9",
+    "vue": "3.4.21",
     "vue-router": "4.2.5",
     "vue-zustand": "0.6.0",
     "vuetify": "3.4.3",
