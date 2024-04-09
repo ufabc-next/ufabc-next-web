@@ -24,7 +24,7 @@
     "core-js": "3.33.3",
     "dayjs": "1.11.10",
     "element-plus": "2.4.2",
-    "highcharts": "11.2.0",
+    "highcharts": "11.4.1",
     "highcharts-vue": "1.4.3",
     "lodash.debounce": "4.0.8",
     "react": "18.2.0",
