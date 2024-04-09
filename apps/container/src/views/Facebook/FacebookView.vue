@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 import { useMutation } from '@tanstack/vue-query';
 import { z } from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
@@ -46,12 +48,16 @@ const { mutate: mutateFacebook, isPending: isPendingSubmit } = useMutation({
     router.push('/reviews');
   },
   onError() {
-    redirectToHome();
-  }
-})
+    window.Toaster.error('Login com Facebook não encontrado');
+    facebookNotFound.value = true;
+  },
+});
 
-const onSubmit = handleSubmit(({ email, ra }) => mutateFacebook({ email, ra }));
-
+const windowLocation = window.location;
+const redirectToHome = () => (windowLocation.pathname = '/');
+const onSubmit = handleSubmit(({ email, ra }) =>
+  mutateFacebook({ email: email.toLowerCase(), ra }),
+);
 </script>
 
 <template>
@@ -92,8 +98,15 @@ const onSubmit = handleSubmit(({ email, ra }) => mutateFacebook({ email, ra }));
           </p>
         </div>
 
-          <v-text-field v-model="emailField" label="Insira seu email do Facebook" variant="solo" class="w-100"
-            prepend-inner-icon="mdi-email" :error-messages="emailErrorMessage">
+        <v-form @submit.prevent="onSubmit">
+          <v-text-field
+            v-model.trim="emailField"
+            label="Insira seu email do Facebook"
+            variant="solo"
+            class="w-100"
+            prepend-inner-icon="mdi-email"
+            :error-messages="emailErrorMessage"
+          >
           </v-text-field>
 
           <v-text-field
