@@ -60,8 +60,6 @@
 import { defineProps } from 'vue';
 
 const props = defineProps<{
-  // year: number;
-  materias: object;
   grade: object;
 }>();
 
