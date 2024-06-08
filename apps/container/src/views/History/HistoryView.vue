@@ -12,12 +12,12 @@
     <p class="mt-4">
       Esta ficha individual é uma réplica do que você pode encontrar no portal
       do discente do
-      <a :href="studentRecordURL">SIGAA.</a>
+      <a :href="studentRecordURL" target="_blank">SIGAA.</a>
     </p>
     <p class="mt-4">
       Caso o seu histórico esteja desatualizado, basta acessar o portal do
       discente do SIGAA novamente utilizando a
-      <a class="text-decoration-none" :href="extensionURL"
+      <a class="text-decoration-none" :href="extensionURL" target="_blank"
         >extensão do UFABC Next</a
       >
       e as informações serão atualizadas.
