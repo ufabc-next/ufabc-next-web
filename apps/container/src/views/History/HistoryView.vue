@@ -10,12 +10,13 @@
   />
   <PaperCard title="Ficha individual do aluno" class="text-next-grey">
     <p class="mt-4">
-      Esta ficha individual é uma réplica do que você pode encontrar no site do
-      <a :href="studentRecordURL">Portal do Aluno.</a>
+      Esta ficha individual é uma réplica do que você pode encontrar no portal
+      do discente do
+      <a :href="studentRecordURL">SIGAA.</a>
     </p>
     <p class="mt-4">
-      Caso o seu histórico esteja desatualizado, basta acessar o portal
-      novamente utilizando a
+      Caso o seu histórico esteja desatualizado, basta acessar o portal do
+      discente do SIGAA novamente utilizando a
       <a class="text-decoration-none" :href="extensionURL"
         >extensão do UFABC Next</a
       >
@@ -220,9 +221,9 @@
         <a :href="extensionURL" target="_blank" class="text-decoration-none"
           >extensão</a
         >
-        e acessar a tela de Fichas Individuais no
+        e acessar a guia "Consultar minhas notas" no Portal do Discente do
         <a :href="studentRecordURL" target="_blank" class="text-decoration-none"
-          >Portal do Aluno.</a
+          >SIGAA.</a
         >
       </h2>
       <img
@@ -311,8 +312,8 @@ const handleOpenDialog = (
     enrollment.pratica?._id === enrollment.teoria?._id
       ? 'teoria e prática'
       : type === 'pratica'
-      ? 'prática'
-      : 'teoria',
+        ? 'prática'
+        : 'teoria',
     formatSeason(processedEnrollment.year + ':' + processedEnrollment.quad),
     isEAD && 'EAD',
   ].filter(Boolean) as string[];
