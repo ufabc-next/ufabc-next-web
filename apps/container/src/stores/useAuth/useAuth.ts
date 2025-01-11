@@ -7,6 +7,7 @@ type UseAuthState = {
 };
 
 export const useAuth = defineStore('auth-storage', {
+  persist: true,
   state: (): UseAuthState => ({
     user: null,
     token: null,
