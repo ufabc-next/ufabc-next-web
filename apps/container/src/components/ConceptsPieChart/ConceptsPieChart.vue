@@ -5,10 +5,10 @@
 </template>
 
 <script setup lang="ts">
-import { conceptsColor } from 'utils';
+import { conceptsColor } from '@/utils';
 import { Chart } from 'highcharts-vue';
 import { computed, PropType } from 'vue';
-import { Concept } from 'types';
+import { Concept } from '@/types';
 
 type Grades = Record<string, number>
 const props = defineProps({

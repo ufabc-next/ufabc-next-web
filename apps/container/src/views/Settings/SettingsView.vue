@@ -95,7 +95,7 @@ import { ElMessage } from 'element-plus';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { useAuth } from '@/stores/useAuth';
 import { useAliasInitials } from '@/utils/composables/aliasInitials';
-import { Users, api } from 'services';
+import { Users, api } from '@/services';
 import { PaperCard } from '@/components/PaperCard';
 
 import { useMutation, useQuery } from '@tanstack/vue-query';

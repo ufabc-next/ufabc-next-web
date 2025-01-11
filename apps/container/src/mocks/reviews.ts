@@ -6,7 +6,7 @@ import {
   SubjectInfo,
   TeacherReview,
   UpdateCommentRequest,
-} from 'types';
+} from '@/types';
 export const subjectInfo = {
   subject: {
     _id: '5bf5fbdb436c414f35a8ef48',

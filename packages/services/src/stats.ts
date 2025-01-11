@@ -1,3 +1,5 @@
+import { api } from './api';
+
 import type {
   CourseName,
   PageableReturn,
@@ -6,9 +8,7 @@ import type {
   StatsOverview,
   StatsSubject,
   StatsUsage,
-} from 'types';
-
-import { api } from './api';
+} from '@/types';
 
 export type StatsParams = {
   page: number;

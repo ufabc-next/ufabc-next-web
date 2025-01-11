@@ -59,9 +59,9 @@
 import { useMutation } from '@tanstack/vue-query';
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
-import { Comments } from 'services';
-import { Comment, RequestError } from 'types';
-import { checkEAD, dateToTimeAgo, conceptsColor, formatSeason } from 'utils';
+import { Comments } from '@/services';
+import { Comment, RequestError } from '@/types';
+import { checkEAD, dateToTimeAgo, conceptsColor, formatSeason } from '@/utils';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 

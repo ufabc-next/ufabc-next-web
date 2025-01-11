@@ -1,4 +1,4 @@
-import type { User } from 'types';
+import type { User } from '@/types';
 
 export const user = {
   _id: '123',
@@ -15,7 +15,7 @@ export const user = {
   },
   ra: 11201810622,
   email: 'email@aluno.ufabc.edu.br',
-  permissions: []
+  permissions: [],
 } satisfies User;
 
 export const userGrades = [

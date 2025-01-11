@@ -3,7 +3,7 @@ import {
   CreateCommentRequest,
   GetCommentResponse,
   UpdateCommentRequest,
-} from '@/types';
+} from '@/types/comments';
 
 import { api } from './api';
 

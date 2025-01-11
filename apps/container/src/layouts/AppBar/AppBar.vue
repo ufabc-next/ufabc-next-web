@@ -75,7 +75,7 @@ import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
 import { useAuth } from '@/stores/useAuth';
 import { useAliasInitials } from '@/utils/composables/aliasInitials';
-import { api } from 'services';
+import { api } from '@/services';
 
 const { logOut, user } = useAuth();
 const handleLogout = () => {

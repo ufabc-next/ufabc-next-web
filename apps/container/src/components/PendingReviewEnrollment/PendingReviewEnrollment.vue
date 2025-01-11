@@ -1,16 +1,7 @@
 <template>
-  <ReviewDialog
-    :enrollment="enrollment"
-    :showDialog="showDialog"
-    :tags="tags"
-    @update:showDialog="showDialog = $event"
-  />
-  <v-container
-    @click="showDialog = true"
-    class="pa-3 bg-secondary rounded-lg"
-    style="max-width: none"
-    role="button"
-  >
+  <ReviewDialog :enrollment="enrollment" :showDialog="showDialog" :tags="tags"
+    @update:showDialog="showDialog = $event" />
+  <v-container @click="showDialog = true" class="pa-3 bg-secondary rounded-lg" style="max-width: none" role="button">
     <v-row class="ma-0">
       <v-col class="d-flex align-center text-primary pa-0 font-weight-bold">
         <p class="line-clamp">
@@ -19,13 +10,8 @@
       </v-col>
     </v-row>
     <v-row class="ma-0 mt-1">
-      <v-col
-        class="pa-0 mr-3 d-flex align-center justify-center flex-grow-0 flex-shrink-1"
-      >
-        <div
-          :style="conceptStyle"
-          class="text-white d-flex align-center justify-center rounded-lg"
-        >
+      <v-col class="pa-0 mr-3 d-flex align-center justify-center flex-grow-0 flex-shrink-1">
+        <div :style="conceptStyle" class="text-white d-flex align-center justify-center rounded-lg">
           {{ enrollment.conceito }}
         </div>
       </v-col>
@@ -37,13 +23,7 @@
           {{ enrollment.pratica?.name }}
         </p>
         <div>
-          <v-chip
-            v-for="tag in tags"
-            :key="tag"
-            density="compact"
-            class="px-2 mr-1 rounded-sm"
-            style="font-size: 12px"
-          >
+          <v-chip v-for="tag in tags" :key="tag" density="compact" class="px-2 mr-1 rounded-sm" style="font-size: 12px">
             {{ tag }}
           </v-chip>
         </div>
@@ -59,8 +39,8 @@
 <script setup lang="ts">
 import { PropType, computed, ref } from 'vue';
 import { ReviewDialog } from '@/components/ReviewDialog';
-import { checkEAD, conceptsColor, formatSeason } from 'utils';
-import { Enrollment } from 'types';
+import { checkEAD, conceptsColor, formatSeason } from '@/utils';
+import { Enrollment } from '@/types';
 const showDialog = ref(false);
 
 const conceptStyle = computed(() => ({

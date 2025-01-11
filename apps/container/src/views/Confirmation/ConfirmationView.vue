@@ -7,10 +7,7 @@
     </v-row>
     <v-row class="h-100">
       <v-col class="d-flex justify-center align-center">
-        <div
-          v-if="isPendingConfirmToken"
-          class="d-flex flex-column align-center"
-        >
+        <div v-if="isPendingConfirmToken" class="d-flex flex-column align-center">
           <h1 class="text-h5 mb-4">
             Estamos validando sua conta, aguarde um momento...
           </h1>
@@ -18,10 +15,7 @@
         </div>
 
         <div class="text-center" v-else>
-          <img
-            src="@/assets/error-token.svg"
-            style="max-width: 260px; width: 100%"
-          />
+          <img src="@/assets/error-token.svg" style="max-width: 260px; width: 100%" />
           <h1 class="text-h5 mb-4">Erro ao confirmar sua conta</h1>
           <p class="text-left text-body-1 mb-2">
             A URL que você entrou para confirmar sua conta não é válida. Siga
@@ -46,9 +40,9 @@
 import { useMutation } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
 import { onMounted } from 'vue';
-import { Users } from 'services';
+import { Users } from '@/services';
 import { AxiosError } from 'axios';
-import { RequestError } from 'types';
+import { RequestError } from '@/types';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { useAuth } from '@/stores/useAuth';
 import { useRouter } from 'vue-router';
@@ -99,6 +93,7 @@ onMounted(async () => {
   display: flex;
   flex-direction: column;
 }
+
 .user-type-button {
   height: 60px;
   width: 160px;

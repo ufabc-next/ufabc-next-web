@@ -1,38 +1,24 @@
 <template>
   <div class="grading">
-    <el-tooltip
-      v-for="grade in orderedDistribution"
-      placement="top"
-      :key="grade.conceito"
-      :hide-after="0"
-      :content="`
+    <el-tooltip v-for="grade in orderedDistribution" placement="top" :key="grade.conceito" :hide-after="0" :content="`
         ${grade.conceito}: ${(
-          (100 * grades[grade.conceito]) /
-          gradeData.count
-        ).toFixed(1)}% (${grade.count} notas)`"
-    >
-      <span
-        class="grading-segment"
-        :class="grade.count < untrustableThreshold ? 'unthrustable' : ''"
-        :style="{
-          background: conceptsColor[grade.conceito],
-          width: `${grades[grade.conceito]}%`,
-        }"
-      >
+        (100 * grades[grade.conceito]) /
+        gradeData.count
+      ).toFixed(1)}% (${grade.count} notas)`">
+      <span class="grading-segment" :class="grade.count < untrustableThreshold ? 'unthrustable' : ''" :style="{
+        background: conceptsColor[grade.conceito],
+        width: `${grades[grade.conceito]}%`,
+      }">
       </span>
     </el-tooltip>
 
-    <span
-      v-if="gradeData.count < untrustableThreshold"
-      class="low-samples text-body-2"
-      >Dados sem muitas amostras</span
-    >
+    <span v-if="gradeData.count < untrustableThreshold" class="low-samples text-body-2">Dados sem muitas amostras</span>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ConceptData, SubjectSpecific } from 'types';
-import { transformConceptDataToObject, conceptsColor } from 'utils';
+import { ConceptData, SubjectSpecific } from '@/types';
+import { transformConceptDataToObject, conceptsColor } from '@/utils';
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
@@ -81,6 +67,7 @@ const grades = computed(() =>
 .grading-segment:hover {
   opacity: 1 !important;
 }
+
 .low-samples {
   display: block;
   position: absolute;
@@ -95,6 +82,7 @@ const grades = computed(() =>
   justify-content: center;
   text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.4);
 }
+
 .grading:hover .low-samples {
   display: none;
 }

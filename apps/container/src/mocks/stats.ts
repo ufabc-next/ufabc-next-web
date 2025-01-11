@@ -5,7 +5,7 @@ import {
   StatsCourse,
   StatsOverview,
   StatsSubject,
-} from 'types';
+} from '@/types';
 
 export const classes: PageableReturn<StatsClass> = {
   total: 1022,

@@ -9,7 +9,7 @@ import {
   usage,
   subjects,
 } from '@/mocks/stats';
-import { getSeason, prettifySeason } from 'utils';
+import { getSeason, prettifySeason } from '@/utils';
 
 describe('<StatsView />', () => {
   test('render loading', () => {

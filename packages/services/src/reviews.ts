@@ -1,11 +1,11 @@
+import { api } from './api';
+
 import {
   SearchSubject,
   SearchTeacher,
   SubjectInfo,
   TeacherReview,
-} from 'types';
-
-import { api } from './api';
+} from '@/types';
 
 export const Reviews = {
   searchTeachers: async (q: string) =>

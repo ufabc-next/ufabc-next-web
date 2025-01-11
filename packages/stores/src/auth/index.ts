@@ -1,6 +1,7 @@
-import type { User } from 'types';
 import { persist } from 'zustand/middleware';
 import { createStore } from 'zustand/vanilla';
+
+import type { User } from '@/types';
 
 type UseAuthStore = {
   user: User | null;

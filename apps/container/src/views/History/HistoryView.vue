@@ -188,8 +188,8 @@
 </style>
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
-import { Enrollments, Users } from 'services';
-import type { Concept, Enrollment } from 'types';
+import { Enrollments, Users } from '@/services';
+import type { Concept, Enrollment } from '@/types';
 import { computed, ref } from 'vue';
 import { ReviewDialog } from '@/components/ReviewDialog';
 import { CenteredLoading } from '@/components/CenteredLoading';
@@ -202,7 +202,7 @@ import {
   extensionURL,
   formatSeason,
   studentRecordURL,
-} from 'utils';
+} from '@/utils';
 
 const showDialog = ref(false);
 const selectedEnrollment = ref<Enrollment>();

@@ -1,11 +1,11 @@
+import { api } from './api';
+
 import {
   Comment,
   CreateCommentRequest,
   GetCommentResponse,
   UpdateCommentRequest,
-} from 'types';
-
-import { api } from './api';
+} from '@/types';
 
 export const Comments = {
   get: (teacherId: string, subjectId: string, pageParam = 0) =>
