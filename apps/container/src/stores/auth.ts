@@ -1,14 +1,14 @@
 import { defineStore } from 'pinia';
 import type { User } from 'types';
 
-type UseAuthState = {
+type authState = {
   user: User | null;
   token: string | null;
 };
 
-export const useAuth = defineStore('auth-storage', {
+export const useAuthStore = defineStore('auth-storage', {
   persist: true,
-  state: (): UseAuthState => ({
+  state: (): authState => ({
     user: null,
     token: null,
   }),
