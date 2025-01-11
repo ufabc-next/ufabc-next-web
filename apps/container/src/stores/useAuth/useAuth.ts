@@ -1,6 +1,31 @@
-import { authStore } from 'stores';
-import create from 'vue-zustand';
+import { defineStore } from 'pinia';
+import type { User } from 'types';
 
-const useAuth = create(authStore);
+type UseAuthState = {
+  user: User | null;
+  token: string | null;
+};
 
-export default useAuth;
+export const useAuth = defineStore('auth-storage', {
+  state: (): UseAuthState => ({
+    user: null,
+    token: null,
+  }),
+  getters: {
+    isLoggedIn: (state) => !!state.user,
+  },
+  actions: {
+    authenticate(token: string) {
+      if (token) {
+        const user = JSON.parse(atob(token.split('.')[1])) as User;
+        this.user = user;
+        this.token = token;
+      }
+    },
+    logOut() {
+      this.user = null;
+      this.token = null;
+      window.location.href = '/';
+    },
+  },
+});
