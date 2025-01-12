@@ -1,7 +1,7 @@
 import axios from 'axios';
-import { useAuthStore } from '@/stores/auth';
+// import { useAuthStore } from '@/stores/auth';
 
-const authStore = useAuthStore();
+// const authStore = useAuthStore();
 
 const resolveEndpoint = (env?: string) =>
   ({
@@ -15,10 +15,10 @@ export const api = axios.create({
   baseURL: resolveEndpoint(process.env.VUE_APP_MF_ENV),
 });
 
-api.interceptors.request.use(async (config) => {
-  const token = authStore.token;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// api.interceptors.request.use(async (config) => {
+//   const token = authStore.token;
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });

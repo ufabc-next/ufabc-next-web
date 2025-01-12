@@ -108,7 +108,7 @@
                     " :loading="isPendingResendEmail" aria-label="Reenviar email de confirmação">
                   <v-icon class="mr-2">{{
                     enableResendEmail ? 'mdi-email' : 'mdi-check-circle'
-                  }}</v-icon>
+                    }}</v-icon>
                   {{ enableResendEmail ? 'Reenviar email' : 'Email reenviado' }}
                 </v-btn>
               </v-col>
@@ -157,11 +157,12 @@ import { RequestError } from '@/types';
 import { ElMessage } from 'element-plus';
 import { useDisplay } from 'vuetify';
 import { watch } from 'vue';
-import { useAuth } from '@/stores/useAuth';
-const { logOut } = useAuth();
+import { useAuthStore } from '@/stores/auth'
+
+const authStore = useAuthStore()
 
 const handleLogout = () => {
-  logOut.value();
+  authStore.logOut();
 };
 
 const { smAndDown } = useDisplay();

@@ -6,14 +6,13 @@ import { z } from 'zod';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm, useField } from 'vee-validate';
 import { ElMessage } from 'element-plus';
+import { useAuthStore } from '@/stores/auth';
+import { Users } from '@/services';
 
-import { useAuth } from '@/stores/useAuth';
-import { Users } from '@/services's's';
+const authStore = useAuthStore()
+const router = useRouter();
 
 const facebookNotFound = ref(false);
-
-const { authenticate } = useAuth();
-const router = useRouter();
 
 const validationSchema = toTypedSchema(
   z.object({
@@ -44,7 +43,7 @@ const { mutate: mutateFacebook, isPending: isPendingSubmit } = useMutation({
       showClose: true,
       duration: 5_000,
     });
-    authenticate.value(data.token);
+    authStore.authenticate(data.token);
     router.push('/partners');
   },
   onError() {

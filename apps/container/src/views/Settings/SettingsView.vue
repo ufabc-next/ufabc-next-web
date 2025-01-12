@@ -93,12 +93,14 @@
 import { ref, computed } from 'vue';
 import { ElMessage } from 'element-plus';
 import { CenteredLoading } from '@/components/CenteredLoading';
-import { useAuth } from '@/stores/useAuth';
+import { useAuthStore } from '@/stores/auth';
 import { useAliasInitials } from '@/utils/composables/aliasInitials';
 import { Users, api } from '@/services';
 import { PaperCard } from '@/components/PaperCard';
 
 import { useMutation, useQuery } from '@tanstack/vue-query';
+
+const authStore = useAuthStore();
 
 const {
   data: user,
@@ -134,9 +136,8 @@ const userInitials = useAliasInitials();
 
 const dialog = ref(false);
 
-const { logOut } = useAuth();
 const handleLogout = () => {
-  logOut.value();
+  authStore.logOut();
 };
 
 const { mutate: removeUser } = useMutation({
