@@ -1,7 +1,0 @@
-{
-  "extends": "./base.json",
-  "compilerOptions": {
-    "jsx": "preserve",
-    "types": ["webpack-env", "jest", "element-plus/global"]
-  }
-}
