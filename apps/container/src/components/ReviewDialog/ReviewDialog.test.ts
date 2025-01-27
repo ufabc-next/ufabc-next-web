@@ -8,7 +8,7 @@ import {
 import { ReviewDialog } from '.';
 import { userCreateComment, userUpdateComment } from '@/mocks/reviews';
 import { enrollment } from '@/mocks/enrollments';
-import { formatSeason } from 'utils';
+import { formatSeason } from '@/utils/season';
 import { server } from '@/mocks/server';
 import { HttpResponse, http } from 'msw';
 import { ElMessage } from 'element-plus';

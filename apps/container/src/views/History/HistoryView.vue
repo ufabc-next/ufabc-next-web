@@ -196,13 +196,12 @@ import { CenteredLoading } from '@/components/CenteredLoading';
 import { PaperCard } from '@/components/PaperCard';
 import { TableComponent } from '@/components/TableComponent';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
-import {
-  checkEAD,
-  conceptsColor,
-  extensionURL,
-  formatSeason,
-  studentRecordURL,
-} from 'utils';
+
+import { checkEAD } from '@/utils/season';
+import { conceptsColor } from '@/utils/consts';
+import { extensionURL } from '@/utils/consts';
+import { formatSeason } from '@/utils/season';
+import { studentRecordURL } from '@/utils/consts';
 
 const showDialog = ref(false);
 const selectedEnrollment = ref<Enrollment>();

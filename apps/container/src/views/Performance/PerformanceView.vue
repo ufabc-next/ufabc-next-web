@@ -33,7 +33,7 @@ import { Performance, type CourseInformation } from 'services';
 import { PaperCard } from '@/components/PaperCard';
 import { theme } from '@/theme';
 import { CenteredLoading } from '@/components/CenteredLoading';
-import { formatSeason } from 'utils';
+import { formatSeason } from '@/utils/season';
 
 const areaGraphOptions = {
   accessibility: {
