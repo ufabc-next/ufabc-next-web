@@ -12,7 +12,7 @@ const SignUpView = () => import('@/views/SignUp/SignUpView.vue');
 const ConfirmationView = () =>
   import('@/views/Confirmation/ConfirmationView.vue');
 const RecoveryView = () => import('@/views/Recovery/RecoveryView.vue');
-const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
+// const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
 const FacebookView = () => import('@/views/Facebook/FacebookView.vue');
 
 const isJWT = (token: string) =>
@@ -109,14 +109,14 @@ const routes: Array<RouteRecordRaw> = [
       auth: false,
     },
   },
-  {
-    path: '/calengrade',
-    name: 'calengrade',
-    component: CalengradeView,
-    meta: {
-      title: 'Calengrade',
-    },
-  },
+  // {
+  //   path: '/calengrade',
+  //   name: 'calengrade',
+  //   component: CalengradeView,
+  //   meta: {
+  //     title: 'Calengrade',
+  //   },
+  // },
   {
     path: '/autenticar-facebook',
     name: 'Autenticar Facebook',

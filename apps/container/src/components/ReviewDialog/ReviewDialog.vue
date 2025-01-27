@@ -1,17 +1,10 @@
 <template>
-  <FeedbackAlert
-    v-if="isFetchingTeacherEnrollmentError || teacherIdError"
-    text="Erro ao carregar as informações do professor desta disciplina"
-  />
+  <FeedbackAlert v-if="isFetchingTeacherEnrollmentError || teacherIdError"
+    text="Erro ao carregar as informações do professor desta disciplina" />
   <v-dialog v-model="showDialog" maxWidth="1200">
     <PaperCard>
       <div class="w-100 d-flex justify-end">
-        <v-btn
-          @click="showDialog = false"
-          variant="tonal"
-          icon="mdi-window-close"
-          aria-label="Fechar"
-        />
+        <v-btn @click="showDialog = false" variant="tonal" icon="mdi-window-close" aria-label="Fechar" />
       </div>
       <v-container class="pa-0 my-2" style="max-width: none">
         <v-row class="ma-0">
@@ -25,56 +18,32 @@
             </p>
             <div class="d-flex align-center">
               <span class="item-name"> Conceito:</span>
-              <div
-                class="text-white d-flex align-center justify-center rounded ml-1"
-                :style="
-                  enrollment?.conceito &&
-                  `background-color:${
-                    conceptsColor[enrollment.conceito]
-                  }; width: 20px; height: 20px;`
-                "
-              >
+              <div class="text-white d-flex align-center justify-center rounded ml-1" :style="enrollment?.conceito &&
+                `background-color:${conceptsColor[enrollment.conceito]
+                }; width: 20px; height: 20px;`
+                ">
                 {{ enrollment?.conceito }}
               </div>
               <span class="font-weight-bold ml-1"></span>
             </div>
-            <v-chip
-              v-for="tag in tags"
-              :key="tag"
-              density="compact"
-              class="px-2 mr-1 rounded-sm"
-              style="font-size: 12px"
-            >
+            <v-chip v-for="tag in tags" :key="tag" density="compact" class="px-2 mr-1 rounded-sm"
+              style="font-size: 12px">
               {{ tag }}
             </v-chip>
             <p class="text-subtitle-1 pt-3">Seu comentário:</p>
-            <v-textarea
-              v-model="userCommentMessage"
-              variant="solo"
-              placeholder="Faça aqui um comentário em relação ao docente e sua disciplina."
-              rows="3"
-              max-rows="5"
-              no-resize
-              auto-grow
-              :loading="isFetchingTeacherEnrollment"
-            />
+            <v-textarea v-model="userCommentMessage" variant="solo"
+              placeholder="Faça aqui um comentário em relação ao docente e sua disciplina." rows="3" max-rows="5"
+              no-resize auto-grow :loading="isFetchingTeacherEnrollment" />
             <div class="w-100 d-flex justify-end">
-              <v-btn
-                @click="submit"
-                color="primary"
-                :disabled="disableMutateComment"
-                :loading="isCreatingComment || isUpdatingComment"
-              >
+              <v-btn @click="submit" color="primary" :disabled="disableMutateComment"
+                :loading="isCreatingComment || isUpdatingComment">
                 {{ hasUserComment ? 'Atualizar comentário' : 'Enviar' }}
               </v-btn>
             </div>
           </v-col>
           <v-col v-if="teacherId" class="pa-0 pa-sm-3" cols="12" md="7">
-            <CommentsList
-              :teacherId="teacherId"
-              :selectedSubject="selectedSubject"
-              @update:selectedSubject="selectedSubject = $event"
-            />
+            <CommentsList :teacherId="teacherId" :selectedSubject="selectedSubject"
+              @update:selectedSubject="selectedSubject = $event" />
           </v-col>
         </v-row>
       </v-container>
@@ -87,7 +56,7 @@ import { PropType, computed, ref } from 'vue';
 import { Comments, Enrollments } from 'services';
 
 import { PaperCard } from '@/components/PaperCard';
-import { conceptsColor } from 'utils';
+import { conceptsColor } from '@/utils/consts';
 import { CommentsList } from '@/components/CommentsList';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { ElMessage } from 'element-plus';
@@ -185,7 +154,7 @@ const disableMutateComment = computed(() => {
   return (
     !userCommentMessage.value ||
     teacherEnrollmentComment.value[
-      subjectType.value as 'teoria' | 'prática'
+    subjectType.value as 'teoria' | 'prática'
     ] === userCommentMessage.value
   );
 });
@@ -276,6 +245,7 @@ watch(
 .item-name {
   font-weight: 700;
 }
+
 .line-clamp {
   display: -webkit-box;
   -webkit-box-orient: vertical;
