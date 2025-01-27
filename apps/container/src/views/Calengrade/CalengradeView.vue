@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { PaperCard } from '@/components/PaperCard';
 import { defineFederatedReactComponent } from '@/utils/moduleFederation';
 
@@ -11,4 +11,16 @@ const Calengrade = defineFederatedReactComponent({
   <PaperCard class="flex flex-column flex-fill">
     <Calengrade />
   </PaperCard>
+</template> -->
+
+<template>
+  <div>
+
+  </div>
 </template>
+
+<script lang="ts" setup>
+
+</script>
+
+<style></style>
