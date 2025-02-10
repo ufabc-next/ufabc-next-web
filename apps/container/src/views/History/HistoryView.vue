@@ -6,7 +6,7 @@
   <PaperCard title="Ficha individual do aluno" class="text-next-grey">
     <p class="mt-4">
       Esta ficha individual é uma réplica do que você podia encontrar no site do
-      <a href="https://aluno.ufabc.edu.br/">Portal do Aluno</a>, hoje são informações do <a
+      <a href="https://sig.ufabc.edu.br/sigaa/portais/discente/discente.jsf">Sigaa</a>, hoje são informações do <a
         :href="studentRecordURL">Sigaa</a>
     </p>
     <p class="mt-4">
