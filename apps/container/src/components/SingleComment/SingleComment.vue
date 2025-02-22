@@ -61,7 +61,10 @@ import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
 import { Comments } from 'services';
 import { Comment, RequestError } from 'types';
-import { checkEAD, dateToTimeAgo, conceptsColor, formatSeason } from 'utils';
+import { checkEAD } from '@/utils/season';
+import { dateToTimeAgo } from '@/utils/dateToTimeAgo';
+import { conceptsColor } from '@/utils/consts';
+import { formatSeason } from '@/utils/season';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 

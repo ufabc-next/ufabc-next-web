@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { conceptsColor } from 'utils';
+import { conceptsColor } from '@/utils/consts';
 import { Chart } from 'highcharts-vue';
 import { computed, PropType } from 'vue';
 import { Concept } from 'types';

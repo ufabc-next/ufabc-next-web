@@ -73,13 +73,15 @@
 <script setup lang="ts">
 import dayjs from 'dayjs';
 import { computed, ref } from 'vue';
-import { useAuth } from '@/stores/useAuth';
+import { useAuthStore } from '@/store/auth';
 import { useAliasInitials } from '@/utils/composables/aliasInitials';
 import { api } from 'services';
 
-const { logOut, user } = useAuth();
+const authStore = useAuthStore();
+const user = computed(() => authStore.user);
+
 const handleLogout = () => {
-  logOut.value();
+  authStore.logOut();
 };
 
 const drawer = ref(true);
@@ -115,12 +117,12 @@ const internalNavigationItems = [
     icon: 'mdi-book-multiple',
     route: '/stats',
   },
-  {
-    title: 'Calengrade',
-    icon: 'mdi-calendar',
-    route: '/calengrade',
-    releaseDate: dayjs('11/25/2023'),
-  },
+  // {
+  //   title: 'Calengrade',
+  //   icon: 'mdi-calendar',
+  //   route: '/calengrade',
+  //   releaseDate: dayjs('11/25/2023'),
+  // },
   {
     title: 'Apoie o UFABC next',
     icon: 'mdi-bank',

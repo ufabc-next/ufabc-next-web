@@ -1,8 +1,5 @@
 <template>
-  <FeedbackAlert
-    v-if="isFetchingTeacherError"
-    text="Erro ao carregar dados do(a) professor(a)"
-  />
+  <FeedbackAlert v-if="isFetchingTeacherError" text="Erro ao carregar dados do(a) professor(a)" />
   <CenteredLoading v-if="isFetchingTeacher" class="mt-10" />
   <PaperCard v-else class="w-100">
     <v-container style="max-width: none">
@@ -11,25 +8,14 @@
           <p class="text-h4 font-weight-bold text-primary mb-2">
             {{ teacherData?.data.teacher.name }}
           </p>
-          <v-chip
-            v-for="(chip, index) in chips"
-            :key="chip.text"
-            variant="outlined"
-            color="primary"
-            :class="`${index < chips.length && 'mr-2'} mb-2`"
-          >
+          <v-chip v-for="(chip, index) in chips" :key="chip.text" variant="outlined" color="primary"
+            :class="`${index < chips.length && 'mr-2'} mb-2`">
             <v-icon :icon="chip.icon"></v-icon>
             {{ chip.value }}
             {{ chip.text }}
           </v-chip>
-          <div
-            class="d-flex align-center justify-center"
-            :style="`${xs && 'margin: 0 -24px'}`"
-          >
-            <ConceptsPieChart
-              :key="`chart-${selectedSubject}`"
-              :grades="grades"
-            ></ConceptsPieChart>
+          <div class="d-flex align-center justify-center" :style="`${xs && 'margin: 0 -24px'}`">
+            <ConceptsPieChart :key="`chart-${selectedSubject}`" :grades="grades"></ConceptsPieChart>
           </div>
           <p class="text-body-2 text-center font-weight-bold mt-6">
             * Provavelmente esse professor
@@ -39,20 +25,13 @@
           </p>
         </v-col>
         <v-col cols="12" md="7">
-          <CommentsList
-            :teacherId="teacherId"
-            :selectedSubject="selectedSubject"
-            @update:selectedSubject="selectedSubject = $event"
-          />
+          <CommentsList :teacherId="teacherId" :selectedSubject="selectedSubject"
+            @update:selectedSubject="selectedSubject = $event" />
         </v-col>
       </v-row>
       <div v-else class="d-flex align-center flex-column">
-        <img
-          src="@/assets/comment_not_found.gif"
-          style="width: 100%; max-width: 275px"
-          class="mb-5"
-          alt="Nenhum comentário encontrado"
-        />
+        <img src="@/assets/comment_not_found.gif" style="width: 100%; max-width: 275px" class="mb-5"
+          alt="Nenhum comentário encontrado" />
         <p>Nenhum dado encontrado 😕</p>
         <p>
           Você já fez matéria com esse professor? Se sim, atualize seu histórico
@@ -68,7 +47,7 @@
 <script lang="ts" setup>
 import { useQuery } from '@tanstack/vue-query';
 import { Reviews } from 'services';
-import { transformConceptDataToObject } from 'utils';
+import { transformConceptDataToObject } from '@/utils/transformConceptDataToObject';
 import { computed, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
