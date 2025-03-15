@@ -122,6 +122,12 @@ const internalNavigationItems = [
     releaseDate: dayjs('11/25/2023'),
   },
   {
+    title: 'Calengrade Vue',
+    icon: 'mdi-calendar',
+    route: '/calengrade-vue',
+    releaseDate: dayjs('11/25/2023'),
+  },
+  {
     title: 'Apoie o UFABC next',
     icon: 'mdi-bank',
     route: '/donate',

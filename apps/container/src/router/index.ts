@@ -14,6 +14,7 @@ const ConfirmationView = () =>
 const RecoveryView = () => import('@/views/Recovery/RecoveryView.vue');
 const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
 const FacebookView = () => import('@/views/Facebook/FacebookView.vue');
+const calengradeVue = () => import('@/views/CalengradeVue/CalengradeView.vue');
 
 const isJWT = (token: string) =>
   /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
@@ -113,6 +114,14 @@ const routes: Array<RouteRecordRaw> = [
     path: '/calengrade',
     name: 'calengrade',
     component: CalengradeView,
+    meta: {
+      title: 'Calengrade',
+    },
+  },
+  {
+    path: '/calengrade-vue',
+    name: 'calengrade-vue',
+    component: calengradeVue,
     meta: {
       title: 'Calengrade',
     },
