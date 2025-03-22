@@ -4,7 +4,7 @@
       <img src="../../assets/calengrade/calengrade-logo.svg" alt="logo do Calengrade" class="calengrade-logo" />
 
       <div class="content">
-        <WelcomeScreen />
+        <component :is="currentStep" @next-step="onNextStep" />
       </div>
 
       <h3>
@@ -18,8 +18,28 @@
 </template>
 
 <script lang="ts" setup>
-import WelcomeScreen from './screens/WelcomeScreen.vue';
+import { ref } from 'vue';
 
+import WelcomeScreen from './screens/WelcomeScreen.vue';
+import SummaryScreen from './screens/SummaryScreen.vue';
+import PreviewScreen from './screens/PreviewScreen.vue';
+import ChangeQuarterScreen from './screens/ChangeQuarterScreen.vue';
+import { computed } from 'vue';
+
+// todo: refactor this step logic!!!
+const steps = ref([
+  WelcomeScreen,
+  SummaryScreen,
+  PreviewScreen,
+  ChangeQuarterScreen,
+]);
+
+const currentStepIndex = ref(0);
+const currentStep = computed(() => steps.value[currentStepIndex.value]);
+
+const onNextStep = () => {
+  currentStepIndex.value += 1;
+};
 
 </script>
 

@@ -11,15 +11,18 @@
 
     <img src="../../../assets/calengrade/calendar.svg" alt="Calendário acadêmico" class="calendar-image" />
 
-    <button @click="handleClick">
+    <button @click="nextStep">
       Começar
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-const handleClick = () => {
-  console.log('Clicou no botão');
+
+const emit = defineEmits(['nextStep']);
+
+const nextStep = () => {
+  emit('nextStep')
 };
 </script>
 
