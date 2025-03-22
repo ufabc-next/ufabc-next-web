@@ -3,10 +3,10 @@ import { authStore } from 'stores';
 
 const resolveEndpoint = (env?: string) =>
   ({
-    development: 'http://localhost:5000',
+    development: 'https://api.v2.ufabcnext.com',
     staging: 'https://api.v2.ufabcnext.com',
     production: 'https://api.v2.ufabcnext.com',
-  })[env!] || 'http://localhost:5000';
+  })[env!] || 'https://api.v2.ufabcnext.com';
 
 export const api = axios.create({
   baseURL: resolveEndpoint(process.env.VUE_APP_MF_ENV),
