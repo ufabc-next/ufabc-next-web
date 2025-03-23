@@ -12,7 +12,7 @@
       <h3>
         <div>
           <strong>Quadrimestre:</strong> {{ calengrade.quarter.title }} (
-          <button @click="setActiveScreen('quarter')" class="quadri">
+          <button class="quadri">
             <u>alterar</u>)
           </button>
         </div>
@@ -42,6 +42,8 @@ import { handleSummary } from '../../../utils/summary';
 import { reactive } from 'vue';
 import { CalengradeInfo } from '../types';
 
+const emit = defineEmits(['nextStep'])
+
 // todo: fazer no component pai desses steps para salvar o estado
 const quarter = computed(() => {
   const now = Date.now();
@@ -64,15 +66,15 @@ const quarter = computed(() => {
 });
 
 const calengrade = reactive<CalengradeInfo>({
-  quarter: {},
+  quarter: definedQuarters[quarter.value],
   classes: [],
   summary: '',
 })
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
 const summaryText = ref<string>(calengrade.summary || '');
-const message = ref<[string, 'info' | 'error'] | []>([]);
 
+const message = ref<[string, 'info' | 'error'] | []>([]);
 const handleChange = (value: string) => {
   summaryText.value = value;
 
@@ -107,8 +109,7 @@ const handleClick = () => {
   } else if ((calengrade.classes || []).length <= 0) {
     message.value = ['Nenhuma disciplina identificada :(', 'error'];
   } else {
-    // próxima tela
-    console.log("próxima tela!!!!")
+    emit('nextStep')
   }
 };
 
