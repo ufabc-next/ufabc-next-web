@@ -1,9 +1,9 @@
 <template>
-  <div id="calengrade">
-    <div class="app">
+  <div class="calengrade-page">
+    <div class="calengrade-page__container">
       <img src="../../assets/calengrade/calengrade-logo.svg" alt="logo do Calengrade" class="calengrade-logo" />
 
-      <div class="content">
+      <div class="calengrade-page__content">
         <component :is="currentStep" @next-step="onNextStep" />
       </div>
 
@@ -44,47 +44,23 @@ const onNextStep = () => {
 </script>
 
 <style scoped>
-#calengrade {
-  height: 100%;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  background-size: cover;
-  -webkit-font-smoothing: antialiased !important;
+.calengrade-page {
+  width: 100%;
+  height: 100vh;
 }
 
-.app {
-  flex-grow: 1;
+.calengrade-page__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
   max-width: 800px;
   margin: auto;
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-content: center;
-  padding: 16px 16px 16px;
+
+  padding: 16px;
   justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  position: relative;
-}
-
-.calengrade-logo {
-  width: 100%;
-  max-width: 400px;
-  max-height: 300px;
-}
-
-.content {
-  width: 100%;
-  background: #fff;
-  border-radius: 10px;
-  padding: 24px;
-  flex-grow: 1;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
 }
 </style>

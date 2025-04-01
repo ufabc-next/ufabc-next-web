@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div v-if="step < 2">
     <div>
       <h1>{{ generatingCalendarMessage }}</h1>
@@ -6,7 +6,7 @@
     </div>
 
     <div class="flex-fill d-flex align-center">
-      <img :src="loadingImage" alt="Calendário acadêmico" />
+      <img src="../../../assets/calengrade/loading.svg" alt="Calendário acadêmico" />
     </div>
   </div>
   <div v-else>
@@ -18,7 +18,7 @@
       </h2>
     </div>
     <div>
-      <img :src="calendarImage" alt="Calendário" style="margin: 32px 0;" />
+      <img src="../../../assets/calengrade/calendar_done.svg" alt="Calendário" style="margin: 32px 0;" />
     </div>
     <div>
       <button @click="resetCalengrade">
@@ -30,8 +30,6 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
-import calendarImage from '../../assets/calendar_done.svg'
-import loadingImage from '../../assets/loading.svg'
 import { useCalengradeContext } from '../../composables/useCalengradeContext'
 import { handleCalendar } from '../../utils/calendar'
 
@@ -120,4 +118,16 @@ watch(step, (newStep) => {
       break
   }
 })
+</script> -->
+
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script lang="ts" setup>
+
 </script>
+
+<style></style>
