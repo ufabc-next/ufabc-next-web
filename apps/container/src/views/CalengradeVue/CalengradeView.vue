@@ -3,11 +3,11 @@
     <div class="calengrade-page__container">
       <img src="../../assets/calengrade/calengrade-logo.svg" alt="logo do Calengrade" class="calengrade-logo" />
 
-      <div class="calengrade-page__content">
+      <div>
         <component :is="currentStep" @next-step="onNextStep" />
       </div>
 
-      <h3>
+      <h3 class="calengrade-page__footer-credits">
         O Calengrade foi desenvolvido em 2020 por
         <a href="https://link.cariri.tech/calengrade-linkedin">
           Marcelo Farias
@@ -46,7 +46,6 @@ const onNextStep = () => {
 <style scoped>
 .calengrade-page {
   width: 100%;
-  height: 100vh;
 }
 
 .calengrade-page__container {
@@ -55,12 +54,27 @@ const onNextStep = () => {
   justify-content: center;
   align-items: center;
 
-  max-width: 800px;
   margin: auto;
   width: 100%;
   height: 100%;
 
-  padding: 16px;
+  padding: 40px 20px;
   justify-content: space-between;
+
+  background-color: white;
+  border-radius: 16px;
+}
+
+.calengrade-logo {
+  width: 100%;
+  max-width: 150px;
+  margin-bottom: 16px;
+}
+
+.calengrade-page__footer-credits {
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  margin-top: 8px;
 }
 </style>
