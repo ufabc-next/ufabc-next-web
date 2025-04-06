@@ -26,7 +26,7 @@ export type Calendar = {
 };
 
 export type CalengradeInfo = {
-  classes: Classes;
+  classes: Classes | null;
   quarter: Quarter;
   summary: string;
   calendar?: Calendar | string;

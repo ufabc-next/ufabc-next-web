@@ -12,7 +12,7 @@
           margin: 32px 0;
         ">
         <label for="quarter">Quadrimestre</label>
-        <select id="quarter" :value="selectedQuarter"
+        <select id="quarter" :value="newQuarter"
           @change="event => handleQuarterChange(Number((event.target as HTMLSelectElement).value))">
           <option v-for="(q, i) in definedQuarters" :key="i" :value="i">
             {{ q.title }}
@@ -20,10 +20,10 @@
         </select>
 
         <label for="startDate">Início</label>
-        <input inputmode="numeric" id="startDate" type="date" :value="startDate" :disabled="selectedQuarter !== 0" />
+        <input inputmode="numeric" id="startDate" type="date" :value="startDate" :disabled="newQuarter !== 0" />
 
         <label for="endDate">Fim</label>
-        <input inputmode="numeric" id="endDate" type="date" :value="endDate" :disabled="selectedQuarter !== 0" />
+        <input inputmode="numeric" id="endDate" type="date" :value="endDate" :disabled="newQuarter !== 0" />
       </div>
     </div>
 
@@ -34,40 +34,29 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { definedQuarters } from '../../../utils/quarters';
+import { CalengradeSteps, Quarter } from '../types';
+
+const props = defineProps<{
+  selectedQuarter: Quarter;
+}>();
+
+const findSelectedQuarterIndex = () => {
+  return definedQuarters.findIndex(q => props.selectedQuarter.title === q.title);
+};
+
+const newQuarter = ref<number>(findSelectedQuarterIndex());
 
 const emit = defineEmits<{
-  (e: 'back'): boolean
+  (e: 'nextStep', step: CalengradeSteps): boolean
   (e: 'changeQuarter', quarter: number): boolean
 }>();
 
-const selectedQuarter = ref(0);
 const startDate = ref('');
 const endDate = ref('');
 
 onMounted(() => {
-  // Initialize quarter based on current date
-  const now = Date.now();
-  for (let q = 1; q < definedQuarters.length; q++) {
-    const quarterEndDate = new Date(
-      `${definedQuarters[q].endDate}T00:00:00.000`,
-    );
-    if (now > quarterEndDate.getTime()) {
-      selectedQuarter.value = q - 1;
-      break;
-    } else {
-      const quarterStartDate = new Date(
-        `${definedQuarters[q].startDate}T00:00:00.000`,
-      );
-      if (now >= quarterStartDate.getTime()) {
-        selectedQuarter.value = q;
-        break;
-      }
-    }
-  }
-
-  // Initialize start and end dates
-  startDate.value = definedQuarters[selectedQuarter.value].startDate;
-  endDate.value = definedQuarters[selectedQuarter.value].endDate;
+  startDate.value = definedQuarters[newQuarter.value].startDate;
+  endDate.value = definedQuarters[newQuarter.value].endDate;
 });
 
 const handleQuarterChange = (value: number) => {
@@ -75,13 +64,14 @@ const handleQuarterChange = (value: number) => {
     startDate.value = definedQuarters[value].startDate;
     endDate.value = definedQuarters[value].endDate;
   }
-  selectedQuarter.value = value;
-  emit('changeQuarter', value);
+  newQuarter.value = value;
 };
 
 const goToSummaryScreen = () => {
-  emit('back');
-
+  if (newQuarter.value !== findSelectedQuarterIndex()) {
+    emit('changeQuarter', newQuarter.value);
+  }
+  emit('nextStep', CalengradeSteps.Summary)
 };
 </script>
 

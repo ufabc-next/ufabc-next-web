@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!isShowingChangeQuarterScreen" class="calengrade-summary">
+  <div class="calengrade-summary">
     <div class="calengrade-summary__container">
       <h1 class="calengrade-summary__title">Cole aqui o seu resumo de disciplinas disponível no</h1>
       <h2 class="calengrade-summary__title-link">
@@ -11,8 +11,8 @@
 
       <h3 class="calengrade-summary__quad-label">
         <div>
-          <strong>Quadrimestre:</strong> {{ currentQuarter.title }}
-          <button @click="showChangeQuarter(true)">
+          <strong>Quadrimestre:</strong> {{ props.selectedQuarter.title }}
+          <button @click="goToStep(CalengradeSteps.ChangeQuarter)">
             (<u>alterar</u>)
           </button>
         </div>
@@ -26,66 +26,47 @@
         style="min-height: 400px; margin: 24px 0 16px" />
       <p :class="message[1] || ''">{{ message[0] || '. . .' }}</p>
     </div>
-    <button v-if="summaryText === ''" @click="handlePaste" class="calengrade-button">
+    <button v-if="!summaryText" @click="handlePaste" class="calengrade-button">
       Colar
     </button>
     <button v-else @click="handleClick" class="calengrade-button">
       Gerar Calengrade!
     </button>
   </div>
-
-  <ChangeQuarterScreen @change-quarter="onChangeQuarter" @back="isShowingChangeQuarterScreen = false" v-else />
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
-import { definedQuarters } from '../../../utils/quarters';
+import { ref } from 'vue';
 import { handleSummary } from '../../../utils/summary';
-import { CalengradeSteps, Classes } from '../types';
-import ChangeQuarterScreen from './ChangeQuarterScreen.vue';
+import { CalengradeSteps, Classes, Quarter } from '../types';
+
+const props = defineProps<{
+  selectedQuarter: Quarter;
+}>();
 
 const emit = defineEmits<{
   (e: 'nextStep', step: CalengradeSteps): boolean
+  (e: 'updateClasses', value: Classes): boolean
+  (e: 'updateSummary', value: string): boolean
 }>()
 
-const currentQuarter = ref(definedQuarters[0]);
-const classes = ref<Classes>();
-const summary = ref<string>('');
-
-
-function getQuarterFromCurrentDate() {
-  const now = Date.now();
-  for (let q = 1; q < definedQuarters.length; q++) {
-    const quarterEndDate = new Date(
-      `${definedQuarters[q].endDate}T00:00:00.000`,
-    );
-    if (now > quarterEndDate.getTime()) {
-      return q - 1;
-    } else {
-      const quarterStartDate = new Date(
-        `${definedQuarters[q].startDate}T00:00:00.000`,
-      );
-      if (now >= quarterStartDate.getTime()) {
-        return q;
-      }
-    }
-  }
-  return 0;
-}
-
-onMounted(() => {
-  const quarter = getQuarterFromCurrentDate();
-  currentQuarter.value = definedQuarters[quarter];
-});
-
-function onChangeQuarter(quarter: number) {
-  currentQuarter.value = definedQuarters[quarter];
-}
+const classes = ref<Classes | null>();
+const summaryText = ref<string>('');
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
-const summaryText = ref<string>(summary.value || '');
 
 const message = ref<[string, 'info' | 'error'] | []>([]);
+
+const onUpdateClasses = (value: Classes) => {
+  classes.value = value;
+  emit('updateClasses', value);
+};
+
+const onUpdateSummary = (value: string) => {
+  summaryText.value = value;
+  emit('updateSummary', value);
+};
+
 const handleChange = (value: string) => {
   summaryText.value = value;
 
@@ -103,24 +84,16 @@ const handleChange = (value: string) => {
         'info',
       ];
       classes.value = newClasses;
-      summary.value = value;
+      onUpdateClasses(newClasses);
+      onUpdateSummary(value);
     } else {
       message.value = ['Nenhuma disciplina identificada :(', 'error'];
       classes.value = [];
-      summary.value = value;
+
+      onUpdateClasses([]);
     }
   } else {
     message.value = [];
-  }
-};
-
-const handleClick = () => {
-  if (summaryText.value === '') {
-    message.value = ['Cole seu resumo de disciplinas!!!', 'error'];
-  } else if ((classes.value || []).length <= 0) {
-    message.value = ['Nenhuma disciplina identificada :(', 'error'];
-  } else {
-    emit('nextStep', CalengradeSteps.Preview);
   }
 };
 
@@ -135,10 +108,20 @@ const handlePaste = async () => {
   }
 };
 
-const isShowingChangeQuarterScreen = ref(false);
-const showChangeQuarter = (value: boolean) => {
-  isShowingChangeQuarterScreen.value = value;
+const handleClick = () => {
+  if (summaryText.value === '') {
+    message.value = ['Cole seu resumo de disciplinas!!!', 'error'];
+  } else if ((classes.value || []).length <= 0) {
+    message.value = ['Nenhuma disciplina identificada :(', 'error'];
+  } else {
+    emit('nextStep', CalengradeSteps.Preview);
+  }
 };
+
+const goToStep = (step: CalengradeSteps) => {
+  emit('nextStep', step);
+};
+
 </script>
 
 <style scoped>

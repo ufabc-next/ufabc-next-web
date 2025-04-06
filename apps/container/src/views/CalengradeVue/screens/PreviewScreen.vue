@@ -1,4 +1,4 @@
-<!-- <template>
+<template>
   <div v-if="step < 2">
     <div>
       <h1>{{ generatingCalendarMessage }}</h1>
@@ -30,10 +30,17 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, watch } from 'vue'
-import { useCalengradeContext } from '../../composables/useCalengradeContext'
-import { handleCalendar } from '../../utils/calendar'
+import { handleCalendar } from '../../../utils/calendar'
+import { CalengradeInfo, CalengradeSteps } from '../types';
 
-const { calengrade, setCalengrade, setActiveScreen } = useCalengradeContext()
+const props = defineProps<{
+  calengrade: CalengradeInfo
+}>()
+
+const emit = defineEmits<{
+  (e: 'nextStep', step: CalengradeSteps): boolean
+  (e: 'resetCalengrade'): void
+}>()
 
 enum generatingCalendarMessages {
   GENERATING = 'Gerando o seu calengrade',
@@ -42,17 +49,9 @@ enum generatingCalendarMessages {
 
 const step = ref(0)
 const generatingCalendarMessage = ref(generatingCalendarMessages.GENERATING)
+const calendar = ref<string>()
+
 const downloadTimer = ref<NodeJS.Timeout>()
-
-const resetCalengrade = () => {
-  setActiveScreen('summary')
-  setCalengrade({
-    classes: [],
-    quarter: {},
-    summary: ''
-  })
-}
-
 onMounted(() => {
   downloadTimer.value = setInterval(() => step.value++, 1000)
 })
@@ -63,36 +62,41 @@ onUnmounted(() => {
   }
 })
 
+const resetCalengrade = () => {
+  emit('resetCalengrade')
+}
+
 watch(step, (newStep) => {
-  const { classes, quarter, calendar } = calengrade.value
+  const { classes, quarter } = props.calengrade
+
+  if (!classes || !quarter) {
+    emit('nextStep', CalengradeSteps.Summary)  // todo: create fallback screen
+    return
+  }
 
   if (classes.length <= 0 || !quarter.startDate || !quarter.endDate) {
-    setActiveScreen('summary')
+    emit('nextStep', CalengradeSteps.Summary)
     return
   }
 
   switch (newStep) {
     case 0: // Gerar
-      const newCalendar = calendar
-        ? calendar
-        : handleCalendar({
+      const newCalendar =
+        handleCalendar({
           classes,
           startDate: quarter.startDate,
           endDate: quarter.endDate
         })
 
-      setCalengrade({
-        ...calengrade.value,
-        calendar: newCalendar
-      })
+      calendar.value = newCalendar
       break
 
     case 1: // Download
       try {
-        const { calendar, quarter } = calengrade.value
+        const { quarter } = props.calengrade
 
-        if (calendar && typeof calendar === 'string') {
-          const blob = new Blob([calendar], { type: 'text/calendar' })
+        if (calendar.value && typeof calendar.value === 'string') {
+          const blob = new Blob([calendar.value], { type: 'text/calendar' })
           const downloadURL = URL.createObjectURL(blob)
           const downloadLink = document.createElement('a')
 
@@ -109,7 +113,7 @@ watch(step, (newStep) => {
         console.log('ERROR', e)
         window.Toaster.error('Não foi possível baixar seu Calengrade!')
         if (downloadTimer.value) clearInterval(downloadTimer.value)
-        setActiveScreen('summary')
+        emit('nextStep', CalengradeSteps.Summary)
       }
       break
 
@@ -118,16 +122,7 @@ watch(step, (newStep) => {
       break
   }
 })
-</script> -->
-
-<template>
-  <div>
-
-  </div>
-</template>
-
-<script lang="ts" setup>
-
 </script>
 
-<style></style>
+
+<style scoped></style>

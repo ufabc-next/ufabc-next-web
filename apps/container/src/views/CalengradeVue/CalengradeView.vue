@@ -5,8 +5,15 @@
 
       <div class="calengrade-page__content">
         <WelcomeScreen v-if="currentStepName === CalengradeSteps.Welcome" @next-step="onNextStep" />
-        <SummaryScreen v-else-if="currentStepName === CalengradeSteps.Summary" @next-step="onNextStep" />
-        <PreviewScreen v-else-if="currentStepName === CalengradeSteps.Preview" @next-step="onNextStep" />
+
+        <SummaryScreen v-else-if="currentStepName === CalengradeSteps.Summary" :selected-quarter="calengrade.quarter"
+          @next-step="onNextStep" @update-classes="onUpdateClasses" @update-summary="onUpdateSummary" />
+
+        <ChangeQuarterScreen v-else-if="currentStepName === CalengradeSteps.ChangeQuarter"
+          :selected-quarter="calengrade.quarter" @change-quarter="onChangeQuarter" @next-step="onNextStep" />
+
+        <PreviewScreen v-else-if="currentStepName === CalengradeSteps.Preview" @next-step="onNextStep"
+          @reset-calengrade="resetCalengrade" :calengrade="calengrade" />
       </div>
 
       <h3 class="calengrade-page__footer-credits">
@@ -20,21 +27,77 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onMounted, reactive, ref, watch } from 'vue';
 
 import WelcomeScreen from './screens/WelcomeScreen.vue';
 import SummaryScreen from './screens/SummaryScreen.vue';
 import PreviewScreen from './screens/PreviewScreen.vue';
-import { CalengradeSteps } from './types';
-
+import ChangeQuarterScreen from './screens/ChangeQuarterScreen.vue';
+import { CalengradeInfo, CalengradeSteps, Classes } from './types';
+import { definedQuarters } from '@/utils/quarters';
 
 const currentStepName = ref<CalengradeSteps>(CalengradeSteps.Welcome);
+
+const currentQuarter = ref(0);
+
+function getQuarterFromCurrentDate() {
+  const now = Date.now();
+  for (let q = 1; q < definedQuarters.length; q++) {
+    const quarterEndDate = new Date(
+      `${definedQuarters[q].endDate}T00:00:00.000`,
+    );
+    if (now > quarterEndDate.getTime()) {
+      return q - 1;
+    } else {
+      const quarterStartDate = new Date(
+        `${definedQuarters[q].startDate}T00:00:00.000`,
+      );
+      if (now >= quarterStartDate.getTime()) {
+        return q;
+      }
+    }
+  }
+  return 0;
+}
+
+onMounted(() => {
+  const quarter = getQuarterFromCurrentDate();
+  currentQuarter.value = quarter
+});
+
+const calengrade = reactive<CalengradeInfo>({
+  quarter: definedQuarters[currentQuarter.value],
+  classes: null,
+  summary: '',
+});
+
+// todo: refactor this in future
+watch(currentQuarter, (newVal: number) => {
+  calengrade.quarter = definedQuarters[newVal];
+});
+
+const onChangeQuarter = (quarter: number) => {
+  currentQuarter.value = quarter;
+};
+
+const onUpdateClasses = (value: Classes) => {
+  calengrade.classes = value;
+};
+
+const onUpdateSummary = (value: string) => {
+  calengrade.summary = value;
+};
 
 const onNextStep = (step: CalengradeSteps) => {
   currentStepName.value = step;
 };
 
+const resetCalengrade = () => {
+  calengrade.classes = null;
+  calengrade.summary = '';
 
+  currentStepName.value = CalengradeSteps.Welcome;
+};
 </script>
 
 <style scoped>
