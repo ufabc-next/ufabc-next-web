@@ -1,19 +1,19 @@
 <template>
-  <div>
-    <div class="summary">
-      <h1>Cole aqui o seu resumo de disciplinas disponível no</h1>
-      <h2>
+  <div v-if="!isShowingChangeQuarterScreen" class="calengrade-summary">
+    <div class="calengrade-summary__container">
+      <h1 class="calengrade-summary__title">Cole aqui o seu resumo de disciplinas disponível no</h1>
+      <h2 class="calengrade-summary__title-link">
         <a class="hint" rel="noopener noreferrer" target="_blank"
           href="https://matricula.ufabc.edu.br/matricula/resumo">
           Portal de Matrículas
         </a>
       </h2>
 
-      <h3>
+      <h3 class="calengrade-summary__quad-label">
         <div>
-          <strong>Quadrimestre:</strong> {{ calengrade.quarter.title }} (
-          <button class="quadri">
-            <u>alterar</u>)
+          <strong>Quadrimestre:</strong> {{ currentQuarter.title }}
+          <button @click="showChangeQuarter(true)">
+            (<u>alterar</u>)
           </button>
         </div>
       </h3>
@@ -23,29 +23,37 @@
         Terça-feira das 21:00 às 23:00 - quinzenal (I)
         Quinta-feira das 19:00 às 21:00 - semanal
         NHT1057-15 - Genética II A-Noturno ..." v-model="summaryText" @input="handleChange(summaryText)"
-        style="min-height: 400px; margin: 32px 0 0" />
+        style="min-height: 400px; margin: 24px 0 16px" />
       <p :class="message[1] || ''">{{ message[0] || '. . .' }}</p>
     </div>
-    <button v-if="summaryText === ''" @click="handlePaste">
+    <button v-if="summaryText === ''" @click="handlePaste" class="calengrade-button">
       Colar
     </button>
-    <button v-else @click="handleClick">
+    <button v-else @click="handleClick" class="calengrade-button">
       Gerar Calengrade!
     </button>
   </div>
+
+  <ChangeQuarterScreen @change-quarter="onChangeQuarter" @back="isShowingChangeQuarterScreen = false" v-else />
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, onMounted } from 'vue';
 import { definedQuarters } from '../../../utils/quarters';
 import { handleSummary } from '../../../utils/summary';
-import { reactive } from 'vue';
-import { CalengradeInfo } from '../types';
+import { CalengradeSteps, Classes } from '../types';
+import ChangeQuarterScreen from './ChangeQuarterScreen.vue';
 
-const emit = defineEmits(['nextStep'])
+const emit = defineEmits<{
+  (e: 'nextStep', step: CalengradeSteps): boolean
+}>()
 
-// todo: fazer no component pai desses steps para salvar o estado
-const quarter = computed(() => {
+const currentQuarter = ref(definedQuarters[0]);
+const classes = ref<Classes>();
+const summary = ref<string>('');
+
+
+function getQuarterFromCurrentDate() {
   const now = Date.now();
   for (let q = 1; q < definedQuarters.length; q++) {
     const quarterEndDate = new Date(
@@ -63,16 +71,19 @@ const quarter = computed(() => {
     }
   }
   return 0;
+}
+
+onMounted(() => {
+  const quarter = getQuarterFromCurrentDate();
+  currentQuarter.value = definedQuarters[quarter];
 });
 
-const calengrade = reactive<CalengradeInfo>({
-  quarter: definedQuarters[quarter.value],
-  classes: [],
-  summary: '',
-})
+function onChangeQuarter(quarter: number) {
+  currentQuarter.value = definedQuarters[quarter];
+}
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
-const summaryText = ref<string>(calengrade.summary || '');
+const summaryText = ref<string>(summary.value || '');
 
 const message = ref<[string, 'info' | 'error'] | []>([]);
 const handleChange = (value: string) => {
@@ -91,12 +102,12 @@ const handleChange = (value: string) => {
         }`,
         'info',
       ];
-      calengrade.classes = newClasses;
-      calengrade.summary = value;
+      classes.value = newClasses;
+      summary.value = value;
     } else {
       message.value = ['Nenhuma disciplina identificada :(', 'error'];
-      calengrade.classes = [];
-      calengrade.summary = value;
+      classes.value = [];
+      summary.value = value;
     }
   } else {
     message.value = [];
@@ -106,10 +117,10 @@ const handleChange = (value: string) => {
 const handleClick = () => {
   if (summaryText.value === '') {
     message.value = ['Cole seu resumo de disciplinas!!!', 'error'];
-  } else if ((calengrade.classes || []).length <= 0) {
+  } else if ((classes.value || []).length <= 0) {
     message.value = ['Nenhuma disciplina identificada :(', 'error'];
   } else {
-    emit('nextStep')
+    emit('nextStep', CalengradeSteps.Preview);
   }
 };
 
@@ -123,22 +134,76 @@ const handlePaste = async () => {
     textareaRef.value?.focus();
   }
 };
+
+const isShowingChangeQuarterScreen = ref(false);
+const showChangeQuarter = (value: boolean) => {
+  isShowingChangeQuarterScreen.value = value;
+};
 </script>
 
 <style scoped>
-.error {
-  color: red;
+.calengrade-summary__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 16px;
 }
 
-.info {
-  color: green;
+.calengrade-summary__title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
 }
 
-.quadri {
-  background: none;
-  border: none;
-  color: blue;
+.calengrade-summary__title-link {
+  font-size: 18px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  text-decoration: underline;
+  color: black;
+}
+
+.hint {
+  color: rgb(29, 29, 29);
+}
+
+.calengrade-summary__quad-label {
+  font-size: 16px;
+  font-weight: 400;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+textarea {
+  width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+  flex-grow: 1;
+  margin-bottom: 16px;
+}
+
+textarea:focus {
+  outline: none;
+  border-color: #0000001f;
+}
+
+.calengrade-button {
+  border: 0;
+  border-radius: 5px;
+  width: 100%;
+  height: 42px;
+  padding: 0 20px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #2e7eed;
+  color: #fff;
   cursor: pointer;
-  padding: 0;
+}
+
+.calengrade-button:hover {
+  background: #0c4594;
 }
 </style>
