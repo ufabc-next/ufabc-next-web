@@ -14,9 +14,9 @@ export type Classes = {
 }[];
 
 export type Quarter = {
-  title?: string;
-  startDate?: string;
-  endDate?: string;
+  title: string;
+  startDate: string;
+  endDate: string;
 };
 
 export type Calendar = {
@@ -31,3 +31,10 @@ export type CalengradeInfo = {
   summary: string;
   calendar?: Calendar | string;
 };
+
+export enum CalengradeSteps {
+  Welcome = 'Welcome',
+  Summary = 'Summary',
+  ChangeQuarter = 'ChangeQuarter',
+  Preview = 'Preview',
+}

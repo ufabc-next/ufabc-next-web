@@ -3,8 +3,10 @@
     <div class="calengrade-page__container">
       <img src="../../assets/calengrade/calengrade-logo.svg" alt="logo do Calengrade" class="calengrade-logo" />
 
-      <div>
-        <component :is="currentStep" @next-step="onNextStep" />
+      <div class="calengrade-page__content">
+        <WelcomeScreen v-if="currentStepName === CalengradeSteps.Welcome" @next-step="onNextStep" />
+        <SummaryScreen v-else-if="currentStepName === CalengradeSteps.Summary" @next-step="onNextStep" />
+        <PreviewScreen v-else-if="currentStepName === CalengradeSteps.Preview" @next-step="onNextStep" />
       </div>
 
       <h3 class="calengrade-page__footer-credits">
@@ -23,23 +25,15 @@ import { ref } from 'vue';
 import WelcomeScreen from './screens/WelcomeScreen.vue';
 import SummaryScreen from './screens/SummaryScreen.vue';
 import PreviewScreen from './screens/PreviewScreen.vue';
-import ChangeQuarterScreen from './screens/ChangeQuarterScreen.vue';
-import { computed } from 'vue';
+import { CalengradeSteps } from './types';
 
-// todo: refactor this step logic!!!
-const steps = ref([
-  WelcomeScreen,
-  SummaryScreen,
-  PreviewScreen,
-  ChangeQuarterScreen,
-]);
 
-const currentStepIndex = ref(0);
-const currentStep = computed(() => steps.value[currentStepIndex.value]);
+const currentStepName = ref<CalengradeSteps>(CalengradeSteps.Welcome);
 
-const onNextStep = () => {
-  currentStepIndex.value += 1;
+const onNextStep = (step: CalengradeSteps) => {
+  currentStepName.value = step;
 };
+
 
 </script>
 
@@ -71,10 +65,15 @@ const onNextStep = () => {
   margin-bottom: 16px;
 }
 
+.calengrade-page__content {
+  width: 100%;
+  max-width: 800px;
+}
+
 .calengrade-page__footer-credits {
   font-size: 16px;
   font-weight: 400;
   text-align: center;
-  margin-top: 8px;
+  margin-top: 24px;
 }
 </style>

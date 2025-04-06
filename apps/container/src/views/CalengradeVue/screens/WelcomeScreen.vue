@@ -11,18 +11,21 @@
 
     <img src="../../../assets/calengrade/calendar.svg" alt="Calendário acadêmico" class="calendar-image" />
 
-    <button @click="nextStep" class="calengrade-button">
+    <button @click="nextStep(CalengradeSteps.Summary)" class="calengrade-button">
       Começar
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
+import { CalengradeSteps } from '../types';
 
-const emit = defineEmits(['nextStep']);
+const emit = defineEmits<{
+  (e: 'nextStep', step: CalengradeSteps): boolean
+}>()
 
-const nextStep = () => {
-  emit('nextStep')
+const nextStep = (step: CalengradeSteps) => {
+  emit('nextStep', step)
 };
 </script>
 
