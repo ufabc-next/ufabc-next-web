@@ -1,27 +1,27 @@
 <template>
-  <div v-if="step < 2">
+  <div v-if="step < 2" class="calengrade-preview-screen">
     <div>
-      <h1>{{ generatingCalendarMessage }}</h1>
-      <h2>...</h2>
+      <h1 class="preview-screen__title">{{ generatingCalendarMessage }}</h1>
     </div>
 
-    <div class="flex-fill d-flex align-center">
-      <img src="../../../assets/calengrade/loading.svg" alt="Calendário acadêmico" />
+    <div class="flex-fill d-flex align-center justify-center">
+      <img src="../../../assets/calengrade/loading.svg" alt="Calendário acadêmico" class="calengrade-image" />
     </div>
   </div>
   <div v-else>
     <div>
-      <h1>Seu Calengrade está pronto!</h1>
-      <h2>
+      <h1 class="preview-screen__title">Seu Calengrade está pronto!</h1>
+      <h2 class="preview-screen__title-subtitle">
         Abra o arquivo com seu aplicativo de calendário favorito e aproveite
         :)
       </h2>
     </div>
-    <div>
-      <img src="../../../assets/calengrade/calendar_done.svg" alt="Calendário" style="margin: 32px 0;" />
+    <div class="flex-fill d-flex align-center justify-center">
+      <img src="../../../assets/calengrade/calendar_done.svg" alt="Calendário" class="calengrade-image"
+        style="margin: 32px 0;" />
     </div>
     <div>
-      <button @click="resetCalengrade">
+      <button class="calengrade-button" @click="resetCalengrade">
         Fazer novo Calengrade
       </button>
     </div>
@@ -70,7 +70,7 @@ watch(step, (newStep) => {
   const { classes, quarter } = props.calengrade
 
   if (!classes || !quarter) {
-    emit('nextStep', CalengradeSteps.Summary)  // todo: create fallback screen
+    emit('nextStep', CalengradeSteps.Summary)  // todo: create fallback screen (never reach here i hope)
     return
   }
 
@@ -92,6 +92,7 @@ watch(step, (newStep) => {
       break
 
     case 1: // Download
+      generatingCalendarMessage.value = generatingCalendarMessages.DOWNLOADING
       try {
         const { quarter } = props.calengrade
 
@@ -110,7 +111,6 @@ watch(step, (newStep) => {
           window.Toaster.error('Não foi possível baixar seu Calengrade!')
         }
       } catch (e) {
-        console.log('ERROR', e)
         window.Toaster.error('Não foi possível baixar seu Calengrade!')
         if (downloadTimer.value) clearInterval(downloadTimer.value)
         emit('nextStep', CalengradeSteps.Summary)
@@ -121,8 +121,49 @@ watch(step, (newStep) => {
       if (downloadTimer.value) clearInterval(downloadTimer.value)
       break
   }
+}, {
+  immediate: true,
+  deep: true
 })
 </script>
 
 
-<style scoped></style>
+<style scoped>
+.preview-screen__title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.preview-screen__title-subtitle {
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.calengrade-image {
+  width: 100%;
+  max-width: 400px;
+  max-height: 300px;
+  margin: 32px 0;
+}
+
+.calengrade-button {
+  border: 0;
+  border-radius: 5px;
+  width: 100%;
+  height: 42px;
+  padding: 0 20px;
+  font-size: 16px;
+  font-weight: bold;
+  background: #2e7eed;
+  color: #fff;
+  cursor: pointer;
+}
+
+.calengrade-button:hover {
+  background: #0c4594;
+}
+</style>
