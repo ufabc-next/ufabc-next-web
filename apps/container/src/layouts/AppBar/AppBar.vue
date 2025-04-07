@@ -94,12 +94,6 @@ const internalNavigationItems = [
     icon: 'mdi-message-draw',
     route: '/reviews',
   },
-  // {
-  //   title: 'Aulões Next',
-  //   icon: 'mdi-school',
-  //   route: '/partners',
-  //   releaseDate: dayjs('08/18/2024')
-  // },
   {
     title: 'Meu histórico',
     icon: 'mdi-history',
@@ -119,12 +113,6 @@ const internalNavigationItems = [
     title: 'Calengrade',
     icon: 'mdi-calendar',
     route: '/calengrade',
-    releaseDate: dayjs('11/25/2023'),
-  },
-  {
-    title: 'Calengrade Vue',
-    icon: 'mdi-calendar',
-    route: '/calengrade-vue',
     releaseDate: dayjs('11/25/2023'),
   },
   {
