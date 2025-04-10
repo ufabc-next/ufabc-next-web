@@ -1,55 +1,25 @@
 <template>
-  <FeedbackAlert
-    v-if="isTeacherDataError"
-    text="Erro ao carregar o(a) professor(a)"
-  />
-  <FeedbackAlert
-    v-if="isFetchingCommentsError"
-    text="Erro ao carregar comentários"
-  />
-  <v-select
-    variant="solo"
-    density="comfortable"
-    v-model="selectedSubject"
-    :items="subjects"
-    hide-details
-    menu-icon="mdi-menu-down"
-  >
+  <FeedbackAlert v-if="isTeacherDataError" text="Erro ao carregar o(a) professor(a)" />
+  <FeedbackAlert v-if="isFetchingCommentsError" text="Erro ao carregar comentários" />
+  <v-select variant="solo" density="comfortable" v-model="selectedSubject" :items="subjects" hide-details
+    menu-icon="mdi-menu-down">
   </v-select>
+  <v-checkbox v-model="checkbox1" :label="`Filtrar EAD`"></v-checkbox>
   <CenteredLoading class="pt-4" v-if="isLoading" />
-  <div
-    v-else-if="!isLoading && commentsData?.total !== 0"
-    :style="`${!smAndDown && 'max-height:500px ; overflow-y:auto'}`"
-    class="pr-md-4 py-4"
-  >
-    <SingleComment
-      v-for="comment in commentsData?.data"
-      :key="comment._id"
-      :comment="comment"
-      date=""
-      class="mb-5"
-    />
-    <div
-      v-if="commentsData?.total !== commentsData?.data.length"
-      class="text-center px-4"
-    >
-      <v-btn
-        class="w-100 text-body-2"
-        @click="fetchMoreComments"
-        :disabled="!hasMoreComments"
-        :loading="isFetchingMoreComments"
-      >
+  <div v-else-if="!isLoading && filteredCommentsData?.total !== 0"
+    :style="`${!smAndDown && 'max-height:500px ; overflow-y:auto'}`" class="pr-md-4 py-4">
+    <SingleComment v-for="comment in filteredCommentsData?.data" :key="comment._id" :comment="comment" date=""
+      class="mb-5" />
+    <div v-if="filteredCommentsData?.total !== filteredCommentsData?.data.length" class="text-center px-4">
+      <v-btn class="w-100 text-body-2" @click="fetchMoreComments" :disabled="!hasMoreComments"
+        :loading="isFetchingMoreComments">
         Carregar mais
       </v-btn>
     </div>
   </div>
   <div v-else class="d-flex align-center flex-column mt-5">
-    <img
-      src="@/assets/comment_not_found.gif"
-      style="width: 100%; max-width: 128px"
-      class="mb-5"
-      alt="Nenhum comentário encontrado"
-    />
+    <img src="@/assets/comment_not_found.gif" style="width: 100%; max-width: 128px" class="mb-5"
+      alt="Nenhum comentário encontrado" />
     Infelizmente, nenhum comentário foi encontrado 😕
   </div>
 </template>
@@ -62,7 +32,9 @@ import { Reviews, Comments } from 'services';
 import { SingleComment } from '@/components/SingleComment';
 import { CenteredLoading } from '@/components/CenteredLoading';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
+import { checkEAD } from 'utils';
 const { smAndDown } = useDisplay();
+
 
 const props = defineProps({
   teacherId: { type: String, required: true },
@@ -129,6 +101,20 @@ const commentsData = computed(() => {
     total: commentsDataPageable.value.pages[0].data.total,
   };
 });
+
+const checkbox1 = ref(false)
+
+const filteredCommentsData = computed(() => {
+  if (!checkbox1.value || !commentsData.value) return commentsData.value;
+
+  const commentsList = commentsData.value.data.filter((comment) => !checkEAD(comment.enrollment.year, comment.enrollment.quad))
+
+  return {
+    data: commentsList,
+    total: commentsData.value.total
+  }
+})
+
 
 watch(
   () => teacherId.value,
