@@ -114,6 +114,7 @@ const routes: Array<RouteRecordRaw> = [
     component: CalengradeView,
     meta: {
       title: 'Calengrade',
+      auth: true,
     },
   },
   {
