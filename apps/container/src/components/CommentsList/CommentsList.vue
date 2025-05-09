@@ -74,7 +74,7 @@ const props = defineProps({
 
 const teacherId = computed(() => props.teacherId);
 
-const emit = defineEmits(['update:selectedSubject']);
+const emit = defineEmits(['update:selectedSubject', 'update:eadFilter']);
 const selectedSubject = computed({
   get: () => props.selectedSubject,
   set: (value: string) => {
@@ -136,6 +136,7 @@ const commentsData = computed(() => {
 const eadFilter = ref(false);
 
 const filteredCommentsData = computed(() => {
+  emit('update:eadFilter', eadFilter.value);
   if (!commentsData.value) return;
 
   if (!eadFilter.value)

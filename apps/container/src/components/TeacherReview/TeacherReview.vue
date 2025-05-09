@@ -27,7 +27,7 @@
             :style="`${xs && 'margin: 0 -24px'}`"
           >
             <ConceptsPieChart
-              :key="`chart-${selectedSubject}`"
+              :key="`chart-${selectedSubject}-${eadFilter}`"
               :grades="grades"
             ></ConceptsPieChart>
           </div>
@@ -43,6 +43,7 @@
             :teacherId="teacherId"
             :selectedSubject="selectedSubject"
             @update:selectedSubject="selectedSubject = $event"
+            @update:eadFilter="eadFilter = $event"
           />
         </v-col>
       </v-row>
@@ -87,6 +88,7 @@ const teacherId = computed(() => props.teacherId);
 const { xs } = useDisplay();
 
 const selectedSubject = ref<string>('Todas as matérias');
+const eadFilter = ref(false);
 
 const {
   data: teacherData,
@@ -110,6 +112,19 @@ const chips = computed(() => {
   );
   const toPlural = (value?: number) => (value == 1 ? '' : 's');
   const isAllSubjects = selectedSubject.value === 'Todas as matérias';
+
+  let gradeCount;
+
+  if (eadFilter.value) {
+    const specificCount = specificValidSelected?.count ?? 0;
+    const specificEadCount = specificValidSelected?.eadCount ?? 0;
+    gradeCount = isAllSubjects
+      ? general.count - general.eadCount
+      : specificCount - specificEadCount;
+  } else {
+    gradeCount = isAllSubjects ? general.count : specificValidSelected?.count;
+  }
+
   return [
     {
       value: specificValid.length,
@@ -117,7 +132,7 @@ const chips = computed(() => {
       icon: 'mdi-human-male-board',
     },
     {
-      value: isAllSubjects ? general.count : specificValidSelected?.count,
+      value: gradeCount,
       text: isAllSubjects
         ? `conceito${toPlural(general.count)}`
         : `conceito${toPlural(specificValidSelected?.count)}`,
@@ -131,12 +146,16 @@ const grades = computed(() => {
   if (selectedSubject.value === 'Todas as matérias') {
     return transformConceptDataToObject(
       teacherData.value.data.general.distribution,
+      eadFilter.value,
     );
   }
   const data = teacherData.value.data.specific
     .filter((subject) => subject._id)
     .find((subject) => subject._id.name === selectedSubject.value);
-  return transformConceptDataToObject(data?.distribution || []);
+  return transformConceptDataToObject(
+    data?.distribution || [],
+    eadFilter.value,
+  );
 });
 
 const demandsAttendance = computed(() => {
