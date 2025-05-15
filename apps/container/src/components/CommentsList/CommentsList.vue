@@ -31,14 +31,10 @@
       date=""
       class="mb-5"
     />
-    <div
-      v-if="filteredCommentsData?.total !== filteredCommentsData?.data.length"
-      class="text-center px-4"
-    >
+    <div v-if="hasMoreComments" class="text-center px-4">
       <v-btn
         class="w-100 text-body-2"
         @click="fetchMoreComments"
-        :disabled="!hasMoreComments"
         :loading="isFetchingMoreComments"
       >
         Carregar mais
