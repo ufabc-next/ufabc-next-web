@@ -40,7 +40,7 @@ export type TeacherReview = {
     updatedAt: string;
     createdAt: string;
     __v: number;
-    alias: string[];
+    alias?: string[];
   };
   general: {
     cr_medio: number;
