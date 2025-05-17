@@ -7,17 +7,20 @@
     v-if="isFetchingCommentsError"
     text="Erro ao carregar comentários"
   />
-  <v-select
-    variant="solo"
-    density="comfortable"
-    v-model="selectedSubject"
-    :items="subjects"
-    hide-details
-    menu-icon="mdi-menu-down"
-  >
-  </v-select>
-  <v-switch v-model="eadFilter" label="Filtrar EAD" inset color="primary">
-  </v-switch>
+  <div class="d-flex align-center">
+    <v-select
+      variant="solo"
+      density="comfortable"
+      v-model="selectedSubject"
+      :items="subjects"
+      hide-details
+      menu-icon="mdi-menu-down"
+      class="mr-4"
+    ></v-select>
+
+    <v-switch v-model="eadFilter" label="Ocultar EAD" color="info"></v-switch>
+  </div>
+
   <CenteredLoading class="pt-4" v-if="isLoading" />
   <div
     v-else-if="!isLoading && filteredCommentsData?.total !== 0"
