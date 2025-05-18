@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "vite",
     "type-check": "vue-tsc --noEmit",
-    "build": "yarn type-check && vite build",
-    "build:staging": "yarn type-check && vite build --mode staging",
+    "build": "pnpm type-check && vite build",
+    "build:staging": "pnpm type-check && vite build --mode staging",
     "test": "vitest run --coverage",
     "test:watch": "vitest --coverage",
     "lint": "eslint .",
