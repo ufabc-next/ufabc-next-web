@@ -18,5 +18,5 @@
     "turbo": "^2.5.0"
   },
   "name": "ufabc-next-web",
-  "packageManager": "pnpm@9.19.9"
+  "packageManager": "pnpm@10.11.0"
 }
