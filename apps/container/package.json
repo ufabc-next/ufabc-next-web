@@ -49,19 +49,19 @@
     "@typescript-eslint/parser": "6.21.0",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vitest/coverage-v8": "0.34.6",
-    "@types/node": "^22.14.1",
     "eslint-plugin-vue": "9.25.0",
     "husky": "8.0.3",
     "jsdom": "23.2.0",
     "lint-staged": "15.2.2",
     "msw": "^2.0.9",
     "sass": "1.75.0",
-    "vue-tsc": "^2.2.8",
     "sass-loader": "13.3.3",
     "types": "*",
     "typescript": "5.4.5",
     "vite": "^6.3.2",
-    "vitest": "0.34.6"
+    "vite-plugin-node-polyfills": "^0.23.0",
+    "vitest": "0.34.6",
+    "vue-tsc": "^2.2.8"
   },
   "gitHooks": {
     "pre-commit": "lint-staged"

@@ -1,6 +1,7 @@
 import vue from '@vitejs/plugin-vue';
 import { defineConfig } from 'vite';
 import { fileURLToPath } from 'node:url';
+import { nodePolyfills } from 'vite-plugin-node-polyfills';
 
 export default defineConfig({
   base: process.env.NODE_ENV === 'production' ? '/app' : '/',
@@ -18,7 +19,7 @@ export default defineConfig({
     host: true,
     strictPort: true,
   },
-  plugins: [vue()],
+  plugins: [vue(), nodePolyfills()],
   resolve: {
     alias: [
       {
