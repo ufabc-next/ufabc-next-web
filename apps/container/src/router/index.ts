@@ -14,6 +14,7 @@ const ConfirmationView = () =>
 const RecoveryView = () => import('@/views/Recovery/RecoveryView.vue');
 const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
 const FacebookView = () => import('@/views/Facebook/FacebookView.vue');
+const WppView = () => import('@/views/Wpp/WppView.vue');
 
 const isJWT = (token: string) =>
   /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
@@ -107,6 +108,14 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Recuperar conta',
       auth: false,
+    },
+  },
+  {
+    path: '/wpp',
+    name: 'wpp',
+    component: WppView,
+    meta: {
+      title: 'Grupos Whatsapp',
     },
   },
   {
