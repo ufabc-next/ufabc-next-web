@@ -54,6 +54,10 @@
 </template>
 
 <script setup lang="ts">
+import mixpanel from 'mixpanel-browser';
+
+
+
 const props = defineProps({
   color: {
     type: String,
@@ -61,13 +65,13 @@ const props = defineProps({
   },
 });
 
+
 // Função para rastrear o clique
 function trackEntrarClick() {
   mixpanel.track('Entrar WppCard Click', {
-    disciplina: 'Fenômenos Térmicos',
-    turma: 'A1 - Diurno',
-    professor: 'Ana Paula Santos',
-    campus: 'Santo André',
+    grupoWpp: 'nome do grupo',
+    userNext: 'true ou false', 
+    userRA: 'RA do usuário', 
   });
 }
 </script>
