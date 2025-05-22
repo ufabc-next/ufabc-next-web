@@ -119,6 +119,7 @@ const internalNavigationItems = [
     title: 'Grupos no WhatsApp',
     icon: 'mdi-whatsapp',
     route: '/wpp',
+    releaseDate: dayjs('06/01/2025')
   },
   {
     title: 'Calengrade',
