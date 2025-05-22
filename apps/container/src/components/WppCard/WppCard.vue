@@ -43,6 +43,7 @@
             href="#"
             target="_blank"
             rel="noopener"
+            @click="trackEntrarClick"
           >
             Entrar
           </v-btn>
@@ -53,10 +54,24 @@
 </template>
 
 <script setup lang="ts">
+import mixpanel from 'mixpanel-browser';
+
+
+
 const props = defineProps({
   color: {
     type: String,
     default: 'primary',
   },
 });
+
+
+// Função para rastrear o clique
+function trackEntrarClick() {
+  mixpanel.track('Entrar WppCard Click', {
+    grupoWpp: 'nome do grupo',
+    userNext: 'true ou false', 
+    userRA: 'RA do usuário', 
+  });
+}
 </script>
