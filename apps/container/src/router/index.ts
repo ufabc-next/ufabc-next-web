@@ -115,7 +115,7 @@ const routes: Array<RouteRecordRaw> = [
     name: 'wpp',
     component: WppView,
     meta: {
-      title: 'Grupos Whatsapp',
+      title: 'Grupos do Whatsapp',
     },
   },
   {

@@ -116,6 +116,11 @@ const internalNavigationItems = [
     route: '/stats',
   },
   {
+    title: 'Grupos no WhatsApp',
+    icon: 'mdi-whatsapp',
+    route: '/wpp',
+  },
+  {
     title: 'Calengrade',
     icon: 'mdi-calendar',
     route: '/calengrade',
@@ -140,11 +145,6 @@ const externalNavigationItems = [
     title: 'Snapshot da Matrícula',
     icon: 'mdi-open-in-new',
     url: 'https://ufabc-matricula-snapshot.vercel.app',
-  },
-  {
-    title: 'Grupos no WhatsApp',
-    icon: 'mdi-whatsapp',
-    url: 'https://rebrand.ly/ufabc-grupos-whatsapp',
   },
   {
     title: 'Use a Extensão',
