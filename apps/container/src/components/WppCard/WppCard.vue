@@ -43,6 +43,7 @@
             href="#"
             target="_blank"
             rel="noopener"
+            @click="trackEntrarClick"
           >
             Entrar
           </v-btn>
@@ -59,4 +60,14 @@ const props = defineProps({
     default: 'primary',
   },
 });
+
+// Função para rastrear o clique
+function trackEntrarClick() {
+  mixpanel.track('Entrar WppCard Click', {
+    disciplina: 'Fenômenos Térmicos',
+    turma: 'A1 - Diurno',
+    professor: 'Ana Paula Santos',
+    campus: 'Santo André',
+  });
+}
 </script>
