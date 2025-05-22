@@ -18,9 +18,9 @@
   "dependencies": {
     "@amcharts/amcharts5": "5.9.4",
     "@mdi/font": "7.4.47",
-    "@tanstack/query-core": "5.32.0",
-    "@tanstack/vue-query": "5.32.0",
-    "@tanstack/vue-query-devtools": "5.32.0",
+    "@tanstack/query-core": "5.76.0",
+    "@tanstack/vue-query": "5.76.0",
+    "@tanstack/vue-query-devtools": "5.76.0",
     "@vee-validate/zod": "4.15.0",
     "axios": "1.9.0",
     "core-js": "3.37.0",
