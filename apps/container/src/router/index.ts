@@ -80,6 +80,7 @@ const routes: Array<RouteRecordRaw> = [
     component: DonateView,
     meta: {
       title: 'Ajude o Next',
+      layout: 'include-sidebar',
     },
   },
   {
@@ -116,6 +117,7 @@ const routes: Array<RouteRecordRaw> = [
     component: WppView,
     meta: {
       title: 'Grupos do Whatsapp',
+      layout: 'include-sidebar',
     },
   },
   {
@@ -124,6 +126,7 @@ const routes: Array<RouteRecordRaw> = [
     component: CalengradeView,
     meta: {
       title: 'Calengrade',
+      layout: 'include-sidebar',
     },
   },
   {
