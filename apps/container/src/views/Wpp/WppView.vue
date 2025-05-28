@@ -1,6 +1,6 @@
 <template>
   <WppBanner></WppBanner>
-  <WppRAInput></WppRAInput> //aqui falta arrumar o fato que o modal aparece por 0.5s ao entrar na tela
+  <WppRAInput></WppRAInput>
   <WppCard></WppCard>
 </template>
 

@@ -22,7 +22,7 @@ import { useRouter } from 'vue-router'
 import { authStore } from 'stores'
 
 const router = useRouter()
-const dialog = ref(true)
+const dialog = ref(false)
 const ra = ref('')
 
 const { isLoggedIn, user, logOut } = authStore.getState()
@@ -52,7 +52,6 @@ function submitRA() {
 }
 
 watch(dialog, () => {
-  console.log('RA definido:', ra.value)
   //logica de pegar as materias do quad atual pelo RA
 })
 
@@ -60,8 +59,9 @@ onMounted(() => {
   if (isLoggedIn() && user) {
     if (checkLoginExpiration()) {
       ra.value = user.ra
-      dialog.value = false
+      return
     }
   }
+  dialog.value = true
 })
 </script>
