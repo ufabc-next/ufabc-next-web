@@ -37,12 +37,12 @@
             <strong>Conta não confirmada</strong>
           </div>
           <div class="mt-2 text-caption">
-            Confirme sua conta pelo email para ter acesso a todas as funcionalidades do sistema.
+            Crie sua conta no next para acessar todas as funcionalidades.
           </div>
-          <!-- <v-btn variant="outlined" size="small" block class="mt-2 bg-blue-darken-2 text-white text-caption"
-            style="border-color: #1e40af" @click="confirmAccount">
-            Confirmar agora
-          </v-btn> -->
+          <v-btn variant="outlined" size="small" block class="mt-2 bg-blue-darken-2 text-white text-caption"
+            style="border-color: #1e40af" @click="createAccount">
+            Criar Conta
+          </v-btn>
         </div>
       </div>
     </v-navigation-drawer>
@@ -110,6 +110,10 @@ const { logOut, user } = useAuth();
 const handleLogout = () => {
   logOut.value();
 };
+
+const createAccount = () => {
+  router.push('/')
+}
 
 const drawer = ref(true);
 const userLogin = computed(

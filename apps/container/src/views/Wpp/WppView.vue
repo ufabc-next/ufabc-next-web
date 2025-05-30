@@ -1,11 +1,9 @@
 <template>
   <WppBanner></WppBanner>
-  <WppRAInput></WppRAInput>
-  <WppCard></WppCard>
+  <WppDashboard></WppDashboard>
 </template>
 
 <script setup lang="ts">
-import { WppCard } from '@/components/WppCard';
 import { WppBanner } from '@/components/WppBanner';
-import { WppRAInput } from '@/components/WppRAInput';
+import { WppDashboard } from '@/components/WppDashboard';
 </script>
