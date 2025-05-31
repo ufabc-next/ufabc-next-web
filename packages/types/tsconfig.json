@@ -1,3 +1,5 @@
 {
-  "include": [".", ".eslintrc.cjs"]
+  "extends": "tsconfig/base.json",
+  "include": ["."],
+  "exclude": ["node_modules", "dist"]
 }

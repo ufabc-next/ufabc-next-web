@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "type": "module",
   "private": true,
-  "main": "base.js",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./base": "./base.js",
+    "./vue": "./vue.js"
+  },
   "devDependencies": {
     "@eslint/js": "^9.27.0",
     "eslint": "^9.27.0",
@@ -13,6 +18,8 @@
     "eslint-plugin-import": "2.29.1",
     "eslint-plugin-simple-import-sort": "10.0.0",
     "eslint-plugin-unused-imports": "3.1.0",
+    "eslint-plugin-vue": "^9.25.0",
+    "vue-eslint-parser": "^9.4.3",
     "globals": "^16.2.0",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.32.0"

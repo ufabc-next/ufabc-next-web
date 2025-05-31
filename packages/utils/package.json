@@ -10,7 +10,8 @@
     "tsc": "tsc --noEmit"
   },
   "devDependencies": {
-    "eslint-config-custom": "*",
+    "eslint": "^9.27.0",
+    "@ufabc-next-web/eslint-config": "*",
     "tsconfig": "*",
     "typescript": "^5.2.2"
   },
