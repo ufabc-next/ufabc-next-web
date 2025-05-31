@@ -27,7 +27,7 @@
 
         <div class="d-flex justify-center">
           <v-btn variant="flat" border class="px-6" append-icon="mdi-open-in-new" :href="cardInfo.link" target="_blank"
-            rel="noopener" @click="trackEntrarClick">
+            rel="noopener">
             Entrar
           </v-btn>
         </div>
@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import mixpanel from 'mixpanel-browser';
 import { PropType } from 'vue';
 
 type wppCardInfo = {
@@ -65,14 +64,4 @@ const props = defineProps({
     })
   }
 });
-
-
-// Função para rastrear o clique
-function trackEntrarClick() {
-  mixpanel.track('Entrar WppCard Click', {
-    grupoWpp: 'props',
-    userNext: 'true ou false',
-    userRA: 'RA do usuário',
-  });
-}
 </script>

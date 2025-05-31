@@ -22,9 +22,5 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ],
-  "dependencies": {
-    "@types/mixpanel-browser": "^2.60.0",
-    "mixpanel-browser": "^2.64.0"
-  }
+  ]
 }
