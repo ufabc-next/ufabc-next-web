@@ -1,6 +1,12 @@
 {
   "extends": "../../packages/tsconfig/vue.json",
-  "include": ["setup-tests.ts"],
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["./setup-tests.ts", "src/**/*"],
   "references": [
     {
       "path": "../../packages/types"
