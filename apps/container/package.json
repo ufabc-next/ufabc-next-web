@@ -56,8 +56,7 @@
     "msw": "^2.8.4",
     "sass": "1.89.0",
     "sass-loader": "16.0.5",
-    "types": "*",
-    "typescript": "5.4.5",
+    "typescript": "^5.8.2",
     "vite": "^6.3.5",
     "vitest": "0.34.6",
     "vue-tsc": "^2.2.10"
@@ -68,8 +67,5 @@
   "engines": {
     "node": ">=v18.4.0",
     "npm": ">=8.12.0"
-  },
-  "lint-staged": {
-    "*.{js,jsx,vue,ts,tsx}": "vue-cli-service lint"
   }
 }

@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "extends": "./packages/tsconfig/base.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "include": ["commitlint.config.ts", "eslint.config.js"],
+  "references": [
+    {
+      "path": "./packages/types"
+    },
+    {
+      "path": "./packages/services"
+    },
+    {
+      "path": "./packages/stores"
+    },
+    {
+      "path": "./packages/utils"
+    }
+  ]
+}
