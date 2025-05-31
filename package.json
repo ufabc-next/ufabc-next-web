@@ -12,7 +12,7 @@
   "devDependencies": {
     "@commitlint/cli": "18.6.1",
     "@commitlint/config-conventional": "18.6.3",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "@ufabc-next-web/eslint-config": "*",
     "typescript": "^5.8.2",
     "turbo": "^2.5.3"

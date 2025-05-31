@@ -48,7 +48,7 @@
     "@types/node": "^22.15.21",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vitest/coverage-v8": "0.34.6",
-    "eslint": "^9.27.0",
+    "eslint": "^9.28.0",
     "@ufabc-next-web/eslint-config": "*",
     "husky": "8.0.3",
     "jsdom": "23.2.0",
