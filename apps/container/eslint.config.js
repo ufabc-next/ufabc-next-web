@@ -1,4 +1,4 @@
-import vueConfig from '../../packages/eslint-config/vue';
+import vueConfig from '../../packages/eslint-config/vue.js';
 
 export default [
   ...vueConfig,
