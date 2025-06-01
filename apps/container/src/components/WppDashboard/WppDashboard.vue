@@ -70,13 +70,18 @@ function checkLoginExpiration() {
   return true
 }
 
-// function randomColor() {
+function generateUniqueColors(): string[] {
+  const baseColors = ['red', 'blue', 'green', 'orange', 'purple', 'indigo', 'pink', 'teal', 'cyan', 'amber']
 
-// }
+  const shuffled = baseColors
+    .sort(() => 0.5 - Math.random())
+
+  return shuffled
+}
 
 function submitRA() {
   if (ra.value) {
-    //logica de cadastrar o RA como confirmed = false
+    //logica de cadastrar o RA como confirmed = false (do or not?)
     dialog.value = false
     update.value = true
     isLoading.value = true
@@ -91,70 +96,72 @@ watch(update, async () => {
   await new Promise(resolve => setTimeout(resolve, 2000))
 
   isLoading.value = false
+  const uniqueColors = generateUniqueColors()
 
-  groupsInfo.value = [{
-    color: 'red',
-    title: '1',
-    turma: '1A',
-    campus: 'SA',
-    season: '2024:1',
-    professor: 'Ana Paula',
-    link: 'http://hardcoded-link.com'
-  },
-  {
-    color: 'blue',
-    title: '2',
-    turma: '2A',
-    campus: 'SA',
-    season: '2024:2',
-    professor: 'Marcelo Werneck',
-    link: 'http://hardcoded-link.com'
-  },
-  {
-    color: 'green',
-    title: '3',
-    turma: '1B',
-    campus: 'SA',
-    season: '2024:3',
-    professor: 'Joao Schmidt',
-    link: 'http://hardcoded-link.com'
-  },
-  {
-    color: 'yellow',
-    title: '4',
-    turma: '2B',
-    campus: 'SBC',
-    season: '2025:1',
-    professor: 'Armando Caputi',
-    link: 'http://hardcoded-link.com'
-  },
-  {
-    color: 'purple',
-    title: '5',
-    turma: '3B',
-    campus: 'SBC',
-    season: '2025:2',
-    professor: 'Leonardo Manguito',
-    link: 'http://hardcoded-link.com'
-  },
-  {
-    color: 'orange',
-    title: '6',
-    turma: '3B',
-    campus: 'SBC',
-    season: '2025:2',
-    professor: 'Leonardo Manguito',
-    link: 'http://hardcoded-link.com'
-  },
-  {
-    color: 'brown',
-    title: '7',
-    turma: '3B',
-    campus: 'SBC',
-    season: '2025:2',
-    professor: 'Leonardo Manguito',
-    link: 'http://hardcoded-link.com'
-  }
+  groupsInfo.value = groupsInfo.value = [
+    {
+      color: uniqueColors[0],
+      title: '1',
+      turma: '1A',
+      campus: 'SA',
+      season: '2024:1',
+      professor: 'Ana Paula',
+      link: 'http://hardcoded-link.com'
+    },
+    {
+      color: uniqueColors[1],
+      title: '2',
+      turma: '2A',
+      campus: 'SA',
+      season: '2024:2',
+      professor: 'Marcelo Werneck',
+      link: 'http://hardcoded-link.com'
+    },
+    {
+      color: uniqueColors[2],
+      title: '3',
+      turma: '1B',
+      campus: 'SA',
+      season: '2024:3',
+      professor: 'Joao Schmidt',
+      link: 'http://hardcoded-link.com'
+    },
+    {
+      color: uniqueColors[3],
+      title: '4',
+      turma: '2B',
+      campus: 'SBC',
+      season: '2025:1',
+      professor: 'Armando Caputi',
+      link: 'http://hardcoded-link.com'
+    },
+    {
+      color: uniqueColors[4],
+      title: '5',
+      turma: '3B',
+      campus: 'SBC',
+      season: '2025:2',
+      professor: 'Leonardo Manguito',
+      link: 'http://hardcoded-link.com'
+    },
+    {
+      color: uniqueColors[5],
+      title: '6',
+      turma: '3B',
+      campus: 'SBC',
+      season: '2025:2',
+      professor: 'Leonardo Manguito',
+      link: 'http://hardcoded-link.com'
+    },
+    {
+      color: uniqueColors[6],
+      title: '7',
+      turma: '3B',
+      campus: 'SBC',
+      season: '2025:2',
+      professor: 'Leonardo Manguito',
+      link: 'http://hardcoded-link.com'
+    }
   ]
 })
 
