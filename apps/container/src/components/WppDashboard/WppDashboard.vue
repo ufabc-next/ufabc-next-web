@@ -1,8 +1,5 @@
 <template>
-  <v-container v-if="isLoading" class="text-center py-10">
-    <v-progress-circular indeterminate color="primary" size="40" />
-  </v-container>
-  <v-container v-if="!isLoading">
+  <v-container>
     <v-dialog v-model="dialog" persistent max-width="400">
       <v-card>
         <v-card-title class="text-h6 text-center">
@@ -20,11 +17,33 @@
     </v-dialog>
   </v-container>
 
-  <v-row class="mt-6" dense>
-    <v-col v-for="(groupInfo, index) in groupsInfo" :key="index" cols="12" sm="6" md="4">
-      <WppCard :cardInfo="groupInfo" />
-    </v-col>
-  </v-row>
+  <v-container v-if="isLoading" class="text-center py-10">
+    <v-progress-circular indeterminate color="primary" size="40" />
+  </v-container>
+
+  <v-btn v-if="!isLoading" @click="toggleShow" :color="show ? 'red-darken-1' : 'primary'" class="mb-4" elevation="2"
+    rounded>
+    <v-icon start>{{ show ? 'mdi-close' : 'mdi-help-circle-outline' }}</v-icon>
+    {{ show ? 'Esconder busca' : 'Não encontrou as matérias corretas?' }}
+  </v-btn>
+
+  <v-expand-transition>
+    <div v-if="show">
+      <WppSearchBar />
+    </div>
+  </v-expand-transition>
+
+  <v-alert v-if="error" type="error" density="compact" class="mt-2" border="start" color="error" variant="tonal">
+    {{ error }}
+  </v-alert>
+
+  <v-container v-if="groupsInfo">
+    <v-row class="mt-6" dense>
+      <v-col v-for="(groupInfo, index) in groupsInfo" :key="index" cols="12" sm="6" md="4">
+        <WppCard :cardInfo="groupInfo" />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
@@ -32,6 +51,7 @@ import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from 'stores'
 import { WppCard } from '../WppCard'
+import { WppSearchBar } from '@/components/WppSearchBar';
 
 type wppCardInfo = {
   color: string;
@@ -46,14 +66,22 @@ type wppCardInfo = {
 const router = useRouter()
 const dialog = ref(false)
 
+
 const update = ref(false)
-//const error = ref(null) adicionar caso de erro
+
 const isLoading = ref(false)
+const groupsInfo = ref<wppCardInfo[]>([])
+const error = ref<string | null>(null)
 
 const ra = ref<number>()
 
+const show = ref(false)
+
+const toggleShow = () => {
+  show.value = !show.value
+}
+
 const { isLoggedIn, user, logOut } = authStore.getState()
-const groupsInfo = ref<wppCardInfo[]>([])
 
 function checkLoginExpiration() {
   const expirationPeriod = 1 * 24 * 60 * 60
@@ -93,76 +121,87 @@ function submitRA() {
 watch(update, async () => {
   //logica de pegar as materias do quad atual pelo RA
 
-  await new Promise(resolve => setTimeout(resolve, 2000))
+  try {
+    await new Promise(resolve => setTimeout(resolve, 2000))
 
-  isLoading.value = false
-  const uniqueColors = generateUniqueColors()
+    const uniqueColors = generateUniqueColors()
 
-  groupsInfo.value = groupsInfo.value = [
-    {
-      color: uniqueColors[0],
-      title: '1',
-      turma: '1A',
-      campus: 'SA',
-      season: '2024:1',
-      professor: 'Ana Paula',
-      link: 'http://hardcoded-link.com'
-    },
-    {
-      color: uniqueColors[1],
-      title: '2',
-      turma: '2A',
-      campus: 'SA',
-      season: '2024:2',
-      professor: 'Marcelo Werneck',
-      link: 'http://hardcoded-link.com'
-    },
-    {
-      color: uniqueColors[2],
-      title: '3',
-      turma: '1B',
-      campus: 'SA',
-      season: '2024:3',
-      professor: 'Joao Schmidt',
-      link: 'http://hardcoded-link.com'
-    },
-    {
-      color: uniqueColors[3],
-      title: '4',
-      turma: '2B',
-      campus: 'SBC',
-      season: '2025:1',
-      professor: 'Armando Caputi',
-      link: 'http://hardcoded-link.com'
-    },
-    {
-      color: uniqueColors[4],
-      title: '5',
-      turma: '3B',
-      campus: 'SBC',
-      season: '2025:2',
-      professor: 'Leonardo Manguito',
-      link: 'http://hardcoded-link.com'
-    },
-    {
-      color: uniqueColors[5],
-      title: '6',
-      turma: '3B',
-      campus: 'SBC',
-      season: '2025:2',
-      professor: 'Leonardo Manguito',
-      link: 'http://hardcoded-link.com'
-    },
-    {
-      color: uniqueColors[6],
-      title: '7',
-      turma: '3B',
-      campus: 'SBC',
-      season: '2025:2',
-      professor: 'Leonardo Manguito',
-      link: 'http://hardcoded-link.com'
+    throw Error("erro generico")
+
+    groupsInfo.value = [
+      {
+        color: uniqueColors[0],
+        title: '1',
+        turma: '1A',
+        campus: 'SA',
+        season: '2024:1',
+        professor: 'Ana Paula',
+        link: 'http://hardcoded-link.com'
+      },
+      {
+        color: uniqueColors[1],
+        title: '2',
+        turma: '2A',
+        campus: 'SA',
+        season: '2024:2',
+        professor: 'Marcelo Werneck',
+        link: 'http://hardcoded-link.com'
+      },
+      {
+        color: uniqueColors[2],
+        title: '3',
+        turma: '1B',
+        campus: 'SA',
+        season: '2024:3',
+        professor: 'Joao Schmidt',
+        link: 'http://hardcoded-link.com'
+      },
+      {
+        color: uniqueColors[3],
+        title: '4',
+        turma: '2B',
+        campus: 'SBC',
+        season: '2025:1',
+        professor: 'Armando Caputi',
+        link: 'http://hardcoded-link.com'
+      },
+      {
+        color: uniqueColors[4],
+        title: '5',
+        turma: '3B',
+        campus: 'SBC',
+        season: '2025:2',
+        professor: 'Leonardo Manguito',
+        link: 'http://hardcoded-link.com'
+      },
+      {
+        color: uniqueColors[5],
+        title: '6',
+        turma: '3B',
+        campus: 'SBC',
+        season: '2025:2',
+        professor: 'Leonardo Manguito',
+        link: 'http://hardcoded-link.com'
+      },
+      {
+        color: uniqueColors[6],
+        title: '7',
+        turma: '3B',
+        campus: 'SBC',
+        season: '2025:2',
+        professor: 'Leonardo Manguito',
+        link: 'http://hardcoded-link.com'
+      }
+    ]
+  } catch (err: unknown) {
+    if (err instanceof Error) error.value = err.message
+    else {
+      error.value = 'Ocorreu um erro desconhecido.'
     }
-  ]
+    groupsInfo.value = []
+  } finally {
+    isLoading.value = false
+  }
 })
 
 onMounted(() => {

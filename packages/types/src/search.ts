@@ -16,3 +16,19 @@ export type SearchSubjectItem = {
   __v: number;
   creditos: number;
 };
+
+export type SearchComponentItem = {
+  disciplina_id: string;
+  identifier: string;
+  season: string;
+  alunos_matriculados: number[];
+  campus: string;
+  ideal_quad: boolean;
+  subject: string;
+  turma: string;
+  turno: string;
+  vagas: number;
+  requisicoes: number;
+  subjectId: string;
+  wppGroupLink: string;
+};
