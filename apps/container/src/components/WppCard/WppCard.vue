@@ -26,7 +26,7 @@
         </v-card-subtitle>
 
         <div class="d-flex justify-center">
-          <v-btn variant="flat" border class="px-6" append-icon="mdi-open-in-new" :href="cardInfo.link" target="_blank"
+          <v-btn variant="flat" border class="px-6" append-icon="mdi-whatsapp" :href="cardInfo.link" target="_blank"
             rel="noopener" @click="trackEntrarClick">
             Entrar
           </v-btn>
