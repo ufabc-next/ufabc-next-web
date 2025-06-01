@@ -21,21 +21,13 @@ import '@mdi/font/css/materialdesignicons.css';
 import HighchartsVue from 'highcharts-vue';
 import Highcharts from 'highcharts';
 import annotationsInit from 'highcharts/modules/annotations';
-import accessibility from "highcharts/modules/accessibility";
+import accessibility from 'highcharts/modules/accessibility';
 import { QueryClient } from '@tanstack/query-core';
 import { theme } from './theme';
-import mixpanel from 'mixpanel-browser';
-
-
+import { eventTracker } from './helpers/tracker';
 
 accessibility(Highcharts);
 annotationsInit(Highcharts);
-
-mixpanel.init(process.env.VUE_APP_API_URL, {
-  debug: true,
-});
-
-
 
 const vuetify = createVuetify({
   components,
@@ -68,6 +60,8 @@ declare global {
     queryClient: QueryClient;
   }
 }
+
+eventTracker.init();
 
 createApp(App)
   .use(router)

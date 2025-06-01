@@ -37,7 +37,6 @@
 </template>
 
 <script setup lang="ts">
-import mixpanel from 'mixpanel-browser';
 import { PropType } from 'vue';
 
 type wppCardInfo = {
@@ -65,14 +64,4 @@ const props = defineProps({
     })
   }
 });
-
-
-// Função para rastrear o clique
-function trackEntrarClick() {
-  mixpanel.track('Entrar WppCard Click', {
-    grupoWpp: 'props',
-    userNext: 'true ou false',
-    userRA: 'RA do usuário',
-  });
-}
 </script>
