@@ -17,15 +17,15 @@
     </v-dialog>
   </v-container>
 
-  <v-container v-if="isLoading" class="text-center py-10">
+  <!-- <v-container v-if="isLoading" class="text-center py-10">
     <v-progress-circular indeterminate color="primary" size="40" />
-  </v-container>
+  </v-container> -->
 
-  <v-btn v-if="!isLoading" @click="toggleShow" :color="show ? 'red-darken-1' : 'primary'" class="mb-4" elevation="2"
+  <!-- <v-btn v-if="!isLoading" @click="toggleShow" :color="show ? 'red-darken-1' : 'primary'" class="mb-4" elevation="2"
     rounded>
     <v-icon start>{{ show ? 'mdi-close' : 'mdi-help-circle-outline' }}</v-icon>
     {{ show ? 'Esconder busca' : 'Não encontrou as matérias corretas?' }}
-  </v-btn>
+  </v-btn> -->
 
   <v-expand-transition>
     <div v-if="show">
@@ -37,20 +37,20 @@
     {{ error }}
   </v-alert>
 
-  <v-container v-if="groupsInfo">
+  <!-- <v-container v-if="groupsInfo">
     <v-row class="mt-6" dense>
       <v-col v-for="(groupInfo, index) in groupsInfo" :key="index" cols="12" sm="6" md="4">
         <WppCard :cardInfo="groupInfo" />
       </v-col>
     </v-row>
-  </v-container>
+  </v-container> -->
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { authStore } from 'stores'
-import { WppCard } from '../WppCard'
+// import { WppCard } from '../WppCard'
 import { WppSearchBar } from '@/components/WppSearchBar';
 
 type wppCardInfo = {
@@ -75,11 +75,11 @@ const error = ref<string | null>(null)
 
 const ra = ref<number>()
 
-const show = ref(false)
+const show = ref(true)
 
-const toggleShow = () => {
-  show.value = !show.value
-}
+// const toggleShow = () => {
+//   show.value = !show.value
+// }
 
 const { isLoggedIn, user, logOut } = authStore.getState()
 
@@ -125,8 +125,6 @@ watch(update, async () => {
     await new Promise(resolve => setTimeout(resolve, 2000))
 
     const uniqueColors = generateUniqueColors()
-
-    throw Error("erro generico")
 
     groupsInfo.value = [
       {
