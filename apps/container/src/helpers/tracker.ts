@@ -3,7 +3,7 @@ import { User } from 'types';
 import { WebEvent } from './WebEvent';
 
 // todo: improve error handling
-const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '';
+const MIXPANEL_TOKEN = process.env.VITE_MIXPANEL_TOKEN || '';
 
 class EventTracker {
   private initialized = false;
