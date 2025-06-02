@@ -1,13 +1,9 @@
 <template>
   <VueQueryDevtools v-if="isLocal" />
-  <AppBar>
+  <AppBar :key="user?.ra">
     <v-main style="background-color: #f5f5f5">
-      <v-container
-        id="app-container"
-        :style="`min-height: calc(100vh${
-          confirmedUser ? '- 64px' : ''
-        }); min-height: calc(100svh${confirmedUser ? '- 64px' : ''})`"
-      >
+      <v-container id="app-container" :style="`min-height: calc(100vh${(confirmedUser || layout === 'include-sidebar') ? '- 64px' : ''
+        }); min-height: calc(100svh${(confirmedUser || layout === 'include-sidebar') ? '- 64px' : ''})`">
         <router-view />
       </v-container>
     </v-main>
@@ -24,9 +20,16 @@ import { VueQueryDevtools } from '@tanstack/vue-query-devtools';
 const isLocal = process.env.VUE_APP_MF_ENV === 'local';
 
 import { AppBar } from '@/layouts/AppBar';
+import { useRouter } from 'vue-router';
 
 const useAuth = create(authStore);
 const { user } = useAuth();
+
+const router = useRouter()
+
+const layout = computed(
+  () => router.currentRoute.value.meta.layout ?? null
+)
 
 const confirmedUser = computed(() => !!user.value?.confirmed);
 
@@ -43,9 +46,11 @@ onMounted(async () => {
 * {
   font-family: Lato, sans-serif;
 }
+
 html {
   font-family: Lato, sans-serif;
 }
+
 #app {
   font-family: Lato, sans-serif;
 }
