@@ -6,12 +6,12 @@
         max-width: 100%;
         max-height: 100%;
       ">
-      <div class="d-flex justify-space-between align-center w-100">
+      <div class="d-flex flex-column flex-md-row justify-space-between align-center w-100">
         <div style="max-width: 330px">
-          <h3 class="text-h6 font-weight-bold mb-1">
+          <h3 class="text-h6 font-weight-bold mb-3 mb-md-1">
             Encontre seu grupo ideal
           </h3>
-          <p class="text-body-2 mb-0">
+          <p class="text-body-2 mb-0 mb-3 mb-md-0">
             Acesse os grupos de WhatsApp das matérias que você está cursando e fique por dentro de tudo com a sua turma.
           </p>
         </div>
