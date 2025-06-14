@@ -1,0 +1,27 @@
+{
+  "name": "@ufabc-next-web/eslint-config",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./base": "./base.js",
+    "./vue": "./vue.js"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.28.0",
+    "eslint": "^9.28.0",
+    "eslint-config-prettier": "^10.1.1",
+    "eslint-import-resolver-typescript": "4.4.2",
+    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "eslint-plugin-turbo": "^2.5.0",
+    "eslint-plugin-unused-imports": "4.1.4",
+    "eslint-plugin-vue": "^10.1.0",
+    "globals": "^16.2.0",
+    "typescript": "^5.8.2",
+    "typescript-eslint": "^8.32.0",
+    "vue-eslint-parser": "^10.1.3"
+  }
+}
