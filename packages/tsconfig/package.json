@@ -1,9 +1,17 @@
 {
-  "name": "tsconfig",
-  "version": "0.0.0",
+  "name": "@ufabc-next-web/tsconfig",
+  "version": "1.0.0",
   "private": true,
   "license": "MIT",
   "publishConfig": {
     "access": "public"
+  },
+  "files": [
+    "base.json",
+    "vue.json"
+  ],
+  "exports": {
+    "./base.json": "./base.json",
+    "./vue.json": "./vue.json"
   }
 }

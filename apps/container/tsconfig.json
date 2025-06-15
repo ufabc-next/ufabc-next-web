@@ -1,13 +1,24 @@
 {
-  "extends": "tsconfig/vue.json",
+  "extends": "../../packages/tsconfig/vue.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
-    },
-    "skipLibCheck": true,
-    "sourceMap": false,
-    "types": ["node", "@testing-library/jest-dom", "vitest/globals"]
+    }
   },
-  "exclude": ["node_modules", "dist"]
+  "include": ["./setup-tests.ts", "src/**/*"],
+  "references": [
+    {
+      "path": "../../packages/types"
+    },
+    {
+      "path": "../../packages/services"
+    },
+    {
+      "path": "../../packages/stores"
+    },
+    {
+      "path": "../../packages/utils"
+    }
+  ]
 }
