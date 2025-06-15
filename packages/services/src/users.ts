@@ -1,6 +1,6 @@
 import type { User } from 'types';
 
-import { api } from './api';
+import { api } from './api.ts';
 
 export type UserSignup = {
   email: string;

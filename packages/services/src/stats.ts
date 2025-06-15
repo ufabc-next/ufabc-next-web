@@ -8,7 +8,7 @@ import type {
   StatsUsage,
 } from 'types';
 
-import { api } from './api';
+import { api } from './api.ts';
 
 export type StatsParams = {
   page: number;

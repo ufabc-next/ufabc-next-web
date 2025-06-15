@@ -1,6 +1,6 @@
 import { Enrollment } from 'types';
 
-import { api } from './api';
+import { api } from './api.ts';
 
 export const Enrollments = {
   list: () => api.get<Enrollment[]>('/entities/enrollments'),

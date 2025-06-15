@@ -5,7 +5,7 @@ import {
   UpdateCommentRequest,
 } from 'types';
 
-import { api } from './api';
+import { api } from './api.ts';
 
 export const Comments = {
   get: (teacherId: string, subjectId: string, pageParam = 0) =>

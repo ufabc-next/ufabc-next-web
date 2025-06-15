@@ -1,6 +1,6 @@
 {
-  "name": "stores",
-  "version": "0.0.0",
+  "name": "@ufabc-next/stores",
+  "version": "1.0.0",
   "main": "./index.ts",
   "license": "MIT",
   "type": "module",
@@ -12,6 +12,7 @@
   "devDependencies": {
     "eslint": "^9.28.0",
     "@ufabc-next/eslint-config": "*",
+    "@ufabc-next/types": "*",
     "typescript": "^5.8.2"
   },
   "dependencies": {

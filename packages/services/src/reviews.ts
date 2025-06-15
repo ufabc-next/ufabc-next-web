@@ -5,7 +5,7 @@ import {
   TeacherReview,
 } from 'types';
 
-import { api } from './api';
+import { api } from './api.ts';
 
 export const Reviews = {
   searchTeachers: async (q: string) =>
