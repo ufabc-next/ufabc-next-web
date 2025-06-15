@@ -1,4 +1,4 @@
-import { Concept } from './concepts';
+import { Concept } from './concepts.ts';
 
 export type Comment = {
   _id: string;
