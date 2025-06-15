@@ -1,5 +1,5 @@
-import { SearchSubjectItem } from '.';
-import { ConceptData } from './teachers';
+import { SearchSubjectItem } from './search.ts';
+import { ConceptData } from './teachers.ts';
 
 export type SubjectSpecific = {
   _id: { mainTeacher: string | null };
