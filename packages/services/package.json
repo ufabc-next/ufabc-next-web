@@ -11,7 +11,7 @@
   },
   "devDependencies": {
     "eslint": "^9.28.0",
-    "@ufabc-next-web/eslint-config": "*",
+    "@next/eslint-config": "*",
     "typescript": "^5.8.2"
   },
   "dependencies": {

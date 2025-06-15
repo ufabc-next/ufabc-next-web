@@ -1,5 +1,5 @@
 {
-  "name": "@ufabc-next-web/tsconfig",
+  "name": "@next/tsconfig",
   "version": "1.0.0",
   "private": true,
   "license": "MIT",

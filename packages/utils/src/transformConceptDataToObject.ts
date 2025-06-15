@@ -8,7 +8,7 @@ export const transformConceptDataToObject = (grades: ConceptData[]) => {
   const ordered = Object.keys(result)
     .sort()
     .reduce((obj: typeof result, key) => {
-      obj[key] = result[key];
+      obj[key] = result[key]!;
       return obj;
     }, {});
   return ordered;
