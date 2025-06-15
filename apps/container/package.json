@@ -46,7 +46,7 @@
     "@testing-library/vue": "8.1.0",
     "@types/lodash.debounce": "4.0.9",
     "@types/node": "^22.15.29",
-    "@next/eslint-config": "*",
+    "@ufabc-next/eslint-config": "*",
     "@vitejs/plugin-vue": "^5.2.4",
     "@vitest/coverage-v8": "3.1.4",
     "eslint": "^9.28.0",

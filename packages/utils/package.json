@@ -1,5 +1,5 @@
 {
-  "name": "@next/utils",
+  "name": "@ufabc-next/utils",
   "version": "1.0.0",
   "main": "./index.ts",
   "license": "MIT",
@@ -11,10 +11,10 @@
   },
   "devDependencies": {
     "eslint": "^9.28.0",
-    "@next/eslint-config": "*",
+    "@ufabc-next/eslint-config": "*",
     "typescript": "^5.8.2"
   },
   "dependencies": {
-    "types": "*"
+    "@ufabc-next/utils": "*"
   }
 }
