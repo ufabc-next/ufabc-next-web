@@ -27,7 +27,12 @@
 
         <div class="d-flex justify-center">
           <v-btn variant="flat" border class="px-6" append-icon="mdi-whatsapp" :href="cardInfo.link" target="_blank"
-            rel="noopener" @click="trackEntrarClick">
+            rel="noopener" @click="trackEntrarClickWpp">
+            Entrar
+          </v-btn>
+            <v-btn variant="flat" border class="px-6"  :href="'https://discord.gg/7BBzDwRXSg'" target="_blank"
+            rel="noopener" @click="trackEntrarClickDiscord">
+            <i class="fab fa-discord" style="margin-right: 8px;"></i>
             Entrar
           </v-btn>
         </div>
@@ -37,7 +42,26 @@
 </template>
 
 <script setup lang="ts">
+import { user } from '@/mocks/users';
+import mixpanel from 'mixpanel-browser'
 import { PropType } from 'vue';
+import { onMounted } from 'vue'
+
+
+onMounted(() => {
+  mixpanel.init('') 
+})
+
+const usuario = user
+
+function trackEntrarClickDiscord() {
+  const horario = new Date().toISOString()
+  mixpanel.track('Clique no botão Discord', {
+    usuario,
+    horario
+  })
+}
+
 
 type wppCardInfo = {
   color: string;
