@@ -132,12 +132,6 @@ const internalNavigationItems = [
     route: '/reviews',
     locked: !user.value?.confirmed
   },
-  // {
-  //   title: 'Aulões Next',
-  //   icon: 'mdi-school',
-  //   route: '/partners',
-  //   releaseDate: dayjs('08/18/2024')
-  // },
   {
     title: 'Meu histórico',
     icon: 'mdi-history',
