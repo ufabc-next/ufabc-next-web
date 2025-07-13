@@ -153,7 +153,7 @@ const internalNavigationItems = [
   {
     title: 'Grupos no WhatsApp',
     icon: 'mdi-whatsapp',
-    route: '/wpp',
+    route: '/grupos-whatsapp',
     releaseDate: dayjs('06/01/2025'),
     locked: false
   },

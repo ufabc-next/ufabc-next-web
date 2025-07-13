@@ -30,7 +30,7 @@
             rel="noopener" @click="trackEntrarClickWpp">
             Entrar
           </v-btn>
-            <v-btn variant="flat" border class="px-6"  :href="'https://discord.gg/7BBzDwRXSg'" target="_blank"
+          <v-btn variant="flat" border class="px-6" :href="'https://discord.gg/7BBzDwRXSg'" target="_blank"
             rel="noopener" @click="trackEntrarClickDiscord">
             <i class="fab fa-discord" style="margin-right: 8px;"></i>
             Entrar
@@ -49,7 +49,7 @@ import { onMounted } from 'vue'
 
 
 onMounted(() => {
-  mixpanel.init('') 
+  mixpanel.init('')
 })
 
 const usuario = user

@@ -5,4 +5,4 @@ export * from './reviews';
 export * from './stats';
 export * from './api';
 export * from './performance';
-export * from './wpp';
+export * from './whatsapp';

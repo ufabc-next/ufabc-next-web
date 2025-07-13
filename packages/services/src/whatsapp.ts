@@ -2,9 +2,10 @@ import { SearchComponentItem } from 'types';
 
 import { api } from './api';
 
-export const Wpp = {
+export const Whatsapp = {
   searchComponents: async (q: string) =>
     api.get<SearchComponentItem[]>('entities/components', {
       params: { q },
     }),
+  getComponentsByUser: async () => api.get<any>('entities/enrollments/wpp'),
 };

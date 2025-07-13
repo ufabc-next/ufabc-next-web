@@ -13,7 +13,8 @@ const ConfirmationView = () =>
 const RecoveryView = () => import('@/views/Recovery/RecoveryView.vue');
 const FacebookView = () => import('@/views/Facebook/FacebookView.vue');
 const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
-const WppView = () => import('@/views/Wpp/WppView.vue');
+const WhatsappGroupsView = () =>
+  import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
 
 const isJWT = (token: string) =>
   /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
@@ -111,9 +112,9 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: '/wpp',
-    name: 'wpp',
-    component: WppView,
+    path: '/grupos-whatsapp',
+    name: 'whatsapp',
+    component: WhatsappGroupsView,
     meta: {
       title: 'Grupos do Whatsapp',
       layout: 'include-sidebar',
