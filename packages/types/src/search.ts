@@ -18,17 +18,13 @@ export type SearchSubjectItem = {
 };
 
 export type SearchComponentItem = {
-  disciplina_id: string;
-  identifier: string;
   season: string;
-  alunos_matriculados: number[];
-  campus: string;
-  ideal_quad: boolean;
+  groupURL: string;
+  codigo: string;
+  campus?: string;
+  turma?: string;
+  turno?: string;
   subject: string;
-  turma: string;
-  turno: string;
-  vagas: number;
-  requisicoes: number;
-  subjectId: string;
-  wppGroupLink: string;
+  teoria: string;
+  pratica: string;
 };
