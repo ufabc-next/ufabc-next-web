@@ -9,9 +9,14 @@ class EventTracker {
   private initialized = false;
 
   public init() {
+    if (!MIXPANEL_TOKEN) {
+      console.warn('Mixpanel token not found or invalid. Tracking disabled.');
+      return;
+    }
+
     mixpanel.init(MIXPANEL_TOKEN, {
-      debug: true,
-      track_pageview: true,
+      debug: import.meta.env.VITE_APP_ENV === 'local',
+      track_pageview: false,
       persistence: 'localStorage',
     });
     this.initialized = true;
@@ -35,16 +40,17 @@ class EventTracker {
 
     const { _id: userId, oauth, email, createdAt, ra } = userData;
 
+    mixpanel.identify(String(ra)); // todo: maybe use userId instead of ra
+
     const userProperties = {
       $id: userId,
       $email: email,
-      $createdAt: createdAt,
-      $oauth: oauth,
-      $userId: userId,
-      $ra: ra,
+      $created: createdAt,
+      oauth: oauth,
+      userId: userId,
+      ra: ra,
     };
 
-    mixpanel.identify(String(ra)); // todo: maybe use userId instead of ra
     mixpanel.people.set(userProperties);
   }
 
