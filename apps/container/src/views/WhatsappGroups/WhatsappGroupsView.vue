@@ -96,9 +96,9 @@
 
       <div v-else-if="groups.length > 0" class="results-grid">
         <!-- GroupCard component será implementado -->
-        <WhatsappGroupCard v-for="(group, index) in groups" :key="index" :season="group.season" :campus="group.season"
-          :codigo="group.codigo" color="#2e7eed" :group-url="group.groupURL" :teoria="group.teoria"
-          :pratica="group.pratica" :turno="group.turno" :subject="group.subject" :turma="group.turma" />
+        <WhatsappGroupCard v-for="(group, index) in groups" :key="index" :season="group.season" :campus="group.campus"
+          :codigo="group.codigo" :group-url="group.groupURL" :teoria="group.teoria" :pratica="group.pratica"
+          :turno="group.turno" :subject="group.subject" :turma="group.turma" />
       </div>
 
       <div v-else-if="isEmptyQuery" class="empty-state">

@@ -21,7 +21,7 @@ export type SearchComponentItem = {
   season: string;
   groupURL: string;
   codigo: string;
-  campus?: string;
+  campus?: 'sa' | 'sbc';
   turma?: string;
   turno?: string;
   subject: string;

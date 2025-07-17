@@ -1,15 +1,13 @@
 <template>
-  <div @click="() => handleClick()" class="group-card">
-    <div class="card-header">
-      <div class="icon-container">
+  <div @click="() => handleClick()" class="whatsapp-group-card">
+    <div class="whatsapp-group-card__header">
+      <div class="header__icon-container">
         <v-icon color="white">mdi-book-open-page-variant</v-icon>
       </div>
-      <div class="header-content">
-        <h3 class="group-name">{{ props.subject }}</h3>
+      <div class="header__info">
+        <h3 class="info__name">{{ props.subject }}</h3>
         <div style="display: flex; gap: 16px;">
-          <p class="discipline">{{ props.codigo }}</p>
-          <p class="discipline">{{ props.turno }}</p>
-          <p class="discipline">{{ props.turma }}</p>
+          <p class="info__description">{{ props.codigo }}</p>
         </div>
       </div>
     </div>
@@ -17,38 +15,35 @@
     <div class="professor-info">
       <p class="professor-name">Prof. Teoria: {{ props.teoria }}</p>
       <p class="professor-name">Prof. Prática: {{ props.pratica }}</p>
-      <p class="semester">{{ props.season }}</p>
+      <p class="season">{{ props.season }}</p>
     </div>
 
-    <div class="group-metrics">
+    <div class="subject__data">
       <div v-if="props.campus" class="metric">
         <v-icon>mdi-town-hall</v-icon>
-        <span>{{ props.campus }}</span>
+        <span>{{ campusName }}</span>
       </div>
-      <div class="metric">
-        <svg class="clock-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="12" cy="12" r="10" />
-          <polyline points="12,6 12,12 16,14" />
-        </svg>
-        <span>2d</span>
+      <div v-if="props.turno && props.turma" class="metric">
+        <p class="info__description">{{ props.turno }} - {{ props.turma }}</p>
       </div>
     </div>
 
     <div class="activity-indicator">
-      <div class="activity-dot"></div>
-      <span class="activity-text">Entrar no grupo</span>
+      <v-btn color="black" prepend-icon="mdi-whatsapp" text="Entrar no Grupo" size="default" variant="text"
+        width="100%"></v-btn>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 
 type WhatsappGroupCardProps = {
-  color: string;
   season: string;
   groupUrl: string;
   codigo: string;
-  campus?: string;
+  campus?: 'sa' | 'sbc';
   turma?: string;
   turno?: string;
   subject: string;
@@ -57,6 +52,10 @@ type WhatsappGroupCardProps = {
 };
 
 const props = defineProps<WhatsappGroupCardProps>()
+const campusName = computed(() => {
+  if (!props.campus) return null;
+  return props.campus === 'sa' ? 'Santo André' : 'São Bernardo';
+})
 
 const emit = defineEmits<{
   (e: 'click'): void;
@@ -68,7 +67,7 @@ const handleClick = () => {
 </script>
 
 <style scoped>
-.group-card {
+.whatsapp-group-card {
   background: white;
   border-radius: 12px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -78,23 +77,24 @@ const handleClick = () => {
   transition: all 200ms ease;
 }
 
-.group-card:hover {
+.whatsapp-group-card:hover {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border-color: #93c5fd;
   transform: translateY(-4px);
 }
 
-.card-header {
+.whatsapp-group-card__header {
   display: flex;
   align-items: flex-start;
+  align-items: center;
   gap: 16px;
   margin-bottom: 16px;
 }
 
-.icon-container {
+.header__icon-container {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  background: rgb(var(--v-theme-primary));
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -108,15 +108,15 @@ const handleClick = () => {
   color: white;
 }
 
-.header-content {
+.header__info {
   flex: 1;
   min-width: 0;
 }
 
-.group-name {
+.info__name {
   font-size: 18px;
   font-weight: 600;
-  color: #1f2937;
+  color: black;
   margin: 0 0 4px 0;
   white-space: nowrap;
   overflow: hidden;
@@ -124,11 +124,11 @@ const handleClick = () => {
   transition: color 200ms ease;
 }
 
-.group-card:hover .group-name {
-  color: #2563eb;
+.whatsapp-group-card:hover .info__name {
+  color: rgb(var(--v-theme-primary))
 }
 
-.discipline {
+.info__description {
   font-size: 14px;
   color: #6b7280;
   margin: 0;
@@ -148,13 +148,13 @@ const handleClick = () => {
   margin: 0 0 4px 0;
 }
 
-.semester {
+.season {
   font-size: 12px;
   color: #6b7280;
   margin: 0;
 }
 
-.group-metrics {
+.subject__data {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -178,8 +178,10 @@ const handleClick = () => {
   margin-top: 16px;
   padding-top: 16px;
   border-top: 1px solid #f3f4f6;
+  width: 100%;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
 }
 
