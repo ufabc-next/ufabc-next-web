@@ -497,7 +497,6 @@ onMounted(async () => {
 }
 
 .preview-card {
-  opacity: 0;
   animation: fadeInUp 0.8s ease-out forwards;
   filter: blur(1px);
   pointer-events: none;
@@ -568,7 +567,6 @@ onMounted(async () => {
   backdrop-filter: blur(10px);
   border: 1px solid rgba(46, 126, 237, 0.2);
   transform: translateX(-20px);
-  opacity: 0;
 }
 
 .coming-soon-cta {
