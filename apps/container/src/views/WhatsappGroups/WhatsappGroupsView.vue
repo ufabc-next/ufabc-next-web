@@ -566,7 +566,6 @@ onMounted(async () => {
   color: #2e7eed;
   backdrop-filter: blur(10px);
   border: 1px solid rgba(46, 126, 237, 0.2);
-  transform: translateX(-20px);
 }
 
 .coming-soon-cta {
