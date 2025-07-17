@@ -3,7 +3,7 @@ import { User } from 'types';
 import { WebEvent } from './WebEvent';
 
 // todo: improve error handling
-const MIXPANEL_TOKEN = process.env.VITE_MIXPANEL_TOKEN || '';
+const MIXPANEL_TOKEN = import.meta.env.VITE_MIXPANEL_TOKEN || '';
 
 class EventTracker {
   private initialized = false;
@@ -30,11 +30,6 @@ class EventTracker {
     mixpanel.track(event, eventParams);
   }
 
-  public identify(ra: number) {
-    if (!this.initialized) return;
-    mixpanel.identify(String(ra)); // todo: maybe use userId instead of ra
-  }
-
   public setUserProperties(userData: User) {
     if (!this.initialized) return;
 
@@ -49,6 +44,7 @@ class EventTracker {
       $ra: ra,
     };
 
+    mixpanel.identify(String(ra)); // todo: maybe use userId instead of ra
     mixpanel.people.set(userProperties);
   }
 

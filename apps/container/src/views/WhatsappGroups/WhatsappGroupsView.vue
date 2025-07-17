@@ -1,8 +1,5 @@
 <template>
   <div class="whatsapp-groups-view">
-    <!-- <WppBanner /> -->
-
-    <!-- Logado sem histórico sincronizado -->
     <div v-if="userType === 'logged-no-history'" class="not-synced__container">
       <div class="not-synced__icon">
         <v-icon size="60" color="primary">mdi-sync</v-icon>
@@ -36,7 +33,6 @@
       </div>
     </div>
 
-    <!-- Search Section -->
     <div v-if="userType !== 'logged-no-history'">
       <div class="hero-section">
         <h1>Encontre seus grupos do <br>Whatsapp</h1>
@@ -95,7 +91,6 @@
       </div>
 
       <div v-else-if="groups.length > 0" class="results-grid">
-        <!-- GroupCard component será implementado -->
         <WhatsappGroupCard v-for="(group, index) in groups" :key="index" :season="group.season" :campus="group.campus"
           :codigo="group.codigo" :group-url="group.groupURL" :teoria="group.teoria" :pratica="group.pratica"
           :turno="group.turno" :subject="group.subject" :turma="group.turma" />
@@ -116,13 +111,14 @@
 </template>
 
 <script setup lang="ts">
-import { WppBanner } from '@/components/WppBanner';
 import { ref, computed, watch, onMounted } from 'vue'
 import { useAuth } from '@/stores/useAuth'
 import { Whatsapp } from 'services';
 import { studentRecordURL, extensionURL } from 'utils';
 import WhatsappGroupCard from '@/components/WhatsappGroupCard/WhatsappGroupCard.vue';
 import { SearchComponentItem } from 'types';
+import { eventTracker } from '@/helpers/EventTracker';
+import { WebEvent } from '@/helpers/WebEvent';
 
 type UserType = 'not-logged' | 'logged-no-history' | 'logged-with-history';
 
@@ -196,6 +192,8 @@ onMounted(async () => {
   if (user.value?.ra) {
     searchQuery.value = String(user.value.ra);
   }
+
+  eventTracker.track(WebEvent.WHATSAPP_GROUP_ACCESS_PREVIEW)
 })
 </script>
 

@@ -21,9 +21,10 @@ const isLocal = import.meta.env.VITE_APP_ENV === 'local';
 
 import { AppBar } from '@/layouts/AppBar';
 import { useRouter } from 'vue-router';
+import { eventTracker } from './helpers/EventTracker';
 
 const useAuth = create(authStore);
-const { user } = useAuth();
+const { user, isLoggedIn } = useAuth();
 
 const router = useRouter()
 
@@ -35,6 +36,10 @@ const confirmedUser = computed(() => !!user.value?.confirmed);
 
 onMounted(async () => {
   window.Toaster = ElMessage;
+
+  if (isLoggedIn.value() && user.value) {
+    eventTracker.setUserProperties(user.value);
+  }
 });
 </script>
 
