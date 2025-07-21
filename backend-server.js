@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const { Client, APIErrorCode } = require('@notionhq/client');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -15,6 +16,10 @@ app.use(
 );
 
 app.use(express.json());
+
+const notion = new Client({
+  auth: process.env.NOTION_TOKEN,
+});
 
 app.post('/api/notion/card', async (req, res) => {
   try {
@@ -32,22 +37,13 @@ app.post('/api/notion/card', async (req, res) => {
       });
     }
 
-    const token = process.env.NOTION_TOKEN;
     const databaseId = process.env.NOTION_DATABASE_ID;
 
-    if (!token) {
-      return res.status(500).json({
-        error: 'NOTION_TOKEN environment variable is required',
-      });
-    }
-
     if (!databaseId) {
-      return res.status(500).json({
-        error: 'NOTION_DATABASE_ID environment variable is required',
-      });
+      return res.status(500).json({ error: 'NOTION_DATABASE_ID environment variable is required' });
     }
 
-    const requestBody = {
+    const response = await notion.pages.create({
       parent: {
         database_id: databaseId,
       },
@@ -81,55 +77,29 @@ app.post('/api/notion/card', async (req, res) => {
           },
         },
       },
-    };
-
-    const response = await fetch('https://api.notion.com/v1/pages', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(requestBody),
     });
 
-    if (!response.ok) {
-      const errorData = await response.json().catch(() => ({}));
-      console.log('Notion API Error Response:', errorData);
-
-      if (response.status === 404) {
-        return res.status(404).json({
-          error: 'Database not found.',
-        });
-      }
-
-      if (response.status === 401) {
-        return res.status(401).json({
-          error: 'Token not found.',
-        });
-      }
-
-      if (response.status === 400) {
-        return res.status(400).json({
-          error: `${errorData.message}`,
-        });
-      }
-
-      return res.status(response.status).json({
-        error:`HTTP ${response.status}: ${response.statusText}`,
-      });
-    }
-
-    const responseData = await response.json();
-
     return res.status(201).json({
-      id: responseData.id,
-      url: pageUrl,
-      created_time: responseData.created_time || new Date().toISOString(),
+      id: response.id,
+      url: response.url,
+      created_time: response.created_time || new Date().toISOString(),
     });
   } catch (error) {
     console.error('Error creating Notion card:', error);
+
+    // Tratamento de erro aprimorado com o SDK
+    if (error.code === APIErrorCode.ObjectNotFound) {
+      return res.status(404).json({ error: 'Database not found. Check NOTION_DATABASE_ID.' });
+    }
+    if (error.code === APIErrorCode.Unauthorized) {
+      return res.status(401).json({ error: 'Invalid Notion token. Check NOTION_TOKEN.' });
+    }
+    if (error.code === APIErrorCode.ValidationError) {
+      return res.status(400).json({ error: `Notion API validation error: ${error.message}` });
+    }
+
     return res.status(500).json({
-      error: 'Failed to create Notion card',
+      error: error.message || 'Failed to create Notion card',
     });
   }
 });
