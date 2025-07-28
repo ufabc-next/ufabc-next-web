@@ -8,6 +8,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     coverage: {
+      provider: 'v8',
       reporter: ['text', 'html'],
       exclude: [
         '**/node_modules/**',
@@ -33,10 +34,8 @@ export default defineConfig({
     alias: {
       '@': '/src',
     },
-    server: {
-      deps: {
-        inline: ['vuetify'],
-      },
+    deps: {
+      inline: ['vuetify'],
     },
     setupFiles: ['./setup-tests.ts'],
   },
