@@ -25,7 +25,6 @@ const routes: Array<RouteRecordRaw> = [
     component: ReviewsView,
     meta: {
       title: 'Reviews',
-      confirmed: true,
     },
   },
   {
@@ -124,7 +123,6 @@ const routes: Array<RouteRecordRaw> = [
     component: NotionView,
     meta: {
       title: 'Notion',
-      confirmed: true,
     },
   },
   {
@@ -200,9 +198,9 @@ router.beforeEach(async (to, _from, next) => {
   const isLocal = import.meta.env.DEV;
 
   const notConfirmedRedirectPath = '/signup';
-  const authenticatedRedirectPath = '/reviews';
+  const authenticatedRedirectPath = '/app/reviews';
   const notAuthenticatedRedirect = () =>
-    isLocal ? next(notConfirmedRedirectPath) : (window.location.pathname = '/');
+    isLocal ? next(notConfirmedRedirectPath) : (window.location.pathname = '/app/reviews');
 
   if (requireAuth) {
     if (isLoggedIn()) return next();

@@ -1,7 +1,7 @@
 <template>
     <section>
         <v-container>
-            <PaperCard title="Integração com Notion" class="text-md-left text-center">
+            <PaperCard title="Suporte" class="text-md-left text-center">
                 <v-form @submit.prevent="onSubmit">
                     <v-row class="mt-4">
                         <v-col cols="12">
@@ -13,25 +13,17 @@
 
                     <v-row>
                         <v-col cols="12">
-                            <v-text-field v-model="title.value.value" :error-messages="title.errorMessage.value"
-                                label="Título do Card" placeholder="Digite o título do seu card" outlined dense
+                            <v-text-field v-model="problemTitleField.value.value" :error-messages="problemTitleField.errorMessage.value"
+                                label="Título do Problema" placeholder="Digite um título" outlined dense
                                 :disabled="isPendingSubmit" />
                         </v-col>
                     </v-row>
 
                     <v-row>
                         <v-col cols="12">
-                            <v-textarea v-model="description.value.value"
-                                :error-messages="description.errorMessage.value" label="Descrição"
-                                placeholder="Descreva o conteúdo do seu card" outlined rows="4"
-                                :disabled="isPendingSubmit" />
-                        </v-col>
-                    </v-row>
-
-                    <v-row>
-                        <v-col cols="12">
-                            <v-select v-model="priority.value.value" :error-messages="priority.errorMessage.value"
-                                :items="priorityOptions" label="Prioridade" outlined dense
+                            <v-textarea v-model="problemDescriptionField.value.value"
+                                :error-messages="problemDescriptionField.errorMessage.value" label="Descrição do Problema"
+                                placeholder="Descreva o problema" outlined rows="4"
                                 :disabled="isPendingSubmit" />
                         </v-col>
                     </v-row>
@@ -40,7 +32,7 @@
                         <v-col cols="12" class="text-center">
                             <v-btn type="submit" color="primary" :loading="isPendingSubmit"
                                 :disabled="!meta.valid || isPendingSubmit" size="large">
-                                Criar Card no Notion
+                                Enviar problema
                             </v-btn>
                         </v-col>
                     </v-row>
@@ -58,32 +50,26 @@ import { useForm, useField } from 'vee-validate';
 import { ElMessage } from 'element-plus';
 import { AxiosError } from 'axios';
 
-import { createNotionCard } from 'services';
+import { sendHelpForm } from 'services';
 import { PaperCard } from '@/components/PaperCard';
 import { RequestError } from 'types';
 
 const successMessage = ref<string>('');
 
-const priorityOptions = [
-    { title: 'Baixa', value: 'Baixa' },
-    { title: 'Média', value: 'Média' },
-    { title: 'Alta', value: 'Alta' },
-];
-
 const { handleSubmit, meta, resetForm } = useForm({
     initialValues: {
-        title: '',
-        description: '',
-        priority: 'Média' as const,
+        email: 'rafael@ufabc.edu.br',
+        ra: '12345678',
+        problemTitle: '',
+        problemDescription: '',
     },
 });
 
-const title = useField('title');
-const description = useField('description');
-const priority = useField('priority');
+const problemTitleField = useField('problemTitle');
+const problemDescriptionField = useField('problemDescription');
 
-const { mutate: mutateCreateCard, isPending: isPendingSubmit } = useMutation({
-    mutationFn: createNotionCard,
+const { mutate: mutateSendForm, isPending: isPendingSubmit } = useMutation({
+    mutationFn: sendHelpForm,
     onSuccess: (response) => {
         successMessage.value = `Card criado com sucesso! Response: ${response}`;
         resetForm();
@@ -104,7 +90,7 @@ const { mutate: mutateCreateCard, isPending: isPendingSubmit } = useMutation({
 
 const onSubmit = handleSubmit((values) => {
     successMessage.value = '';
-    mutateCreateCard(values);
+    mutateSendForm(values);
 });
 </script>
 

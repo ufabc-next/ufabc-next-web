@@ -1,43 +1,37 @@
 import { api } from './api';
 
-export interface NotionCardData {
-  title: string;
-  description: string;
-  priority: 'Baixa' | 'Média' | 'Alta';
+export interface HelpFormData {
+  email: string;
+  ra: string;
+  problemTitle: string;
+  problemDescription: string;
 }
 
-export interface NotionCardResponse {
-  id: string;
-  url: string;
-  created_time: string;
-}
 
-export const createNotionCard = async (
-  data: NotionCardData,
-): Promise<NotionCardResponse> => {
+
+export const sendHelpForm = async (
+  data: HelpFormData,
+): Promise<void> => {
   try {
-    const { title, description, priority } = data;
+    const { email, ra, problemTitle, problemDescription } = data;
 
-    if (!title || !description || !priority) {
-      throw new Error('Title, description, and priority are required fields');
+    if (!email || !ra || !problemTitle || !problemDescription) {
+      throw new Error('Missing required fields');
     }
 
-    if (!['Baixa', 'Média', 'Alta'].includes(priority)) {
-      throw new Error('Priority must be one of: Baixa, Média, Alta');
-    }
+    console.log('Sending help form to backend...');
+    console.log('Request data:', data);
 
-    console.log('Making request to backend proxy...');
-    console.log('Request data:', { title, description, priority });
-
-    const response = await api.post<NotionCardResponse>('/api/notion/card', {
-      title,
-      description,
-      priority,
+    await api.post('/help/form', {
+      email,
+      ra,
+      problemTitle,
+      problemDescription,
     });
 
-    console.log('Success response:', response.data);
+    console.log('Form sent successfully');
 
-    return response.data;
+    return;
   } catch (error: any) {
     console.error('Error creating Notion card:', error);
     console.error('Error details:', {
@@ -50,6 +44,6 @@ export const createNotionCard = async (
       throw new Error(error.response.data.error);
     }
 
-    throw new Error(error.message || 'Failed to create Notion card');
+    throw new Error(error.message || 'Failed to send help form');
   }
 };

@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-navigation-drawer v-if="user?.confirmed" v-model="drawer" color="navigation" width="240">
+    <v-navigation-drawer v-model="drawer" color="navigation" width="240">
       <v-list>
         <div class="py-4 d-flex justify-center align-center">
           <img class="logo-white" src="@/assets/logo_white.svg" height="44" alt="logo do UFABC Next" />
@@ -27,7 +27,7 @@
       </v-list>
     </v-navigation-drawer>
 
-    <v-app-bar v-if="user?.confirmed" app height="min-content" class="py-2 header">
+    <v-app-bar app height="min-content" class="py-2 header">
       <v-app-bar-nav-icon app variant="text" color="primary" @click.stop="drawer = !drawer"
         class="d-lg-none"></v-app-bar-nav-icon>
 
@@ -61,7 +61,7 @@
         </v-menu>
       </v-btn>
     </v-app-bar>
-    <div v-if="user?.confirmed" style="height: 64px"></div>
+    <div style="height: 64px"></div>
     <slot />
   </v-app>
 </template>
@@ -113,10 +113,9 @@ const internalNavigationItems = [
     title: 'Calengrade',
     icon: 'mdi-calendar',
     route: '/calengrade',
-    releaseDate: dayjs('11/25/2023'),
   },
   {
-    title: 'Integração Notion',
+    title: 'Suporte',
     icon: 'mdi-note-plus',
     route: '/notion',
     releaseDate: dayjs(new Date()),
