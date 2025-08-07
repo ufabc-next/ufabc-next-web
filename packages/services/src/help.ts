@@ -7,8 +7,6 @@ export interface HelpFormData {
   problemDescription: string;
 }
 
-
-
 export const sendHelpForm = async (
   data: HelpFormData,
 ): Promise<void> => {
@@ -16,7 +14,7 @@ export const sendHelpForm = async (
     const { email, ra, problemTitle, problemDescription } = data;
 
     if (!email || !ra || !problemTitle || !problemDescription) {
-      throw new Error('Missing required fields');
+      throw new Error('Preencha os campos obrigatórios');
     }
 
     console.log('Sending help form to backend...');
@@ -33,7 +31,7 @@ export const sendHelpForm = async (
 
     return;
   } catch (error: any) {
-    console.error('Error creating Notion card:', error);
+    console.error('Error creating help card:', error);
     console.error('Error details:', {
       name: error.name,
       message: error.message,

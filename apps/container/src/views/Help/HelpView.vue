@@ -1,12 +1,12 @@
 <template>
     <section>
         <v-container>
-            <PaperCard title="Suporte" class="text-md-left text-center">
+            <PaperCard title="Ajuda" class="text-md-left text-center">
                 <v-form @submit.prevent="onSubmit">
                     <v-row class="mt-4">
                         <v-col cols="12">
                             <p class="text-body-1 mb-4">
-                                Crie um card no Notion com as suas informações
+                                Envie uma mensagem de ajuda sobre algum erro que você está enfrentando
                             </p>
                         </v-col>
                     </v-row>
@@ -50,7 +50,7 @@ import { useForm, useField } from 'vee-validate';
 import { ElMessage } from 'element-plus';
 import { AxiosError } from 'axios';
 
-import { sendHelpForm } from 'services';
+import { sendHelpForm, type HelpFormData } from 'services';
 import { PaperCard } from '@/components/PaperCard';
 import { RequestError } from 'types';
 
@@ -68,20 +68,24 @@ const { handleSubmit, meta, resetForm } = useForm({
 const problemTitleField = useField('problemTitle');
 const problemDescriptionField = useField('problemDescription');
 
-const { mutate: mutateSendForm, isPending: isPendingSubmit } = useMutation({
+const { mutate: mutateSendForm, isPending: isPendingSubmit } = useMutation<void, Error, HelpFormData>({
     mutationFn: sendHelpForm,
     onSuccess: (response) => {
         successMessage.value = `Card criado com sucesso! Response: ${response}`;
         resetForm();
         ElMessage({
-            message: 'Card criado no Notion com sucesso!',
+            message: 'Mensagem de ajuda enviada com sucesso!',
             type: 'success',
             showClose: true,
         });
     },
-    onError: (error: AxiosError<RequestError>) => {
+    onError: (error: Error) => {
+        const message = error instanceof AxiosError 
+            ? error.response?.data?.error || error.message
+            : error.message;
+            
         ElMessage({
-            message: 'Erro ao criar card no Notion: ' + error.response?.data?.error,
+            message: 'Erro ao enviar mensagem de ajuda: ' + message,
             type: 'error',
             showClose: true,
         });

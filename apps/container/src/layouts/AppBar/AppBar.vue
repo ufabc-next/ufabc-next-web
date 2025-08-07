@@ -115,9 +115,9 @@ const internalNavigationItems = [
     route: '/calengrade',
   },
   {
-    title: 'Suporte',
+    title: 'Ajuda',
     icon: 'mdi-note-plus',
-    route: '/notion',
+    route: '/help',
     releaseDate: dayjs(new Date()),
   },
   {
