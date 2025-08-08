@@ -7,9 +7,15 @@ export interface HelpFormData {
   problemDescription: string;
 }
 
+export interface HelpFormResult {
+  success: boolean;
+  id?: string;
+  url?: string;
+}
+
 export const sendHelpForm = async (
   data: HelpFormData,
-): Promise<void> => {
+): Promise<HelpFormResult> => {
   try {
     const { email, ra, problemTitle, problemDescription } = data;
 
@@ -17,27 +23,21 @@ export const sendHelpForm = async (
       throw new Error('Preencha os campos obrigatórios');
     }
 
-    console.log('Sending help form to backend...');
-    console.log('Request data:', data);
-
-    await api.post('/help/form', {
+    const response = await api.post('/help/form', {
       email,
       ra,
       problemTitle,
       problemDescription,
     });
 
-    console.log('Form sent successfully');
+    const result = response.data as HelpFormResult;
 
-    return;
+    if (!result?.success) {
+      throw new Error('Falha ao criar o cartão de ajuda');
+    }
+
+    return result;
   } catch (error: any) {
-    console.error('Error creating help card:', error);
-    console.error('Error details:', {
-      name: error.name,
-      message: error.message,
-      response: error.response?.data,
-    });
-
     if (error.response?.data?.error) {
       throw new Error(error.response.data.error);
     }

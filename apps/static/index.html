@@ -890,7 +890,7 @@
       const resolveEndpoint = (origin) => {
         if (origin === 'file://') {
           // local backend
-          return 'http://localhost:5050/login/google';
+          return 'http://localhost:5000/login/google';
         } else if (origin.includes('dev')) {
           // staging url
           return 'https://api.v2.ufabcnext.com/login/google';
@@ -1025,7 +1025,7 @@
           e.preventDefault();
           const email = document.getElementById('emailInput').value;
           const { data: res } = await axios.post(
-            'http://localhost:5050/backoffice/token',
+            'http://localhost:5000/backoffice/token',
             { email },
           );
           const token = res.token?.replace('Bearer ', '');

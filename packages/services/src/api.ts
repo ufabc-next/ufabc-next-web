@@ -3,7 +3,7 @@ import { authStore } from 'stores';
 
 const resolveEndpoint = (env?: string) =>
   ({
-    development: 'http://localhost:5050',
+    development: 'http://localhost:5000',
     staging: 'https://api.v2.ufabcnext.com',
     production: 'https://api.v2.ufabcnext.com',
   })[env!] || 'https://api.v2.ufabcnext.com';

@@ -32,7 +32,7 @@
                         <v-col cols="12" class="text-center">
                             <v-btn type="submit" color="primary" :loading="isPendingSubmit"
                                 :disabled="!meta.valid || isPendingSubmit" size="large">
-                                Enviar problema
+                                Enviar
                             </v-btn>
                         </v-col>
                     </v-row>

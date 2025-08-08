@@ -116,7 +116,7 @@ const internalNavigationItems = [
   },
   {
     title: 'Ajuda',
-    icon: 'mdi-note-plus',
+    icon: 'mdi-help-circle',
     route: '/help',
     releaseDate: dayjs(new Date()),
   },
