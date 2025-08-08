@@ -52,14 +52,12 @@ import { AxiosError } from 'axios';
 
 import { sendHelpForm, type HelpFormData } from 'services';
 import { PaperCard } from '@/components/PaperCard';
-import { RequestError } from 'types';
+import { useAuth } from '@/stores/useAuth';
 
 const successMessage = ref<string>('');
 
 const { handleSubmit, meta, resetForm } = useForm({
     initialValues: {
-        email: 'rafael@ufabc.edu.br',
-        ra: '12345678',
         problemTitle: '',
         problemDescription: '',
     },
@@ -68,7 +66,10 @@ const { handleSubmit, meta, resetForm } = useForm({
 const problemTitleField = useField('problemTitle');
 const problemDescriptionField = useField('problemDescription');
 
-const { mutate: mutateSendForm, isPending: isPendingSubmit } = useMutation<void, Error, HelpFormData>({
+//Fetching Current User Information
+const { user } = useAuth();
+
+const { mutate: mutateSendForm, isPending: isPendingSubmit } = useMutation<import('services').HelpFormResult, Error, HelpFormData>({
     mutationFn: sendHelpForm,
     onSuccess: (response) => {
         successMessage.value = `Card criado com sucesso! Response: ${response}`;
@@ -94,7 +95,14 @@ const { mutate: mutateSendForm, isPending: isPendingSubmit } = useMutation<void,
 
 const onSubmit = handleSubmit((values) => {
     successMessage.value = '';
-    mutateSendForm(values);
+    const email = user.value?.email ?? user.value?.oauth?.email ?? '';
+    const ra = String(user.value?.ra ?? '');
+
+    mutateSendForm({
+        ...values,
+        email,
+        ra,
+    });
 });
 </script>
 

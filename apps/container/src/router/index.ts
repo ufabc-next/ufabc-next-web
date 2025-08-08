@@ -25,6 +25,7 @@ const routes: Array<RouteRecordRaw> = [
     component: ReviewsView,
     meta: {
       title: 'Reviews',
+      confirmed: true,
     },
   },
   {
@@ -123,6 +124,7 @@ const routes: Array<RouteRecordRaw> = [
     component: HelpView,
     meta: {
       title: 'Ajuda',
+      confirmed: true,
     },
   },
   {
@@ -198,9 +200,9 @@ router.beforeEach(async (to, _from, next) => {
   const isLocal = import.meta.env.DEV;
 
   const notConfirmedRedirectPath = '/signup';
-  const authenticatedRedirectPath = '/app/reviews';
+  const authenticatedRedirectPath = '/reviews';
   const notAuthenticatedRedirect = () =>
-    isLocal ? next(notConfirmedRedirectPath) : (window.location.pathname = '/app/reviews');
+    isLocal ? next(notConfirmedRedirectPath) : (window.location.pathname = '/');
 
   if (requireAuth) {
     if (isLoggedIn()) return next();

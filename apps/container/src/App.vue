@@ -1,5 +1,5 @@
 <template>
-  <VueQueryDevtools />
+  <VueQueryDevtools  v-if="isLocal" />
   <AppBar>
     <v-main style="background-color: #f5f5f5">
       <v-container id="app-container" :style="`min-height: calc(100vh${confirmedUser ? '- 64px' : ''
@@ -17,13 +17,14 @@ import create from 'vue-zustand';
 import { ElMessage } from 'element-plus';
 import { VueQueryDevtools } from '@tanstack/vue-query-devtools';
 
+const isLocal = import.meta.env.VITE_APP_ENV === 'local';
 
 import { AppBar } from '@/layouts/AppBar';
 
 const useAuth = create(authStore);
 const { user } = useAuth();
 
-const confirmedUser = true;
+const confirmedUser = computed(() => !!user.value?.confirmed);
 
 onMounted(async () => {
   window.Toaster = ElMessage;
