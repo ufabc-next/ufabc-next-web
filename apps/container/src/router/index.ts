@@ -13,8 +13,8 @@ const ConfirmationView = () =>
 const RecoveryView = () => import('@/views/Recovery/RecoveryView.vue');
 const FacebookView = () => import('@/views/Facebook/FacebookView.vue');
 const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
-const WhatsappGroupsView = () =>
-  import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
+const HelpView = () => import('@/views/Help/HelpView.vue');
+const WhatsappGroupsView = () => import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
 
 const isJWT = (token: string) =>
   /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
@@ -132,6 +132,15 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    path: '/help',
+    name: 'help',
+    component: HelpView,
+    meta: {
+      title: 'Ajuda',
+      confirmed: true,
+    },
+  },
+  {
     path: '/autenticar-facebook',
     name: 'Autenticar Facebook',
     component: FacebookView,
@@ -201,7 +210,7 @@ router.beforeEach(async (to, _from, next) => {
 
   const userConfirmed = user?.confirmed;
 
-  const isLocal = import.meta.env.VITE_APP_ENV === 'local';
+  const isLocal = import.meta.env.DEV;
 
   const notConfirmedRedirectPath = '/signup';
   const authenticatedRedirectPath = '/reviews';
