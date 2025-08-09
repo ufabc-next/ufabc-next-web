@@ -6,7 +6,7 @@
                     <v-row class="mt-4">
                         <v-col cols="12">
                             <p class="text-body-1 mb-4">
-                                Envie uma mensagem de ajuda sobre algum erro que você está enfrentando
+                                Envie uma mensagem de ajuda sobre algum problema que você está enfrentando
                             </p>
                         </v-col>
                     </v-row>

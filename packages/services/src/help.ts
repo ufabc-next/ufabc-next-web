@@ -30,13 +30,11 @@ export const sendHelpForm = async (
       problemDescription,
     });
 
-    const result = response.data as HelpFormResult;
-
-    if (!result?.success) {
-      throw new Error('Falha ao criar o cartão de ajuda');
+    if (response.status === 201) {
+      return { success: true };
     }
 
-    return result;
+    throw new Error('Falha ao criar o cartão de ajuda');
   } catch (error: any) {
     if (error.response?.data?.error) {
       throw new Error(error.response.data.error);
