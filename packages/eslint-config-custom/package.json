@@ -5,16 +5,16 @@
   "license": "MIT",
   "devDependencies": {
     "@tanstack/eslint-plugin-query": "5.83.1",
-    "@typescript-eslint/eslint-plugin": "6.21.0",
-    "@typescript-eslint/parser": "6.21.0",
-    "eslint-config-prettier": "9.1.2",
-    "eslint-import-resolver-typescript": "3.10.1",
+    "@typescript-eslint/eslint-plugin": "8.39.0",
+    "@typescript-eslint/parser": "8.39.0",
+    "eslint-config-prettier": "10.1.8",
+    "eslint-import-resolver-typescript": "4.4.4",
     "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-jest": "27.9.0",
+    "eslint-plugin-jest": "29.0.1",
     "eslint-plugin-jsx-a11y": "6.10.2",
     "eslint-plugin-prettier": "5.5.3",
-    "eslint-plugin-simple-import-sort": "10.0.0",
-    "eslint-plugin-unused-imports": "3.2.0",
+    "eslint-plugin-simple-import-sort": "12.1.1",
+    "eslint-plugin-unused-imports": "4.1.4",
     "typescript": "5.9.2"
   },
   "publishConfig": {
