@@ -6,3 +6,4 @@ export * from './stats';
 export * from './api';
 export * from './performance';
 export * from './help';
+export * from './whatsapp';
