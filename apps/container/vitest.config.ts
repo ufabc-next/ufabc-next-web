@@ -14,7 +14,7 @@ export default defineConfig({
         '**/node_modules/**',
         '**/test-utils.ts',
         '**/mocks/**',
-        '.eslintrc.js',
+        'eslint.config.js',
         'mf.config.js',
         'remotes.hosts.local.js',
         'remotes.hosts.production.js',

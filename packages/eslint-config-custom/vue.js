@@ -2,11 +2,13 @@ import baseConfig from './base.js';
 import vuePlugin from 'eslint-plugin-vue';
 import vueEslintParser from 'vue-eslint-parser';
 import tseslint from 'typescript-eslint';
+import tanstackQueryPlugin from '@tanstack/eslint-plugin-query';
 
 export default [
   ...baseConfig,
 
   ...vuePlugin.configs['flat/recommended'],
+  ...tanstackQueryPlugin.configs['flat/recommended'],
 
   // TypeScript configuration for Vue files
   {
@@ -33,7 +35,7 @@ export default [
       'vue/multi-word-component-names': 'off',
       'vue/require-default-prop': 'off',
       'vue/require-explicit-emits': 'error',
-      'vue/no-setup-props-destructure': 'off',
+      'vue/no-setup-props-destructure': 'error',
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
       'vue/define-macros-order': 'error',

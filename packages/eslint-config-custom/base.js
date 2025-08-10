@@ -24,30 +24,35 @@ export default [
       'simple-import-sort': simpleImportSort,
       'unused-imports': unusedImports,
     },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          alwaysTryTypes: true,
+          project: [
+            './tsconfig.json',
+            './packages/*/tsconfig.json',
+            './apps/*/tsconfig.json',
+          ],
+        },
+      },
+    },
     rules: {
       // Import/export rules
       'simple-import-sort/imports': 'error',
       'simple-import-sort/exports': 'error',
-      'import/no-unresolved': 'off',
+      'import/no-unresolved': 'error',
       'import/no-duplicates': 'error',
-      'import/first': 'error',
       'import/newline-after-import': 'error',
       'unused-imports/no-unused-imports': 'error',
-      'unused-imports/no-unused-vars': [
-        'warn',
-        {
-          vars: 'all',
-          varsIgnorePattern: '^_',
-          args: 'after-used',
-          argsIgnorePattern: '^_',
-        },
-      ],
+      'unused-imports/no-unused-vars': 'warn',
 
       // TypeScript-specific rules
-      '@typescript-eslint/no-unused-vars': 'off',
       '@typescript-eslint/explicit-function-return-type': 'off',
       '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/no-var-requires': 'error',
+      '@typescript-eslint/no-empty-function': 'warn',
+      '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
   {
