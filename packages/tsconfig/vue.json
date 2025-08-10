@@ -2,6 +2,9 @@
   "extends": "./base.json",
   "compilerOptions": {
     "jsx": "preserve",
-    "types": ["jest", "element-plus/global"]
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "allowSyntheticDefaultImports": true,
+    "types": ["jest", "element-plus/global", "vite/client", "node"],
+    "noEmit": true
   }
 }
