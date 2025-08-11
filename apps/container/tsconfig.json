@@ -5,7 +5,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
-    "types": ["jest", "element-plus/global", "vite/client", "node"],
+    "types": ["element-plus/global", "vite/client", "node", "@testing-library/jest-dom", "vitest/globals"],
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "allowSyntheticDefaultImports": true,
     "noEmit": true
