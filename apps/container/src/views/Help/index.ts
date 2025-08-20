@@ -1,1 +1,1 @@
-export { default } from './HelpView.vue';
+export { default as HelpView } from './HelpView.vue';

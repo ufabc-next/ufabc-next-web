@@ -9,7 +9,7 @@ const resolveEndpoint = (env?: string) =>
   })[env!] || 'https://api.v2.ufabcnext.com';
 
 export const api = axios.create({
-  baseURL: resolveEndpoint(import.meta.env.VITE_APP_ENV),
+  baseURL: resolveEndpoint('production'),
 });
 
 api.interceptors.request.use(async (config) => {
