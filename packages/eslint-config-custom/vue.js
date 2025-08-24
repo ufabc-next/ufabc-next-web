@@ -22,6 +22,7 @@ export default [
         globals: {
           ...globals.browser,
         },
+        extraFileExtensions: ['.vue'],
       },
     },
   },
