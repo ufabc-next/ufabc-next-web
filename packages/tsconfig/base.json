@@ -3,11 +3,12 @@
   "compilerOptions": {
     "target": "es2022",
     "module": "esnext",
+    "moduleResolution": "bundler",
     "strict": true,
     "esModuleInterop": true,
     "isolatedModules": true,
     "skipLibCheck": true,
     "baseUrl": "."
   },
-  "exclude": ["node_modules", "dist", "**/*.test.*"]
+  "exclude": ["node_modules", "dist", "**/*.test.*", "**/*.spec.ts"]
 }

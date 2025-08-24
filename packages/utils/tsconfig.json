@@ -7,8 +7,6 @@
     "declarationMap": true,
     "composite": true,
     "noEmit": false,
-    "moduleResolution": "nodenext",
-    "allowSyntheticDefaultImports": true,
   },
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"],
+  "include": ["src/**/*"],
 }

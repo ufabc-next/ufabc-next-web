@@ -7,9 +7,8 @@
     "declarationMap": true,
     "composite": true,
     "noEmit": false,
-    "moduleResolution": "nodenext",
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+     "types": ["vite/client"]
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"],
 }

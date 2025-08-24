@@ -6,6 +6,7 @@ import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import turboPlugin from 'eslint-plugin-turbo';
 import unusedImports from 'eslint-plugin-unused-imports';
+import globals from 'globals';
 
 export default [
   js.configs.recommended,
@@ -18,6 +19,9 @@ export default [
       parser: parserTypeScript,
       parserOptions: {
         sourceType: 'module',
+        globals: {
+          ...globals.browser,
+        },
       },
     },
     plugins: {
