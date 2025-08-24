@@ -1,52 +1,42 @@
-import baseConfig from './base.js';
-import vuePlugin from 'eslint-plugin-vue';
-import vueEslintParser from 'vue-eslint-parser';
-import tseslint from 'typescript-eslint';
 import tanstackQueryPlugin from '@tanstack/eslint-plugin-query';
+import parserTypeScript from '@typescript-eslint/parser';
+import vuePlugin from 'eslint-plugin-vue';
+import globals from 'globals';
+import vueEslintParser from 'vue-eslint-parser';
+
+import baseConfig from './base.js';
 
 export default [
   ...baseConfig,
-
   ...vuePlugin.configs['flat/recommended'],
   ...tanstackQueryPlugin.configs['flat/recommended'],
 
-  // TypeScript configuration for Vue files
+  // ESLint for Vue files
   {
-    files: ['**/*.vue'],
+    files: ['*.vue', '**/*.vue'],
     languageOptions: {
       parser: vueEslintParser,
       parserOptions: {
-        parser: tseslint.parser,
-        ecmaVersion: 'latest',
+        parser: parserTypeScript,
         sourceType: 'module',
-        ecmaFeatures: {
-          jsx: true,
+        globals: {
+          ...globals.browser,
         },
-        extraFileExtensions: ['.vue'],
       },
     },
   },
 
-  // rules for vue files
   {
-    files: ['**/*.vue'],
+    files: ['*.vue', '**/*.vue'],
     rules: {
       'vue/no-unused-vars': 'error',
+      'vue/no-unused-components': 'error',
+      'vue/no-unused-refs': 'error',
       'vue/multi-word-component-names': 'off',
       'vue/require-default-prop': 'off',
       'vue/require-explicit-emits': 'error',
-      'vue/no-setup-props-destructure': 'error',
       'vue/component-definition-name-casing': ['error', 'PascalCase'],
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
-      'vue/define-macros-order': 'error',
-      'vue/no-undef-components': 'error',
-      'vue/no-unused-components': 'error',
-      'vue/no-unused-refs': 'error',
-      'vue/prefer-import-from-vue': 'error',
-      'vue/prefer-separate-static-class': 'error',
-      'vue/prefer-true-attribute-shorthand': 'error',
-      'vue/require-macro-variable-name': 'error',
-      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 

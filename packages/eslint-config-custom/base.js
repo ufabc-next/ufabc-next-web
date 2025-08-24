@@ -1,15 +1,39 @@
 import js from '@eslint/js';
+import configTypeScript from '@typescript-eslint/eslint-plugin';
+import parserTypeScript from '@typescript-eslint/parser';
 import eslintConfigPrettier from 'eslint-config-prettier';
 import importPlugin from 'eslint-plugin-import';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import turboPlugin from 'eslint-plugin-turbo';
 import unusedImports from 'eslint-plugin-unused-imports';
-import tseslint from 'typescript-eslint';
 
 export default [
   js.configs.recommended,
   eslintConfigPrettier,
-  ...tseslint.configs.recommended,
+
+  // TypeScript rules
+  {
+    files: ['**/*.{ts,tsx}'],
+    languageOptions: {
+      parser: parserTypeScript,
+      parserOptions: {
+        sourceType: 'module',
+      },
+    },
+    plugins: {
+      '@typescript-eslint': configTypeScript,
+    },
+    rules: {
+      ...configTypeScript.configs.recommended.rules,
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        { argsIgnorePattern: '^_' },
+      ],
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+    },
+  },
+
   {
     plugins: {
       turbo: turboPlugin,
@@ -45,14 +69,6 @@ export default [
       'import/newline-after-import': 'error',
       'unused-imports/no-unused-imports': 'error',
       'unused-imports/no-unused-vars': 'warn',
-
-      // TypeScript-specific rules
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/no-explicit-any': 'error',
-      '@typescript-eslint/no-var-requires': 'error',
-      '@typescript-eslint/no-empty-function': 'warn',
-      '@typescript-eslint/consistent-type-imports': 'error',
     },
   },
   {
