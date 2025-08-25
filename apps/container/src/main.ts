@@ -11,6 +11,7 @@ import client from './queryClient';
 import { createVuetify } from 'vuetify';
 import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
+import { VFileUpload } from 'vuetify/labs/VFileUpload';
 import 'vuetify/styles';
 
 import elementPlus, { ElMessage } from 'element-plus';
@@ -30,7 +31,10 @@ accessibility(Highcharts);
 annotationsInit(Highcharts);
 
 const vuetify = createVuetify({
-  components,
+  components: {
+    ...components,
+    VFileUpload,
+  },
   directives,
   theme: {
     defaultTheme: 'theme',

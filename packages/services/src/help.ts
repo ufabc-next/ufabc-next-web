@@ -5,6 +5,7 @@ export interface HelpFormData {
   ra: string;
   problemTitle: string;
   problemDescription: string;
+  image?: File;
 }
 
 export interface HelpFormResult {
@@ -16,39 +17,26 @@ export interface HelpFormResult {
 export const sendHelpForm = async (
   data: HelpFormData,
 ): Promise<HelpFormResult> => {
-  try {
-    const { email, ra, problemTitle, problemDescription } = data;
+  const formData = new FormData();
 
+  formData.append("email", data.email);
+  formData.append("ra", data.ra);
+  formData.append("problemTitle", data.problemTitle);
+  formData.append("problemDescription", data.problemDescription);
 
-    if (!email || !ra || !problemTitle || !problemDescription) {
-      throw new Error('Preencha os campos obrigatórios');
-    }
-
-    if (problemTitle.length < 5 || problemTitle.length > 100) {
-      throw new Error('O título deve ter entre 5 e 100 caracteres.');
-    }
-
-    if (problemDescription.length < 20 || problemDescription.length > 1000) {
-      throw new Error('A descrição deve ter entre 20 e 1000 caracteres.');
-    }
-
-    const response = await api.post('/help/form', {
-      email,
-      ra,
-      problemTitle,
-      problemDescription,
-    });
-
-    if (response.status === 201) {
-      return { success: true };
-    }
-
-    throw new Error('Falha ao criar o cartão de ajuda');
-  } catch (error: any) {
-    if (error.response?.data?.error) {
-      throw new Error(error.response.data.error);
-    }
-
-    throw new Error(error.message || 'Failed to send help form');
+  if (data.image) {
+    formData.append("image", data.image);
   }
+
+  const response = await api.post("/help/form", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+
+  if (response.status === 201) {
+    return { success: true };
+  }
+
+  throw new Error("Falha ao enviar o formulário");
 };
