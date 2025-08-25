@@ -16,6 +16,6 @@
   },
   "dependencies": {
     "stores": "*",
-    "types": "*"
+    "@ufabc-next/types": "*"
   }
 }

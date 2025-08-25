@@ -180,18 +180,18 @@
 
 <script setup lang="ts">
 import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
+import type {
+  PageableReturn,
+  StatsClass,
+  StatsCourse,
+  StatsSubject,
+} from '@ufabc-next/types';
 import {
   getElapsedSeasons,
   getSeason,
   prettifySeason,
 } from '@ufabc-next/utils';
 import { type StatsParams, StatsSubjects } from 'services';
-import type {
-  PageableReturn,
-  StatsClass,
-  StatsCourse,
-  StatsSubject,
-} from 'types';
 import { computed, ref } from 'vue';
 
 import { CenteredLoading } from '@/components/CenteredLoading';

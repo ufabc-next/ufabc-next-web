@@ -31,8 +31,8 @@
 
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
+import { Enrollment } from '@ufabc-next/types';
 import { Enrollments } from 'services';
-import { Enrollment } from 'types';
 import { computed } from 'vue';
 
 import { FeedbackAlert } from '@/components/FeedbackAlert';

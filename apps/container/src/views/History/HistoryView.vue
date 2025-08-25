@@ -276,6 +276,7 @@
 
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
+import type { Concept, Enrollment } from '@ufabc-next/types';
 import {
   checkEAD,
   conceptsColor,
@@ -285,7 +286,6 @@ import {
 } from '@ufabc-next/utils';
 import { ElNotification } from 'element-plus';
 import { Enrollments, Users } from 'services';
-import type { Concept, Enrollment } from 'types';
 import { computed, onMounted, ref } from 'vue';
 
 import { CenteredLoading } from '@/components/CenteredLoading';

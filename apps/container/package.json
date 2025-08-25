@@ -55,7 +55,7 @@
     "msw": "^2.8.4",
     "sass": "1.90.0",
     "sass-loader": "16.0.5",
-    "types": "*",
+    "@ufabc-next/types": "*",
     "typescript": "5.9.2",
     "vite": "^6.3.5",
     "vitest": "0.34.6",

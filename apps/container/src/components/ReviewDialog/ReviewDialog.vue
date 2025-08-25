@@ -101,10 +101,10 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
+import type { Enrollment } from '@ufabc-next/types';
 import { conceptsColor } from '@ufabc-next/utils';
 import { ElMessage } from 'element-plus';
 import { Comments, Enrollments } from 'services';
-import type { Enrollment } from 'types';
 import { computed, PropType, ref, watch } from 'vue';
 
 import { CommentsList } from '@/components/CommentsList';

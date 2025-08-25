@@ -110,6 +110,7 @@
 
 <script lang="ts" setup>
 import { useMutation } from '@tanstack/vue-query';
+import { Comment, RequestError } from '@ufabc-next/types';
 import {
   checkEAD,
   conceptsColor,
@@ -119,7 +120,6 @@ import {
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
 import { Comments } from 'services';
-import { Comment, RequestError } from 'types';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 
