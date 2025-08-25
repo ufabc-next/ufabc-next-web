@@ -30,7 +30,7 @@
     "ics": "^3.5.0",
     "lodash.debounce": "4.0.8",
     "mixpanel-browser": "^2.65.0",
-    "services": "*",
+    "@ufabc-next/services": "*",
     "@ufabc-next/stores": "*",
     "@ufabc-next/utils": "*",
     "vee-validate": "4.15.1",

@@ -177,10 +177,10 @@
 
 <script lang="ts" setup>
 import { useQuery } from '@tanstack/vue-query';
+import { Reviews } from '@ufabc-next/services';
 import { Concept, SubjectSpecific } from '@ufabc-next/types';
 import { transformConceptDataToObject } from '@ufabc-next/utils';
 import { ElMessage } from 'element-plus';
-import { Reviews } from 'services';
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 

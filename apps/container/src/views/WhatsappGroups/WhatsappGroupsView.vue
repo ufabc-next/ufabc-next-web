@@ -205,9 +205,9 @@
 </template>
 
 <script setup lang="ts">
+import { Whatsapp } from '@ufabc-next/services';
 import { SearchComponentItem } from '@ufabc-next/types';
 import { extensionURL, studentRecordURL } from '@ufabc-next/utils';
-import { Whatsapp } from 'services';
 import { computed, onMounted, ref } from 'vue';
 
 import WhatsappGroupCard from '@/components/WhatsappGroupCard/WhatsappGroupCard.vue';

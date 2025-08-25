@@ -53,9 +53,9 @@
 
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
+import { type CourseInformation, Performance } from '@ufabc-next/services';
 import { formatSeason } from '@ufabc-next/utils';
 import { Chart } from 'highcharts-vue';
-import { type CourseInformation, Performance } from 'services';
 import { computed, ref } from 'vue';
 
 import { CenteredLoading } from '@/components/CenteredLoading';

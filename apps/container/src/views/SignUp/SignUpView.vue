@@ -316,11 +316,11 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery } from '@tanstack/vue-query';
+import { Users } from '@ufabc-next/services';
 import { RequestError } from '@ufabc-next/types';
 import { toTypedSchema } from '@vee-validate/zod';
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
-import { Users } from 'services';
 import { useField, useForm } from 'vee-validate';
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';

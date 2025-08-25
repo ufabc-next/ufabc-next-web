@@ -110,6 +110,7 @@
 
 <script lang="ts" setup>
 import { useMutation } from '@tanstack/vue-query';
+import { Comments } from '@ufabc-next/services';
 import { Comment, RequestError } from '@ufabc-next/types';
 import {
   checkEAD,
@@ -119,7 +120,6 @@ import {
 } from '@ufabc-next/utils';
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
-import { Comments } from 'services';
 import { computed, onMounted, PropType, ref } from 'vue';
 import { useDisplay } from 'vuetify';
 
