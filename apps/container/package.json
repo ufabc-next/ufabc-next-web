@@ -32,7 +32,7 @@
     "mixpanel-browser": "^2.65.0",
     "services": "*",
     "stores": "*",
-    "utils": "*",
+    "@ufabc-next/utils": "*",
     "vee-validate": "4.15.1",
     "vue": "3.5.19",
     "vue-router": "4.5.1",

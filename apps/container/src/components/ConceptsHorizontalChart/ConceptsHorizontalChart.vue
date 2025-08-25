@@ -29,8 +29,8 @@
 </template>
 
 <script setup lang="ts">
+import { conceptsColor, transformConceptDataToObject } from '@ufabc-next/utils';
 import { ConceptData, SubjectSpecific } from 'types';
-import { conceptsColor,transformConceptDataToObject } from 'utils';
 import { computed, PropType } from 'vue';
 
 const props = defineProps({
