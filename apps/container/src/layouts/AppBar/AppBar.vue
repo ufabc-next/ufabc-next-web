@@ -165,6 +165,12 @@ const internalNavigationItems = [
     locked: false
   },
   {
+    title: 'Ajuda',
+    icon: 'mdi-help-circle',
+    route: '/help',
+    releaseDate: dayjs(new Date()),
+  },
+  {
     title: 'Apoie o UFABC next',
     icon: 'mdi-bank',
     route: '/donate',

@@ -13,8 +13,8 @@ const ConfirmationView = () =>
 const RecoveryView = () => import('@/views/Recovery/RecoveryView.vue');
 const FacebookView = () => import('@/views/Facebook/FacebookView.vue');
 const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
-const WhatsappGroupsView = () =>
-  import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
+const HelpView = () => import('@/views/Help/HelpView.vue');
+const WhatsappGroupsView = () => import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
 
 const isJWT = (token: string) =>
   /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
@@ -129,6 +129,15 @@ const routes: Array<RouteRecordRaw> = [
       title: 'Calengrade',
       layout: 'include-sidebar',
       auth: true,
+    },
+  },
+  {
+    path: '/help',
+    name: 'help',
+    component: HelpView,
+    meta: {
+      title: 'Ajuda',
+      confirmed: true,
     },
   },
   {
