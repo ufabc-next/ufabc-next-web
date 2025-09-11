@@ -27,8 +27,8 @@
     "axios": "1.11.0",
     "dayjs": "1.11.18",
     "element-plus": "2.11.2",
-    "highcharts": "11.4.8",
-    "highcharts-vue": "1.4.3",
+    "highcharts": "12.4.0",
+    "highcharts-vue": "2.0.1",
     "ics": "^3.5.0",
     "lodash.debounce": "4.0.8",
     "mixpanel-browser": "^2.65.0",
@@ -39,7 +39,7 @@
     "vue-router": "4.5.1",
     "vue-zustand": "0.6.0",
     "vuetify": "3.9.7",
-    "zod": "3.25.76"
+    "zod": "4.1.8"
   },
   "devDependencies": {
     "@testing-library/jest-dom": "6.8.0",
@@ -58,8 +58,8 @@
     "sass": "1.92.1",
     "sass-loader": "16.0.5",
     "typescript": "5.9.2",
-    "vite": "^6.3.5",
-    "vitest": "0.34.6",
+    "vite": "^7.0.0",
+    "vitest": "3.2.4",
     "vue-tsc": "^3.0.6"
   },
   "gitHooks": {
