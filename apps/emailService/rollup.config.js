@@ -5,7 +5,7 @@ import commonjs from '@rollup/plugin-commonjs';
 
 import fg from 'fast-glob';
 
-const entries = fg.sync('email-templates/*.vue');
+const entries = fg.sync('templates/*.vue');
 
 export default defineConfig({
   input: entries,
