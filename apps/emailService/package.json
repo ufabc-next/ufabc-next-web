@@ -12,8 +12,7 @@
     "rollup-plugin-vue": "^6.0.0"
   },
   "scripts": {
-    "build": "rollup -c rollup.config.js",
-    "template:render": "node scripts/render.js",
-    "template:deploy": "node scripts/upload.js"
+    "build": "rollup -c rollup.config.js && node scripts/render.js",
+    "deploy": "node scripts/upload.js"
   }
 }
