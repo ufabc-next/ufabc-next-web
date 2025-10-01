@@ -6,7 +6,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const files = fs.readdirSync(`${__dirname}/../email-templates`);
+const files = fs.readdirSync(`${__dirname}/../templates`);
+
+if (!fs.existsSync('preview')) {
+  fs.mkdirSync('preview');
+}
 
 for (const fileName of files) {
   const name = path.parse(fileName).name;
@@ -17,7 +21,7 @@ for (const fileName of files) {
 
   const text = await render(
     currentTemplate.default,
-    { title: '{{title}}' },
+    { title: '{{title}}', ctaUrl: '{{url}}' },
     { plainText: true },
   );
 
