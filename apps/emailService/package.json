@@ -1,0 +1,19 @@
+{
+  "name": "email-service",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "license": "MIT",
+  "dependencies": {
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@vue-email/components": "^0.0.21",
+    "@vue-email/render": "^0.0.9",
+    "rollup-plugin-vue": "^6.0.0"
+  },
+  "scripts": {
+    "build": "rollup -c rollup.config.js",
+    "template:render": "node scripts/render.js",
+    "template:deploy": "node scripts/upload.js"
+  }
+}

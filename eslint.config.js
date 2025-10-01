@@ -9,4 +9,7 @@ export default [
       },
     },
   },
+  {
+    ignores: ['apps/emailService/**/*'],
+  },
 ];
