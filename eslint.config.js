@@ -10,6 +10,6 @@ export default [
     },
   },
   {
-    ignores: ['apps/emailService/**/*'],
+    ignores: ['apps/email/**/*'],
   },
 ];
