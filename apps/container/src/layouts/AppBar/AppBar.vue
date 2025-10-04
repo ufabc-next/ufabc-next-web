@@ -1,7 +1,7 @@
 <template>
   <v-app>
     <v-navigation-drawer
-      v-if="user?.confirmed || layout === 'include-sidebar'"
+      v-if="authStore.user?.confirmed || layout === 'include-sidebar'"
       v-model="drawer"
       color="navigation"
       width="240"
@@ -58,26 +58,22 @@
           </v-layout>
         </v-list-item>
       </v-list>
-      <div v-if="!user?.confirmed">
+      <div v-if="!authStore.user?.confirmed">
         <v-divider />
         <div style="height: 64px" />
-        <div
-          class="mb-4 pa-3 rounded-md bg-blue-darken-3 border border-blue-darken-2 text-blue-50 text-subtitle-2"
-        >
-          <div class="d-flex align-center gap-2">
-            <v-icon class="bg-blue-darken-2 pa-1 rounded-circle" size="20">
-              mdi-lock-outline
-            </v-icon>
+        <div class="mb-4 pa-4 bg-blue-darken-3 border create-account-box">
+          <div class="d-flex align-center gap-3">
+            <v-icon class="pa-1" size="20"> mdi-lock-outline </v-icon>
             <strong>Conta não confirmada</strong>
           </div>
           <div class="mt-2 text-caption">
             Crie sua conta no next para acessar todas as funcionalidades.
           </div>
           <v-btn
-            variant="outlined"
+            variant="tonal"
             size="small"
             block
-            class="mt-2 bg-blue-darken-2 text-white text-caption"
+            class="mt-4 bg-blue-darken-2 text-white text-caption pa-2"
             style="border-color: #1e40af"
             @click="createAccount"
           >
@@ -88,7 +84,7 @@
     </v-navigation-drawer>
 
     <v-app-bar
-      v-if="user?.confirmed || layout === 'include-sidebar'"
+      v-if="authStore.user?.confirmed || layout === 'include-sidebar'"
       app
       height="min-content"
       class="py-2 header"
@@ -111,7 +107,7 @@
       />
 
       <v-spacer />
-      <div v-if="user?.confirmed">
+      <div v-if="authStore.user?.confirmed">
         <v-btn
           color="primary"
           icon="mdi-dots-vertical"
@@ -128,10 +124,10 @@
                   <v-layout class="flex-column ml-4">
                     <p>{{ userLogin }}</p>
                     <p
-                      v-if="user?.ra"
+                      v-if="authStore.user?.ra"
                       class="text-caption text-medium-emphasis"
                     >
-                      RA: {{ user.ra }}
+                      RA: {{ authStore.user.ra }}
                     </p>
                   </v-layout>
                 </v-layout>
@@ -152,7 +148,7 @@
       </div>
     </v-app-bar>
     <div
-      v-if="user?.confirmed || layout === 'include-sidebar'"
+      v-if="authStore.user?.confirmed || layout === 'include-sidebar'"
       style="height: 64px"
     />
     <slot />
@@ -164,20 +160,26 @@ import dayjs from 'dayjs';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { useAuth } from '@/stores/useAuth';
+import { eventTracker } from '@/helpers/EventTracker';
+import { WebEvent } from '@/helpers/WebEvent';
+import { useAuthStore } from '@/stores/auth';
 import { useAliasInitials } from '@/utils/composables/aliasInitials';
 
 const router = useRouter();
+const authStore = useAuthStore();
 
 const layout = computed(() => router.currentRoute.value.meta.layout ?? null);
 
-const { logOut, user } = useAuth();
 const handleLogout = () => {
-  logOut.value();
+  authStore.logOut();
 };
 
 const createAccount = () => {
-  router.push('/');
+  eventTracker.track(WebEvent.CREATE_ACCOUNT_CLICKED, {
+    source: 'app_bar_sidebar',
+  });
+
+  router.push('/signup');
 };
 
 const drawer = ref(false);
@@ -186,7 +188,7 @@ onMounted(() => {
 });
 
 const userLogin = computed(() =>
-  user.value?.email?.replace('@aluno.ufabc.edu.br', ''),
+  authStore.user?.email?.replace('@aluno.ufabc.edu.br', ''),
 );
 const userInitials = useAliasInitials();
 
@@ -195,31 +197,31 @@ const internalNavigationItems = [
     title: 'Reviews',
     icon: 'mdi-message-draw',
     route: '/reviews',
-    locked: !user.value?.confirmed,
+    locked: !authStore.user?.confirmed,
   },
   {
     title: 'Meu histórico',
     icon: 'mdi-history',
     route: '/history',
-    locked: !user.value?.confirmed,
+    locked: !authStore.user?.confirmed,
   },
   {
     title: 'Performance',
     icon: 'mdi-google-analytics',
     route: '/performance',
-    locked: !user.value?.confirmed,
+    locked: !authStore.user?.confirmed,
   },
   {
     title: 'Dados da Matrícula',
     icon: 'mdi-book-multiple',
     route: '/stats',
-    locked: !user.value?.confirmed,
+    locked: !authStore.user?.confirmed,
   },
   {
     title: 'Grupos no WhatsApp',
     icon: 'mdi-whatsapp',
     route: '/grupos-whatsapp',
-    releaseDate: dayjs('06/01/2025'),
+    releaseDate: dayjs('07/10/2025'),
     locked: false,
   },
   {
@@ -229,17 +231,23 @@ const internalNavigationItems = [
     releaseDate: dayjs('11/25/2023'),
     locked: false,
   },
-  //{
-  //title: 'Apoie o UFABC next',
-  //icon: 'mdi-bank',
-  //route: '/donate',
-  // locked: false,
-  //},
+  {
+    title: 'Apoie o UFABC next',
+    icon: 'mdi-bank',
+    route: '/donate',
+    locked: false,
+  },
   {
     title: 'Configurações',
     icon: 'mdi-cog',
     route: '/settings',
-    locked: !user.value?.confirmed,
+    locked: !authStore.user?.confirmed,
+  },
+  {
+    title: 'Ajuda',
+    icon: 'mdi-help-circle',
+    route: '/help',
+    locked: false,
   },
 ];
 
@@ -256,12 +264,12 @@ const externalNavigationItems = [
     icon: 'mdi-download',
     url: 'https://chrome.google.com/webstore/detail/ufabc-next/gphjopenfpnlnffmhhhhdiecgdcopmhk',
   },
-  ...(user.value?.permissions?.includes('admin')
+  ...(authStore.user?.permissions?.includes('admin')
     ? [
         {
           title: 'Monitoramento de Jobs',
           icon: 'mdi-open-in-new',
-          url: `${apiURL}/login/jobs-monitoring?userId=${user.value?._id}`,
+          url: `${apiURL}/login/jobs-monitoring?userId=${authStore.user?._id}`,
         },
       ]
     : []),
@@ -304,5 +312,10 @@ const externalNavigationItems = [
   margin-left: auto;
   border-radius: 50%;
   border: 12px solid rgb(45, 78, 128);
+}
+
+.create-account-box {
+  border-radius: 16px;
+  margin: 10px;
 }
 </style>

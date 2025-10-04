@@ -5,7 +5,7 @@
         src="../../assets/calengrade/calengrade-logo.svg"
         alt="logo do Calengrade"
         class="calengrade-logo"
-      >
+      />
 
       <div class="calengrade-page__content">
         <WelcomeScreen
@@ -39,8 +39,8 @@
       <h3 class="calengrade-page__footer-credits">
         O Calengrade foi desenvolvido em 2020 por
         <a href="https://link.cariri.tech/calengrade-linkedin">
-          Marcelo Farias
-        </a>, um ex aluno da UFABC.
+          Marcelo Farias </a
+        >, um ex aluno da UFABC.
       </h3>
     </div>
   </div>
@@ -49,6 +49,8 @@
 <script lang="ts" setup>
 import { onMounted, reactive, ref, watch } from 'vue';
 
+import { eventTracker } from '@/helpers/EventTracker';
+import { WebEvent } from '@/helpers/WebEvent';
 import { definedQuarters } from '@/utils/quarters';
 
 import ChangeQuarterScreen from './screens/ChangeQuarterScreen.vue';
@@ -83,7 +85,11 @@ function getQuarterFromCurrentDate() {
 
 onMounted(() => {
   const quarter = getQuarterFromCurrentDate();
-  currentQuarter.value = quarter
+  currentQuarter.value = quarter;
+
+  eventTracker.track(WebEvent.CALENGRADE_ACCESS, {
+    event_type: 'page_view',
+  });
 });
 
 const calengrade = reactive<CalengradeInfo>({
@@ -111,6 +117,13 @@ const onUpdateSummary = (value: string) => {
 
 const onNextStep = (step: CalengradeSteps) => {
   currentStepName.value = step;
+
+  if (step === CalengradeSteps.Preview) {
+    eventTracker.track(WebEvent.CALENGRADE_PREVIEW_GENERATED, {
+      event_type: 'preview_generated',
+      quarter_title: calengrade.quarter?.title || 'unknown',
+    });
+  }
 };
 
 const resetCalengrade = () => {

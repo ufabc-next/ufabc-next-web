@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 import { PaperCard } from '@/components/PaperCard';
+import { eventTracker } from '@/helpers/EventTracker';
+import { WebEvent } from '@/helpers/WebEvent';
 
 const dialog = ref(false);
 
@@ -11,6 +13,14 @@ const handleCloseDialog = () => {
 
 const handleOpenDialog = () => {
   dialog.value = true;
+
+  eventTracker.track(WebEvent.DONATE_DIALOG_OPENED, {
+    event_type: 'dialog_open',
+  });
+};
+
+const handlePixLinkClick = () => {
+  eventTracker.track(WebEvent.DONATE_PIX_LINK_CLICKED);
 };
 
 const tableData = [
@@ -33,17 +43,18 @@ const tableData = [
     amount: 'US$ 100,00/ano',
   },
 ];
+
+onMounted(() => {
+  eventTracker.track(WebEvent.DONATE_VIEW_ENTERED, {
+    event_type: 'page_view',
+  });
+});
 </script>
 
 <template>
   <PaperCard class="mt-4">
     <v-row class="justify-center">
-      <v-col
-        sm="12"
-        md="12"
-        lg="12"
-        class="justify-center"
-      >
+      <v-col sm="12" md="12" lg="12" class="justify-center">
         <div class="donation-text">
           <h2 class="donate-title text-primary font-weight-bold">
             Ajude o UFABC Next
@@ -58,27 +69,30 @@ const tableData = [
               target="_blank"
               rel="noopener noreferrer"
               style="text-decoration: none"
-            >pode opinar, dar sugestões</a>
+              >pode opinar, dar sugestões</a
+            >
             e criar novas funcionalidades, pois é um
             <a
               href="https://github.com/ufabc-next"
               target="_blank"
               rel="noopener noreferrer"
               style="text-decoration: none"
-            >projeto open-source.</a>
-            <br><br>
+              >projeto open-source.</a
+            >
+            <br /><br />
             Como nem tudo são flores 🥲, o projeto é mantido pelos seus próprios
             desenvolvedores, que já gastaram mais de 300h desenvolvendo sem ter
             nenhum retorno financeiro 🙃, com apenas o objetivo de ganhar
             conhecimento e colaborar com a comunidade da UFABC.
-            <br><br>
+            <br /><br />
             Em 2020, lançamos uma
             <a
               href="https://www.kickante.com.br/campanhas/ajude-ufabc-next"
               target="_blank"
               rel="noopener noreferrer"
               style="text-decoration: none"
-            >campanha de crowdfunding</a>
+              >campanha de crowdfunding</a
+            >
             que foi sucesso (🎉) e arrecadamos R$ 1.650,00 para manter o projeto
             no ar até junho de 2022. Como os custos do projeto são mensais e em
             dólar, precisamos de sua ajuda para continuar com o projeto
@@ -87,7 +101,7 @@ const tableData = [
             acompanhar e melhorar sua performance acadêmica 😍. Tudo isso para
             ajudar os alunos da UFABC a se formar (sabemos que é quase uma
             missão impossível, mas com o Next fica mais fácil 🚀).
-            <br><br>
+            <br /><br />
             Abaixo temos os custos detalhados:
           </div>
         </div>
@@ -99,27 +113,17 @@ const tableData = [
           border
           style="width: 100%; word-break: normal"
         >
-          <el-table-column
-            prop="name"
-            label="Nome"
-          />
+          <el-table-column prop="name" label="Nome" />
           <el-table-column
             prop="description"
             label="Descrição"
             min-width="170"
           />
-          <el-table-column
-            prop="amount"
-            label="Custo"
-          />
+          <el-table-column prop="amount" label="Custo" />
           <template #append>
             <div class="summary">
-              <div class="summary-text flex">
-                Total de aproximadamente
-              </div>
-              <div class="summary-total">
-                ~R$ 1200,00/ano 😬
-              </div>
+              <div class="summary-text flex">Total de aproximadamente</div>
+              <div class="summary-total">~R$ 1200,00/ano 😬</div>
             </div>
           </template>
         </el-table>
@@ -135,11 +139,7 @@ const tableData = [
         </v-btn>
       </v-col>
     </v-row>
-    <v-dialog
-      v-model="dialog"
-      width="700px"
-      transition="scroll-y-transition"
-    >
+    <v-dialog v-model="dialog" width="700px" transition="scroll-y-transition">
       <v-card class="dialog-content">
         <div class="dialog-header">
           <v-card-title class="dialog-title ufabcnext-darkgrey--text">
@@ -167,7 +167,7 @@ const tableData = [
               src="@/assets/pix.webp"
               style="width: 250px"
               alt="PIX do UFABC Next"
-            >
+            />
           </div>
           <div
             class="dialog-body-account"
@@ -175,17 +175,17 @@ const tableData = [
               marginLeft: $vuetify.display.smAndDown ? '10px' : '30px',
             }"
           >
+            <p class="dialog-body-account-item">Nome: Gabriel Monteiro Rocha</p>
             <p class="dialog-body-account-item">
-              Nome: Gabriel Monteiro Rocha
-            </p>
-            <p class="dialog-body-account-item">
-              Chave Pix: <br><strong>ufabcnext@gmail.com</strong>
+              Chave Pix: <br /><strong>ufabcnext@gmail.com</strong>
             </p>
             <a
               href="https://nubank.com.br/pagar/cs8ck/sVTkIdy1Yx"
               target="_blank"
               rel="noopener noreferrer"
-            ><p>Clique e contribua!</p></a>
+              @click="handlePixLinkClick"
+              ><p>Clique e contribua!</p></a
+            >
           </div>
         </v-card-text>
 
