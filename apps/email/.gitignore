@@ -1,0 +1,6 @@
+dist
+preview
+node_modules
+.env
+localstack-data
+volume

@@ -1,5 +1,6 @@
 export type * from './comments';
 export type * from './concepts';
+export type * from './email-template';
 export type * from './enrollments';
 export type * from './request-error';
 export type * from './search';
