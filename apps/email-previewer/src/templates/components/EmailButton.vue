@@ -28,6 +28,7 @@ const buttonStyle = computed(() => ({
   textAlign: 'center' as const,
   border: 'none',
   cursor: 'pointer',
+  fontFamily: 'Roboto, sans-serif',
 }));
 </script>
 

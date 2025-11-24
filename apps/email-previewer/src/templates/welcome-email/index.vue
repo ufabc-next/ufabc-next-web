@@ -33,6 +33,7 @@ const titleStyle = {
   lineHeight: '36px',
   fontWeight: '700',
   color: '#1e293b',
+  fontFamily: 'Roboto, sans-serif',
 };
 
 const highlightStyle = {

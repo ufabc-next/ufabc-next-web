@@ -46,20 +46,37 @@ const contentStyle = computed(() => ({
   maxWidth: `${props.maxWidth}px`,
   margin: '0 auto',
   fontFamily:
-    '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    'Lato, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
 }));
 </script>
 
 <template>
-  <table :style="outerTableStyle" cellpadding="0" cellspacing="0" border="0">
-    <tbody>
-      <tr>
-        <td :style="contentWrapperStyle">
-          <div :style="contentStyle">
-            <slot />
-          </div>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <html>
+    <head>
+      <link rel="preconnect" href="https://fonts.googleapis.com" />
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+      <link
+        href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&family=Roboto:wght@400;500;700&display=swap"
+        rel="stylesheet"
+      />
+    </head>
+    <body>
+      <table
+        :style="outerTableStyle"
+        cellpadding="0"
+        cellspacing="0"
+        border="0"
+      >
+        <tbody>
+          <tr>
+            <td :style="contentWrapperStyle">
+              <div :style="contentStyle">
+                <slot />
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </body>
+  </html>
 </template>

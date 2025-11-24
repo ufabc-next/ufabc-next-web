@@ -153,6 +153,7 @@ watch(currentTemplate, (template) => {
   flex-direction: column;
   height: 100vh;
   background-color: #f8fafc;
+  font-family: Lato, sans-serif;
 }
 
 .app__body {
