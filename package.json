@@ -10,8 +10,8 @@
     "tsc": "turbo run tsc --parallel"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
+    "@commitlint/cli": "20.2.0",
+    "@commitlint/config-conventional": "20.2.0",
     "eslint": "^9.33.0",
     "@ufabc-next/eslint-config": "*",
     "prettier": "^3.1.0",
@@ -24,7 +24,7 @@
     "packages/*"
   ],
   "dependencies": {
-    "@vitest/coverage-v8": "^3.2.4",
-    "vitest": "^3.2.4"
+    "@vitest/coverage-v8": "^4.0.0",
+    "vitest": "^4.0.0"
   }
 }
