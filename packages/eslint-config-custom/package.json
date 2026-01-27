@@ -25,7 +25,7 @@
     "eslint-plugin-turbo": "^2.5.3",
     "eslint-plugin-unused-imports": "^4.0.0",
     "eslint-plugin-vue": "^10.4.0",
-    "globals": "^16.3.0",
+    "globals": "^17.0.0",
     "typescript": "5.9.3",
     "vue-eslint-parser": "^10.2.0"
   },
