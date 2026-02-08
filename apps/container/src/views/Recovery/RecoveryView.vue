@@ -21,8 +21,8 @@ const { handleSubmit, meta } = useForm({
 });
 
 const email = useField('email');
-const ra = useField<string>('ra.ra');
-const raConfirm = useField('ra.confirm');
+const ra = useField<string>('ra');
+const raConfirm = useField('raConfirm');
 
 const isFetchEmailEnabled = computed(
   () => raConfirm.value.value === ra.value.value,
@@ -89,7 +89,7 @@ const { mutate: mutateRecover, isPending: isPendingSubmit } = useMutation({
 const onSubmit = handleSubmit((values) => {
   const payload = {
     email: values.email.toLowerCase(),
-    ra: values.ra.ra,
+    ra: values.ra,
   };
   mutateRecover(payload);
 });
