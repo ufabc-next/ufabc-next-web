@@ -25,12 +25,17 @@ export type EmailResponse = {
   email: string;
 };
 
+export type RecoveryRequest = {
+  email: string;
+  ra: string;
+};
+
 export const Users = {
   completeSignup: (params: UserSignup) => api.put('/users/complete', params),
   confirmSignup: (token: string) =>
     api.post<UserConfirmResponse>('/users/confirm', { token }),
   resendEmail: () => api.post('/users/resend'),
-  recovery: (email: string) => api.post('/users/recover', { email }),
+  recovery: (params: RecoveryRequest) => api.post('/users/recover', params),
   delete: () => api.delete('/users/remove'),
   info: () => api.get<User>('/users/info'),
   facebookAuth: (params: FacebookAuth) =>
