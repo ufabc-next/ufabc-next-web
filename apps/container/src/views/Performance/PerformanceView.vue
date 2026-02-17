@@ -46,6 +46,7 @@
 <script setup lang="ts">
 import { useQuery } from '@tanstack/vue-query';
 import { type CourseInformation, Performance } from '@ufabc-next/services';
+import type { Options } from 'highcharts';
 import { Chart } from 'highcharts-vue';
 import { computed, ref, watch } from 'vue';
 import { useTheme } from 'vuetify';
@@ -66,7 +67,7 @@ watch(
   },
 );
 
-const areaGraphOptions = computed(() => ({
+const areaGraphOptions = computed<Options>(() => ({
   accessibility: {
     enabled: true,
   },
@@ -104,7 +105,7 @@ const crHistorySeries = computed(() => {
   return arrCrHistory;
 });
 
-const crHistoryOptions = computed(() => ({
+const crHistoryOptions = computed<Options>(() => ({
   ...areaGraphOptions.value,
   title: {
     text: 'Seu CR ao longo do tempo',
@@ -160,7 +161,7 @@ const cpHistorySeries = computed(() => {
   }
   return result;
 });
-const cpHistoryOptions = computed(() => ({
+const cpHistoryOptions = computed<Options>(() => ({
   ...areaGraphOptions.value,
   title: {
     text: 'Seu CP ao longo do tempo',
@@ -209,10 +210,10 @@ const closeCrs = computed(
   () =>
     crDistributionSeries.value?.find(
       (element) => element[0].toFixed(1) === userCr.value?.toFixed(1),
-    )?.[1] || '',
+    )?.[1],
 );
 
-const crDistributionOptions = computed(() => ({
+const crDistributionOptions = computed<Options>(() => ({
   ...areaGraphOptions.value,
   title: {
     text: 'Distribuição de CR',
@@ -239,15 +240,14 @@ const crDistributionOptions = computed(() => ({
   ],
   annotations: [
     {
-      draggable: '',
       labelOptions: {
         crop: false,
       },
       labels: [
         {
           point: {
-            x: userCr.value,
-            y: closeCrs.value,
+            x: userCr.value ?? 0,
+            y: closeCrs.value ?? 0,
             xAxis: 0,
             yAxis: 0,
           },
@@ -290,7 +290,7 @@ const cards = computed(() => [
     icon: 'mdi-chart-line-variant',
   },
   {
-    title: closeCrs.value,
+    title: closeCrs.value ?? '',
     content: 'Possuem um CR muito próximo ao seu',
     color: 'navigation',
     icon: 'mdi-chart-bell-curve',

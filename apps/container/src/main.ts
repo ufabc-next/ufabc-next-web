@@ -52,7 +52,9 @@ const savedTheme = localStorage.getItem('darkMode');
 const defaultTheme = savedTheme === 'true' ? 'dark' : 'light';
 
 // Set initial Highcharts theme class
-document.body.classList.add(defaultTheme === 'dark' ? 'highcharts-dark' : 'highcharts-light');
+document.body.classList.add(
+  defaultTheme === 'dark' ? 'highcharts-dark' : 'highcharts-light',
+);
 applyChartsTheme();
 
 const vuetify = createVuetify({

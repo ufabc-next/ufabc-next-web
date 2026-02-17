@@ -33,7 +33,7 @@ const {
   data: verifiedEmail,
   error: fetchEmailError,
 } = useQuery({
-  queryKey: ['email'],
+  queryKey: ['email', ra.value.value],
   queryFn: () => Users.getEmail(ra.value.value),
   enabled: false,
 });
