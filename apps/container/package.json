@@ -45,7 +45,6 @@
     "@testing-library/user-event": "14.6.1",
     "@testing-library/vue": "8.1.0",
     "@types/lodash.debounce": "4.0.9",
-    "@types/mixpanel-browser": "^2.60.0",
     "@types/node": "^25.2.3",
     "@ufabc-next/types": "workspace:*",
     "@vitejs/plugin-vue": "^6.0.4",
