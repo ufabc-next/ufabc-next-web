@@ -8,9 +8,8 @@ import {
   VueQueryPlugin,
 } from '@tanstack/vue-query';
 import elementPlus, { ElMessage } from 'element-plus';
-import Highcharts from 'highcharts';
-import accessibility from 'highcharts/modules/accessibility';
-import annotationsInit from 'highcharts/modules/annotations';
+import 'highcharts/modules/accessibility';
+import 'highcharts/modules/annotations';
 import HighchartsVue from 'highcharts-vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
@@ -44,10 +43,6 @@ declare global {
 
 const pinia = createPinia();
 pinia.use(piniaPluginPersistedstate);
-
-accessibility(Highcharts);
-annotationsInit(Highcharts);
-
 const savedTheme = localStorage.getItem('darkMode');
 const defaultTheme = savedTheme === 'true' ? 'dark' : 'light';
 
