@@ -12,8 +12,8 @@
     "tsc": "turbo run tsc --parallel"
   },
   "devDependencies": {
-    "@commitlint/cli": "19.8.1",
-    "@commitlint/config-conventional": "19.8.1",
+    "@commitlint/cli": "20.4.1",
+    "@commitlint/config-conventional": "20.4.1",
     "@ufabc-next/eslint-config": "workspace:*",
     "eslint": "^9.33.0",
     "prettier": "^3.8.1",
