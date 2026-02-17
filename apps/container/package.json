@@ -48,7 +48,7 @@
     "@types/mixpanel-browser": "^2.60.0",
     "@types/node": "^24.2.1",
     "@ufabc-next/types": "workspace:*",
-    "@vitejs/plugin-vue": "^6.0.1",
+    "@vitejs/plugin-vue": "^6.0.4",
     "@vitest/coverage-v8": "3.2.4",
     "globals": "^16.3.0",
     "husky": "9.1.7",
@@ -58,7 +58,7 @@
     "sass-loader": "16.0.7",
     "tsconfig": "workspace:*",
     "typescript": "5.9.3",
-    "vite": "^6.3.5",
+    "vite": "^7.3.1",
     "vitest": "3.2.4",
     "vue-tsc": "^3.0.6"
   },
