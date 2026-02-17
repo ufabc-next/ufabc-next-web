@@ -161,13 +161,13 @@ import { WebEvent } from '@/helpers/WebEvent';
 import { useAuthStore } from '@/stores/auth';
 import { applyChartsTheme } from '@/theme';
 
-const router = useRouter();
+const router = useRouter() as ReturnType<typeof useRouter> | undefined;
 const authStore = useAuthStore();
 const theme = useTheme();
 
 const getCurrentDate = () => dayjs();
 
-const layout = computed(() => router.currentRoute?.value?.meta?.layout ?? null);
+const layout = computed(() => router?.currentRoute?.value?.meta?.layout ?? null);
 
 const handleLogout = () => {
   authStore.logOut();
@@ -178,7 +178,7 @@ const createAccount = () => {
     source: 'app_bar_sidebar',
   });
 
-  router.push('/signup');
+  router?.push('/signup');
 };
 
 const drawer = ref(false);
