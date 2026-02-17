@@ -99,9 +99,6 @@ importers:
       vue-router:
         specifier: 4.6.4
         version: 4.6.4(vue@3.5.26(typescript@5.9.3))
-      vue-zustand:
-        specifier: 0.6.0
-        version: 0.6.0(vue@3.5.26(typescript@5.9.3))(zustand@5.0.8)
       vuetify:
         specifier: 3.11.6
         version: 3.11.6(typescript@5.9.3)(vue@3.5.26(typescript@5.9.3))
@@ -4050,12 +4047,6 @@ packages:
     peerDependencies:
       typescript: '>=5.0.0'
 
-  vue-zustand@0.6.0:
-    resolution: {integrity: sha512-injGg2Nxcq7RBXe4n92LmIOcAP3DxqHr3w5uVhkV1BnCIChjztXfsWEX9k8IP3zb7EmHnDV5SW0XtxY6TQct2Q==}
-    peerDependencies:
-      vue: '>=3.2.0'
-      zustand: '>=4.3.0'
-
   vue@3.5.26:
     resolution: {integrity: sha512-SJ/NTccVyAoNUJmkM9KUqPcYlY+u8OVL1X5EW9RIs3ch5H2uERxyyIUI4MRxVCSOiEcupX9xNGde1tL9ZKpimA==}
     peerDependencies:
@@ -4198,24 +4189,6 @@ packages:
 
   zod@3.25.76:
     resolution: {integrity: sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ==}
-
-  zustand@5.0.8:
-    resolution: {integrity: sha512-gyPKpIaxY9XcO2vSMrLbiER7QMAMGOQZVRdJ6Zi782jkbzZygq5GI9nG8g+sMgitRtndwaBSl7uiqC49o1SSiw==}
-    engines: {node: '>=12.20.0'}
-    peerDependencies:
-      '@types/react': '>=18.0.0'
-      immer: '>=9.0.6'
-      react: '>=18.0.0'
-      use-sync-external-store: '>=1.2.0'
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-      immer:
-        optional: true
-      react:
-        optional: true
-      use-sync-external-store:
-        optional: true
 
 snapshots:
 
@@ -8319,14 +8292,6 @@ snapshots:
       '@vue/language-core': 3.2.2
       typescript: 5.9.3
 
-  vue-zustand@0.6.0(vue@3.5.26(typescript@5.9.3))(zustand@5.0.8):
-    dependencies:
-      '@vueuse/core': 10.11.1(vue@3.5.26(typescript@5.9.3))
-      vue: 3.5.26(typescript@5.9.3)
-      zustand: 5.0.8
-    transitivePeerDependencies:
-      - '@vue/composition-api'
-
   vue@3.5.26(typescript@5.9.3):
     dependencies:
       '@vue/compiler-dom': 3.5.26
@@ -8470,5 +8435,3 @@ snapshots:
       type-fest: 2.19.0
 
   zod@3.25.76: {}
-
-  zustand@5.0.8: {}
