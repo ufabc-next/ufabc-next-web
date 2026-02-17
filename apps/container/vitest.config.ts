@@ -25,7 +25,6 @@ export default defineConfig({
         'src/main.ts',
         '**/*.d.ts',
       ],
-      all: true,
       reportOnFailure: true,
       thresholds: {
         statements: 80,
@@ -37,8 +36,10 @@ export default defineConfig({
     alias: {
       '@': '/src',
     },
-    deps: {
-      inline: ['vuetify'],
+    server: {
+      deps: {
+        inline: ['vuetify'],
+      },
     },
     setupFiles: ['./setup-tests.ts'],
   },

@@ -1,6 +1,8 @@
 import 'vuetify/styles';
 import 'element-plus/dist/index.css';
 import '@mdi/font/css/materialdesignicons.css';
+import 'highcharts/modules/accessibility';
+import 'highcharts/modules/annotations';
 
 import { QueryClient } from '@tanstack/query-core';
 import {
@@ -8,8 +10,6 @@ import {
   VueQueryPlugin,
 } from '@tanstack/vue-query';
 import elementPlus, { ElMessage } from 'element-plus';
-import 'highcharts/modules/accessibility';
-import 'highcharts/modules/annotations';
 import HighchartsVue from 'highcharts-vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';

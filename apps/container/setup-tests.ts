@@ -34,6 +34,17 @@ if (!window.visualViewport) {
   });
 }
 
+if (!window.CSS) {
+  Object.defineProperty(window, 'CSS', {
+    configurable: true,
+    value: {
+      supports: () => false,
+    },
+  });
+} else if (typeof window.CSS.supports !== 'function') {
+  window.CSS.supports = () => false;
+}
+
 beforeAll(() => server.listen());
 
 afterEach(() => server.resetHandlers());
