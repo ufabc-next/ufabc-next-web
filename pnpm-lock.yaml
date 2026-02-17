@@ -70,11 +70,11 @@ importers:
         specifier: 2.13.2
         version: 2.13.2(vue@3.5.28(typescript@5.9.3))
       highcharts:
-        specifier: 12.5.0
-        version: 12.5.0
+        specifier: 11.4.8
+        version: 11.4.8
       highcharts-vue:
-        specifier: 2.0.1
-        version: 2.0.1(highcharts@12.5.0)(vue@3.5.28(typescript@5.9.3))
+        specifier: 1.4.3
+        version: 1.4.3(highcharts@11.4.8)(vue@3.5.28(typescript@5.9.3))
       ics:
         specifier: ^3.5.0
         version: 3.8.1
@@ -2711,22 +2711,14 @@ packages:
   headers-polyfill@4.0.3:
     resolution: {integrity: sha512-IScLbePpkvO846sIwOtOTDjutRMWdXdJmXdMvk6gCBHxFO8d+QKOQedyZSxFTTFYRSmlgSTDtXqqq4pcenBXLQ==}
 
-  highcharts-vue@2.0.1:
-    resolution: {integrity: sha512-7yVaKvsWlx7OgmKFXE2D99fi/0tr2A85H4KUz3jL7CRQhAwvEvXgtDIyTBGLHJsOC5L9VlppAI7k6KfIi0j0hg==}
+  highcharts-vue@1.4.3:
+    resolution: {integrity: sha512-qIy9EFuLIgOw+reNkTvu0pvMBcSE0BAPtONAqZoEl0qaAIpGxiyXqhRNPDufWieSC0YlybpCznxE8EK19Kcg+A==}
     peerDependencies:
       highcharts: '>=5.0.0'
-      vue: '>=3.0.0'
+      vue: '>=1.0.0'
 
-  highcharts@12.5.0:
-    resolution: {integrity: sha512-uNSSv1KqRLNvkyXlf1FbeGWB1mJ/8/IYpVeqYiTIop5Wo8peUvNyzUfLa58vILsmXyz+XrETtgKIEOcSgBBKuQ==}
-    peerDependencies:
-      jspdf: ^3.0.0
-      svg2pdf.js: ^2.6.0
-    peerDependenciesMeta:
-      jspdf:
-        optional: true
-      svg2pdf.js:
-        optional: true
+  highcharts@11.4.8:
+    resolution: {integrity: sha512-5Tke9LuzZszC4osaFisxLIcw7xgNGz4Sy3Jc9pRMV+ydm6sYqsPYdU8ELOgpzGNrbrRNDRBtveoR5xS3SzneEA==}
 
   hookable@5.5.3:
     resolution: {integrity: sha512-Yc+BQe8SvoXH1643Qez1zqLRmbA5rCL+sSmk6TVos0LWVfNIB7PGncdlId77WzLGSIB5KaWgTaNTs2lNVEI6VQ==}
@@ -6786,12 +6778,12 @@ snapshots:
 
   headers-polyfill@4.0.3: {}
 
-  highcharts-vue@2.0.1(highcharts@12.5.0)(vue@3.5.28(typescript@5.9.3)):
+  highcharts-vue@1.4.3(highcharts@11.4.8)(vue@3.5.28(typescript@5.9.3)):
     dependencies:
-      highcharts: 12.5.0
+      highcharts: 11.4.8
       vue: 3.5.28(typescript@5.9.3)
 
-  highcharts@12.5.0: {}
+  highcharts@11.4.8: {}
 
   hookable@5.5.3: {}
 
