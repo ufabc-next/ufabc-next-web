@@ -6,18 +6,6 @@ type AuthState = {
   token: string | null;
 };
 
-const decodeJwtPayload = (token: string): User | null => {
-  const [, payload = ''] = token.split('.');
-  if (!payload) return null;
-  const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
-  const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
-  try {
-    return JSON.parse(atob(padded)) as User;
-  } catch {
-    return null;
-  }
-};
-
 export const useAuthStore = defineStore('auth', {
   persist: true,
   state: (): AuthState => {
@@ -31,21 +19,11 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     authenticate(token: string) {
-      if (!token) {
-        this.token = null;
-        this.user = null;
-        return;
+      if (token) {
+        const user = JSON.parse(atob(token.split('.')[1])) as User;
+        this.token = token;
+        this.user = user;
       }
-
-      const user = decodeJwtPayload(token);
-      if (!user) {
-        this.token = null;
-        this.user = null;
-        return;
-      }
-
-      this.token = token;
-      this.user = user;
     },
     logOut(redirect = true) {
       localStorage.removeItem('auth');
