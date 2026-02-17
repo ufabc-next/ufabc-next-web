@@ -14,10 +14,10 @@
   "devDependencies": {
     "@commitlint/cli": "19.8.1",
     "@commitlint/config-conventional": "19.8.1",
-    "eslint": "^9.33.0",
     "@ufabc-next/eslint-config": "workspace:*",
-    "prettier": "^3.1.0",
-    "turbo": "^2.5.3"
+    "eslint": "^9.33.0",
+    "prettier": "^3.8.1",
+    "turbo": "^2.8.9"
   },
   "dependencies": {
     "@vitest/coverage-v8": "^3.2.4",
