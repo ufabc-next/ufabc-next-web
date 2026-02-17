@@ -31,11 +31,21 @@ export const useAuthStore = defineStore('auth', {
   },
   actions: {
     authenticate(token: string) {
-      if (token) {
-        const user = decodeJwtPayload(token);
-        this.token = token;
-        if (user) this.user = user;
+      if (!token) {
+        this.token = null;
+        this.user = null;
+        return;
       }
+
+      const user = decodeJwtPayload(token);
+      if (!user) {
+        this.token = null;
+        this.user = null;
+        return;
+      }
+
+      this.token = token;
+      this.user = user;
     },
     logOut(redirect = true) {
       localStorage.removeItem('auth');

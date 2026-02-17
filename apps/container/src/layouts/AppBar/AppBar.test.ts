@@ -32,7 +32,7 @@ describe('<AppBar />', () => {
       },
     } as unknown as ReturnType<typeof useRouter>);
     authStore = useAuthStore();
-    authStore.authenticate('mock-token');
+    authStore.token = 'mock-token';
     authStore.user = mockedUser;
   });
 
@@ -103,6 +103,8 @@ describe('<AppBar />', () => {
       }),
     ).not.toThrow();
 
-    expect(screen.getAllByRole('img', { name: 'logo do UFABC Next' })).toHaveLength(2);
+    expect(screen.getAllByRole('img', { name: 'logo do UFABC Next' })).toHaveLength(
+      2,
+    );
   });
 });
