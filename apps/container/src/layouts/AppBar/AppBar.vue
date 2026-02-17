@@ -167,7 +167,7 @@ const theme = useTheme();
 
 const getCurrentDate = () => dayjs();
 
-const layout = computed(() => router.currentRoute.value.meta.layout ?? null);
+const layout = computed(() => router.currentRoute?.value?.meta?.layout ?? null);
 
 const handleLogout = () => {
   authStore.logOut();
