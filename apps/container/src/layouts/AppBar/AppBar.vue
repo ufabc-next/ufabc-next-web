@@ -258,6 +258,11 @@ const internalNavigationItems = [
 const apiURL = api.defaults.baseURL ?? 'https://api.v2.ufabcnext.com';
 
 const externalNavigationItems = [
+    {
+    title: 'Discord',
+    icon: 'mdi-forum',
+    url: 'https://discord.gg/7BBzDwRXSg',
+  },
   {
     title: 'Snapshot da Matrícula',
     icon: 'mdi-open-in-new',
@@ -268,6 +273,7 @@ const externalNavigationItems = [
     icon: 'mdi-download',
     url: 'https://chrome.google.com/webstore/detail/ufabc-next/gphjopenfpnlnffmhhhhdiecgdcopmhk',
   },
+
   ...(authStore.user?.permissions?.includes('admin')
     ? [
         {
