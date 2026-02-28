@@ -228,10 +228,8 @@ const subjects = useInfiniteQuery({
   queryKey: [
     'stats',
     'disciplinas',
-    selectedSeason,
-    pages.value.subjects,
-    orderBy,
-    filterByPeriod,
+    'subjects',
+    params.value,
   ],
   getNextPageParam: (
     lastPage: { data: PageableReturn<StatsSubject> },
@@ -252,10 +250,7 @@ const courses = useInfiniteQuery({
     'stats',
     'disciplinas',
     'courses',
-    selectedSeason,
-    pages.value.courses,
-    orderBy,
-    filterByPeriod,
+    params.value,
   ],
   getNextPageParam: (
     lastPage: { data: PageableReturn<StatsCourse> },
@@ -276,10 +271,7 @@ const classes = useInfiniteQuery({
     'stats',
     'disciplinas',
     'classes',
-    selectedSeason,
-    pages.value.classes,
-    orderBy,
-    filterByPeriod,
+    params.value,
   ],
   getNextPageParam: (
     lastPage: { data: PageableReturn<StatsClass> },
@@ -359,13 +351,13 @@ const matriculaNameLabel = (data: StatsClass | StatsSubject | StatsCourse) => {
 
 const { data: deficit, isPending: isPendingDeficit } = useQuery({
   queryFn: () => StatsSubjects.getOverview({ season: selectedSeason.value }),
-  queryKey: ['stats', 'disciplinas', 'overview'],
+  queryKey: ['stats', 'disciplinas', 'overview', selectedSeason.value],
   select: ({ data }) => -data.data[0]?.deficit,
 });
 
 const { data: usage, isPending: isPendingUsage } = useQuery({
   queryFn: () => StatsSubjects.getUsage({ season: selectedSeason.value }),
-  queryKey: ['stats', 'usage'],
+  queryKey: ['stats', 'usage', selectedSeason.value],
   select: ({ data }) => data,
 });
 

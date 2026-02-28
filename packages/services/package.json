@@ -12,10 +12,11 @@
   "devDependencies": {
     "@ufabc-next/eslint-config": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.2",
+    "vite": "^6.3.5"
   },
   "dependencies": {
     "@ufabc-next/types": "workspace:*",
-    "axios": "1.13.2"
+    "axios": "1.13.5"
   }
 }
