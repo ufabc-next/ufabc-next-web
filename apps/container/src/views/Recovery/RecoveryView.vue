@@ -21,8 +21,8 @@ const { handleSubmit, meta } = useForm({
 });
 
 const email = useField('email');
-const ra = useField<string>('ra.ra');
-const raConfirm = useField('ra.confirm');
+const ra = useField<string>('ra');
+const raConfirm = useField('raConfirm');
 
 const isFetchEmailEnabled = computed(
   () => raConfirm.value.value === ra.value.value,
@@ -75,10 +75,12 @@ watch(
 );
 
 const recoveryStep = ref(0);
+const raAdjusted = ref(false);
 
 const { mutate: mutateRecover, isPending: isPendingSubmit } = useMutation({
   mutationFn: Users.recovery,
-  onSuccess: () => {
+  onSuccess: (response) => {
+    raAdjusted.value = response.data?.raAdjusted || false;
     recoveryStep.value = 2;
   },
   onError: () => {
@@ -86,9 +88,13 @@ const { mutate: mutateRecover, isPending: isPendingSubmit } = useMutation({
   },
 });
 
-const onSubmit = handleSubmit(({ email }) =>
-  mutateRecover(email.toLowerCase()),
-);
+const onSubmit = handleSubmit((values) => {
+  const payload = {
+    email: values.email.toLowerCase(),
+    ra: values.ra,
+  };
+  mutateRecover(payload);
+});
 </script>
 
 <template>
@@ -217,7 +223,15 @@ const onSubmit = handleSubmit(({ email }) =>
           <h1 style="font-size: 26px; font-weight: 700" class="mb-4">
             Sua conta será recuperada! 🎉
           </h1>
-          <p class="mb-4">
+          <p v-if="!raAdjusted" class="mb-4">
+            Você recebeu um email para recuperar sua conta,
+            <a href="https://www.outlook.com/aluno.ufabc.edu.br" target="_blank"
+              >clique aqui</a
+            >
+            para acessar seu email institucional.
+          </p>
+          <p v-else class="mb-4">
+            Detectamos que seu RA não estava atualizado e já o ajustamos para você!
             Você recebeu um email para recuperar sua conta,
             <a href="https://www.outlook.com/aluno.ufabc.edu.br" target="_blank"
               >clique aqui</a
