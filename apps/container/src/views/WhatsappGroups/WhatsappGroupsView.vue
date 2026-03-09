@@ -359,7 +359,15 @@ const isDarkMode = computed(() => theme.global.current.value.dark);
 const userRa = computed(
   () => authStore.user?.ra || (route.query.ra ? Number(route.query.ra) : null),
 );
-const componentSelected = computed(() => route.query.component ?? '');
+const componentSelected = computed(() => {
+  const componentQuery = route.query.component;
+
+  if (Array.isArray(componentQuery)) {
+    return componentQuery[0] ?? '';
+  }
+
+  return componentQuery ?? '';
+});
 const isUserLoggedIn = computed(() => authStore.isLoggedIn);
 
 const whatsappRestrictionDialog = ref(false);
@@ -377,11 +385,6 @@ const shouldFetchGroupsByRa = ref(false);
 const shouldFetchComponents = ref(false);
 const shouldFetchGroupsByCourse = ref(false);
 const selectedSearchType = ref<SearchType>('ra');
-
-if (componentSelected.value) {
-  selectedSearchType.value = 'component';
-  searchComponentQuery.value = String(componentSelected.value);
-}
 
 const resultsPage = ref(1);
 const showOverlay = ref(false);
@@ -491,6 +494,21 @@ const debouncedComponentSearch = useDebounceFn((query: string) => {
     shouldFetchComponents.value = false;
   }
 }, 300);
+
+watch(
+  componentSelected,
+  (newComponent) => {
+    if (!newComponent) {
+      return;
+    }
+
+    selectedSearchType.value = 'component';
+    searchComponentQuery.value = String(newComponent);
+    resultsPage.value = 1;
+    debouncedComponentSearch(String(newComponent));
+  },
+  { immediate: true },
+);
 
 watch(searchRaQuery, (newRa) => {
   if (selectedSearchType.value === 'ra' && newRa !== null) {
