@@ -359,6 +359,7 @@ const isDarkMode = computed(() => theme.global.current.value.dark);
 const userRa = computed(
   () => authStore.user?.ra || (route.query.ra ? Number(route.query.ra) : null),
 );
+const componentSelected = computed(() => route.query.component ?? '');
 const isUserLoggedIn = computed(() => authStore.isLoggedIn);
 
 const whatsappRestrictionDialog = ref(false);
@@ -376,6 +377,11 @@ const shouldFetchGroupsByRa = ref(false);
 const shouldFetchComponents = ref(false);
 const shouldFetchGroupsByCourse = ref(false);
 const selectedSearchType = ref<SearchType>('ra');
+
+if (componentSelected.value) {
+  selectedSearchType.value = 'component';
+  searchComponentQuery.value = String(componentSelected.value);
+}
 
 const resultsPage = ref(1);
 const showOverlay = ref(false);
