@@ -478,17 +478,7 @@ const coursesList = computed(() => {
 
 // Componentes filtrados por curso
 const filteredByCourse = computed(() => {
-  console.log('[WhatsappGroupsView] filteredByCourse recomputed');
   if (!allComponentsData.value.length || !searchCourseQuery.value) {
-    console.log(
-      '[WhatsappGroupsView] No components or no course selected, returning empty array',
-    );
-    console.log(
-      `[WhatsappGroupsView] allComponentsData length: ${allComponentsData.value.length}`,
-    );
-    console.log(
-      `[WhatsappGroupsView] searchCourseQuery value: ${searchCourseQuery.value}`,
-    );
     return [];
   }
 
@@ -497,17 +487,8 @@ const filteredByCourse = computed(() => {
   );
 
   if (!selectedCourse) {
-    console.log(
-      '[WhatsappGroupsView] Selected course not found, returning empty array',
-    );
     return [];
   }
-
-  console.log(
-    `[WhatsappGroupsView] Filtering components for course: ${selectedCourse.name} with UF codes: ${selectedCourse.ufComponentCodes.join(
-      ', ',
-    )}`,
-  );
 
   return allComponentsData.value.filter((component) => {
     return (
@@ -519,14 +500,7 @@ const filteredByCourse = computed(() => {
 
 // Componentes do curso com filtro adicional de texto e enriquecidos
 const filteredAndSearchedCourseComponents = computed(() => {
-  console.log(
-    '[WhatsappGroupsView] filteredAndSearchedCourseComponents recomputed',
-  );
   const courseFiltered = filteredByCourse.value;
-
-  console.log(
-    `[WhatsappGroupsView] Components after course filter: ${courseFiltered.length}`,
-  );
 
   // Enriquece os componentes com dados de professores
   const enrichedComponents = courseFiltered.map(enrichComponent);
