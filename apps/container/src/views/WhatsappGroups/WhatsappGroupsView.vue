@@ -348,6 +348,8 @@ import { useAuthStore } from '@/stores/auth';
 import { extensionURL, studentRecordURL } from '@/utils/consts';
 import { normalizeText } from '@/utils/normalizeTextSearch';
 
+import { getMockedGroups } from './utils/mockedGroups';
+
 type SearchType = 'ra' | 'component' | 'course';
 const WHATSAPP_GROUPS_SEASON = '2026:1';
 
@@ -356,6 +358,7 @@ const route = useRoute();
 const authStore = useAuthStore();
 const theme = useTheme();
 const isDarkMode = computed(() => theme.global.current.value.dark);
+
 const userRa = computed(
   () => authStore.user?.ra || (route.query.ra ? Number(route.query.ra) : null),
 );
@@ -390,56 +393,7 @@ const capitalizeName = (name: string): string => {
     .join(' ');
 };
 
-const mockGroups = ref([
-  {
-    season: WHATSAPP_GROUPS_SEASON,
-    groupURL: 'https://chat.whatsapp.com/example1',
-    codigo: 'BCJ0205-15',
-    campus: 'sa' as const,
-    turma: 'B1',
-    turno: 'noturno',
-    subject: 'Fenômenos Térmicos',
-    teoria: 'Eduardo De Moraes Gregores',
-    pratica: 'Marcos De Abreu Avila',
-    uf_cod_turma: 'BCJ0205-15',
-  },
-  {
-    season: WHATSAPP_GROUPS_SEASON,
-    groupURL: 'https://chat.whatsapp.com/example2',
-    codigo: 'BCM0506-15',
-    campus: 'sa' as const,
-    turma: 'A2',
-    turno: 'matutino',
-    subject: 'Comunicação e Redes',
-    teoria: 'Maria Silva Santos',
-    pratica: 'João Pedro Oliveira',
-    uf_cod_turma: 'BCM0506-15',
-  },
-  {
-    season: WHATSAPP_GROUPS_SEASON,
-    groupURL: 'https://chat.whatsapp.com/example3',
-    codigo: 'BCN0404-15',
-    campus: 'sa' as const,
-    turma: 'C1',
-    turno: 'matutino',
-    subject: 'Geometria Analítica',
-    teoria: 'Ana Carolina Lima',
-    pratica: 'Roberto Carlos Souza',
-    uf_cod_turma: 'BCN0404-15',
-  },
-  {
-    season: WHATSAPP_GROUPS_SEASON,
-    groupURL: 'https://chat.whatsapp.com/example4',
-    codigo: 'BCS0001-15',
-    campus: 'sbc' as const,
-    turma: 'B3',
-    turno: 'noturno',
-    subject: 'Base Experimental das Ciências Naturais',
-    teoria: 'Pedro Henrique Costa',
-    pratica: 'Fernanda Rodrigues',
-    uf_cod_turma: 'BCS0001-15',
-  },
-]);
+const mockGroups = ref(getMockedGroups(WHATSAPP_GROUPS_SEASON));
 
 const debouncedRaSearch = useDebounceFn((raValue: number) => {
   if (raValue && String(raValue).length >= 8) {
