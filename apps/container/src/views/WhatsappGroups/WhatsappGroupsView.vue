@@ -359,7 +359,7 @@ const isDarkMode = computed(() => theme.global.current.value.dark);
 const userRa = computed(
   () => authStore.user?.ra || (route.query.ra ? Number(route.query.ra) : null),
 );
-const componentSelected = computed(() => {
+const componentSelectedByQueryUrl = computed(() => {
   const componentQuery = route.query.component;
 
   if (Array.isArray(componentQuery)) {
@@ -496,7 +496,7 @@ const debouncedComponentSearch = useDebounceFn((query: string) => {
 }, 300);
 
 watch(
-  componentSelected,
+  componentSelectedByQueryUrl,
   (newComponent) => {
     if (!newComponent) {
       return;
