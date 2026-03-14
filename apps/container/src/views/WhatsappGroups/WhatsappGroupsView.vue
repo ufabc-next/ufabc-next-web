@@ -612,6 +612,7 @@ const filteredByComponent = computed(() => {
   const normalizedQuery = normalizeText(searchComponentQuery.value);
 
   return allComponentsData.value.map(enrichComponent).filter((component) => {
+    const normalizedComponentCode = normalizeText(component.uf_cod_turma || '');
     const normalizedSubject = normalizeText(component.subject || '');
     const normalizedCodigo = normalizeText(component.codigo || '');
     const normalizedTeoria = normalizeText(component.teoria || '');
@@ -621,7 +622,8 @@ const filteredByComponent = computed(() => {
       normalizedSubject.includes(normalizedQuery) ||
       normalizedCodigo.includes(normalizedQuery) ||
       normalizedTeoria.includes(normalizedQuery) ||
-      normalizedPratica.includes(normalizedQuery)
+      normalizedPratica.includes(normalizedQuery) ||
+      normalizedComponentCode.includes(normalizedQuery)
     );
   });
 });
