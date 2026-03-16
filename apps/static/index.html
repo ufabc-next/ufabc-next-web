@@ -261,6 +261,109 @@
       .hidden {
         display: none;
       }
+
+      .mobile-info-toast {
+        display: none;
+      }
+
+      .mobile-info-toast.notification-dark {
+        background: #1e1e1e !important;
+        border-color: #2d2d2d !important;
+        color: #ffffff !important;
+        cursor: pointer !important;
+      }
+
+      .mobile-info-toast.notification-dark .mobile-info-toast__title {
+        color: #ffffff !important;
+      }
+
+      .mobile-info-toast.notification-dark .mobile-info-toast__content {
+        color: rgba(255, 255, 255, 0.87) !important;
+      }
+
+      .mobile-info-toast.notification-light {
+        background: #ffffff !important;
+        border-color: #e0e0e0 !important;
+        color: #000000 !important;
+        cursor: pointer !important;
+        transition:
+          transform 0.2s ease,
+          box-shadow 0.2s ease !important;
+      }
+
+      .mobile-info-toast.notification-light:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+      }
+
+      .mobile-info-toast.notification-light .mobile-info-toast__title {
+        color: #000000 !important;
+      }
+
+      .mobile-info-toast.notification-light .mobile-info-toast__content {
+        color: rgba(0, 0, 0, 0.87) !important;
+      }
+
+      @media only screen and (max-width: 768px) {
+        .mobile-info-toast {
+          position: fixed;
+          left: 12px;
+          right: 12px;
+          bottom: 14px;
+          z-index: 1200;
+          border-radius: 14px;
+          padding: 12px 14px;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .mobile-info-toast.is-visible {
+          display: flex;
+        }
+
+        .mobile-info-toast__icon {
+          flex: 0 0 auto;
+          width: 24px;
+          height: 24px;
+          border-radius: 50%;
+          background: #2E7EED;
+          color: #fff;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 700;
+          font-size: 14px;
+          margin-top: 0;
+        }
+
+        .mobile-info-toast__title {
+          font-weight: 600;
+          font-size: 14px;
+          margin: 0 0 4px 0;
+        }
+
+        .mobile-info-toast__content {
+          flex: 1;
+          font-size: 13px;
+          line-height: 1.4;
+          text-align: center;
+        }
+
+        .mobile-info-toast__close {
+          flex: 0 0 auto;
+          border: 0;
+          background: transparent;
+          color: inherit;
+          font-size: 24px;
+          line-height: 1;
+          padding: 0;
+          margin: -4px -2px -2px 0;
+          cursor: pointer;
+        }
+
+
+      }
     </style>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.2.1/mustache.js"></script>
@@ -386,9 +489,7 @@
                       Já tenho conta mas estou com problemas para acessar
                     </a>
                   </div>
-                  <div class="form-note">
-                    <p>O acesso está limitado somente à alunos por enquanto</p>
-                  </div>
+                
                 </div>
               </div>
               <div class="col-md-12 col-lg-7 text-center">
@@ -1113,6 +1214,42 @@
       $(function () {
         $('[data-toggle="popover"]').popover();
       });
+    </script>
+    <script>
+      (function () {
+        const mobileMedia = window.matchMedia('(max-width: 768px)');
+
+        if (!mobileMedia.matches) {
+          return;
+        }
+
+        const prefersDark = window.matchMedia(
+          '(prefers-color-scheme: dark)',
+        ).matches;
+        const toastThemeClass = 'notification-light';
+
+        const toast = document.createElement('div');
+        toast.className = `mobile-info-toast is-visible ${toastThemeClass}`;
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.innerHTML = `
+          <span class="mobile-info-toast__icon" aria-hidden="true">i</span>
+          <div class="mobile-info-toast__content">
+              Para melhor experiência, todas as contas foram migradas para acesso via e-mail institucional vinculado ao Google.
+          </div>
+          <button class="mobile-info-toast__close" type="button" aria-label="Fechar aviso">&times;</button>
+        `;
+
+        const closeToast = () => {
+          toast.remove();
+        };
+
+        toast
+          .querySelector('.mobile-info-toast__close')
+          .addEventListener('click', closeToast);
+
+        document.body.appendChild(toast);
+      })();
     </script>
   </body>
 </html>
