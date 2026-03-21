@@ -34,7 +34,7 @@ const {
   error: fetchEmailError,
 } = useQuery({
   queryKey: ['email'],
-  queryFn: () => Users.getEmail(ra.value.value),
+  queryFn: () => Users.getEmail(Number(ra.value.value)),
   enabled: false,
 });
 
@@ -91,7 +91,7 @@ const { mutate: mutateRecover, isPending: isPendingSubmit } = useMutation({
 const onSubmit = handleSubmit((values) => {
   const payload = {
     email: values.email.toLowerCase(),
-    ra: values.ra,
+    ra: Number(values.ra),
   };
   mutateRecover(payload);
 });

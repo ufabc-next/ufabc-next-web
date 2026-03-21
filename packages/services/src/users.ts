@@ -27,7 +27,7 @@ export type EmailResponse = {
 
 export type RecoveryRequest = {
   email: string;
-  ra: string;
+  ra: number;
 };
 
 export const Users = {
@@ -40,6 +40,6 @@ export const Users = {
   info: () => api.get<User>('/users/info'),
   facebookAuth: (params: FacebookAuth) =>
     api.post<FacebookConfirmResponse>('/users/facebook', params),
-  getEmail: (ra: string) =>
+  getEmail: (ra: number) =>
     api.get<EmailResponse>('/users/check-email', { params: { ra } }),
 };

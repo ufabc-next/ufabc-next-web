@@ -380,7 +380,7 @@ const {
   error: fetchEmailError,
 } = useQuery({
   queryKey: ['email'],
-  queryFn: () => Users.getEmail(ra.value.value),
+  queryFn: () => Users.getEmail(Number(ra.value.value)),
   enabled: false,
 });
 
