@@ -13,13 +13,30 @@
 
           <v-row>
             <v-col cols="12">
+              <v-select
+                v-model="courseId.value.value"
+                :items="coursesList"
+                item-title="name"
+                item-value="id"
+                :error-messages="courseId.errorMessage.value"
+                label="Selecionar um Curso"
+                placeholder="Selecione um curso"
+                variant="outlined"
+                prepend-inner-icon="mdi-school"
+                :loading="isCoursesLoading"
+                :disabled="isPendingSubmit"
+              />
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col cols="12">
               <v-text-field
-                v-model="courseName.value.value"
-                :error-messages="courseName.errorMessage.value"
-                label="Nome do Curso"
-                placeholder="Digite o nome do curso"
-                outlined
-                dense
+                v-model="disciplineName.value.value"
+                :error-messages="disciplineName.errorMessage.value"
+                label="Nome da Disciplina"
+                placeholder="Digite o nome da disciplina"
+                variant="outlined"
                 :disabled="isPendingSubmit"
               />
             </v-col>
@@ -32,7 +49,7 @@
                 :error-messages="announcementText.errorMessage.value"
                 label="Texto do Anúncio"
                 placeholder="Digite o texto do anúncio"
-                outlined
+                variant="outlined"
                 rows="4"
                 :disabled="isPendingSubmit"
               />
@@ -59,14 +76,14 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation } from '@tanstack/vue-query';
-import { sendAnnouncement } from '@ufabc-next/services/announcements';
-import { RequestError } from '@ufabc-next/types';
+import { useMutation, useQuery } from '@tanstack/vue-query';
+import { sendAnnouncement, Whatsapp } from '@ufabc-next/services';
+import { RequestError, SearchCourseItem } from '@ufabc-next/types';
 import { toTypedSchema } from '@vee-validate/zod';
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
 import { useField, useForm } from 'vee-validate';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 
 import { PaperCard } from '@/components/PaperCard';
 import { useAuthStore } from '@/stores/auth';
@@ -74,6 +91,7 @@ import { useAuthStore } from '@/stores/auth';
 import { announcementValidationSchema } from './announcementValidationSchema';
 
 const authStore = useAuthStore();
+const isUserLoggedIn = computed(() => !!authStore.user);
 const successMessage = ref<string>('');
 
 const validationSchema = toTypedSchema(announcementValidationSchema);
@@ -81,13 +99,30 @@ const validationSchema = toTypedSchema(announcementValidationSchema);
 const { handleSubmit, meta, resetForm } = useForm({
   validationSchema,
   initialValues: {
-    courseName: '',
+    courseId: undefined,
+    disciplineName: '',
     announcementText: '',
   },
 });
 
-const courseName = useField('courseName');
+const courseId = useField<number | undefined>('courseId');
+const disciplineName = useField('disciplineName');
 const announcementText = useField('announcementText');
+
+const { data: coursesData, isLoading: isCoursesLoading } = useQuery({
+  queryKey: ['courses'],
+  queryFn: () => Whatsapp.getCourses(),
+  staleTime: 1000 * 60 * 60,
+});
+
+const coursesList = computed(() => {
+  if (!coursesData.value) return [];
+  return coursesData.value
+    .filter((course: SearchCourseItem) => course.name && course.name.trim())
+    .sort((a: SearchCourseItem, b: SearchCourseItem) =>
+      a.name.localeCompare(b.name),
+    );
+});
 
 const { mutate: sendAnnouncementData, isPending: isPendingSubmit } =
   useMutation({
@@ -113,9 +148,12 @@ const { mutate: sendAnnouncementData, isPending: isPendingSubmit } =
 
 const onSubmit = handleSubmit((values) => {
   successMessage.value = '';
+  const selectedCourse = coursesList.value.find(
+    (course: SearchCourseItem) => course.id === values.courseId,
+  );
 
   sendAnnouncementData({
-    courseName: values.courseName,
+    courseName: selectedCourse?.name ?? '',
     announcementText: values.announcementText,
   });
 });

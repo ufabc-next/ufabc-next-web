@@ -1,3 +1,5 @@
+import { apiCommunications } from "./api";
+
 type AnnouncementsData = {
   courseName: string;
   announcementText: string;
@@ -13,13 +15,7 @@ type AnnouncementsResult = {
 export const sendAnnouncement = async (
   data: AnnouncementsData,
 ): Promise<AnnouncementsResult> => {
-  const response = {
-    status: 201,
-  }
+  const response = await apiCommunications.post('/announcements', data);
 
-  if (response.status === 201) {
-    return { success: true, data: data };
-  }
-
-  throw new Error('Falha ao enviar o anuncio');
+  return response.data
 };
