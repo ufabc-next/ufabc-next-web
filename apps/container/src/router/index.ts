@@ -16,6 +16,7 @@ const RecoveryView = () => import('@/views/Recovery/RecoveryView.vue');
 const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
 const WhatsappGroupsView = () =>
   import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
+const AnnouncementsView = () => import('@/views/Announcements/AnnouncementsView.vue');
 const HelpView = () => import('@/views/Help/HelpView.vue');
 
 const isJWT = (token: string) =>
@@ -120,6 +121,17 @@ const routes: Array<RouteRecordRaw> = [
     meta: {
       title: 'Grupos do Whatsapp',
       layout: 'include-sidebar',
+    },
+  },
+  {
+    path: '/announcements',
+    name: 'announcements',
+    component: AnnouncementsView,
+    meta: {
+      title: 'Anúncios',
+      layout: 'include-sidebar',
+      auth: true,
+      confirmed: true,
     },
   },
   {

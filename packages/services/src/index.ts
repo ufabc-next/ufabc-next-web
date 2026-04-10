@@ -1,3 +1,4 @@
+export * from './announcements';
 export * from './api';
 export * from './comments';
 export * from './enrollments';

@@ -216,6 +216,9 @@ const toggleTheme = () => {
   updateHighchartsThemeClass(newTheme === 'dark');
 };
 
+const hasAdminPermission = computed(() => authStore.user?.permissions?.includes('admin'));
+const hasAccessToAnnouncements = computed(() => authStore.user?.permissions?.includes('admin') || authStore.user?.permissions?.includes('announcements'));
+
 const internalNavigationItems = [
   {
     title: 'Reviews',
@@ -248,6 +251,16 @@ const internalNavigationItems = [
     releaseDate: dayjs('07/10/2025'),
     locked: false,
   },
+  ...(hasAccessToAnnouncements.value
+    ? [
+        {
+          title: 'Anúncios',
+          icon: 'mdi-bullhorn',
+          route: `/announcements`,
+          locked: !hasAccessToAnnouncements.value,
+        },
+      ]
+    : []),
   {
     title: 'Calengrade',
     icon: 'mdi-calendar',
@@ -288,7 +301,7 @@ const externalNavigationItems = [
     url: 'https://chrome.google.com/webstore/detail/ufabc-next/gphjopenfpnlnffmhhhhdiecgdcopmhk',
   },
 
-  ...(authStore.user?.permissions?.includes('admin')
+  ...(hasAdminPermission.value
     ? [
         {
           title: 'Monitoramento de Jobs',
@@ -297,7 +310,7 @@ const externalNavigationItems = [
         },
       ]
     : []),
-  ...(authStore.user?.permissions?.includes('admin')
+  ...(hasAdminPermission.value
     ? [
         {
           title: 'Monitoramento de Jobs V2',
