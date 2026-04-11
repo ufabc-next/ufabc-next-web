@@ -65,7 +65,7 @@
 
 <script setup lang="ts">
 import { useMutation, useQuery } from '@tanstack/vue-query';
-import { sendAnnouncement, Whatsapp } from '@ufabc-next/services';
+import { Announcements, Whatsapp } from '@ufabc-next/services';
 import { RequestError, SearchCourseItem } from '@ufabc-next/types';
 import { toTypedSchema } from '@vee-validate/zod';
 import { AxiosError } from 'axios';
@@ -112,7 +112,7 @@ const coursesList = computed(() => {
 
 const { mutate: sendAnnouncementData, isPending: isPendingSubmit } =
   useMutation({
-    mutationFn: sendAnnouncement,
+    mutationFn: Announcements.sendAnnouncement,
     onSuccess: () => {
       resetForm();
       ElMessage({
@@ -132,11 +132,15 @@ const { mutate: sendAnnouncementData, isPending: isPendingSubmit } =
     },
   });
 
+// todo: update season dynamically based on current date or config (parser will allow this in future updates) -> reference WhasappGroupsVuew.vue
+const WHATSAPP_GROUPS_SEASON = '2026:1';
+
 const onSubmit = handleSubmit((values) => {
   successMessage.value = '';
 
   sendAnnouncementData({
     courseIdentifier: values.courseId,
+    season: WHATSAPP_GROUPS_SEASON,
     text: values.text,
   });
 });
