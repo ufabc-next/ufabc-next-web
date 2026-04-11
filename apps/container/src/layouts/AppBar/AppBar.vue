@@ -216,8 +216,11 @@ const toggleTheme = () => {
   updateHighchartsThemeClass(newTheme === 'dark');
 };
 
-const hasAdminPermission = computed(() => authStore.user?.permissions?.includes('admin'));
-const hasAccessToAnnouncements = computed(() => authStore.user?.permissions?.includes('admin') || authStore.user?.permissions?.includes('announcements'));
+const permissions = computed(() => authStore.user?.permissions ?? []);
+const hasAdminPermission = computed(() => permissions.value.includes('admin'));
+const hasAccessToAnnouncements = computed(
+  () => hasAdminPermission.value || permissions.value.includes('announcements')
+);
 
 const internalNavigationItems = [
   {
