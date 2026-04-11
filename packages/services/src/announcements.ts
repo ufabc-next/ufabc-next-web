@@ -1,8 +1,8 @@
 import { apiCommunications } from "./api";
 
 type AnnouncementsData = {
-  courseName: string;
-  announcementText: string;
+  courseIdentifier: number;
+  text: string;
 };
 
 type AnnouncementsResult = {
