@@ -22,7 +22,7 @@ export const apiParser = axios.create({
 });
 
 export const apiCommunications = axios.create({
-  baseURL: 'url-do-communications',
+  baseURL: 'https://communications.fundacaonexus.com/v2',
 });
 
 api.interceptors.request.use(async (config) => {
