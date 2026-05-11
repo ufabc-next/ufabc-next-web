@@ -146,6 +146,7 @@ import { ConceptsHorizontalChart } from '@/components/ConceptsHorizontalChart';
 import { ConceptsPieChart } from '@/components/ConceptsPieChart';
 import { PaperCard } from '@/components/PaperCard';
 import { transformConceptDataToObject } from '@/utils/transformConceptDataToObject';
+import { formatTeacherName } from '@/utils/formatName';
 
 const props = defineProps({
   subjectId: { type: String, required: true },
@@ -278,7 +279,15 @@ const shortedSpecifics = computed(() => {
     sorted.sort((a, b) => approveRating(a) - approveRating(b));
   }
 
-  return sorted;
+  // normalize teacher names to Title Case for display
+  const normalized = sorted.map((t) => {
+    if (t.teacher?.name) {
+      t.teacher.name = formatTeacherName(t.teacher.name);
+    }
+    return t;
+  });
+
+  return normalized;
 });
 </script>
 

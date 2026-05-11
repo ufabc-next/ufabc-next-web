@@ -93,6 +93,7 @@ import { CommentsList } from '@/components/CommentsList';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { PaperCard } from '@/components/PaperCard';
 import { conceptsColor } from '@/utils/consts';
+import { formatTeacherName } from '@/utils/formatName';
 
 const selectedSubject = ref<string>('Todas as matérias');
 
@@ -135,12 +136,12 @@ if (!teacherId.value) {
 
 const teacherName = computed(() => {
   if (subjectType.value === 'teoria e prática')
-    return (
-      props.enrollment?.pratica?.name || props.enrollment?.teoria?.name || ''
+    return formatTeacherName(
+      props.enrollment?.pratica?.name || props.enrollment?.teoria?.name || '',
     );
   if (subjectType.value === 'prática')
-    return props.enrollment?.pratica?.name || '';
-  return props.enrollment?.teoria?.name || '';
+    return formatTeacherName(props.enrollment?.pratica?.name || '');
+  return formatTeacherName(props.enrollment?.teoria?.name || '');
 });
 
 const subjectId = computed(() => props.enrollment?.subject._id ?? '');

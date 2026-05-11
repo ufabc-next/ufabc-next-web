@@ -9,7 +9,7 @@
       <v-row v-if="Number(teacherData?.data.general.count) > 0" class="pa-0">
         <v-col cols="12" md="5">
           <p class="text-h4 font-weight-bold text-primary mb-2">
-            {{ teacherData?.data.teacher.name }}
+            {{ formattedTeacherName }}
           </p>
           <v-chip
             v-for="(chip, index) in chips"
@@ -79,6 +79,7 @@ import { ConceptsPieChart } from '@/components/ConceptsPieChart';
 import { FeedbackAlert } from '@/components/FeedbackAlert';
 import { PaperCard } from '@/components/PaperCard';
 import { transformConceptDataToObject } from '@/utils/transformConceptDataToObject';
+import { formatTeacherName } from '@/utils/formatName';
 
 const props = defineProps({
   teacherId: { type: String, required: true },
@@ -177,4 +178,8 @@ const demandsAttendance = computed(() => {
     (grade) => grade.conceito === 'O',
   );
 });
+
+const formattedTeacherName = computed(() =>
+  formatTeacherName(teacherData.value?.data?.teacher?.name || ''),
+);
 </script>

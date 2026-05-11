@@ -352,15 +352,7 @@ const selectedSearchType = ref<SearchType>('ra');
 
 const queryResultsPage = ref(1);
 
-// helper para atualizar o nome dos professores do parser
-const capitalizeName = (name: string): string => {
-  if (!name) return '';
-  return name
-    .toLowerCase()
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
+import { formatTeacherName } from '@/utils/formatName';
 
 const debouncedRaSearch = useDebounceFn((raValue: number) => {
   if (!isUserLoggedIn.value) {
@@ -631,8 +623,8 @@ const componentsByCode = computed(() => {
     const praticaRaw =
       component.teachers?.find((t: any) => t.role === 'practice')?.name || '';
 
-    const teoria = capitalizeName(teoriaRaw);
-    const pratica = capitalizeName(praticaRaw);
+    const teoria = formatTeacherName(teoriaRaw);
+    const pratica = formatTeacherName(praticaRaw);
 
     grouped[component.ufClassroomCode] = {
       teoria,
