@@ -1,5 +1,3 @@
-@/Users/renan/.codex/RTK.md
-
 # AGENTS.md
 
 ## Scope
