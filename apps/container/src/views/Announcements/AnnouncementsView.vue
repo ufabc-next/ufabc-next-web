@@ -17,15 +17,15 @@
                 v-model="courseId.value.value"
                 :items="coursesList"
                 item-title="name"
-                item-value="id"
+                item-value="ufabcCourseIdentifier"
                 :error-messages="courseId.errorMessage.value"
                 label="Selecionar um Curso"
                 placeholder="Selecione um curso"
                 variant="outlined"
                 prepend-inner-icon="mdi-school"
                 :loading="isCoursesLoading"
-                :disabled="isPendingSubmit"
-                clearable
+                :disabled="isPendingSubmit || hasRestrictedCourseAccess"
+                :clearable="!hasRestrictedCourseAccess"
               />
             </v-col>
           </v-row>
@@ -71,10 +71,11 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
 import { useField, useForm } from 'vee-validate';
-import { computed, ref } from 'vue';
+import { computed, ref, watch } from 'vue';
 
 import { PaperCard } from '@/components/PaperCard';
 import { useAuthStore } from '@/stores/auth';
+import { PERMISSIONS } from '@/utils/consts';
 
 import { announcementValidationSchema } from './announcementValidationSchema';
 
@@ -101,14 +102,56 @@ const { data: coursesData, isLoading: isCoursesLoading } = useQuery({
   staleTime: 1000 * 60 * 60,
 });
 
+const permissions = computed(() => authStore.user?.permissions ?? []);
+const hasAdminPermission = computed(() =>
+  permissions.value.includes(PERMISSIONS.ADMIN),
+);
+const hasAnnouncementsPermission = computed(() =>
+  permissions.value.includes(PERMISSIONS.ANNOUNCEMENTS),
+);
+const hasAnnouncementsBccPermission = computed(() =>
+  permissions.value.includes(PERMISSIONS.ANNOUNCEMENTS_BCC),
+);
+const hasRestrictedCourseAccess = computed(
+  () =>
+    !hasAdminPermission.value &&
+    !hasAnnouncementsPermission.value &&
+    hasAnnouncementsBccPermission.value,
+);
+
+const bccCourse = computed(() =>
+  coursesData.value?.find(
+    (course: SearchCourseItem) =>
+      course.name === 'Bacharelado em Ciência da Computação',
+  ),
+);
+
 const coursesList = computed(() => {
   if (!coursesData.value) return [];
-  return coursesData.value
+  const availableCourses = hasRestrictedCourseAccess.value
+    ? coursesData.value.filter(
+        (course: SearchCourseItem) =>
+          course.ufabcCourseIdentifier ===
+          bccCourse.value?.ufabcCourseIdentifier,
+      )
+    : coursesData.value;
+
+  return availableCourses
     .filter((course: SearchCourseItem) => course.name && course.name.trim())
     .sort((a: SearchCourseItem, b: SearchCourseItem) =>
       a.name.localeCompare(b.name),
     );
 });
+
+watch(
+  [bccCourse, hasRestrictedCourseAccess],
+  ([course, isRestricted]) => {
+    if (isRestricted && course) {
+      courseId.setValue(course.ufabcCourseIdentifier);
+    }
+  },
+  { immediate: true },
+);
 
 const { mutate: sendAnnouncementData, isPending: isPendingSubmit } =
   useMutation({

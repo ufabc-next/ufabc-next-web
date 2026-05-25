@@ -170,6 +170,7 @@ import { eventTracker } from '@/helpers/EventTracker';
 import { WebEvent } from '@/helpers/WebEvent';
 import { useAuthStore } from '@/stores/auth';
 import { applyChartsTheme } from '@/theme';
+import { PERMISSIONS } from '@/utils/consts';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -217,9 +218,15 @@ const toggleTheme = () => {
 };
 
 const permissions = computed(() => authStore.user?.permissions ?? []);
-const hasAdminPermission = computed(() => permissions.value.includes('admin'));
+const hasAdminPermission = computed(() =>
+  permissions.value.includes(PERMISSIONS.ADMIN),
+);
 const hasAccessToAnnouncements = computed(
-  () => hasAdminPermission.value || permissions.value.includes('announcements')
+  () =>
+    hasAdminPermission.value ||
+    permissions.value.some((permission) =>
+      permission.includes(PERMISSIONS.ANNOUNCEMENTS),
+    ),
 );
 
 const internalNavigationItems = [
