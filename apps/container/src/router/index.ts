@@ -18,6 +18,7 @@ const WhatsappGroupsView = () =>
   import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
 const AnnouncementsView = () => import('@/views/Announcements/AnnouncementsView.vue');
 const HelpView = () => import('@/views/Help/HelpView.vue');
+const TeamScheduleView = () => import('@/views/TeamSchedule/TeamScheduleView.vue');
 
 const isJWT = (token: string) =>
   /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
@@ -143,6 +144,18 @@ const routes: Array<RouteRecordRaw> = [
       layout: 'include-sidebar',
     },
   },
+  {
+    path: '/team',
+    name: 'team-schedule',
+    component: TeamScheduleView,
+    meta: {
+      title: 'Grade do Time',
+      layout: 'include-sidebar',
+      auth: true,
+      requiresTeamMember: true,
+      confirmed: true,
+    },
+  },
 
   {
     path: '/help',
@@ -207,6 +220,9 @@ router.beforeEach(async (to, _from, next) => {
   const notAllowConfirmed = to.matched.some(
     (record) => record.meta.confirmed === false,
   );
+  const requireTeamMember = to.matched.some(
+    (record) => record.meta.requiresTeamMember === true,
+  );
 
   if (authStore.isLoggedIn && authStore.user) {
     const expirationPeriod = 1 * 24 * 60 * 60; // 1 day
@@ -227,6 +243,12 @@ router.beforeEach(async (to, _from, next) => {
   const authenticatedRedirectPath = '/reviews';
   const notAuthenticatedRedirect = () =>
     isLocal ? next(notConfirmedRedirectPath) : (window.location.pathname = '/');
+
+  if (requireTeamMember) {
+    if (isLocal) return next(); // Bypass temporário para você testar localmente
+    if (!authStore.isLoggedIn) return notAuthenticatedRedirect();
+    if (!authStore.user?.permissions?.includes('team_member')) return next('/');
+  }
 
   if (requireAuth) {
     if (authStore.isLoggedIn) return next();
