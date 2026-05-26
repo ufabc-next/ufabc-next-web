@@ -21,6 +21,10 @@ export const apiParser = axios.create({
   baseURL: 'https://ufabc-parser.com/v2',
 });
 
+export const apiCommunications = axios.create({
+  baseURL: 'https://communications.fundacaonexus.com/v2',
+});
+
 api.interceptors.request.use(async (config) => {
   const token = getToken();
   if (token) {

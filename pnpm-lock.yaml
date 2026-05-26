@@ -232,6 +232,9 @@ importers:
       axios:
         specifier: 1.13.2
         version: 1.13.2
+      zod:
+        specifier: 3.25.76
+        version: 3.25.76
     devDependencies:
       '@ufabc-next/eslint-config':
         specifier: workspace:*
@@ -242,6 +245,9 @@ importers:
       typescript:
         specifier: ^5.9.2
         version: 5.9.3
+      vite:
+        specifier: ^6.3.5
+        version: 6.4.1(@types/node@25.0.6)(jiti@2.6.1)(sass@1.97.2)
 
   packages/tsconfig: {}
 
