@@ -1,4 +1,4 @@
-import { apiCommunications } from "./api";
+import { api } from './api';
 
 type AnnouncementsData = {
   courseIdentifier: number;
@@ -7,5 +7,6 @@ type AnnouncementsData = {
 };
 
 export const Announcements = {
-  sendAnnouncement: (data: AnnouncementsData) =>  apiCommunications.post('/groups/announcements', data),
-}
+  sendAnnouncement: (data: AnnouncementsData) =>
+    api.post('/v2/announcement', data),
+};

@@ -71,7 +71,7 @@ import { toTypedSchema } from '@vee-validate/zod';
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
 import { useField, useForm } from 'vee-validate';
-import { computed, ref, watch } from 'vue';
+import { computed, watch } from 'vue';
 
 import { PaperCard } from '@/components/PaperCard';
 import { useAuthStore } from '@/stores/auth';
@@ -80,8 +80,6 @@ import { PERMISSIONS } from '@/utils/consts';
 import { announcementValidationSchema } from './announcementValidationSchema';
 
 const authStore = useAuthStore();
-const isUserLoggedIn = computed(() => !!authStore.user);
-const successMessage = ref<string>('');
 
 const validationSchema = toTypedSchema(announcementValidationSchema);
 
@@ -179,8 +177,6 @@ const { mutate: sendAnnouncementData, isPending: isPendingSubmit } =
 const WHATSAPP_GROUPS_SEASON = '2026:1';
 
 const onSubmit = handleSubmit((values) => {
-  successMessage.value = '';
-
   sendAnnouncementData({
     courseIdentifier: values.courseId,
     season: WHATSAPP_GROUPS_SEASON,
