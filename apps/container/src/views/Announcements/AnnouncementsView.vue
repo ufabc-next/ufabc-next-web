@@ -76,9 +76,9 @@ import { computed, watch } from 'vue';
 import { PaperCard } from '@/components/PaperCard';
 import { useAuthStore } from '@/stores/auth';
 import { PERMISSIONS } from '@/utils/consts';
+import { getCurrentAcademicSeason } from '@/utils/currentQuarter';
 
 import { announcementValidationSchema } from './announcementValidationSchema';
-import { getCurrentAcademicSeason } from '@/utils/currentQuarter';
 
 const authStore = useAuthStore();
 
