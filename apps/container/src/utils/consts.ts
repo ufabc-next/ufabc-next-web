@@ -21,3 +21,5 @@ export const PERMISSIONS = {
   ANNOUNCEMENTS: 'announcements',
   ANNOUNCEMENTS_BCC: 'announcements-bcc',
 };
+
+export const CURRENT_SEASON = '2026:2'; //hardcoded - automatizar - Rafael maio/26

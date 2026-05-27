@@ -94,7 +94,7 @@ describe('<AnnouncementsView />', () => {
       expect(requestBodies).toEqual([
         {
           courseIdentifier: 42,
-          season: '2026:1',
+          season: '2026:2',
           text: 'A matricula abre hoje.',
         },
       ]);

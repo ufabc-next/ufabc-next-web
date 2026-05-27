@@ -75,7 +75,7 @@ import { computed, watch } from 'vue';
 
 import { PaperCard } from '@/components/PaperCard';
 import { useAuthStore } from '@/stores/auth';
-import { PERMISSIONS } from '@/utils/consts';
+import { CURRENT_SEASON, PERMISSIONS } from '@/utils/consts';
 
 import { announcementValidationSchema } from './announcementValidationSchema';
 
@@ -151,36 +151,32 @@ watch(
   { immediate: true },
 );
 
-const { mutate: sendAnnouncementData, isPending: isPendingSubmit } =
-  useMutation({
-    mutationFn: Announcements.sendAnnouncement,
-    onSuccess: () => {
-      resetForm();
-      ElMessage({
-        message: 'Anúncio está sendo enviado para os grupos!',
-        type: 'success',
-        showClose: true,
-      });
-    },
-    onError: (error: AxiosError<RequestError>) => {
-      ElMessage({
-        message:
-          'Erro ao enviar anúncio: ' +
-          (error.response?.data?.error || error.message),
-        type: 'error',
-        showClose: true,
-      });
-    },
-  });
-
-// todo: update season dynamically based on current date or config (parser will allow this in future updates) -> reference WhasappGroupsVuew.vue
-const WHATSAPP_GROUPS_SEASON = '2026:1';
+const { mutate: sendAnnouncement, isPending: isPendingSubmit } = useMutation({
+  mutationFn: Announcements.sendAnnouncement,
+  onSuccess: () => {
+    resetForm();
+    ElMessage({
+      message: 'Anúncio está sendo enviado para os grupos!',
+      type: 'success',
+      showClose: true,
+    });
+  },
+  onError: (error: AxiosError<RequestError>) => {
+    ElMessage({
+      message:
+        'Erro ao enviar anúncio: ' +
+        (error.response?.data?.error || error.message),
+      type: 'error',
+      showClose: true,
+    });
+  },
+});
 
 const onSubmit = handleSubmit((values) => {
-  sendAnnouncementData({
+  sendAnnouncement({
     courseIdentifier: values.courseId,
-    season: WHATSAPP_GROUPS_SEASON,
-    text: values.text,
+    season: CURRENT_SEASON,
+    message: values.text,
   });
 });
 </script>

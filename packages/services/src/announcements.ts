@@ -3,7 +3,7 @@ import { api } from './api';
 type AnnouncementsData = {
   courseIdentifier: number;
   season: string;
-  text: string;
+  message: string;
 };
 
 export const Announcements = {

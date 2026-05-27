@@ -301,19 +301,16 @@ import WhatsappGroupCard from '@/components/WhatsappGroupCard/WhatsappGroupCard.
 import { eventTracker } from '@/helpers/EventTracker';
 import { WebEvent } from '@/helpers/WebEvent';
 import { useAuthStore } from '@/stores/auth';
-import { extensionURL, studentRecordURL } from '@/utils/consts';
+import { CURRENT_SEASON, extensionURL, studentRecordURL } from '@/utils/consts';
 import { normalizeText } from '@/utils/normalizeTextSearch';
 
 import { getMockedGroups } from './utils/mockedGroups';
-
-// todo: update season dynamically based on current date or config (parser will allow this in future updates)
-const WHATSAPP_GROUPS_SEASON = '2026:1';
 
 type SearchType = 'ra' | 'component' | 'course';
 const MIN_RA_LENGTH = 8;
 
 const showOverlay = ref(false);
-const mockGroups = ref(getMockedGroups(WHATSAPP_GROUPS_SEASON));
+const mockGroups = ref(getMockedGroups(CURRENT_SEASON));
 
 const router = useRouter();
 const route = useRoute();
@@ -477,7 +474,7 @@ const {
   isError: isAllComponentsError,
 } = useQuery({
   queryKey: ['whatsappGroups', 'allComponents'],
-  queryFn: () => Whatsapp.searchComponents(WHATSAPP_GROUPS_SEASON),
+  queryFn: () => Whatsapp.searchComponents(CURRENT_SEASON),
   gcTime: 1000 * 60 * 10,
   enabled: computed(
     () =>
@@ -490,8 +487,8 @@ const {
 
 // Query para dados do parser (professores)
 const { data: parserComponents, isError: isParserComponentsError } = useQuery({
-  queryKey: ['disciplinaComponents', WHATSAPP_GROUPS_SEASON],
-  queryFn: () => Whatsapp.searchComponentsBySeason(WHATSAPP_GROUPS_SEASON),
+  queryKey: ['disciplinaComponents', CURRENT_SEASON],
+  queryFn: () => Whatsapp.searchComponentsBySeason(CURRENT_SEASON),
   gcTime: 1000 * 60 * 10,
   enabled: computed(
     () =>
@@ -513,7 +510,7 @@ const {
   queryFn: () =>
     Whatsapp.getComponentsByUser({
       ra: searchRaQuery.value ?? 0,
-      season: WHATSAPP_GROUPS_SEASON,
+      season: CURRENT_SEASON,
     }),
   enabled: computed(() => isUserLoggedIn.value && shouldFetchGroupsByRa.value),
 });
@@ -582,7 +579,7 @@ const filteredByCourse = computed(() => {
   return allComponentsData.value.filter((component) => {
     return (
       selectedCourse.ufComponentCodes.includes(component.codigo) &&
-      component.season === WHATSAPP_GROUPS_SEASON
+      component.season === CURRENT_SEASON
     );
   });
 });
