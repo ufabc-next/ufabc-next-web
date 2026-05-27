@@ -18,69 +18,105 @@
       </div>
       <div class="search-section">
         <div>
-          <div class="search-input-wrapper">
-            <Transition name="slide-up" mode="out-in">
-              <v-number-input
-                v-if="selectedSearchType === 'ra'"
-                v-model="searchRaQuery"
-                placeholder="Digite seu RA (ex: 11202012345)"
-                variant="outlined"
-                :loading="currentLoading"
-                :disabled="!isUserLoggedIn"
-                prepend-inner-icon="mdi-magnify"
-                clearable
-                class="main-search"
-                control-variant="hidden"
-              >
-              </v-number-input>
+          <div class="search-controls-row">
+            <div class="search-input-wrapper">
+              <Transition name="slide-up" mode="out-in">
+                <v-number-input
+                  v-if="selectedSearchType === 'ra'"
+                  v-model="searchRaQuery"
+                  placeholder="Digite seu RA (ex: 11202012345)"
+                  variant="outlined"
+                  :loading="currentLoading"
+                  :disabled="!isUserLoggedIn"
+                  prepend-inner-icon="mdi-magnify"
+                  clearable
+                  class="main-search"
+                  control-variant="hidden"
+                >
+                </v-number-input>
 
-              <div
-                v-else-if="selectedSearchType === 'course'"
-                class="course-search-row"
-              >
-                <v-select
-                  v-model="searchCourseQuery"
-                  :items="coursesList"
-                  item-title="name"
-                  item-value="id"
-                  placeholder="Selecione um curso"
+                <div
+                  v-else-if="selectedSearchType === 'course'"
+                  class="course-search-row"
+                >
+                  <v-select
+                    v-model="searchCourseQuery"
+                    :items="coursesList"
+                    item-title="name"
+                    item-value="id"
+                    placeholder="Selecione um curso"
+                    variant="outlined"
+                    size="large"
+                    :disabled="!isUserLoggedIn"
+                    :loading="currentLoading || isCoursesLoading"
+                    prepend-inner-icon="mdi-school"
+                    class="course-select"
+                  >
+                  </v-select>
+
+                  <div class="course-filter-row">
+                    <v-text-field
+                      v-model="searchCourseFilterQuery"
+                      placeholder="Digite a disciplina ou professor"
+                      variant="outlined"
+                      size="large"
+                      :disabled="!isUserLoggedIn || !searchCourseQuery"
+                      prepend-inner-icon="mdi-magnify"
+                      clearable
+                      class="course-filter"
+                    >
+                    </v-text-field>
+
+                    <div
+                      class="season-select-wrapper season-select-wrapper--course"
+                    >
+                      <v-select
+                        v-model="selectedSeason"
+                        :items="seasonOptions"
+                        item-title="label"
+                        item-value="value"
+                        label="Quadrimestre"
+                        variant="outlined"
+                        :disabled="!isUserLoggedIn"
+                        prepend-inner-icon="mdi-calendar-clock"
+                        class="season-select"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                <v-text-field
+                  v-else
+                  v-model="searchComponentQuery"
+                  placeholder="Digite o nome da disciplina (ex: Função de várias variáveis)"
                   variant="outlined"
                   size="large"
                   :disabled="!isUserLoggedIn"
-                  :loading="currentLoading || isCoursesLoading"
-                  prepend-inner-icon="mdi-school"
-                  class="course-select"
-                >
-                </v-select>
-
-                <v-text-field
-                  v-model="searchCourseFilterQuery"
-                  placeholder="Digite a disciplina ou professor"
-                  variant="outlined"
-                  size="large"
-                  :disabled="!isUserLoggedIn || !searchCourseQuery"
+                  :loading="currentLoading"
                   prepend-inner-icon="mdi-magnify"
                   clearable
-                  class="course-filter"
+                  class="main-search"
+                  @input="getWhatsappGroupsByComponent"
                 >
                 </v-text-field>
-              </div>
-
-              <v-text-field
-                v-else
-                v-model="searchComponentQuery"
-                placeholder="Digite o nome da disciplina (ex: Função de várias variáveis)"
+              </Transition>
+            </div>
+            <div
+              v-if="selectedSearchType !== 'course'"
+              class="season-select-wrapper"
+            >
+              <v-select
+                v-model="selectedSeason"
+                :items="seasonOptions"
+                item-title="label"
+                item-value="value"
+                label="Quadrimestre"
                 variant="outlined"
-                size="large"
                 :disabled="!isUserLoggedIn"
-                :loading="currentLoading"
-                prepend-inner-icon="mdi-magnify"
-                clearable
-                class="main-search"
-                @input="getWhatsappGroupsByComponent"
-              >
-              </v-text-field>
-            </Transition>
+                prepend-inner-icon="mdi-calendar-clock"
+                class="season-select"
+              />
+            </div>
           </div>
 
           <div class="option-chips">
@@ -178,9 +214,9 @@
             usuários autenticados.
           </p>
           <div class="not-synced__actions auth-required-actions">
-            <button class="not-synced__button" @click="createAccount">
+            <button class="not-synced__button" @click="loginAccount">
               <v-icon size="20"> mdi-account-plus </v-icon>
-              Criar conta
+              Login na conta
             </button>
             <button
               class="not-synced__button secondary"
@@ -227,6 +263,9 @@
               <v-icon size="64" color="grey-darken-1"> mdi-whatsapp </v-icon>
             </div>
             <h3>Nenhum grupo encontrado</h3>
+            <p class="season-warning">
+              Os grupos de {{ selectedSeasonLabel }} podem estar em atualização.
+            </p>
 
             <div class="empty-suggestions">
               <p class="empty-description">
@@ -301,16 +340,25 @@ import WhatsappGroupCard from '@/components/WhatsappGroupCard/WhatsappGroupCard.
 import { eventTracker } from '@/helpers/EventTracker';
 import { WebEvent } from '@/helpers/WebEvent';
 import { useAuthStore } from '@/stores/auth';
-import { CURRENT_SEASON, extensionURL, studentRecordURL } from '@/utils/consts';
+import { extensionURL, studentRecordURL } from '@/utils/consts';
+import {
+  getCurrentAcademicSeason,
+  getSelectableAcademicSeasons,
+  isValidAcademicSeason,
+} from '@/utils/currentQuarter';
 import { normalizeText } from '@/utils/normalizeTextSearch';
+import { formatSeason } from '@/utils/season';
 
 import { getMockedGroups } from './utils/mockedGroups';
+import { capitalizeName } from '@/utils/capitalizeName';
 
 type SearchType = 'ra' | 'component' | 'course';
 const MIN_RA_LENGTH = 8;
+const DEFAULT_COURSE_NAME = 'Bacharelado em Ciências e Tecnologia';
 
 const showOverlay = ref(false);
-const mockGroups = ref(getMockedGroups(CURRENT_SEASON));
+const defaultSeason = getCurrentAcademicSeason();
+const mockGroups = ref(getMockedGroups(defaultSeason));
 
 const router = useRouter();
 const route = useRoute();
@@ -340,8 +388,20 @@ const isRaValid = computed(() => {
 
 const searchRaQuery = ref<number | null>(null);
 const searchComponentQuery = ref('');
-const searchCourseQuery = ref<number | null>(null);
+const searchCourseQuery = ref<number | string | null>(null);
 const searchCourseFilterQuery = ref('');
+const routeSeason = computed(() => {
+  const seasonQuery = route.query.season;
+
+  if (Array.isArray(seasonQuery)) {
+    return seasonQuery[0] ?? '';
+  }
+
+  return String(seasonQuery ?? '');
+});
+const selectedSeason = ref(
+  isValidAcademicSeason(routeSeason.value) ? routeSeason.value : defaultSeason,
+);
 const shouldFetchGroupsByRa = ref(false);
 const shouldFetchComponents = ref(false);
 const shouldFetchGroupsByCourse = ref(false);
@@ -349,15 +409,17 @@ const selectedSearchType = ref<SearchType>('ra');
 
 const queryResultsPage = ref(1);
 
-// helper para atualizar o nome dos professores do parser
-const capitalizeName = (name: string): string => {
-  if (!name) return '';
-  return name
-    .toLowerCase()
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-    .join(' ');
-};
+const seasonOptions = computed(() => {
+  const currentSeason = getCurrentAcademicSeason();
+  return getSelectableAcademicSeasons(currentSeason).map((season) => ({
+    value: season,
+    label: formatSeason(season),
+  }));
+});
+
+const selectedSeasonLabel = computed(() => {
+  return formatSeason(selectedSeason.value);
+});
 
 const debouncedRaSearch = useDebounceFn((raValue: number) => {
   if (!isUserLoggedIn.value) {
@@ -378,7 +440,33 @@ const debouncedRaSearch = useDebounceFn((raValue: number) => {
   }
 }, 500);
 
-const selectSearchType = (type: SearchType) => {
+const applyDefaultCourseSelection = () => {
+  if (!coursesList.value.length) {
+    return;
+  }
+
+  if (
+    searchCourseQuery.value !== null &&
+    String(searchCourseQuery.value).trim()
+  ) {
+    return;
+  }
+
+  const normalizedDefault = normalizeText(DEFAULT_COURSE_NAME);
+  const defaultCourse = coursesList.value.find(
+    (course: SearchCourseItem) =>
+      normalizeText(course.name) === normalizedDefault,
+  );
+
+  if (!defaultCourse) {
+    return;
+  }
+
+  searchCourseQuery.value = defaultCourse.id;
+};
+
+const selectSearchType = (type: SearchType | null) => {
+  const normalizedType = type ?? 'course';
   if (!isUserLoggedIn.value) {
     searchRaQuery.value = null;
   }
@@ -386,13 +474,17 @@ const selectSearchType = (type: SearchType) => {
   searchComponentQuery.value = '';
   searchCourseQuery.value = null;
   searchCourseFilterQuery.value = '';
-  selectedSearchType.value = type;
+  selectedSearchType.value = normalizedType;
   shouldFetchGroupsByRa.value = false;
   shouldFetchComponents.value = false;
   shouldFetchGroupsByCourse.value = false;
   queryResultsPage.value = 1;
 
-  if (type === 'ra' && isRaValid.value && searchRaQuery.value) {
+  if (normalizedType === 'course') {
+    applyDefaultCourseSelection();
+  }
+
+  if (normalizedType === 'ra' && isRaValid.value && searchRaQuery.value) {
     debouncedRaSearch(searchRaQuery.value);
   }
 };
@@ -460,6 +552,49 @@ watch(searchCourseFilterQuery, () => {
   }
 });
 
+watch(selectedSearchType, (newType) => {
+  if (!newType) {
+    selectSearchType('course');
+    return;
+  }
+
+  if (newType === 'course') {
+    applyDefaultCourseSelection();
+  }
+});
+
+watch(routeSeason, (newSeason) => {
+  if (!newSeason || !isValidAcademicSeason(newSeason)) {
+    return;
+  }
+
+  if (newSeason === selectedSeason.value) {
+    return;
+  }
+
+  selectedSeason.value = newSeason;
+});
+
+watch(selectedSeason, (season) => {
+  if (!isValidAcademicSeason(season)) {
+    return;
+  }
+
+  mockGroups.value = getMockedGroups(season);
+
+  const currentQuerySeason = routeSeason.value;
+  if (currentQuerySeason === season) {
+    return;
+  }
+
+  router.replace({
+    query: {
+      ...route.query,
+      season,
+    },
+  });
+});
+
 const getWhatsappGroupsByComponent = () => {
   if (selectedSearchType.value === 'component') {
     debouncedComponentSearch(searchComponentQuery.value);
@@ -473,8 +608,8 @@ const {
   isSuccess: isAllComponentsSuccess,
   isError: isAllComponentsError,
 } = useQuery({
-  queryKey: ['whatsappGroups', 'allComponents'],
-  queryFn: () => Whatsapp.searchComponents(CURRENT_SEASON),
+  queryKey: ['whatsappGroups', 'allComponents', selectedSeason],
+  queryFn: () => Whatsapp.searchComponents(selectedSeason.value),
   gcTime: 1000 * 60 * 10,
   enabled: computed(
     () =>
@@ -486,9 +621,9 @@ const {
 });
 
 // Query para dados do parser (professores)
-const { data: parserComponents, isError: isParserComponentsError } = useQuery({
-  queryKey: ['disciplinaComponents', CURRENT_SEASON],
-  queryFn: () => Whatsapp.searchComponentsBySeason(CURRENT_SEASON),
+const { data: parserComponents } = useQuery({
+  queryKey: ['disciplinaComponents', selectedSeason],
+  queryFn: () => Whatsapp.searchComponentsBySeason(selectedSeason.value),
   gcTime: 1000 * 60 * 10,
   enabled: computed(
     () =>
@@ -506,11 +641,11 @@ const {
   isSuccess: isGroupsByRaSuccess,
   isError: isGroupsByRaError,
 } = useQuery({
-  queryKey: ['whatsappGroups', 'byRa', searchRaQuery],
+  queryKey: ['whatsappGroups', 'byRa', searchRaQuery, selectedSeason],
   queryFn: () =>
     Whatsapp.getComponentsByUser({
       ra: searchRaQuery.value ?? 0,
-      season: CURRENT_SEASON,
+      season: selectedSeason.value,
     }),
   enabled: computed(() => isUserLoggedIn.value && shouldFetchGroupsByRa.value),
 });
@@ -562,26 +697,84 @@ const coursesList = computed(() => {
     );
 });
 
+watch(coursesList, () => {
+  if (selectedSearchType.value === 'course') {
+    applyDefaultCourseSelection();
+  }
+});
+
+const normalizeCourseCode = (code: string | null | undefined) =>
+  String(code ?? '')
+    .trim()
+    .toUpperCase();
+
+const getBaseCourseCode = (code: string | null | undefined) =>
+  normalizeCourseCode(code).split('-')[0] ?? '';
+
+const normalizeSeasonToken = (season: string | null | undefined) =>
+  String(season ?? '')
+    .trim()
+    .replace('.', ':');
+
+const extractComponentCodeFromUfClassroom = (ufClassroomCode: string) => {
+  const match = ufClassroomCode.match(/[A-Z]{3}\d{4}-\d{2}/i);
+  return match ? normalizeCourseCode(match[0]) : '';
+};
+
 // Componentes filtrados por curso
 const filteredByCourse = computed(() => {
-  if (!allComponentsData.value.length || !searchCourseQuery.value) {
+  if (!allComponentsData.value.length || searchCourseQuery.value == null) {
     return [];
   }
 
+  const selectedCourseRaw = searchCourseQuery.value as
+    | number
+    | string
+    | { id?: number | string }
+    | null;
+  const selectedCourseId =
+    selectedCourseRaw &&
+    typeof selectedCourseRaw === 'object' &&
+    'id' in selectedCourseRaw
+      ? String(selectedCourseRaw.id ?? '').trim()
+      : String(selectedCourseRaw ?? '').trim();
   const selectedCourse = coursesList.value.find(
-    (course: SearchCourseItem) => course.id === searchCourseQuery.value,
+    (course: SearchCourseItem) => String(course.id).trim() === selectedCourseId,
   );
 
   if (!selectedCourse) {
     return [];
   }
 
-  return allComponentsData.value.filter((component) => {
-    return (
-      selectedCourse.ufComponentCodes.includes(component.codigo) &&
-      component.season === CURRENT_SEASON
+  const courseCodes = new Set(
+    selectedCourse.ufComponentCodes.map((code) => normalizeCourseCode(code)),
+  );
+  const baseCourseCodes = new Set(
+    selectedCourse.ufComponentCodes.map((code) => getBaseCourseCode(code)),
+  );
+
+  const filtered = allComponentsData.value.filter((component) => {
+    const codigo = normalizeCourseCode(component.codigo);
+    const codigoBase = getBaseCourseCode(component.codigo);
+    const classroomCode = extractComponentCodeFromUfClassroom(
+      component.uf_cod_turma || '',
     );
+    const classroomCodeBase = getBaseCourseCode(classroomCode);
+
+    const matchesCourse =
+      courseCodes.has(codigo) ||
+      baseCourseCodes.has(codigoBase) ||
+      courseCodes.has(classroomCode) ||
+      baseCourseCodes.has(classroomCodeBase);
+
+    const matchesSeason =
+      normalizeSeasonToken(component.season) ===
+      normalizeSeasonToken(selectedSeason.value);
+
+    return matchesCourse && matchesSeason;
   });
+
+  return filtered;
 });
 
 // Componentes do curso com filtro adicional de texto e enriquecidos
@@ -705,6 +898,19 @@ const currentError = computed(
   () => searchConfig.value[selectedSearchType.value]?.error || false,
 );
 
+watch(
+  [selectedSearchType, currentSuccess, currentLoading, currentGroups],
+  ([type, success, loading, groups]) => {
+    if (type !== 'ra' || loading || !success) {
+      return;
+    }
+
+    if (groups.length === 0) {
+      selectSearchType('course');
+    }
+  },
+);
+
 const openWhatsappGroup = (url: string) => {
   if (!isUserLoggedIn.value || !url) {
     return;
@@ -734,12 +940,11 @@ const handleSyncHistory = () => {
   window.open(studentRecordURL, '_blank');
 };
 
-const createAccount = () => {
-  eventTracker.track(WebEvent.CREATE_ACCOUNT_CLICKED, {
+const loginAccount = () => {
+  eventTracker.track(WebEvent.LOGIN_ACCOUNT_CLICKED, {
     source: 'whatsapp_groups_dialog',
   });
-
-  router.push('/signup');
+  window.location.href = `${window.location.origin}/`;
 };
 
 const openSupport = () => {
@@ -759,6 +964,15 @@ onMounted(() => {
   });
 
   if (isUserLoggedIn.value) {
+    if (!isValidAcademicSeason(routeSeason.value)) {
+      router.replace({
+        query: {
+          ...route.query,
+          season: selectedSeason.value,
+        },
+      });
+    }
+
     searchRaQuery.value = toValue(userRa);
     if (searchRaQuery.value !== null) {
       debouncedRaSearch(searchRaQuery.value);
@@ -811,12 +1025,40 @@ onMounted(() => {
   margin-bottom: 16px;
 }
 
+.search-controls-row {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  margin-bottom: 12px;
+}
+
+.season-select-wrapper {
+  flex: 1;
+  min-width: 180px;
+}
+
+.search-input-wrapper {
+  flex: 3;
+}
+
+.season-select :deep(.v-field) {
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
 .main-search :deep(.v-field) {
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .course-search-row {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
+.course-filter-row {
   display: flex;
   gap: 16px;
   width: 100%;
@@ -833,7 +1075,7 @@ onMounted(() => {
 }
 
 .course-filter {
-  flex: 1;
+  flex: 3;
   min-width: 0;
 }
 
@@ -842,15 +1084,43 @@ onMounted(() => {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
+.season-select-wrapper--course {
+  flex: 1;
+}
+
 @media (max-width: 768px) {
+  .search-controls-row {
+    flex-direction: column;
+  }
+
+  .season-select-wrapper,
+  .search-input-wrapper {
+    width: 100%;
+    flex: 1;
+  }
+
+  .season-select-wrapper {
+    order: -1;
+  }
+
   .course-search-row {
     flex-direction: column;
     gap: 12px;
   }
 
-  .course-select,
-  .course-filter {
+  .course-filter-row {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .course-select {
     flex: 1;
+  }
+
+  .course-filter,
+  .season-select-wrapper--course {
+    flex: 1;
+    width: 100%;
   }
 }
 
@@ -901,6 +1171,13 @@ onMounted(() => {
 
 .auth-required-state p {
   margin-bottom: 20px;
+}
+
+.season-warning {
+  margin-top: -4px;
+  margin-bottom: 16px;
+  color: #b45309;
+  font-weight: 500;
 }
 
 .coming-soon-overlay {
