@@ -75,9 +75,10 @@ import { computed, watch } from 'vue';
 
 import { PaperCard } from '@/components/PaperCard';
 import { useAuthStore } from '@/stores/auth';
-import { CURRENT_SEASON, PERMISSIONS } from '@/utils/consts';
+import { PERMISSIONS } from '@/utils/consts';
 
 import { announcementValidationSchema } from './announcementValidationSchema';
+import { getCurrentAcademicSeason } from '@/utils/currentQuarter';
 
 const authStore = useAuthStore();
 
@@ -172,10 +173,12 @@ const { mutate: sendAnnouncement, isPending: isPendingSubmit } = useMutation({
   },
 });
 
+const currentSeason = computed(() => getCurrentAcademicSeason());
+
 const onSubmit = handleSubmit((values) => {
   sendAnnouncement({
     courseIdentifier: values.courseId,
-    season: CURRENT_SEASON,
+    season: currentSeason.value,
     message: values.text,
   });
 });
