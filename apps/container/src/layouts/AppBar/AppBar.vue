@@ -170,6 +170,7 @@ import { eventTracker } from '@/helpers/EventTracker';
 import { WebEvent } from '@/helpers/WebEvent';
 import { useAuthStore } from '@/stores/auth';
 import { applyChartsTheme } from '@/theme';
+import { PERMISSIONS } from '@/utils/consts';
 
 const router = useRouter();
 const authStore = useAuthStore();
@@ -216,6 +217,18 @@ const toggleTheme = () => {
   updateHighchartsThemeClass(newTheme === 'dark');
 };
 
+const permissions = computed(() => authStore.user?.permissions ?? []);
+const hasAdminPermission = computed(() =>
+  permissions.value.includes(PERMISSIONS.ADMIN),
+);
+const hasAccessToAnnouncements = computed(
+  () =>
+    hasAdminPermission.value ||
+    permissions.value.some((permission) =>
+      permission.includes(PERMISSIONS.ANNOUNCEMENTS),
+    ),
+);
+
 const internalNavigationItems = [
   {
     title: 'Reviews',
@@ -248,6 +261,16 @@ const internalNavigationItems = [
     releaseDate: dayjs('07/10/2025'),
     locked: false,
   },
+  ...(hasAccessToAnnouncements.value
+    ? [
+        {
+          title: 'Anúncios',
+          icon: 'mdi-bullhorn',
+          route: `/announcements`,
+          locked: !hasAccessToAnnouncements.value,
+        },
+      ]
+    : []),
   {
     title: 'Calengrade',
     icon: 'mdi-calendar',
@@ -288,7 +311,7 @@ const externalNavigationItems = [
     url: 'https://chrome.google.com/webstore/detail/ufabc-next/gphjopenfpnlnffmhhhhdiecgdcopmhk',
   },
 
-  ...(authStore.user?.permissions?.includes('admin')
+  ...(hasAdminPermission.value
     ? [
         {
           title: 'Monitoramento de Jobs',
@@ -297,7 +320,7 @@ const externalNavigationItems = [
         },
       ]
     : []),
-  ...(authStore.user?.permissions?.includes('admin')
+  ...(hasAdminPermission.value
     ? [
         {
           title: 'Monitoramento de Jobs V2',

@@ -2,6 +2,7 @@ import { api } from '@ufabc-next/services';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import { useAuthStore } from '@/stores/auth';
+import { PERMISSIONS } from '@/utils/consts';
 
 const ReviewsView = () => import('@/views/Reviews/ReviewsView.vue');
 const PerformanceView = () => import('@/views/Performance/PerformanceView.vue');
@@ -17,10 +18,20 @@ const RecoveryView = () => import('@/views/Recovery/RecoveryView.vue');
 const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
 const WhatsappGroupsView = () =>
   import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
+const AnnouncementsView = () =>
+  import('@/views/Announcements/AnnouncementsView.vue');
 const HelpView = () => import('@/views/Help/HelpView.vue');
 
 const isJWT = (token: string) =>
   /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
+
+const hasAnyPermission = (
+  userPermissions: string[] | undefined,
+  requiredPermissions: string[],
+) =>
+  requiredPermissions.some((permission) =>
+    userPermissions?.includes(permission),
+  );
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -124,6 +135,22 @@ const routes: Array<RouteRecordRaw> = [
     },
   },
   {
+    path: '/announcements',
+    name: 'announcements',
+    component: AnnouncementsView,
+    meta: {
+      title: 'Anúncios',
+      layout: 'include-sidebar',
+      auth: true,
+      confirmed: true,
+      permissions: [
+        PERMISSIONS.ADMIN,
+        PERMISSIONS.ANNOUNCEMENTS,
+        PERMISSIONS.ANNOUNCEMENTS_BCC,
+      ],
+    },
+  },
+  {
     path: '/calengrade',
     name: 'calengrade',
     component: CalengradeView,
@@ -215,6 +242,9 @@ router.beforeEach(async (to, _from, next) => {
   const notAllowConfirmed = to.matched.some(
     (record) => record.meta.confirmed === false,
   );
+  const requiredPermissions = to.matched.flatMap(
+    (record) => record.meta.permissions ?? [],
+  );
 
   if (authStore.isLoggedIn && authStore.user) {
     const expirationPeriod = 1 * 24 * 60 * 60; // 1 day
@@ -236,17 +266,24 @@ router.beforeEach(async (to, _from, next) => {
   const notAuthenticatedRedirect = () =>
     isLocal ? next(notConfirmedRedirectPath) : (window.location.pathname = '/');
 
-  if (requireAuth) {
-    if (authStore.isLoggedIn) return next();
-    return notAuthenticatedRedirect();
+  const requiresPermission = requiredPermissions.length > 0;
+
+  if (requireAuth || requiresPermission) {
+    if (!authStore.isLoggedIn) return notAuthenticatedRedirect();
   }
+
   if (requireConfirmed) {
-    if (authStore.isLoggedIn) {
-      if (userConfirmed) return next();
-      return next(notConfirmedRedirectPath);
-    }
-    return notAuthenticatedRedirect();
+    if (!authStore.isLoggedIn) return notAuthenticatedRedirect();
+    if (!userConfirmed) return next(notConfirmedRedirectPath);
   }
+
+  if (
+    requiresPermission &&
+    !hasAnyPermission(authStore.user?.permissions, requiredPermissions)
+  ) {
+    return next(authenticatedRedirectPath);
+  }
+
   if (notAllowAuth) {
     if (authStore.isLoggedIn) return next(authenticatedRedirectPath);
     return next();
