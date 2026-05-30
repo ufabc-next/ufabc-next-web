@@ -335,6 +335,7 @@ import WhatsappGroupCard from '@/components/WhatsappGroupCard/WhatsappGroupCard.
 import { eventTracker } from '@/helpers/EventTracker';
 import { WebEvent } from '@/helpers/WebEvent';
 import { useAuthStore } from '@/stores/auth';
+import { capitalizeName } from '@/utils/capitalizeName';
 import { extensionURL, studentRecordURL } from '@/utils/consts';
 import {
   getCurrentAcademicSeason,
@@ -345,7 +346,6 @@ import { normalizeText } from '@/utils/normalizeTextSearch';
 import { formatSeason } from '@/utils/season';
 
 import { getMockedGroups } from './utils/mockedGroups';
-import { capitalizeName } from '@/utils/capitalizeName';
 
 type SearchType = 'ra' | 'component' | 'course';
 const MIN_RA_LENGTH = 8;
