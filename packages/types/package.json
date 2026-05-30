@@ -12,6 +12,6 @@
   "devDependencies": {
     "@ufabc-next/eslint-config": "workspace:*",
     "tsconfig": "workspace:*",
-    "typescript": "^5.9.2"
+    "typescript": "^6.0.0"
   }
 }
