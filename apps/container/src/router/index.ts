@@ -2,6 +2,7 @@ import { api } from '@ufabc-next/services';
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import { useAuthStore } from '@/stores/auth';
+import { isTokenExpired, isValidJwtFormat } from '@/utils/jwt';
 
 const ReviewsView = () => import('@/views/Reviews/ReviewsView.vue');
 const PerformanceView = () => import('@/views/Performance/PerformanceView.vue');
@@ -18,9 +19,6 @@ const CalengradeView = () => import('@/views/Calengrade/CalengradeView.vue');
 const WhatsappGroupsView = () =>
   import('@/views/WhatsappGroups/WhatsappGroupsView.vue');
 const HelpView = () => import('@/views/Help/HelpView.vue');
-
-const isJWT = (token: string) =>
-  /^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/.test(token);
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -183,7 +181,7 @@ router.beforeEach(async (to, _from, next) => {
 
   const tokenParam = to.query.token;
   
-  if (tokenParam && !isJWT(tokenParam as string)) {
+  if (tokenParam && !isValidJwtFormat(tokenParam as string)) {
     try {
       const response = await api.post('/v2/auth/whatsapp-token', {
         component: to.query.component,
@@ -199,7 +197,7 @@ router.beforeEach(async (to, _from, next) => {
     });
   }
 
-  if (isJWT(tokenParam as string)) {
+  if (isValidJwtFormat(tokenParam as string)) {
     authStore.authenticate(tokenParam as string);
     return next({
       path: to.path,
@@ -217,11 +215,7 @@ router.beforeEach(async (to, _from, next) => {
   );
 
   if (authStore.isLoggedIn && authStore.user) {
-    const expirationPeriod = 1 * 24 * 60 * 60; // 1 day
-    const currentTime = Math.floor(Date.now() / 1000);
-    const expirationTime = authStore.user.iat + expirationPeriod;
-
-    if (expirationTime < currentTime) {
+    if (isTokenExpired(authStore.user)) {
       authStore.logOut();
       return next('/');
     }
