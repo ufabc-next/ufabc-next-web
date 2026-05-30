@@ -1,6 +1,7 @@
 import { http, HttpResponse } from 'msw';
 import { createPinia, setActivePinia } from 'pinia';
 
+import { createMockJwt } from '@/mocks/jwt';
 import { server } from '@/mocks/server';
 import { user as mockedUser } from '@/mocks/users';
 import { useAuthStore } from '@/stores/auth';
@@ -14,8 +15,7 @@ describe('<SettingsView />', () => {
   beforeEach(() => {
     setActivePinia(createPinia());
     authStore = useAuthStore();
-    authStore.authenticate('token');
-    authStore.user = mockedUser;
+    authStore.authenticate(createMockJwt(mockedUser));
   });
 
   afterEach(() => {
