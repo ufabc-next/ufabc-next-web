@@ -48,9 +48,9 @@ describe('jwt utilities', () => {
       expect(isTokenExpired(user)).toBe(false);
     });
 
-    test('returns true for a token issued more than one day ago', () => {
+    test('returns true for a token issued more than 7 days ago', () => {
       const user = {
-        iat: Math.floor(Date.now() / 1000) - 2 * 24 * 60 * 60,
+        iat: Math.floor(Date.now() / 1000) - 8 * 24 * 60 * 60,
       };
       expect(isTokenExpired(user)).toBe(true);
     });
