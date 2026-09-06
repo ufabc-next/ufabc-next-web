@@ -72,7 +72,13 @@ export default fp(
         }
 
         if (error instanceof Error) {
-          const statusCode = error.statusCode ?? 500;
+          const statusCode =
+            'statusCode' in error &&
+            typeof error.statusCode === 'number' &&
+            error.statusCode >= 400 &&
+            error.statusCode < 600
+              ? error.statusCode
+              : 500;
 
           if (statusCode >= 500) {
             request.log.error(

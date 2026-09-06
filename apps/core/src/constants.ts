@@ -38,6 +38,10 @@ export const REDIRECT_TARGETS = ['web', 'web-local'] as const;
 export const HTTP_REDIS_KEY_PREFIX = 'http';
 export const MAX_LOG_SIZE = 600 * 1024;
 
+export const BYTES_PER_MB = 1024 * 1024;
+export const NANOSECONDS_PER_MS = 1_000_000;
+export const SNAPSHOT_URL_TTL_SECONDS = 7 * 24 * 60 * 60;
+
 export const PARSER_WEBHOOK_EVENTS = {
   CLASS_SETTLED: 'class.settled',
   COMPONENT_CREATED: 'component.created',
@@ -69,3 +73,19 @@ export const ALLOWED_ANNOUNCEMENT_PERMISSIONS = [
 ] as const;
 
 export const UFABC_EMAIL_DOMAINS = ['aluno.ufabc.edu.br', 'ufabc.edu.br'];
+
+// accent-insensitive character classes used to build disciplina-name regexes
+export const ACCENT_MAP: Record<string, string> = {
+  a: '[aáàâãAÁÀÂÃ]',
+  c: '[cçCÇ]',
+  e: '[eéêEÉÊ]',
+  i: '[iíIÍ]',
+  o: '[oóôõOÓÔÕ]',
+  u: '[uúüUÚÜ]',
+};
+
+export const REGEX_SPECIAL_CHARS = /[.*+?^${}()|[\]\\]/u;
+
+// e.g. "MCTA001-24" — a real discipline offering, not a Moodle
+// program/degree-shell course (those have no discipline code anywhere)
+export const DISCIPLINE_CODE_PATTERN = /[A-Z]{2,}\d{3,}(?:-\d+)?/u;
