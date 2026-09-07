@@ -1740,14 +1740,10 @@ export const userUpdateComment: UpdateCommentRequest = {
 export const teacherSummary: TeacherSummary = {
   commentsCount: 12,
   didacticQuality: 4.5,
-  newestComment: '2025-06-01T00:00:00.000Z',
-  oldestComment: '2023-02-10T00:00:00.000Z',
-  promptVersion: 'v1',
   summary:
     'Professor bem avaliado por explicar com clareza e disponibilizar material de apoio.',
   takesAttendance: false,
   teacher: '5bf5fb65d741524f090c9215',
-  updatedAt: '2025-06-02T00:00:00.000Z',
   usesMoodle: false,
   usesSigaa: true,
 };

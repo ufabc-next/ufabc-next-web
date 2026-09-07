@@ -8,9 +8,10 @@ import { buildApp } from '../../../../src/app.js';
 import { SummaryModel } from '../../../../src/models/Summary.js';
 import { TeacherModel } from '../../../../src/models/Teacher.js';
 
-describe('GET /entities/teachers/summary/:teacherId', () => {
+describe('GET /v2/entities/teachers/summary/:teacherId', () => {
   let stack: TestStack;
   let app: FastifyInstance;
+  let token: string;
   const teacherId = new Types.ObjectId();
   const teacherWithoutSummaryId = new Types.ObjectId();
 
@@ -21,6 +22,12 @@ describe('GET /entities/teachers/summary/:teacherId', () => {
       config: { ...stack.config, NODE_ENV: 'test' },
     });
     await app.ready();
+
+    const tokenRes = await app.inject({
+      method: 'POST',
+      url: '/_test/token',
+    });
+    token = JSON.parse(tokenRes.body).token;
 
     await TeacherModel.create([
       { _id: teacherId, name: 'Professor Teste' },
@@ -51,28 +58,34 @@ describe('GET /entities/teachers/summary/:teacherId', () => {
     await stack.stop();
   });
 
-  it('is public — no auth required', async () => {
+  it('rejects requests without a JWT', async () => {
     const res = await app.inject({
       method: 'GET',
-      url: `/entities/teachers/summary/${teacherId}`,
+      url: `/v2/entities/teachers/summary/${teacherId}`,
     });
-    expect(res.statusCode).toBe(200);
+    expect(res.statusCode).toBe(401);
   });
 
   it('returns the latest active summary', async () => {
     const res = await app.inject({
       method: 'GET',
-      url: `/entities/teachers/summary/${teacherId}`,
+      url: `/v2/entities/teachers/summary/${teacherId}`,
+      headers: { Authorization: `Bearer ${token}` },
     });
     const body = JSON.parse(res.body);
+    expect(res.statusCode).toBe(200);
     expect(body.summary).toBe('Resumo de teste.');
     expect(body.commentsCount).toBe(10);
+    expect(body).not.toHaveProperty('oldestComment');
+    expect(body).not.toHaveProperty('newestComment');
+    expect(body).not.toHaveProperty('updatedAt');
   });
 
   it('404s when teacher has no summary yet', async () => {
     const res = await app.inject({
       method: 'GET',
-      url: `/entities/teachers/summary/${teacherWithoutSummaryId}`,
+      url: `/v2/entities/teachers/summary/${teacherWithoutSummaryId}`,
+      headers: { Authorization: `Bearer ${token}` },
     });
     expect(res.statusCode).toBe(404);
   });
@@ -113,7 +126,8 @@ describe('GET /entities/teachers/summary/:teacherId', () => {
 
     const res = await app.inject({
       method: 'GET',
-      url: `/entities/teachers/summary/${teacherWithMultipleId}`,
+      url: `/v2/entities/teachers/summary/${teacherWithMultipleId}`,
+      headers: { Authorization: `Bearer ${token}` },
     });
     expect(JSON.parse(res.body).summary).toBe('Resumo mais novo.');
   });

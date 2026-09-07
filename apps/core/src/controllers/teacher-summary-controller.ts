@@ -1,5 +1,6 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
+import { jwtVerifyHook } from '@/hooks/jwt-verify.js';
 import { findLatestSummary } from '@/routes/entities/teachers/service.js';
 import {
   teacherSummaryParamsSchema,
@@ -16,8 +17,7 @@ export const teacherSummaryController: FastifyPluginAsyncZod = async (
   app.route({
     method: 'GET',
     url: '/entities/teachers/summary/:teacherId',
-    // Public endpoint — no preHandler. This route sits outside `routes/`
-    // (autohooks.ts global auth hook), so auth is opt-in per route here.
+    preHandler: [jwtVerifyHook],
     schema: {
       params: teacherSummaryParamsSchema,
       response: {

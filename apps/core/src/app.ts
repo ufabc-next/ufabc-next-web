@@ -38,6 +38,7 @@ const routesV2 = [
   UfabcParserIncomingWebhookController,
   authenticationController,
   proxyController,
+  teacherSummaryController,
 ];
 
 export async function buildApp(
@@ -63,10 +64,6 @@ export async function buildApp(
   await app.register(memoryMonitorPlugin);
 
   await setupV2Routes(app, routesV2);
-
-  // Not part of routesV2: keeps its pre-existing unprefixed path
-  // (/entities/teachers/summary/:teacherId) for frontend compatibility.
-  await app.register(teacherSummaryController);
 
   app.setSchemaErrorFormatter((errors, dataVar) => {
     let message = `${dataVar}:`;

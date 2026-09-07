@@ -12,7 +12,4 @@ export const teacherSummaryResponseSchema = z.object({
   usesSigaa: z.boolean().nullish(),
   usesMoodle: z.boolean().nullish(),
   commentsCount: z.number().int(),
-  oldestComment: z.coerce.date(),
-  newestComment: z.coerce.date(),
-  updatedAt: z.coerce.date(),
 });

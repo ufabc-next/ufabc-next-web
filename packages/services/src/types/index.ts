@@ -324,10 +324,6 @@ export type TeacherSummary = {
   usesSigaa?: boolean | null;
   usesMoodle?: boolean | null;
   commentsCount: number;
-  oldestComment: string;
-  newestComment: string;
-  promptVersion: string;
-  updatedAt: string;
 };
 
 export type Device = {
