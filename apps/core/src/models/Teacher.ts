@@ -1,5 +1,7 @@
 import { type InferSchemaType, Schema, model, Types } from 'mongoose';
 
+import { TEACHER_CACHE_MAX_SIZE } from '@/constants.js';
+
 export function normalizeName(str: string): string {
   return str
     .toLowerCase()
@@ -98,6 +100,26 @@ teacherSchema.index(
   { unique: true, name: 'TeacherExternalKeyIndex', sparse: true }
 );
 
+/**
+ * Sets a cache entry, evicting the oldest entry first if `cache` is already
+ * at `maxSize` — without this, `teacherCache` below grows unbounded for the
+ * life of the process (it caches every distinct teacher name variant ever seen).
+ */
+export function setTeacherCacheEntry<Value>(
+  cache: Map<string, Value>,
+  key: string,
+  value: Value,
+  maxSize = TEACHER_CACHE_MAX_SIZE
+) {
+  if (cache.size >= maxSize && !cache.has(key)) {
+    const oldestKey = cache.keys().next().value;
+    if (oldestKey !== undefined) {
+      cache.delete(oldestKey);
+    }
+  }
+  cache.set(key, value);
+}
+
 const teacherCache = new Map<string, Types.ObjectId | null>();
 
 export async function findTeacher(
@@ -120,13 +142,13 @@ export async function findTeacher(
       await TeacherModel.findByIdAndUpdate(levMatch._id, {
         $addToSet: { alias: { $each: [normalizedName, name.toLowerCase()] } },
       });
-      teacherCache.set(normalizedName, levMatch._id);
+      setTeacherCacheEntry(teacherCache, normalizedName, levMatch._id);
       return levMatch._id;
     }
   }
 
   if (!teacher && normalizedName !== '0') {
-    teacherCache.set(normalizedName, null);
+    setTeacherCacheEntry(teacherCache, normalizedName, null);
     return null;
   }
 
@@ -137,7 +159,7 @@ export async function findTeacher(
   }
 
   const teacherId = teacher?._id ?? null;
-  teacherCache.set(normalizedName, teacherId);
+  setTeacherCacheEntry(teacherCache, normalizedName, teacherId);
   return teacherId;
 }
 
