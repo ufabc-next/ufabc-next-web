@@ -1,3 +1,5 @@
+import type { Types } from 'mongoose';
+
 import { NextError } from './base-error.js';
 
 export class EmailVerificationFailed extends NextError {
@@ -64,13 +66,14 @@ export class ArchiveFileEmpty extends NextError {
 }
 
 export class DuplicateComment extends NextError {
-  constructor(enrollment: string) {
+  constructor(enrollment: Types.ObjectId) {
     super(
       'Duplicate Comment',
       'NEX0006',
       409,
-      `You can only comment once on enrollment ${enrollment}`,
-      `Você só pode comentar uma vez neste vínculo ${enrollment}`
+      'User already has a comment on this enrollment',
+      'Você já possui um comentário neste vínculo',
+      { enrollment }
     );
   }
 }

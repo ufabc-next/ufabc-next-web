@@ -151,7 +151,7 @@ commentSchema.pre('save', async function () {
       type: this.type,
     });
     if (enrollment) {
-      throw new DuplicateComment(String(this.enrollment));
+      throw new DuplicateComment(this.enrollment);
     }
   }
 });
