@@ -1,5 +1,7 @@
 import { type InferSchemaType, Schema, model, Types } from 'mongoose';
 
+import { TEACHER_CACHE_MAX_SIZE } from '@/constants.js';
+
 export function normalizeName(str: string): string {
   return str
     .toLowerCase()
@@ -97,8 +99,6 @@ teacherSchema.index(
   { externalKey: 1 },
   { unique: true, name: 'TeacherExternalKeyIndex', sparse: true }
 );
-
-const TEACHER_CACHE_MAX_SIZE = 500;
 
 /**
  * Sets a cache entry, evicting the oldest entry first if `cache` is already
