@@ -77,3 +77,29 @@ export class DuplicateComment extends NextError {
     );
   }
 }
+
+export class DuplicateReaction extends NextError {
+  constructor(comment: Types.ObjectId, user: Types.ObjectId, kind: string) {
+    super(
+      'Duplicate Reaction',
+      'NEX0007',
+      409,
+      'User already reacted to this comment with this reaction kind',
+      'Você não pode reagir duas vezes iguais ao mesmo comentário',
+      { comment, user, kind }
+    );
+  }
+}
+
+export class RecommendationNotAllowed extends NextError {
+  constructor(comment: Types.ObjectId, user: Types.ObjectId) {
+    super(
+      'Recommendation Not Allowed',
+      'NEX0008',
+      403,
+      'User cannot recommend a comment for a teacher they have not taken',
+      'Você não pode recomendar este comentário, pois não fez nenhuma matéria com este professor',
+      { comment, user }
+    );
+  }
+}
