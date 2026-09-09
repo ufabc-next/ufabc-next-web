@@ -10,6 +10,6 @@ export function getClassLogger(instance: object, bindings: Record<string, unknow
   return logger.child({ component: instance.constructor.name, ...bindings })
 }
 
-export function getRequestTraceId() {
+export function getGlobalTraceId() {
   return requestContext.get('traceId') ?? randomUUID()
 }

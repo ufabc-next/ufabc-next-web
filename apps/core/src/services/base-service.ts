@@ -1,17 +1,17 @@
 import type { Logger } from 'pino';
 
-import { getClassLogger, getRequestTraceId } from '@/utils/logger.js';
+import { getClassLogger, getGlobalTraceId } from '@/utils/logger.js';
 
 export type BaseServiceOptions = {
-  traceId?: string;
+  globalTraceId?: string;
 };
 
 export abstract class BaseService {
-  protected readonly traceId: string;
+  protected readonly globalTraceId: string;
   protected readonly logger: Logger;
 
-  constructor({ traceId }: BaseServiceOptions = {}) {
-    this.traceId = traceId ?? getRequestTraceId();
-    this.logger = getClassLogger(this, { traceId: this.traceId });
+  constructor({ globalTraceId }: BaseServiceOptions = {}) {
+    this.globalTraceId = globalTraceId ?? getGlobalTraceId();
+    this.logger = getClassLogger(this, { globalTraceId: this.globalTraceId });
   }
 }

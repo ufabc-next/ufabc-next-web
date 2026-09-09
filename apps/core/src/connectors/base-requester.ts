@@ -7,7 +7,7 @@ import {
 } from '@/constants.js';
 import { sanitizeHeaders } from '@next/logger/sanitize';
 
-import { getClassLogger, getRequestTraceId } from '@/utils/logger.js';
+import { getClassLogger, getGlobalTraceId } from '@/utils/logger.js';
 
 export class BaseRequester {
   protected readonly requester: ReturnType<typeof ofetch.create>;
@@ -122,7 +122,7 @@ export class BaseRequester {
   }
 
   protected getTraceId() {
-    return getRequestTraceId();
+    return getGlobalTraceId();
   }
 
   private getRequestPath(request: FetchRequest): string {

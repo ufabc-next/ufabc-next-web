@@ -1,6 +1,6 @@
 import type { Client } from '@aws-sdk/types';
 
-import { getClassLogger, getRequestTraceId } from '@/utils/logger.js';
+import { getClassLogger, getGlobalTraceId } from '@/utils/logger.js';
 
 export abstract class BaseAWSConnector<TClient extends Client<any, any, any>> {
   protected readonly client: TClient;
@@ -62,6 +62,6 @@ export abstract class BaseAWSConnector<TClient extends Client<any, any, any>> {
   }
 
   protected getTraceId() {
-    return getRequestTraceId();
+    return getGlobalTraceId();
   }
 }
