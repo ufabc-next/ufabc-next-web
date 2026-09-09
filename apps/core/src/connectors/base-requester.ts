@@ -28,8 +28,6 @@ export class BaseRequester {
 
         options.headers = {
           ...existingHeaders,
-          // ofetch narrows options.headers to Headers here, but a plain
-          // object is also a valid HeadersInit
           // @ts-expect-error
           'global-trace-id': traceId,
         };
