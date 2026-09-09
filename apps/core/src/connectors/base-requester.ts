@@ -1,6 +1,3 @@
-// @ts-nocheck only for the logger
-import { requestContext } from '@fastify/request-context';
-import { randomUUID } from 'node:crypto';
 import { type FetchOptions, type FetchRequest, ofetch } from 'ofetch';
 
 import {
@@ -10,7 +7,7 @@ import {
 } from '@/constants.js';
 import { sanitizeHeaders } from '@next/logger/sanitize';
 
-import { logger as defaultLogger } from '@/utils/logger.js';
+import { getClassLogger, getRequestTraceId } from '@/utils/logger.js';
 
 export class BaseRequester {
   protected readonly requester: ReturnType<typeof ofetch.create>;
@@ -21,8 +18,7 @@ export class BaseRequester {
     this.requester = ofetch.create({
       baseURL,
       onRequest: ({ request, options }) => {
-        const logger =
-          this.getLogger() ?? defaultLogger.child({ connector: true });
+        const logger = this.getLogger();
         const traceId = globalTraceId || this.getTraceId();
 
         const existingHeaders =
@@ -32,6 +28,9 @@ export class BaseRequester {
 
         options.headers = {
           ...existingHeaders,
+          // ofetch narrows options.headers to Headers here, but a plain
+          // object is also a valid HeadersInit
+          // @ts-expect-error
           'global-trace-id': traceId,
         };
 
@@ -54,8 +53,7 @@ export class BaseRequester {
         );
       },
       onResponse: ({ response, options }) => {
-        const logger =
-          this.getLogger() ?? defaultLogger.child({ connector: true });
+        const logger = this.getLogger();
         const traceId = this.getTraceId();
 
         const logData = {
@@ -88,8 +86,7 @@ export class BaseRequester {
         logger.info(logData, TRACING_MESSAGES.INCOMING_RESPONSE);
       },
       onResponseError: ({ response }) => {
-        const logger =
-          this.getLogger() ?? defaultLogger.child({ connector: true });
+        const logger = this.getLogger();
 
         logger.error(
           {
@@ -102,8 +99,7 @@ export class BaseRequester {
         );
       },
       onRequestError: ({ error }) => {
-        const logger =
-          this.getLogger() ?? defaultLogger.child({ connector: true });
+        const logger = this.getLogger();
 
         logger.error(
           {
@@ -124,11 +120,11 @@ export class BaseRequester {
   }
 
   protected getLogger() {
-    return requestContext.get('log');
+    return getClassLogger(this);
   }
 
   protected getTraceId() {
-    return requestContext.get('traceId') ?? randomUUID();
+    return getRequestTraceId();
   }
 
   private getRequestPath(request: FetchRequest): string {
@@ -186,7 +182,7 @@ export class BaseRequester {
     options?: FetchOptions
   ): Promise<Response> {
     const traceId = this.getTraceId();
-    const logger = this.getLogger() ?? defaultLogger.child({ connector: true });
+    const logger = this.getLogger();
     const requestPath = this.getRequestPath(url);
     const fullUrl = this.buildFullUrl(requestPath);
     const headers = this.buildRequestHeaders(options?.headers, traceId);
