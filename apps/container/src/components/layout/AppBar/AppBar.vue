@@ -165,11 +165,11 @@ import moonIcon from '@/assets/icons/moon.svg';
 import sunIcon from '@/assets/icons/sun.svg';
 import logoDark from '@/assets/logo.svg';
 import logoLight from '@/assets/logo_white.svg';
-import { UserMenu } from '@/components/UserMenu';
+import { applyChartsTheme } from '@/config/highcharts';
+import { UserMenu } from '@/features/auth/components/UserMenu';
 import { eventTracker } from '@/helpers/EventTracker';
 import { WebEvent } from '@/helpers/WebEvent';
 import { useAuthStore } from '@/stores/auth';
-import { applyChartsTheme } from '@/theme';
 import { runtimeConfig } from '@/utils/runtimeConfig';
 
 import {
@@ -229,7 +229,7 @@ const internalNavigationItems = computed(() =>
   baseInternalItems.map((item) => ({
     ...item,
     locked: item.locked(Boolean(authStore.user?.confirmed)),
-  })),
+  }))
 );
 
 const externalNavigationItems = computed(() =>
@@ -237,7 +237,7 @@ const externalNavigationItems = computed(() =>
     apiURL,
     token: authStore.token,
     permissions: authStore.user?.permissions ?? [],
-  }),
+  })
 );
 </script>
 <style scoped lang="scss">
