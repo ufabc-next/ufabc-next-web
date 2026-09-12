@@ -1,4 +1,4 @@
-import { definedQuarters } from '@/utils/quarters';
+import { definedQuarters } from './quarters';
 
 type QuarterRange = {
   season: string;
@@ -56,7 +56,7 @@ export const isValidAcademicSeason = (season: string): boolean => {
 };
 
 export const getCurrentAcademicSeason = (
-  options: GetCurrentAcademicSeasonOptions = {},
+  options: GetCurrentAcademicSeasonOptions = {}
 ): string => {
   const { now = new Date(), advanceDays = CURRENT_QUARTER_ADVANCE_DAYS } =
     options;
@@ -67,7 +67,7 @@ export const getCurrentAcademicSeason = (
   const currentRange = academicQuarterRanges.find(
     (quarter) =>
       evaluatedDate.getTime() >= quarter.startDate.getTime() &&
-      evaluatedDate.getTime() <= quarter.endDate.getTime(),
+      evaluatedDate.getTime() <= quarter.endDate.getTime()
   );
 
   if (currentRange) {
@@ -89,11 +89,11 @@ export const getCurrentAcademicSeason = (
 };
 
 export const getSelectableAcademicSeasons = (
-  currentSeason: string,
+  currentSeason: string
 ): string[] => {
   const orderedSeasons = academicQuarterRanges.map((quarter) => quarter.season);
   const currentIndex = orderedSeasons.findIndex(
-    (season) => season === currentSeason,
+    (season) => season === currentSeason
   );
 
   if (currentIndex === -1) {
