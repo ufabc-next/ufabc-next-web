@@ -50,7 +50,10 @@
         <v-icon size="20">mdi-whatsapp</v-icon>
         <span class="unavailable-text">Grupo não disponível</span>
         <v-tooltip activator="parent" location="top">
-          <span>Este grupo ainda não foi criado ou não está disponível no momento</span>
+          <span
+            >Este grupo ainda não foi criado ou não está disponível no
+            momento</span
+          >
         </v-tooltip>
       </div>
     </div>
@@ -73,10 +76,11 @@ const campusName = computed(() => {
 });
 
 const isGroupAvailable = computed(() => {
-  return props.component.groupURL !== null 
-  && props.component.groupURL !== ''
-  && props.component.groupURL !== undefined;
-
+  return (
+    props.component.groupURL !== null &&
+    props.component.groupURL !== '' &&
+    props.component.groupURL !== undefined
+  );
 });
 
 const emit = defineEmits<{
