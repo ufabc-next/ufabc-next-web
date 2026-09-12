@@ -62,15 +62,16 @@
 </template>
 
 <script setup lang="ts">
-import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import { Comments, Reviews } from '@next/services';
+import { useInfiniteQuery, useQuery } from '@tanstack/vue-query';
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 
-import { CenteredLoading } from '@/components/CenteredLoading';
-import { FeedbackAlert } from '@/components/FeedbackAlert';
-import { SingleComment } from '@/components/SingleComment';
+import { CenteredLoading } from '@/components/ui/CenteredLoading';
+import { FeedbackAlert } from '@/components/ui/FeedbackAlert';
 import { checkEAD } from '@/utils/season';
+
+import { SingleComment } from '../SingleComment';
 
 const { smAndDown } = useDisplay();
 const props = defineProps({
@@ -107,7 +108,7 @@ const selectedSubjectId = computed(
     teacherData.value?.specific
       .filter((subject) => subject._id)
       .find((subject) => subject._id.name === selectedSubject.value)?._id._id ||
-    '',
+    ''
 );
 
 const {
@@ -152,7 +153,7 @@ const filteredCommentsData = computed(() => {
     };
 
   const commentsList = commentsData.value.data.filter(
-    (comment) => !checkEAD(comment.enrollment.year, comment.enrollment.quad),
+    (comment) => !checkEAD(comment.enrollment.year, comment.enrollment.quad)
   );
 
   return {
@@ -163,7 +164,7 @@ const filteredCommentsData = computed(() => {
 
 watch(
   () => teacherId.value,
-  () => refetchTeacher(),
+  () => refetchTeacher()
 );
 
 const subjects = computed(() => {
@@ -180,6 +181,6 @@ const subjects = computed(() => {
 const isLoading = computed(
   () =>
     isFetchingTeacher.value ||
-    (isFetchingComments.value && !isFetchingMoreComments.value),
+    (isFetchingComments.value && !isFetchingMoreComments.value)
 );
 </script>

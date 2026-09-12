@@ -2,7 +2,7 @@ import type { ConceptData } from '@next/services';
 
 export const transformConceptDataToObject = (
   grades: ConceptData[],
-  eadFilter?: boolean,
+  eadFilter?: boolean
 ) => {
   const result: Record<string, number> = {};
   grades.forEach((grade) => {

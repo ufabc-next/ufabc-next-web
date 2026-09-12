@@ -97,8 +97,8 @@
 </template>
 
 <script lang="ts" setup>
+import { Comment, Comments, RequestError } from '@next/services';
 import { useMutation } from '@tanstack/vue-query';
-import { Comment, Comments , RequestError } from '@next/services';
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
 import { computed, onMounted, PropType, ref } from 'vue';
@@ -122,7 +122,7 @@ const like = ref(comment.value.myReactions.like ?? false);
 const likeCount = ref(comment.value.reactionsCount?.like ?? 0);
 const recommendation = ref(comment.value.myReactions.recommendation ?? false);
 const recommendationCount = ref(
-  comment.value.reactionsCount?.recommendation ?? 0,
+  comment.value.reactionsCount?.recommendation ?? 0
 );
 
 const conceptStyle = computed(() => ({
@@ -208,12 +208,12 @@ const season = computed(() => {
   return formatSeason(
     (year ?? props.comment.enrollment.year) +
       ':' +
-      (quad ?? props.comment.enrollment.quad),
+      (quad ?? props.comment.enrollment.quad)
   );
 });
 
 const isEAD = computed(() =>
-  checkEAD(props.comment?.enrollment.year, props.comment?.enrollment.quad),
+  checkEAD(props.comment?.enrollment.year, props.comment?.enrollment.quad)
 );
 
 const expanded = ref(false);
@@ -247,7 +247,11 @@ onMounted(() => {
   position: absolute;
   width: 100%;
   top: 60px;
-  background-image: linear-gradient(to right, transparent, rgb(var(--v-theme-surface)) 40%);
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    rgb(var(--v-theme-surface)) 40%
+  );
 }
 
 .v-btn--icon.v-btn--density-default.icon-button {

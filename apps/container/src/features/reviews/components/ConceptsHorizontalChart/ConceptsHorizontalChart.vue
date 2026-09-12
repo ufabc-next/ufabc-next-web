@@ -34,7 +34,8 @@ import { ConceptData, SubjectSpecific } from '@next/services';
 import { computed, PropType } from 'vue';
 
 import { conceptsColor } from '@/utils/consts';
-import { transformConceptDataToObject } from '@/utils/transformConceptDataToObject';
+
+import { transformConceptDataToObject } from '../../utils/transformConceptDataToObject';
 
 const props = defineProps({
   gradeData: { type: Object as PropType<SubjectSpecific>, required: true },
@@ -48,7 +49,7 @@ const orderedDistribution = computed(() => {
 });
 
 const grades = computed(() =>
-  transformConceptDataToObject(props.gradeData.distribution),
+  transformConceptDataToObject(props.gradeData.distribution)
 );
 </script>
 

@@ -22,13 +22,14 @@
 </template>
 
 <script setup lang="ts">
+import { Enrollment, Enrollments } from '@next/services';
 import { useQuery } from '@tanstack/vue-query';
-import { Enrollment,Enrollments  } from '@next/services';
 import { computed } from 'vue';
 
-import { FeedbackAlert } from '@/components/FeedbackAlert';
-import { PaperCard } from '@/components/PaperCard';
-import { PendingReviewEnrollment } from '@/components/PendingReviewEnrollment';
+import { FeedbackAlert } from '@/components/ui/FeedbackAlert';
+import { PaperCard } from '@/components/ui/PaperCard';
+
+import { PendingReviewEnrollment } from '../PendingReviewEnrollment';
 
 const { data: enrollments, isError: isErrorEnrollment } = useQuery({
   refetchOnWindowFocus: false,
@@ -76,7 +77,7 @@ const filteredAndSeparatedEnrollments = computed(() => {
       return acc;
     }, [] as Enrollment[])
     .filter(
-      (enrollment) => enrollment.year === year && enrollment.quad === quad,
+      (enrollment) => enrollment.year === year && enrollment.quad === quad
     );
 });
 </script>

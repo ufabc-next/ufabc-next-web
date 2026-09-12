@@ -134,17 +134,18 @@
 </template>
 
 <script lang="ts" setup>
+import { Concept, Reviews, SubjectSpecific } from '@next/services';
 import { useQuery } from '@tanstack/vue-query';
-import { Concept, Reviews , SubjectSpecific } from '@next/services';
 import { ElMessage } from 'element-plus';
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 
-import { CenteredLoading } from '@/components/CenteredLoading';
-import { ConceptsHorizontalChart } from '@/components/ConceptsHorizontalChart';
-import { ConceptsPieChart } from '@/components/ConceptsPieChart';
-import { PaperCard } from '@/components/PaperCard';
-import { transformConceptDataToObject } from '@/utils/transformConceptDataToObject';
+import { CenteredLoading } from '@/components/ui/CenteredLoading';
+import { PaperCard } from '@/components/ui/PaperCard';
+
+import { transformConceptDataToObject } from '../../utils/transformConceptDataToObject';
+import { ConceptsHorizontalChart } from '../ConceptsHorizontalChart';
+import { ConceptsPieChart } from '../ConceptsPieChart';
 
 const props = defineProps({
   subjectId: { type: String, required: true },
@@ -176,7 +177,7 @@ watch(
         type: 'error',
         showClose: true,
       });
-  },
+  }
 );
 
 const chips = computed(() => {
@@ -186,16 +187,13 @@ const chips = computed(() => {
   return [
     {
       value: subjectData.value?.general.count,
-      text:
-        subjectData.value?.general.count == 1 ? 'conceito' : 'conceitos',
+      text: subjectData.value?.general.count == 1 ? 'conceito' : 'conceitos',
       icon: 'mdi-message-text-outline',
     },
     {
       value: subjectData.value.specific.length,
       text:
-        subjectData.value.specific.length == 1
-          ? 'professor'
-          : 'professores',
+        subjectData.value.specific.length == 1 ? 'professor' : 'professores',
       icon: 'mdi-human-male-board',
     },
   ];
@@ -203,9 +201,7 @@ const chips = computed(() => {
 
 const generalGrades = computed(() => {
   if (!subjectData.value) return {};
-  return transformConceptDataToObject(
-    subjectData.value.general.distribution,
-  );
+  return transformConceptDataToObject(subjectData.value.general.distribution);
 });
 
 const tableHead = ['Nome do Professor', 'Conceitos', 'Amostras'];
@@ -256,16 +252,16 @@ const approveRating = (subject: SubjectSpecific) => {
 const shortedSpecifics = computed(() => {
   if (!subjectData.value?.specific) return [];
   const sorted: SubjectSpecific[] = JSON.parse(
-    JSON.stringify(subjectData.value.specific),
+    JSON.stringify(subjectData.value.specific)
   );
 
   if (selectedOrder.value === 'teacherCres') {
     sorted.sort((a, b) =>
-      (a.teacher?.name ?? '') > (b.teacher?.name ?? '') ? 1 : -1,
+      (a.teacher?.name ?? '') > (b.teacher?.name ?? '') ? 1 : -1
     );
   } else if (selectedOrder.value === 'teacherDecres') {
     sorted.sort((a, b) =>
-      (a.teacher?.name ?? '') > (b.teacher?.name ?? '') ? -1 : 1,
+      (a.teacher?.name ?? '') > (b.teacher?.name ?? '') ? -1 : 1
     );
   } else if (selectedOrder.value === 'samplesCres') {
     sorted.sort((a, b) => a.count - b.count);

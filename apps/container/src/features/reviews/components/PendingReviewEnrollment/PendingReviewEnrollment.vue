@@ -60,9 +60,10 @@
 import { Enrollment } from '@next/services';
 import { computed, PropType, ref } from 'vue';
 
-import { ReviewDialog } from '@/components/ReviewDialog';
 import { conceptsColor } from '@/utils/consts';
 import { checkEAD, formatSeason } from '@/utils/season';
+
+import { ReviewDialog } from '../ReviewDialog';
 
 const showDialog = ref(false);
 
@@ -81,14 +82,14 @@ const props = defineProps({
 });
 
 const isEAD = computed(() =>
-  checkEAD(props.enrollment.year, props.enrollment.quad),
+  checkEAD(props.enrollment.year, props.enrollment.quad)
 );
 const subjectType = computed(() =>
   props.enrollment.teoria
     ? props.enrollment.pratica
       ? 'teoria e prática'
       : 'teoria'
-    : 'prática',
+    : 'prática'
 );
 const tags = computed(() => {
   const tags = [

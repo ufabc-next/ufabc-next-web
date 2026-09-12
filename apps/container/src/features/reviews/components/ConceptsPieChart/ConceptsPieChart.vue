@@ -20,7 +20,7 @@ watch(
   () => theme.global.current.value.dark,
   () => {
     chartKey.value++;
-  },
+  }
 );
 
 type Grades = Record<string, number>;

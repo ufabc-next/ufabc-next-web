@@ -43,14 +43,14 @@
 </template>
 
 <script lang="ts" setup>
-import { useQuery } from '@tanstack/vue-query';
 import type { SearchSubjectItem, SearchTeacherItem } from '@next/services';
 import { Reviews } from '@next/services';
+import { useQuery } from '@tanstack/vue-query';
 import debounce from 'lodash.debounce';
 import { computed, onMounted, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
-import { FeedbackAlert } from '@/components/FeedbackAlert';
+import { FeedbackAlert } from '@/components/ui/FeedbackAlert';
 import { capitalizeName } from '@/utils/capitalizeName';
 
 const router = useRouter();
@@ -123,7 +123,7 @@ onMounted(() => {
 
 const mapSearchResults = (
   type: string,
-  results?: (SearchTeacherItem | SearchSubjectItem)[],
+  results?: (SearchTeacherItem | SearchSubjectItem)[]
 ) =>
   results?.map((result) => ({
     name: result.name || '',

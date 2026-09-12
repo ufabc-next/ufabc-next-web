@@ -83,18 +83,19 @@
 </template>
 
 <script setup lang="ts">
-import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import type { Enrollment, RequestError } from '@next/services';
 import { Comments, Enrollments } from '@next/services';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { AxiosError } from 'axios';
 import { ElMessage } from 'element-plus';
 import { computed, PropType, ref, watch } from 'vue';
 
-import { CommentsList } from '@/components/CommentsList';
-import { FeedbackAlert } from '@/components/FeedbackAlert';
-import { PaperCard } from '@/components/PaperCard';
+import { FeedbackAlert } from '@/components/ui/FeedbackAlert';
+import { PaperCard } from '@/components/ui/PaperCard';
 import { capitalizeName } from '@/utils/capitalizeName';
 import { conceptsColor } from '@/utils/consts';
+
+import { CommentsList } from '../CommentsList';
 
 const selectedSubject = ref<string>('Todas as matérias');
 
@@ -194,7 +195,7 @@ const disableMutateComment = computed(() => {
 
 const hasUserComment = computed(
   () =>
-    !!teacherEnrollmentComment.value[subjectType.value as 'teoria' | 'prática'],
+    !!teacherEnrollmentComment.value[subjectType.value as 'teoria' | 'prática']
 );
 
 const queryClient = useQueryClient();
@@ -276,7 +277,7 @@ watch(
   () => props.showDialog,
   () => {
     if (!showDialog.value) comment.value = '';
-  },
+  }
 );
 </script>
 
