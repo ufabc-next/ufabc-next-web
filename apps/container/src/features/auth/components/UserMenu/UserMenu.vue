@@ -62,8 +62,9 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 import { useAuthStore } from '@/stores/auth';
-import { useAliasInitials } from '@/utils/composables/aliasInitials';
-import { useCleanUsername } from '@/utils/composables/cleanUsername';
+
+import { useAliasInitials } from '../../composables/useAliasInitials';
+import { useCleanUsername } from '../../composables/useCleanUsername';
 
 const emit = defineEmits<{
   logout: [];
@@ -87,4 +88,3 @@ const handleLogoutClick = () => {
   emit('logout');
 };
 </script>
-

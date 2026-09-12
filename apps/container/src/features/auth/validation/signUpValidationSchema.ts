@@ -17,7 +17,7 @@ const raFieldSchema = z
   })
   .refine(
     (ra) => ra.length >= 8,
-    'O campo RA deve conter pelo menos 8 dígitos.',
+    'O campo RA deve conter pelo menos 8 dígitos.'
   );
 
 // Combined RA and confirmation schema
