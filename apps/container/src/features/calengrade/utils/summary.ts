@@ -1,4 +1,4 @@
-import type { Classes } from '../views/Calengrade/types';
+import type { Classes } from '../types';
 
 const CLASSES_CODES_REGES = /[A-Z0-9]{7}[-][0-9]{2}/gi;
 const TITLE_REGEX = /(?<=[\d-]\s-\s)(.+?)(?=\s\w{1,2}-|$)/gi;
@@ -51,7 +51,7 @@ export const handleSummary = (summary: string): Classes => {
       .replace(/\s*<br\s*\/?>\s*/gi, '\n')
       .split(/\n+/gi)
       .map((line) => line.trim())
-      .filter((line) => line.length > 0),
+      .filter((line) => line.length > 0)
   );
 
   // Get the classes info
@@ -72,8 +72,8 @@ export const handleSummary = (summary: string): Classes => {
       {
         info: '',
         times: [] as string[],
-      },
-    ),
+      }
+    )
   );
 
   // Create the final json with the classes

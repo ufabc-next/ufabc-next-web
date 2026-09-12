@@ -40,8 +40,8 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, watch } from 'vue';
 
-import { handleCalendar } from '../../../utils/calendar';
 import { CalengradeInfo, CalengradeSteps } from '../types';
+import { handleCalendar } from '../utils/calendar';
 
 const props = defineProps<{
   calengrade: CalengradeInfo;
@@ -139,7 +139,7 @@ watch(
   {
     immediate: true,
     deep: true,
-  },
+  }
 );
 </script>
 

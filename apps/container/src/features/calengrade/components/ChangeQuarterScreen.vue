@@ -21,7 +21,7 @@
           @change="
             (event) =>
               handleQuarterChange(
-                Number((event.target as HTMLSelectElement).value),
+                Number((event.target as HTMLSelectElement).value)
               )
           "
         >
@@ -57,8 +57,9 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 
-import { definedQuarters } from '../../../utils/quarters';
-import { CalengradeSteps, Quarter } from '../types';
+import { definedQuarters, type Quarter } from '@/shared/academic-calendar';
+
+import { CalengradeSteps } from '../types';
 
 const props = defineProps<{
   selectedQuarter: Quarter;
@@ -66,7 +67,7 @@ const props = defineProps<{
 
 const findSelectedQuarterIndex = () => {
   return definedQuarters.findIndex(
-    (q) => props.selectedQuarter.title === q.title,
+    (q) => props.selectedQuarter.title === q.title
   );
 };
 

@@ -2,8 +2,9 @@ import type { Dayjs } from 'dayjs';
 import dayjs from 'dayjs';
 import * as ics from 'ics';
 
-import type { Calendar } from '../views/Calengrade/types';
 import { logger } from '@/utils/logger';
+
+import type { Calendar } from '../types';
 
 const dayOfWeekReturnMappings = {
   Domingo: {

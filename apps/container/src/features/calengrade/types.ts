@@ -1,3 +1,5 @@
+import type { Quarter } from '@/shared/academic-calendar';
+
 export type Classes = {
   title: string | null;
   campus: string | null;
@@ -12,12 +14,6 @@ export type Classes = {
     repeat: string | null;
   }[];
 }[];
-
-export type Quarter = {
-  title: string;
-  startDate: string;
-  endDate: string;
-};
 
 export type Calendar = {
   classes: Classes;
