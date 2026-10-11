@@ -8,7 +8,6 @@ import { adminHook } from '@/hooks/admin.js';
 import { UserModel } from '@/models/User.js';
 
 const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
-  // dev only: in prod the route is never registered, so it always answers 404
   if (app.config.NODE_ENV === 'dev') {
     app.post(
       '/token',

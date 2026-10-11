@@ -2,7 +2,6 @@ import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
 
 import { currentQuad } from '@next/utils';
 
-import { InvalidRa } from '@/errors/custom-errors.js';
 import { listUserEnrollments } from '@/schemas/entities/enrollments.js';
 
 import {
@@ -18,7 +17,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
     return userEnrollments;
   });
 
-  app.get('/wpp', async ({ user, query }) => {
+  app.get('/wpp', async ({ user, query }, reply) => {
     const { season, ra } = query as {
       season?: ReturnType<typeof currentQuad>;
       ra?: string;
@@ -26,14 +25,13 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
 
     const actualSeason = season ?? currentQuad();
 
-    // the "search by RA" feature looks up other students, default to the caller
     let targetRa = user.ra;
     if (ra !== undefined) {
       targetRa = Number(ra);
     }
 
     if (Number.isNaN(targetRa)) {
-      throw new InvalidRa();
+      return reply.badRequest('Invalid ra');
     }
 
     const wppEnrollments = await listWithComponents(targetRa, actualSeason);

@@ -23,7 +23,7 @@ export default fp(async (app: FastifyInstance) => {
         direction: TRACING_DIRECTION.INCOMING,
         method: request.method,
         url: request.url,
-        headers: request.headers, // redacted at the Pino level, see REDACTED_PATHS
+        headers: request.headers, // Redaction should happen at the Pino level
         queryParams: serializeQueryParams(request.query),
       },
       TRACING_MESSAGES.INCOMING_REQUEST

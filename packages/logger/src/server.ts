@@ -2,7 +2,6 @@ import { pino, stdSerializers, type Logger } from 'pino'
 
 export type Env = 'dev' | 'production'
 
-// headers and job payloads that carry credentials, never ship them to a log sink
 const REDACTED_PATHS = [
   'headers.authorization',
   'headers.cookie',

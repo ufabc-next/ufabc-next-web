@@ -29,7 +29,6 @@ export const authenticateBoard: BoardAuthHook = async (request, reply) => {
   }
 
   if (queryToken) {
-    // move the token from the url into a cookie scoped to the board
     const requestPath = request.url.split('?')[0];
     const boardPath = requestPath.endsWith('/') ? requestPath : `${requestPath}/`;
     reply.setCookie('token', queryToken, {

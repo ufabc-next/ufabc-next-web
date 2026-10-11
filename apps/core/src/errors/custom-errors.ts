@@ -142,14 +142,26 @@ export class BoardForbidden extends NextError {
   }
 }
 
-export class InvalidRa extends NextError {
+export class InvalidWebhookApiKey extends NextError {
   constructor() {
     super(
-      'Invalid RA',
+      'Invalid Webhook API Key',
       'NEX0012',
-      400,
-      'The provided RA is not a valid number',
-      'O RA informado não é válido'
+      401,
+      'Invalid or missing webhook API key',
+      'Chave de API do webhook inválida ou ausente'
+    );
+  }
+}
+
+export class InvalidInternalToken extends NextError {
+  constructor() {
+    super(
+      'Invalid Internal Token',
+      'NEX0013',
+      401,
+      'Invalid or missing x-internal-token header',
+      'Token interno inválido ou ausente'
     );
   }
 }
