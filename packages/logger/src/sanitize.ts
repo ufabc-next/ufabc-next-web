@@ -2,7 +2,25 @@ const SENSITIVE_HEADER_KEYS = new Set([
   'authorization',
   'cookie',
   'set-cookie',
+  'x-academic-token',
+  'session-id',
+  'view-id',
+  'view-state',
+  'sess-key',
 ]);
+
+export function sanitizeCredentials(value: unknown): unknown {
+  if (Array.isArray(value)) return value.map(sanitizeCredentials);
+  if (!value || typeof value !== 'object') return value;
+  return Object.fromEntries(
+    Object.entries(value).map(([key, child]) => [
+      key,
+      ['accesstoken', 'credentialhash'].includes(key.toLowerCase())
+        ? '[REDACTED]'
+        : sanitizeCredentials(child),
+    ])
+  );
+}
 
 export function sanitizeHeaders(
   headers: Headers | Record<string, unknown> | undefined

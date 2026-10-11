@@ -1,4 +1,5 @@
 import { type FetchOptions, type FetchRequest, ofetch } from 'ofetch';
+import { sanitizeHeaders, sanitizeCredentials } from '@next/logger/sanitize';
 
 import { MAX_LOG_SIZE, TRACING_DIRECTION, TRACING_MESSAGES } from './constants.ts';
 
@@ -77,7 +78,7 @@ export class BaseRequester {
             url: fullUrl,
             baseURL,
             path: requestPath,
-            headers: requestOptions.headers,
+            headers: sanitizeHeaders(requestOptions.headers),
             responseType: requestOptions.responseType,
             body: requestOptions.body,
           },
@@ -93,7 +94,7 @@ export class BaseRequester {
           method: requestOptions.method || 'GET',
           url: response.url,
           status: response.status,
-          headers: response.headers,
+          headers: sanitizeHeaders(response.headers),
           responseType: requestOptions.responseType || 'json',
           body: this.truncateForLogging(response._data),
         };
@@ -135,7 +136,7 @@ export class BaseRequester {
         logger.error(
           {
             direction: TRACING_DIRECTION.OUTGOING,
-            error,
+            error: error.message,
           },
           TRACING_MESSAGES.OUTGOING_REQUEST_FAILED
         );
@@ -207,7 +208,7 @@ export class BaseRequester {
         url: fullUrl,
         baseURL: this.baseURL,
         path: requestPath,
-        headers,
+        headers: sanitizeHeaders(headers),
         responseType: options?.responseType,
         body: options?.body,
       },
@@ -227,7 +228,7 @@ export class BaseRequester {
           method: options?.method || 'GET',
           url: response.url,
           status: response.status,
-          headers: response.headers,
+          headers: sanitizeHeaders(response.headers),
         },
         TRACING_MESSAGES.INCOMING_RESPONSE
       );
@@ -237,7 +238,7 @@ export class BaseRequester {
       logger.error(
         {
           direction: TRACING_DIRECTION.OUTGOING,
-          error,
+          error: error instanceof Error ? error.message : 'Request failed',
         },
         TRACING_MESSAGES.OUTGOING_REQUEST_FAILED
       );
@@ -310,6 +311,7 @@ export class BaseRequester {
   }
 
   private truncateForLogging(data: unknown): unknown {
+    data = sanitizeCredentials(data);
     if (data === null || data === undefined) return data;
 
     const stringified = typeof data === 'string' ? data : JSON.stringify(data);

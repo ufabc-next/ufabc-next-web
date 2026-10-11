@@ -1,8 +1,11 @@
-import type { FastifyBaseLogger, FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-
+import { sanitizeHeaders, serializeQueryParams } from '@next/logger/sanitize';
+import type {
+  FastifyBaseLogger,
+  FastifyInstance,
+  FastifyReply,
+  FastifyRequest,
+} from 'fastify';
 import { fastifyPlugin as fp } from 'fastify-plugin';
-
-import { serializeQueryParams } from '@next/logger/sanitize';
 
 import { TRACING_DIRECTION, TRACING_MESSAGES } from '@/constants.js';
 
@@ -23,43 +26,46 @@ export default fp(async (app: FastifyInstance) => {
         direction: TRACING_DIRECTION.INCOMING,
         method: request.method,
         url: request.url,
-        headers: request.headers, // Redaction should happen at the Pino level
+        headers: sanitizeHeaders(request.headers),
         queryParams: serializeQueryParams(request.query),
       },
       TRACING_MESSAGES.INCOMING_REQUEST
     );
   });
 
-  app.addHook('onResponse', async (request: FastifyRequest, reply: FastifyReply) => {
-    const status = reply.statusCode;
+  app.addHook(
+    'onResponse',
+    async (request: FastifyRequest, reply: FastifyReply) => {
+      const status = reply.statusCode;
 
-    const logData = {
-      direction: TRACING_DIRECTION.OUTGOING,
-      method: request.method,
-      path: request.url,
-      status,
-      duration: reply.elapsedTime,
-      headers: reply.getHeaders(),
-      userAgent: request.headers['user-agent'],
-      ip: request.ip,
-      queryParams: serializeQueryParams(request.query),
-      params: request.params,
-    };
+      const logData = {
+        direction: TRACING_DIRECTION.OUTGOING,
+        method: request.method,
+        path: request.url,
+        status,
+        duration: reply.elapsedTime,
+        headers: sanitizeHeaders(reply.getHeaders()),
+        userAgent: request.headers['user-agent'],
+        ip: request.ip,
+        queryParams: serializeQueryParams(request.query),
+        params: request.params,
+      };
 
-    const hasError = !!reply.error;
+      const hasError = !!reply.error;
 
-    if (status >= 500) {
-      request.log.error(
-        { ...logData, ...(hasError && { error: reply.error }) },
-        TRACING_MESSAGES.OUTGOING_RESPONSE_WITH_5XX_STATUS
-      );
-    } else if (status >= 400) {
-      request.log.warn(
-        { ...logData, ...(hasError && { error: reply.error }) },
-        TRACING_MESSAGES.OUTGOING_RESPONSE_WITH_4XX_STATUS
-      );
-    } else {
-      request.log.info(logData, TRACING_MESSAGES.OUTGOING_RESPONSE);
+      if (status >= 500) {
+        request.log.error(
+          { ...logData, ...(hasError && { error: reply.error }) },
+          TRACING_MESSAGES.OUTGOING_RESPONSE_WITH_5XX_STATUS
+        );
+      } else if (status >= 400) {
+        request.log.warn(
+          { ...logData, ...(hasError && { error: reply.error }) },
+          TRACING_MESSAGES.OUTGOING_RESPONSE_WITH_4XX_STATUS
+        );
+      } else {
+        request.log.info(logData, TRACING_MESSAGES.OUTGOING_RESPONSE);
+      }
     }
-  });
+  );
 });
