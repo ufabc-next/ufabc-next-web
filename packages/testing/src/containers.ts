@@ -57,3 +57,8 @@ export async function startTestStack() {
 }
 
 export type TestStack = Awaited<ReturnType<typeof startTestStack>>;
+
+// A dedicated replica set for academic ownership transaction tests.
+export async function startMongoTestDatabase() {
+  return new MongoDBContainer('mongo:6').start();
+}
