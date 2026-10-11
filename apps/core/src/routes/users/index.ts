@@ -2,6 +2,7 @@ import { currentQuad } from '@next/utils';
 import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
 
 import { UfabcParserError } from '@/errors/ufabc-parser.js';
+import { validateInternalTokenAuthHook } from '@/hooks/validate-token.js';
 import { StudentModel } from '@/models/Student.js';
 import { UserModel, type User } from '@/models/User.js';
 import { completeUserSchema, type Auth } from '@/schemas/auth.js';
@@ -48,22 +49,26 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
 
     return userInfo;
   });
-  app.get('/validate/:ra', async (request, reply) => {
-    const { ra } = request.params as { ra: string };
-    const raNumber = Number.parseInt(ra);
-    const user = await UserModel.findOne({ ra: raNumber });
-    if (!user) {
-      return reply.badRequest('User not found');
+  app.get(
+    '/validate/:ra',
+    { preHandler: [validateInternalTokenAuthHook] },
+    async (request, reply) => {
+      const { ra } = request.params as { ra: string };
+      const raNumber = Number.parseInt(ra);
+      const user = await UserModel.findOne({ ra: raNumber });
+      if (!user) {
+        return reply.badRequest('User not found');
+      }
+
+      const userInfo = {
+        ra: user.ra,
+        active: user.active,
+        confirmed: user.confirmed,
+      };
+
+      return userInfo;
     }
-
-    const userInfo = {
-      ra: user.ra,
-      active: user.active,
-      confirmed: user.confirmed,
-    };
-
-    return userInfo;
-  });
+  );
 
   app.post('/resend', { schema: resendEmailSchema }, async (request, reply) => {
     const user = await UserModel.findOne({
