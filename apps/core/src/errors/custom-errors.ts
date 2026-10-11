@@ -116,3 +116,40 @@ export class TeacherSummaryNotFound extends NextError {
     );
   }
 }
+
+export class BoardUnauthorized extends NextError {
+  constructor() {
+    super(
+      'Board Unauthorized',
+      'NEX0010',
+      401,
+      'Missing or invalid board token',
+      'Token de acesso ao painel ausente ou inválido'
+    );
+  }
+}
+
+export class BoardForbidden extends NextError {
+  constructor(userId: string) {
+    super(
+      'Board Forbidden',
+      'NEX0011',
+      403,
+      'User is not allowed to access the board',
+      'Você não tem permissão para acessar o painel',
+      { userId }
+    );
+  }
+}
+
+export class InvalidRa extends NextError {
+  constructor() {
+    super(
+      'Invalid RA',
+      'NEX0012',
+      400,
+      'The provided RA is not a valid number',
+      'O RA informado não é válido'
+    );
+  }
+}

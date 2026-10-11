@@ -2,6 +2,7 @@ import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
 
 import { currentQuad } from '@next/utils';
 
+import { InvalidRa } from '@/errors/custom-errors.js';
 import { listUserEnrollments } from '@/schemas/entities/enrollments.js';
 
 import {
@@ -17,7 +18,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
     return userEnrollments;
   });
 
-  app.get('/wpp', async ({ user, query }, reply) => {
+  app.get('/wpp', async ({ user, query }) => {
     const { season, ra } = query as {
       season?: ReturnType<typeof currentQuad>;
       ra?: string;
@@ -32,7 +33,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
     }
 
     if (Number.isNaN(targetRa)) {
-      return reply.badRequest('Invalid ra');
+      throw new InvalidRa();
     }
 
     const wppEnrollments = await listWithComponents(targetRa, actualSeason);

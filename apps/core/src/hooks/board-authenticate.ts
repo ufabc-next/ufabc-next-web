@@ -1,7 +1,8 @@
 // @ts-nocheck - Fastify types are not compatible with the BoardAuthHook type
 import type { BoardAuthHook } from '@next/queues/manager';
 
-const BOARD_COOKIE_MAX_AGE_SECONDS = 3600;
+import { BOARD_COOKIE_MAX_AGE_SECONDS } from '@/constants.js';
+import { BoardForbidden, BoardUnauthorized } from '@/errors/custom-errors.js';
 
 export const authenticateBoard: BoardAuthHook = async (request, reply) => {
   if (request.server.config.NODE_ENV === 'dev') {
@@ -13,22 +14,18 @@ export const authenticateBoard: BoardAuthHook = async (request, reply) => {
   const token = queryToken ?? request.cookies.token;
 
   if (!token) {
-    return reply
-      .status(401)
-      .send({ error: 'Unauthorized', message: 'No token provided' });
+    throw new BoardUnauthorized();
   }
 
   let user;
   try {
     user = request.server.jwt.verify(token);
   } catch {
-    request.log.warn('Board access denied: invalid token');
-    return reply.status(401).send({ error: 'Unauthorized' });
+    throw new BoardUnauthorized();
   }
 
   if (!user.permissions?.includes('admin')) {
-    request.log.warn({ userId: user._id }, 'Board access denied: not an admin');
-    return reply.status(403).send({ error: 'Forbidden' });
+    throw new BoardForbidden(user._id);
   }
 
   if (queryToken) {
