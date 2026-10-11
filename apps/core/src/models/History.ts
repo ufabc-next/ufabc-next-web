@@ -1,5 +1,11 @@
 import { type InferSchemaType, type Model, Schema, model } from 'mongoose';
 
+import {
+  academicOwnershipFields,
+  addAcademicOwnershipIndexes,
+  type AcademicOwnership,
+} from './academic-ownership.js';
+
 const CONCEITOS = ['A', 'B', 'C', 'D', 'O', 'F', '-'] as const;
 export const POSSIBLE_SITUATIONS = [
   'Repr.Freq',
@@ -81,7 +87,7 @@ const historiesDisciplinasSchema = new Schema(
   { _id: false }
 );
 
-export type History = {
+export type History = AcademicOwnership & {
   ra: number;
   disciplinas: InferSchemaType<typeof historiesDisciplinasSchema>[];
   active?: boolean;
@@ -94,6 +100,7 @@ export type THistoryModel = Model<History, {}>;
 export type HistoryDocument = ReturnType<(typeof HistoryModel)['hydrate']>;
 const historySchema = new Schema<History, THistoryModel>(
   {
+    ...academicOwnershipFields,
     ra: { type: Number, required: true },
     active: { type: Boolean, default: true },
     disciplinas: [historiesDisciplinasSchema],
@@ -108,6 +115,8 @@ const historySchema = new Schema<History, THistoryModel>(
 
 historySchema.index({ curso: 'asc', grade: 'asc' });
 historySchema.index({ ra: 'asc', updatedAt: 'desc' });
+
+addAcademicOwnershipIndexes(historySchema);
 
 export const HistoryModel = model<History, THistoryModel>(
   'histories',

@@ -1,5 +1,10 @@
 import { type InferSchemaType, Schema, model } from 'mongoose';
 
+import {
+  academicOwnershipFields,
+  addAcademicOwnershipIndexes,
+} from './academic-ownership.js';
+
 export const COURSE_SHIFTS = [
   'Noturno',
   'Matutino',
@@ -28,6 +33,7 @@ const coursesSchema = new Schema(
 
 const studentSchema = new Schema(
   {
+    ...academicOwnershipFields,
     ra: { type: Number, required: true },
     active: { type: Boolean, default: true },
     login: { type: String, required: true },
@@ -52,4 +58,6 @@ const studentSchema = new Schema(
 export type Student = InferSchemaType<typeof studentSchema>;
 export type StudentDocument = ReturnType<(typeof StudentModel)['hydrate']>;
 export type StudentCourse = InferSchemaType<typeof coursesSchema>;
+addAcademicOwnershipIndexes(studentSchema);
+
 export const StudentModel = model('alunos', studentSchema);

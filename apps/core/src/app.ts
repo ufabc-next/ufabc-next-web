@@ -23,6 +23,7 @@ import queueV2Plugin from './plugins/v2/queue.js';
 import redisV2Plugin from './plugins/v2/redis.js';
 import { setupV2Routes } from './plugins/v2/setup.js';
 import testUtilsPlugin from './plugins/v2/test-utils.js';
+import { ensureAcademicIndexes } from './services/academic-indexes.js';
 
 declare module 'fastify' {
   interface FastifyInstance {
@@ -57,6 +58,7 @@ export async function buildApp(
   await app.register(redisV2Plugin);
   await app.register(dbPlugin, { config: app.config });
   await ensureUserRaIndex();
+  await ensureAcademicIndexes();
 
   if (process.env.NEXT_JOBS_ENABLED !== 'false') {
     await app.register(queueV2Plugin, {

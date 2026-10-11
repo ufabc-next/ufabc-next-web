@@ -7,6 +7,15 @@ import {
 
 const userSchema = new Schema(
   {
+    academicIdentityId: {
+      type: Schema.Types.ObjectId,
+      ref: 'academic_identities',
+    },
+    currentAcademicBindingId: {
+      type: Schema.Types.ObjectId,
+      ref: 'academic_ra_bindings',
+    },
+    academicVerifiedAt: Date,
     ra: {
       type: Number,
       unique: true,

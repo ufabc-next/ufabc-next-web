@@ -1,5 +1,9 @@
 import { type InferSchemaType, Schema, model } from 'mongoose';
 
+import {
+  academicOwnershipFields,
+  addAcademicOwnershipIndexes,
+} from './academic-ownership.js';
 import { GroupModel } from './Group.js';
 
 const COMMENT_TYPE = ['teoria', 'pratica'] as const;
@@ -14,6 +18,7 @@ const enrollmentSchema = new Schema(
       required: true,
     },
     identifier: String,
+    ...academicOwnershipFields,
     ra: {
       type: Number,
       required: true,
@@ -148,4 +153,6 @@ export type Enrollment = InferSchemaType<typeof enrollmentSchema>;
 export type EnrollmentDocument = ReturnType<
   (typeof EnrollmentModel)['hydrate']
 >;
+addAcademicOwnershipIndexes(enrollmentSchema);
+
 export const EnrollmentModel = model('enrollments', enrollmentSchema);

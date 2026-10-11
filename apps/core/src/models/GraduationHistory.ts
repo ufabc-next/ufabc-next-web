@@ -6,6 +6,11 @@ import {
   model,
 } from 'mongoose';
 
+import {
+  academicOwnershipFields,
+  addAcademicOwnershipIndexes,
+  type AcademicOwnership,
+} from './academic-ownership.js';
 import type { CoefficientsMap } from './History.js';
 
 const CONCEITOS = ['A', 'B', 'C', 'D', 'O', 'F', '-'] as const;
@@ -20,7 +25,7 @@ const POSSIBLE_SITUATIONS = [
 const CATEGORIES = ['-', 'Opção Limitada', 'Obrigatória'] as const;
 const PERIODO = ['1', '2', '3'] as const;
 
-type GraduationHistory = {
+type GraduationHistory = AcademicOwnership & {
   ra: number;
   disciplinas: InferSchemaType<typeof GraduationHistoryDisciplinasSchema>[];
   curso: string;
@@ -64,6 +69,7 @@ const graduationHistorySchema = new Schema<
   GraduationHistoryModel
 >(
   {
+    ...academicOwnershipFields,
     ra: {
       type: Number,
       required: true,
@@ -84,6 +90,8 @@ const graduationHistorySchema = new Schema<
 );
 
 export type { GraduationHistory };
+addAcademicOwnershipIndexes(graduationHistorySchema);
+
 export const GraduationHistoryModel = model<
   GraduationHistory,
   GraduationHistoryModel

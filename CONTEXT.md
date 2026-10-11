@@ -6,9 +6,11 @@ UFABC Next é uma plataforma colaborativa para estudantes da UFABC. O portal web
 
 Use os identificadores de código em crases como vocabulário técnico canônico. O texto em português pode explicá-los, mas não deve introduzir outro nome para a mesma entidade.
 
-- **RA**: identificador acadêmico do estudante. É a chave que relaciona conta, dados acadêmicos, matrículas e histórico.
+- **RA**: identificador acadêmico do estudante. Pode mudar ou ser reutilizado; não determina propriedade nem autorização sobre dados acadêmicos.
 - **User**: conta do portal, com autenticação, confirmação e permissões. Uma conta pode estar ligada a um RA.
-- **Student**: retrato dos dados acadêmicos de uma pessoa identificada por RA, incluindo cursos e período atual. Não use `User` e `Student` como sinônimos.
+- **AcademicIdentity**: identidade acadêmica permanente ligada explicitamente a uma conta. Não é inferida de RA, e-mail ou login coincidentes.
+- **AcademicRaBinding**: ocorrência verificada de associação entre AcademicIdentity e RA. Encerrar um vínculo preserva sua propriedade e permite leitura histórica.
+- **Student**: retrato dos dados acadêmicos de uma pessoa associado a um AcademicRaBinding, incluindo cursos e período atual. Não use `User` e `Student` como sinônimos.
 - **Subject**: disciplina canônica do catálogo, identificada por código(s) da UFABC e créditos.
 - **Component**: oferta de um subject em um período: turma, turno, campus, vagas, docentes e horários. O código legado pode chamar essa oferta de `disciplina`; quando a distinção importar, prefira `component` para a oferta e `subject` para a disciplina canônica.
 - **Enrollment**: vínculo de um Student com um Component em um período. Carrega o resultado acadêmico disponível, como conceito e créditos.

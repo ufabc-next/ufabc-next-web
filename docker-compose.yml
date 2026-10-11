@@ -1,6 +1,7 @@
 services:
   next-db:
     image: mongo:latest
+    command: ["mongod", "--replSet", "rs0", "--bind_ip_all"]
     container_name: next-db
     ports:
       - 27017:27017
@@ -8,7 +9,7 @@ services:
       - ./scripts/docker/mongo/initdb.d:/docker-entrypoint-initdb.d:ro
       - next-db-data:/data/db/
     healthcheck:
-      test: ['CMD', 'mongosh', '--eval', "db.adminCommand('ping')"]
+      test: ['CMD', 'mongosh', '--quiet', '--eval', "try { if (!rs.status().ok) quit(1); } catch (e) { rs.initiate({_id:'rs0',members:[{_id:0,host:'next-db:27017'}]}); quit(1); } if (!db.hello().isWritablePrimary) quit(1);"]
       interval: 5s
       timeout: 5s
       retries: 10
