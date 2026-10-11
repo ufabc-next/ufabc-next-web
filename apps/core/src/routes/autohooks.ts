@@ -13,7 +13,7 @@ const PUBLIC_ROUTES = [
   '/users/check-email',
   '/help/form',
   '/users/recover',
-  '/users/validate',
+  '/users/validate/',
   '/v2/auth/whatsapp-token',
 ];
 

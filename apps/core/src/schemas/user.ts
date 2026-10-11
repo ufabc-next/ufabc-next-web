@@ -66,7 +66,10 @@ export const confirmUserSchema = {
 export const validateUserEmailSchema = {
   tags,
   querystring: z.object({
-    ra: z.string().describe('Student ID (RA) of the user to validate'),
+    ra: z
+      .string()
+      .regex(/^\d{1,15}$/)
+      .describe('Student ID (RA) of the user to validate'),
   }),
   response: {
     400: {
