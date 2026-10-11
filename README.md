@@ -88,3 +88,22 @@ Para propor trabalho público, use as convenções em [docs/agents/issue-tracker
 O repositório oferece instruções para Codex, Claude Code, GitHub Copilot e Gemini CLI. A fonte de verdade é [AGENTS.md](AGENTS.md); os adaptadores apenas permitem que cada ferramenta a encontre.
 
 Antes de uma mudança de domínio, leia [CONTEXT.md](CONTEXT.md).
+
+### Identidade acadêmica e histórico de RAs
+
+Históricos e matrículas são autorizados por identidade e vínculo acadêmico.
+Registros de vínculos anteriores continuam consultáveis com `active = false`;
+a reutilização de RA não transfere documentos entre contas.
+
+A extensão acompanha a confirmação do parser antes de mostrar sucesso e usa
+uma credencial acadêmica limitada, válida por até 24 horas. Trocas de vínculo
+ou uma nova sincronização confirmada invalidam a credencial anterior; nesse
+caso, acesse o SIGAA novamente para atualizar os dados da extensão.
+
+A implantação exige MongoDB com transações (replica set), adaptação do parser
+para correlação e comprovação da sessão e migração revisada dos dados legados.
+O Docker Compose local inicializa um replica set de um membro. Para conectar
+pelo host, use `directConnection=true` na URL local.
+Dados sem propriedade comprovada e eventos sem o novo contrato ficam pendentes,
+sem fallback de autorização por RA. Veja o [ADR 0002](docs/adr/0002-academic-ownership.md)
+e o [procedimento de migração](docs/academic-ownership-migration.md) antes de implantar.
