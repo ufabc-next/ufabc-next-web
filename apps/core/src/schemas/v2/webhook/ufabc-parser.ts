@@ -75,6 +75,10 @@ export const StudentSyncedEventSchema = z.object({
   timestamp: z.string().datetime(),
   deliveryId: z.string().uuid(),
   data: z.object({
+    operationId: z.string().uuid().optional(),
+    verifiedSession: z
+      .object({ login: z.string().min(1), ra: z.string().regex(/^\d+$/) })
+      .optional(),
     ra: z.string().describe('Student ID'),
     timestamp: z.string().describe('When processing completed'),
     student: StudentSchema,
@@ -89,6 +93,10 @@ export const StudentFailedEventSchema = z.object({
   timestamp: z.string().datetime(),
   deliveryId: z.string().uuid(),
   data: z.object({
+    operationId: z.string().uuid().optional(),
+    verifiedSession: z
+      .object({ login: z.string().min(1), ra: z.string().regex(/^\d+$/) })
+      .optional(),
     ra: z.string().describe('Student ID'),
     timestamp: z.string().describe('When processing failed'),
     error: ErrorSchema,
@@ -132,13 +140,20 @@ export const ClassSettledEventSchema = z.object({
   timestamp: z.string().datetime(),
   deliveryId: z.string().uuid(),
   data: z.object({
+    operationId: z.string().uuid().optional(),
+    verifiedSession: z
+      .object({ login: z.string().min(1), ra: z.string().regex(/^\d+$/) })
+      .optional(),
     ra: z.string().describe('Student ID'),
     season: z.string().describe('Season (e.g., 2024:2)'),
     tenantId: z.number().describe('Tenant ID'),
     classes: z
       .array(z.string())
       .describe('Array of class codes (uf_cod_turma)'),
-    referenceKey: z.string().optional().describe('Reference key for deduplication'),
+    referenceKey: z
+      .string()
+      .optional()
+      .describe('Reference key for deduplication'),
   }),
 });
 

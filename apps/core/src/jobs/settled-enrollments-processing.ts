@@ -1,118 +1,94 @@
 import { defineJob } from '@next/queues/client';
-import { z } from 'zod';
-
-import type { Enrollment } from '@/models/Enrollment.js';
+import type { FastifyBaseLogger } from 'fastify';
+import type { z } from 'zod';
 
 import { JOB_NAMES } from '@/constants.js';
+import {
+  AcademicPendingEventModel,
+  AcademicSyncOperationModel,
+} from '@/models/AcademicIdentity.js';
 import { ComponentModel } from '@/models/Component.js';
+import { ClassSettledEventSchema } from '@/schemas/v2/webhook/ufabc-parser.js';
+import { proofMatches } from '@/services/academic-identity.js';
 
+import { enrollmentRecordKey } from './utils/enrollment-record-key.js';
 import { upsertEnrollment } from './utils/enrollment-upsert.js';
 
-const settledEnrollmentsDataSchema = z.object({
-  ra: z.string().describe('Student ID'),
-  season: z.string().describe('Season (e.g., 2024:2)'),
-  tenantId: z.number().describe('Tenant ID'),
-  classes: z.array(z.string()).describe('Array of class codes (uf_cod_turma)'),
-  referenceKey: z.string().optional().describe('Reference key for deduplication'),
-});
-
-export const settledEnrollmentsProcessingJob = defineJob(
-  JOB_NAMES.PROCESS_SETTLED_ENROLLMENTS
-)
-  .input(
-    z.object({
-      deliveryId: z.string().uuid().describe('Unique webhook delivery ID'),
-      event: z.literal('class.settled').describe('Event type'),
-      timestamp: z.string().describe('Event timestamp'),
-      data: settledEnrollmentsDataSchema,
-    })
-  )
-  .handler(async ({ job, app }) => {
-    const { deliveryId, data } = job.data;
-    const { ra, season, classes } = data;
-
-    const [year, quad] = season.split(':').map(Number);
-    const raNumber = Number(ra);
-
-    app.log.info(
+export async function processSettledEnrollments(
+  event: z.infer<typeof ClassSettledEventSchema>,
+  log: FastifyBaseLogger
+) {
+  const { data } = event;
+  const retain = async (reason: string) => {
+    await AcademicPendingEventModel.updateOne(
+      { deliveryId: event.deliveryId },
       {
-        deliveryId,
-        ra,
-        season,
-        classCount: classes.length,
+        $setOnInsert: { reason, payload: event },
       },
-      'Processing settled enrollments'
+      { upsert: true }
     );
-
-    const results = [];
-
-    for (const ufCodTurma of classes) {
-      const component = await ComponentModel.findOne({
-        uf_cod_turma: ufCodTurma,
-        season,
-      }).lean();
-
-      if (!component) {
-        app.log.warn(
-          { ra, season, ufCodTurma },
-          'Component not found for settled enrollment'
-        );
-        results.push({
-          ufCodTurma,
-          status: 'component_not_found',
-        });
-        continue;
-      }
-
-      const enrollmentData: Partial<Enrollment> = {
-        ra: raNumber,
+    return { success: false, status: 'pending_identity' };
+  };
+  if (!data.operationId || !data.verifiedSession)
+    return retain('settled_missing_session_proof');
+  const operation = await AcademicSyncOperationModel.findOne({
+    operationId: data.operationId,
+  });
+  if (
+    !operation ||
+    operation.ra !== data.ra ||
+    !proofMatches(operation, data.verifiedSession)
+  )
+    return retain('settled_invalid_session_proof');
+  if (operation.status === 'awaiting')
+    throw new Error('Awaiting verified academic synchronization');
+  if (operation.status !== 'applied')
+    return retain('settled_operation_not_applied');
+  if (!/^\d{4}:[123]$/.test(data.season))
+    return retain('settled_invalid_season');
+  const [year, quad] = data.season.split(':').map(Number);
+  const results = [];
+  for (const classCode of new Set(data.classes)) {
+    const component = await ComponentModel.findOne({
+      season: data.season,
+      uf_cod_turma: classCode,
+    }).lean();
+    if (!component) {
+      // Retry after the independent component webhook is processed.
+      throw new Error('Settled enrollment component is not available yet');
+    }
+    const enrollmentId = await upsertEnrollment(
+      {
+        ra: Number(data.ra),
         year,
         quad,
-        season,
+        season: data.season,
+        sourceOperationId: operation.operationId,
+        recordKey: enrollmentRecordKey(year, quad, '', classCode),
         disciplina: component.disciplina.toLowerCase(),
         disciplina_id: component.disciplina_id,
         turma: component.turma,
-        uf_cod_turma: component.uf_cod_turma,
+        uf_cod_turma: classCode,
         campus: component.campus,
         turno: component.turno,
         subject: component.subject,
         teoria: component.teoria,
         pratica: component.pratica,
         syncedBy: 'ufabc-parser',
-        kind: null,
-        conceito: null,
-        cr_acumulado: null,
-        ca_acumulado: null,
-        cp_acumulado: null,
-      };
-
-      const enrollmentId = await upsertEnrollment(enrollmentData, app.log);
-
-      results.push({
-        ufCodTurma,
-        status: enrollmentId ? 'processed' : 'failed',
-        enrollmentId,
-      });
-    }
-
-    app.log.info(
-      {
-        deliveryId,
-        ra,
-        season,
-        processed: results.filter((r) => r.status === 'processed').length,
-        failed: results.filter((r) => r.status === 'failed').length,
-        notFound: results.filter((r) => r.status === 'component_not_found')
-          .length,
+        // Settlement must not erase transcript grades or coefficients.
       },
-      'Settled enrollments processing completed'
+      log
     );
+    if (!enrollmentId) return retain('settled_binding_no_longer_current');
+    results.push(enrollmentId);
+  }
+  return { success: true, status: 'processed', processed: results.length };
+}
 
-    return {
-      success: true,
-      deliveryId,
-      event: 'class.settled',
-      processed: results.length,
-      results,
-    };
-  });
+export const settledEnrollmentsProcessingJob = defineJob(
+  JOB_NAMES.PROCESS_SETTLED_ENROLLMENTS
+)
+  .input(ClassSettledEventSchema)
+  .handler(async ({ job, app }) =>
+    processSettledEnrollments(job.data, app.log)
+  );

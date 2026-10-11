@@ -37,6 +37,13 @@ export const UfabcParserIncomingWebhookController: FastifyPluginAsyncZod =
         const deliveryId = request.headers['x-webhook-delivery-id'];
         const eventType = request.headers['x-webhook-event'];
         const timestamp = request.headers['x-webhook-timestamp'];
+        if (
+          eventType !== request.body.event ||
+          deliveryId !== request.body.deliveryId ||
+          timestamp !== request.body.timestamp
+        ) {
+          return reply.badRequest('Webhook envelope mismatch');
+        }
 
         request.log.info(
           {
@@ -63,18 +70,18 @@ export const UfabcParserIncomingWebhookController: FastifyPluginAsyncZod =
           });
         }
 
-        await request.redisService.setJSON(
-          `webhook:${deliveryId}`,
-          'processed',
-          '24h'
-        );
-
         await app.manager.dispatch(JOB_NAMES.UFABC_PARSER_WEBHOOK_PROCESSING, {
           deliveryId,
           event: eventType,
           timestamp,
           data: request.body.data,
         });
+
+        await request.redisService.setJSON(
+          `webhook:${deliveryId}`,
+          'processed',
+          '24h'
+        );
 
         request.log.info(
           { deliveryId, jobName: JOB_NAMES.UFABC_PARSER_WEBHOOK_PROCESSING },

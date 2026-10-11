@@ -1,7 +1,10 @@
-import type { QueryFilter as FilterQuery } from 'mongoose';
+import type { FastifyBaseLogger } from 'fastify';
+import mongoose from 'mongoose';
 
-import { FastifyBaseLogger } from 'fastify';
-
+import {
+  AcademicRaBindingModel,
+  AcademicSyncOperationModel,
+} from '@/models/AcademicIdentity.js';
 import { EnrollmentModel, type Enrollment } from '@/models/Enrollment.js';
 
 export function normalizeText(text: string): string {
@@ -17,75 +20,44 @@ export async function upsertEnrollment(
   enrollmentData: Partial<Enrollment>,
   log: FastifyBaseLogger
 ): Promise<string | null> {
-  // @ts-ignore - Mongoose FilterQuery type
-  const base: FilterQuery<Enrollment> = {
-    active: { $ne: false },
-    ra: enrollmentData.ra,
-    season: enrollmentData.season,
-  };
-
-  let query = { ...base, uf_cod_turma: enrollmentData.uf_cod_turma };
-  let enrollment = await EnrollmentModel.findOneAndUpdate(
-    query,
-    { $set: enrollmentData },
-    { new: true }
+  if (!enrollmentData.sourceOperationId || !enrollmentData.recordKey) {
+    log.warn('Enrollment without verified provenance was not assigned');
+    return null;
+  }
+  return (
+    (await mongoose.connection.transaction(async (session) => {
+      const operation = await AcademicSyncOperationModel.findOne({
+        operationId: enrollmentData.sourceOperationId,
+        status: 'applied',
+      }).session(session);
+      if (!operation || operation.ra !== String(enrollmentData.ra)) return null;
+      // This write conflicts with closure/newer sync in the same binding. A retry
+      // rechecks the current operation and cannot reactivate an archived binding.
+      const binding = await AcademicRaBindingModel.findOneAndUpdate(
+        {
+          _id: operation.academicBindingId,
+          ownerIdentityId: operation.ownerIdentityId,
+          status: 'current',
+          latestOperationId: operation.operationId,
+        },
+        { $inc: { revision: 1 } },
+        { session, new: true }
+      );
+      if (!binding) return null;
+      const enrollment = await EnrollmentModel.findOneAndUpdate(
+        { academicBindingId: binding._id, recordKey: enrollmentData.recordKey },
+        {
+          $set: {
+            ...enrollmentData,
+            academicBindingId: binding._id,
+            ownerIdentityId: binding.ownerIdentityId,
+            ownershipStatus: 'confirmed',
+            active: true,
+          },
+        },
+        { upsert: true, new: true, session }
+      );
+      return enrollment._id.toString();
+    })) ?? null
   );
-
-  if (!enrollment && enrollmentData.disciplina_id) {
-    // @ts-ignore - Mongoose FilterQuery type
-    query = { ...base, disciplina_id: enrollmentData.disciplina_id };
-    enrollment = await EnrollmentModel.findOneAndUpdate(
-      query,
-      { $set: enrollmentData },
-      { new: true }
-    );
-  }
-
-  if (!enrollment && enrollmentData.subject) {
-    // @ts-ignore - Mongoose FilterQuery type
-    query = { ...base, subject: enrollmentData.subject };
-    enrollment = await EnrollmentModel.findOneAndUpdate(
-      query,
-      { $set: enrollmentData },
-      { new: true }
-    );
-  }
-
-  if (!enrollment && enrollmentData.disciplina) {
-    const normalizedDisciplina = normalizeText(enrollmentData.disciplina);
-    // @ts-ignore - Mongoose FilterQuery type
-    query = {
-      ...base,
-      disciplina: { $regex: normalizedDisciplina, $options: 'i' },
-    } as FilterQuery<Enrollment>;
-    enrollment = await EnrollmentModel.findOneAndUpdate(
-      query,
-      { $set: enrollmentData },
-      { new: true }
-    );
-  }
-
-  if (!enrollment) {
-    enrollment = await EnrollmentModel.create(enrollmentData);
-    log.debug({
-      enrollmentId: enrollment?.identifier,
-      ra: enrollment?.ra,
-      disciplina: enrollment?.disciplina,
-      uf_cod_turma: enrollment?.uf_cod_turma,
-      season: enrollment?.season,
-    });
-  } else {
-    log.debug(
-      {
-        enrollmentId: enrollment?.identifier,
-        ra: enrollment?.ra,
-        disciplina: enrollment?.disciplina,
-        uf_cod_turma: enrollment?.uf_cod_turma,
-        season: enrollment?.season,
-      },
-      'Enrollment updated'
-    );
-  }
-
-  return enrollment?._id?.toString() || null;
 }

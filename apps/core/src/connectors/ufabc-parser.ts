@@ -59,6 +59,7 @@ type UfabcParserComponent = {
 };
 
 type SyncStudentParams = {
+  operationId: string;
   sessionId: string;
   viewId: string;
   requesterKey: string;
@@ -108,10 +109,11 @@ export class UfabcParserConnector extends BaseRequester {
   }
 
   async syncStudent(params: SyncStudentParams) {
-    const { sessionId, viewId, requesterKey } = params;
+    const { sessionId, viewId, requesterKey, operationId } = params;
     const headers = new Headers();
     headers.set('session-id', sessionId);
     headers.set('view-state', viewId);
+    headers.set('x-sync-operation-id', operationId);
     headers.set('requester-key', requesterKey);
     const response = await this.request<{
       message: string;

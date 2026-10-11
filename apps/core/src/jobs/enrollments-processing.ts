@@ -2,17 +2,18 @@ import { defineJob } from '@next/queues/client';
 import { FastifyBaseLogger } from 'fastify';
 import { z } from 'zod';
 
+import { JOB_NAMES } from '@/constants.js';
+import { ComponentModel } from '@/models/Component.js';
 import type { Enrollment } from '@/models/Enrollment.js';
 import type { SubjectDocument } from '@/models/Subject.js';
 
-import { JOB_NAMES } from '@/constants.js';
-import { ComponentModel } from '@/models/Component.js';
-
+import { enrollmentRecordKey } from './utils/enrollment-record-key.js';
 import { upsertEnrollment } from './utils/enrollment-upsert.js';
 import { findOrCreateSubject } from './utils/subject-resolution.js';
 
 const jobSchema = z.object({
   ra: z.number(),
+  operationId: z.string().uuid().optional(),
   historyJobId: z
     .string()
     .optional()
@@ -47,7 +48,13 @@ export const enrollmentsProcessingJob = defineJob(
   .iterator('component')
   .concurrency(5)
   .handler(async ({ job, app }) => {
-    const { ra, component, coefficients, historyJobId } = job.data;
+    const { ra, component, coefficients, historyJobId, operationId } = job.data;
+    if (!operationId)
+      return {
+        success: false,
+        message: 'Missing verified operation',
+        skipped: true,
+      };
     const log = app.log;
     const historyData = { ra, coefficients };
 
@@ -76,7 +83,19 @@ export const enrollmentsProcessingJob = defineJob(
         };
       }
 
-      const enrollmentId = await upsertEnrollment(enrollmentData, log);
+      const enrollmentId = await upsertEnrollment(
+        {
+          ...enrollmentData,
+          sourceOperationId: operationId,
+          recordKey: enrollmentRecordKey(
+            component.year,
+            component.period,
+            component.UFCode,
+            component.class ?? ''
+          ),
+        },
+        log
+      );
 
       if (!enrollmentId) {
         log.warn(
