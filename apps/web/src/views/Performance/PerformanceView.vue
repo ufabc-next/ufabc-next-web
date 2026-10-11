@@ -27,7 +27,10 @@
       <v-select
         v-model="currentCpCourse"
         :items="cpHistoryData"
-        :item-title="(course: CourseInformation) => course.curso"
+        :item-title="
+          (course: CourseInformation) =>
+            `${course.curso} · RA ${course.ra}${course.active === false ? ' · Histórico anterior' : ''}`
+        "
         :item-value="(course: CourseInformation) => course"
         variant="outlined"
         class="course-select"
@@ -44,8 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
 import { type CourseInformation, Performance } from '@next/services';
+import { useQuery } from '@tanstack/vue-query';
 import { Chart } from 'highcharts-vue';
 import { computed, ref, watch } from 'vue';
 import { useTheme } from 'vuetify';
@@ -63,7 +66,7 @@ watch(
   () => theme.global.current.value.dark,
   () => {
     chartKey.value++;
-  },
+  }
 );
 
 const areaGraphOptions = computed(() => ({
@@ -206,8 +209,8 @@ const userCr = computed(() => {
 const closeCrs = computed(
   () =>
     crDistributionSeries.value?.find(
-      (element) => element[0].toFixed(1) === userCr.value?.toFixed(1),
-    )?.[1] || '',
+      (element) => element[0].toFixed(1) === userCr.value?.toFixed(1)
+    )?.[1] || ''
 );
 
 const crDistributionOptions = computed(() => ({
@@ -269,7 +272,7 @@ const maxCreditsQuad = computed(() =>
     return previousQuad.period_credits > currentQuad.period_credits
       ? previousQuad
       : currentQuad;
-  }),
+  })
 );
 
 const bestQuad = computed(() => {

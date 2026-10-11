@@ -102,6 +102,9 @@ export type Subject = {
 };
 
 export type Enrollment = {
+  ra?: number;
+  academicBindingId?: string;
+  active?: boolean;
   _id: string;
   pratica?: EnrollmentTeacher | null;
   teoria?: EnrollmentTeacher | null;

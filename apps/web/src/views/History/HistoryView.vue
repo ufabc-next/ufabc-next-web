@@ -105,6 +105,14 @@
     </div>
   </PaperCard>
   <PaperCard class="mt-4">
+    <v-select
+      v-if="bindingOptions.length > 1"
+      v-model="selectedBinding"
+      :items="bindingOptions"
+      label="Vínculo acadêmico"
+      clearable
+      placeholder="Todos os vínculos"
+    />
     <div
       v-if="!!enrollmentByDateKeysSorted.length"
       class="horizontal-scroll-except-first-column"
@@ -127,7 +135,12 @@
           <template v-for="date in enrollmentByDateKeysSorted" :key="date">
             <tr class="quad-header">
               <td
-                style="position: sticky; left: 0; background-color: rgb(var(--v-theme-appbar)); z-index: 1"
+                style="
+                  position: sticky;
+                  left: 0;
+                  background-color: rgb(var(--v-theme-appbar));
+                  z-index: 1;
+                "
                 colspan="1"
                 class="text-left"
               >
@@ -141,14 +154,25 @@
               <td
                 rowspan="1"
                 colspan="1"
-                style="position: sticky; left: 0; z-index: 1; background-color: rgb(var(--v-theme-appbar))"
+                style="
+                  position: sticky;
+                  left: 0;
+                  z-index: 1;
+                  background-color: rgb(var(--v-theme-appbar));
+                "
               >
                 {{ capitalizeName(item.disciplina) }}
+                <div v-if="item.ra" class="text-caption">
+                  RA {{ item.ra }} ·
+                  {{ item.active === false ? 'Histórico anterior' : 'Atual' }}
+                </div>
               </td>
               <td rowspan="1" colspan="1" class="px-2" style="max-width: 200px">
                 <div
                   :class="`text-next-light-gray text-caption d-flex align-center ${
-                    capitalizeName(item.teoria?.name) ? 'justify-left' : 'justify-center'
+                    capitalizeName(item.teoria?.name)
+                      ? 'justify-left'
+                      : 'justify-center'
                   }`"
                 >
                   <v-btn
@@ -176,7 +200,9 @@
               <td rowspan="1" colspan="1" class="px-2" style="max-width: 200px">
                 <div
                   :class="`text-next-light-gray text-truncate text-caption d-flex align-center ${
-                    capitalizeName(item.pratica?.name) ? 'justify-left' : 'justify-center'
+                    capitalizeName(item.pratica?.name)
+                      ? 'justify-left'
+                      : 'justify-center'
                   }`"
                 >
                   <v-btn
@@ -238,9 +264,9 @@
 </template>
 
 <script setup lang="ts">
-import { useQuery } from '@tanstack/vue-query';
 import type { Concept, Enrollment } from '@next/services';
 import { Enrollments, Users } from '@next/services';
+import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
 
 import { CenteredLoading } from '@/components/CenteredLoading';
@@ -258,7 +284,7 @@ const selectedEnrollment = ref<Enrollment>();
 const tags = ref<string[]>([]);
 const handleOpenDialog = (
   enrollment: Enrollment,
-  type: 'teoria' | 'pratica',
+  type: 'teoria' | 'pratica'
 ) => {
   const processedEnrollment: Enrollment = {
     ...enrollment,
@@ -327,8 +353,28 @@ const { data: user, isError: isErrorUser } = useQuery({
   queryFn: Users.info,
 });
 
+const selectedBinding = ref<string | null>(null);
+const bindingOptions = computed(() =>
+  Array.from(
+    new Map(
+      (enrollments.value ?? [])
+        .filter((item) => item.academicBindingId)
+        .map((item) => [
+          item.academicBindingId,
+          {
+            value: item.academicBindingId,
+            title: `RA ${item.ra} · ${item.active === false ? 'Histórico anterior' : 'Atual'}`,
+          },
+        ])
+    ).values()
+  )
+);
+
 const enrollmentByDate = computed(() => {
-  const enrollmentCopy = enrollments.value?.slice();
+  const enrollmentCopy = enrollments.value?.filter(
+    (item) =>
+      !selectedBinding.value || item.academicBindingId === selectedBinding.value
+  );
   return enrollmentCopy?.reduce(
     (acc, enroll) => {
       const date = enroll.quad + enroll.year * 10;
@@ -338,7 +384,7 @@ const enrollmentByDate = computed(() => {
       acc[date].push(enroll);
       return acc;
     },
-    {} as Record<string, Enrollment[]>,
+    {} as Record<string, Enrollment[]>
   );
 });
 
@@ -347,7 +393,7 @@ const hasCommented = (item: Enrollment) =>
   (item.pratica?._id === item.teoria?._id && item.comments?.includes('teoria'));
 
 const enrollmentByDateKeysSorted = computed(() =>
-  Object.keys(enrollmentByDate.value || {}).sort(),
+  Object.keys(enrollmentByDate.value || {}).sort()
 );
 
 const lastUpdate = computed(() => {

@@ -38,6 +38,8 @@ type CoefficientsByYear = {
 };
 
 export type CourseInformation = {
+  academicBindingId?: string;
+  active?: boolean;
   _id: string;
   curso: string;
   grade: string;
@@ -69,7 +71,9 @@ export const Performance = {
     return data;
   },
   getHistoriesGraduations: async () => {
-    const { data } = await api.get<HistoriesGraduations>('/courseStats/user/grades');
+    const { data } = await api.get<HistoriesGraduations>(
+      '/courseStats/user/grades'
+    );
     return data;
   },
 };
