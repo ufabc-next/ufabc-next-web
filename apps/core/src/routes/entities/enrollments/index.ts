@@ -1,40 +1,36 @@
-import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
-
 import { currentQuad } from '@next/utils';
+import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
 
 import { listUserEnrollments } from '@/schemas/entities/enrollments.js';
 
 import {
   findComment,
   findOne,
-  listByRa,
+  listByUser,
   listWithComponents,
 } from './service.js';
 
 const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
   app.get('/', { schema: listUserEnrollments }, async ({ user }) => {
-    const userEnrollments = await listByRa(user.ra);
+    const userEnrollments = await listByUser(user._id);
     return userEnrollments;
   });
 
   app.get('/wpp', async ({ user, query }, reply) => {
-    const { season, ra } = query as {
+    const { season } = query as {
       season: ReturnType<typeof currentQuad>;
       ra: string;
     };
 
     const actualSeason = season ?? currentQuad();
 
-    const wppEnrollments = await listWithComponents(
-      user?.ra ?? ra,
-      actualSeason
-    );
+    const wppEnrollments = await listWithComponents(user._id, actualSeason);
     return wppEnrollments;
   });
 
   app.get('/:enrollmentId', async (request, reply) => {
     const { enrollmentId } = request.params as { enrollmentId: string };
-    const enrollment = await findOne(enrollmentId, request.user.ra);
+    const enrollment = await findOne(enrollmentId, request.user._id);
 
     if (!enrollment) {
       return reply.badRequest('Enrollment not found');

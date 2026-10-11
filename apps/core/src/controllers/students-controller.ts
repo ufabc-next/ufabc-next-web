@@ -2,27 +2,57 @@ import { currentQuad } from '@next/utils';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 
-import { matriculaSession } from '@/hooks/matricula-session.js';
 import { sigaaSession } from '@/hooks/sigaa-session.js';
 import { StudentModel } from '@/models/Student.js';
-import { findRaByLogin } from '@/utils/resolve-student-ra.js';
+import { academicAccessFilter } from '@/services/academic-access.js';
+import {
+  authenticateAcademicRequest,
+  findAcademicCredential,
+} from '@/services/academic-credential.js';
 import { syncStudentFromSigaa } from '@/services/sigaa-student-sync.js';
 
 export const studentsController: FastifyPluginAsyncZod = async (app) => {
+  app.get(
+    '/students/sigaa/status',
+    {
+      schema: {
+        headers: z.object({ 'x-academic-token': z.string() }),
+        response: {
+          200: z.object({
+            operationId: z.string(),
+            status: z.enum([
+              'awaiting',
+              'applied',
+              'failed',
+              'conflict',
+              'rejected',
+            ]),
+          }),
+        },
+      },
+    },
+    async (request, reply) => {
+      reply.header('Cache-Control', 'no-store');
+      const operation = await findAcademicCredential(
+        request.headers['x-academic-token']
+      );
+      if (!operation) return reply.unauthorized();
+      // An older tab must not save a capability revoked by a newer sync.
+      if (operation.status === 'applied') {
+        await authenticateAcademicRequest(request);
+      }
+      return { operationId: operation.operationId, status: operation.status! };
+    }
+  );
   app.route({
     handler: async (request, reply) => {
       const season = currentQuad();
       const { login, studentId, graduationId } = request.body;
 
-      const ra = await findRaByLogin(login);
-
-      if (!ra) {
-        return await reply.notFound();
-      }
-
-      await StudentModel.findOneAndUpdate(
+      const updated = await StudentModel.findOneAndUpdate(
         {
-          ra,
+          ...(await academicAccessFilter(request.user._id, true)),
+          login: login.trim().toLowerCase(),
           season,
           active: { $ne: false },
         },
@@ -33,11 +63,11 @@ export const studentsController: FastifyPluginAsyncZod = async (app) => {
           },
         }
       );
-
+      if (!updated) return reply.notFound();
       return await reply.send({ message: 'Student updated successfully' });
     },
     method: 'PUT',
-    preHandler: [matriculaSession],
+    preHandler: [authenticateAcademicRequest],
     schema: {
       body: z.object({
         graduationId: z.number(),
@@ -45,7 +75,9 @@ export const studentsController: FastifyPluginAsyncZod = async (app) => {
         studentId: z.number(),
       }),
       headers: z.object({
-        'session-id': z.string(),
+        'session-id': z.string().optional(),
+        'x-academic-token': z.string().optional(),
+        authorization: z.string().optional(),
       }),
       response: {
         200: z.object({
@@ -60,7 +92,8 @@ export const studentsController: FastifyPluginAsyncZod = async (app) => {
     handler: async (request, reply) => {
       const season = currentQuad();
       const [student] = await StudentModel.find({
-        login: request.headers.login,
+        ...(await academicAccessFilter(request.user._id, true)),
+        login: request.headers.login.trim().toLowerCase(),
         season,
         active: { $ne: false },
       });
@@ -84,11 +117,13 @@ export const studentsController: FastifyPluginAsyncZod = async (app) => {
       });
     },
     method: 'GET',
-    preHandler: [matriculaSession],
+    preHandler: [authenticateAcademicRequest],
     schema: {
       headers: z.object({
         login: z.string(),
-        'session-id': z.string(),
+        'session-id': z.string().optional(),
+        'x-academic-token': z.string().optional(),
+        authorization: z.string().optional(),
       }),
       response: {
         200: z.object({
@@ -109,7 +144,7 @@ export const studentsController: FastifyPluginAsyncZod = async (app) => {
               ]),
             })
             .array(),
-          ra: z.number(),
+          ra: z.number().int().positive().safe(),
         }),
       },
     },
@@ -132,11 +167,7 @@ export const studentsController: FastifyPluginAsyncZod = async (app) => {
         return reply.notFound(result.message);
       }
 
-      if (result.status === 'cached') {
-        app.log.debug({ cacheKey: result.cacheKey }, 'Student already synced');
-        return reply.status(202).send({ status: 'cached' });
-      }
-
+      reply.header('Cache-Control', 'no-store');
       return reply.status(202).send(result);
     },
     method: 'POST',

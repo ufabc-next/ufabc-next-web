@@ -1,9 +1,11 @@
 import type { FastifyZodOpenApiSchema } from 'fastify-zod-openapi';
-
 import { z } from 'zod';
 
 const enrollmentsListSchema = z.object({
   _id: z.coerce.string(),
+  ra: z.number().optional(),
+  academicBindingId: z.coerce.string().optional(),
+  active: z.boolean().optional(),
   disciplina: z.string(),
   quad: z.union([z.literal(1), z.literal(2), z.literal(3)]),
   year: z.number(),

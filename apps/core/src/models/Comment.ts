@@ -15,6 +15,7 @@ const COMMENT_TYPE = ['teoria', 'pratica'] as const;
 
 const commentSchema = new Schema(
   {
+    authorUserId: { type: Schema.Types.ObjectId, ref: 'users' },
     comment: {
       type: String,
       required: true,
@@ -83,7 +84,11 @@ const commentSchema = new Schema(
         query: FilterQuery<AnyObject>,
         userId: Types.ObjectId,
         populateFields: (string | PopulateOptions)[] = [
-          { path: 'enrollment', select: '-ra' },
+          {
+            path: 'enrollment',
+            select:
+              '-ra -ownerIdentityId -academicBindingId -sourceOperationId',
+          },
           'subject',
         ],
         limit = 10,
@@ -93,7 +98,7 @@ const commentSchema = new Schema(
           throw new Error(`Usuário Não Encontrado ${userId}`);
         }
 
-        const comments = await this.find(query, '-ra')
+        const comments = await this.find(query, '-ra -authorUserId')
           .lean(true)
           .populate(populateFields)
           .skip(page * limit)
@@ -159,7 +164,8 @@ commentSchema.pre('save', async function () {
 commentSchema.post('save', async function () {
   await EnrollmentModel.findOneAndUpdate(
     { _id: this.enrollment },
-    { $addToSet: { comments: [this.type] } }
+    { $addToSet: { comments: this.type } },
+    { session: this.$session() }
   );
 });
 

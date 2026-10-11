@@ -1,9 +1,10 @@
 import { lastQuad } from '@next/utils';
 
+import { GraduationModel } from '@/models/Graduation.js';
 import type { Graduation } from '@/models/Graduation.js';
-
 import { GraduationHistoryModel } from '@/models/GraduationHistory.js';
 import { HistoryModel } from '@/models/History.js';
+import { academicAccessFilter } from '@/services/academic-access.js';
 
 export async function getCrDistribution(points: number, interval: number) {
   const { year, quad } = lastQuad();
@@ -34,31 +35,30 @@ export async function getCrDistribution(points: number, interval: number) {
   return distribution;
 }
 
-export async function findLatestHistory(ra: number) {
+export async function findLatestHistory(userId: string) {
   const lastHistory = await HistoryModel.findOne({
-    ra,
-    active: { $ne: false },
+    ...(await academicAccessFilter(userId)),
     disciplinas: { $ne: [] },
-  }).sort({ updatedAt: -1 });
+  }).sort({ active: -1, updatedAt: -1 });
 
   return lastHistory;
 }
 
 export async function findOneGraduation(grade: string, curso: string) {
-  const graduation = await GraduationHistoryModel.findOne({
+  const graduation = await GraduationModel.findOne({
     curso,
     grade,
-    active: { $ne: false },
   }).lean<Graduation>();
 
   return graduation;
 }
 
-export async function getGraduationHistory(ra: number) {
+export async function getGraduationHistory(userId: string) {
   const history = await GraduationHistoryModel.find({
-    ra,
-    active: { $ne: false },
-  }).lean();
+    ...(await academicAccessFilter(userId)),
+  })
+    .sort({ active: -1, updatedAt: -1 })
+    .lean();
 
   return history;
 }

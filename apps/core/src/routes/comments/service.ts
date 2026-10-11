@@ -3,18 +3,18 @@ import type { AnyObject, QueryFilter as FilterQuery, Types } from 'mongoose';
 import { type Comment, CommentModel } from '@/models/Comment.js';
 import { EnrollmentModel } from '@/models/Enrollment.js';
 import { type Reaction, ReactionModel } from '@/models/Reaction.js';
+import { academicAccessFilter } from '@/services/academic-access.js';
 
-export async function getUserEnrollments(ra: number) {
+export async function getUserEnrollments(userId: string) {
   const userEnrollments = await EnrollmentModel.find({
-    ra,
-    active: { $ne: false },
+    ...(await academicAccessFilter(userId)),
   }).lean();
 
   return userEnrollments;
 }
 
-export async function getUserComments(ra: number) {
-  const userComments = await CommentModel.find({ ra: ra.toString() }).lean();
+export async function getUserComments(userId: string) {
+  const userComments = await CommentModel.find({ authorUserId: userId }).lean();
   return userComments;
 }
 
@@ -66,7 +66,13 @@ export async function getReactions({
   const reactions = await CommentModel.commentsByReaction(
     filter,
     userId,
-    [{ path: 'enrollment', select: '-ra' }, 'subject'],
+    [
+      {
+        path: 'enrollment',
+        select: '-ra -ownerIdentityId -academicBindingId -sourceOperationId',
+      },
+      'subject',
+    ],
     limit,
     page
   );

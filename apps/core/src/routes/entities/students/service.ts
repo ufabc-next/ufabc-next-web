@@ -1,12 +1,11 @@
-import type { QueryFilter as FilterQuery } from 'mongoose';
-
 import { currentQuad } from '@next/utils';
-
-import type { UpdatedStudent } from '@/schemas/entities/students.js';
+import type { QueryFilter as FilterQuery } from 'mongoose';
 
 import { ComponentModel } from '@/models/Component.js';
 import { HistoryModel } from '@/models/History.js';
 import { StudentModel, type Student } from '@/models/Student.js';
+import type { UpdatedStudent } from '@/schemas/entities/students.js';
+import { academicAccessFilter } from '@/services/academic-access.js';
 import { logger } from '@/utils/logger.js';
 import { findRaByLogin } from '@/utils/resolve-student-ra.js';
 
@@ -80,10 +79,11 @@ export async function getAllCourses() {
   return courses;
 }
 
-export async function getStudent(filter: FilterQuery<Student>) {
+export async function getStudent(filter: FilterQuery<Student>, userId: string) {
   const season = currentQuad();
   const student: Student | null = await StudentModel.findOne({
     ...filter,
+    ...(await academicAccessFilter(userId, true)),
     season,
     active: { $ne: false },
   }).lean();
@@ -91,9 +91,9 @@ export async function getStudent(filter: FilterQuery<Student>) {
   return student;
 }
 
-export async function getGraduation(ra: number, name: string) {
+export async function getGraduation(userId: string, name: string) {
   const history = await HistoryModel.findOne({
-    ra,
+    ...(await academicAccessFilter(userId)),
     curso: name,
     active: { $ne: false },
   }).sort({
@@ -103,49 +103,16 @@ export async function getGraduation(ra: number, name: string) {
   return history;
 }
 
-type CreateStudent = {
-  ra: number;
-  login: string;
-  studentId?: number;
-  graduations: {
-    nome_curso: string;
-    id_curso: number;
-    turno: 'Noturno' | 'Matutino' | 'noturno' | 'matutino';
-    cp: number | undefined;
-    cr: number | undefined;
-    ind_afinidade: number | undefined;
-    quads: number | undefined;
-  }[];
-};
-
 type UpdateStudent = {
+  userId: string;
   ra: number | null;
   login: string;
   studentId: number | null | undefined;
   graduationId: number | null | undefined;
 };
 
-export async function createOrInsert({
-  studentId,
-  ra,
-  login,
-  graduations,
-}: CreateStudent) {
-  const season = currentQuad();
-
-  const student = await StudentModel.findOneAndUpdate(
-    {
-      ra,
-      season,
-    },
-    { $set: { ra, login, cursos: graduations, active: true } },
-    { new: true, upsert: true }
-  );
-
-  return student;
-}
-
 export async function update({
+  userId,
   ra,
   login,
   studentId,
@@ -161,6 +128,7 @@ export async function update({
   }
 
   const student = await StudentModel.findOne({
+    ...(await academicAccessFilter(userId, true)),
     ra: resolvedRa,
     season,
     active: { $ne: false },
@@ -171,7 +139,7 @@ export async function update({
   }
 
   const historyComponents = await HistoryModel.findOne(
-    { ra: student.ra, active: { $ne: false } },
+    { ...(await academicAccessFilter(userId, true)), active: { $ne: false } },
     { disciplinas: 1, _id: 0 }
   )
     .sort({

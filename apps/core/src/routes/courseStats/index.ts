@@ -1,9 +1,7 @@
+import { calculateCoefficients } from '@next/utils';
 import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
 
-import { calculateCoefficients } from '@next/utils';
-
 import type { GraduationHistory } from '@/models/GraduationHistory.js';
-
 import { gradesStatsSchema, userGradesSchema } from '@/schemas/courseStats.js';
 
 import {
@@ -32,7 +30,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
   app.get('/history', { schema: userGradesSchema }, async ({ user }, reply) => {
     // This code is necessary for show data to performance page - get the coefficients from the last history
     // Example: users with BCT concluded and BCC in progress will have the BCC coefficients showed on the performance screen.
-    const lastHistory = await findLatestHistory(user.ra);
+    const lastHistory = await findLatestHistory(user._id);
 
     // Next step
     // Needs to add a querie to get the coefficients from the first historyGraduatiation and show that on the performance screen.
@@ -60,9 +58,9 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
   });
 
   app.get('/user/grades', async ({ user }) => {
-    const userHistory = await getGraduationHistory(user.ra);
+    const userHistory = await getGraduationHistory(user._id);
     if (userHistory.length === 0) {
-      return null;
+      return { docs: [] };
     }
     return { docs: userHistory };
   });

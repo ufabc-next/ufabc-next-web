@@ -1,7 +1,7 @@
 import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
-
 import { Types } from 'mongoose';
 
+import { EnrollmentModel } from '@/models/Enrollment.js';
 import {
   missingCommentsSchema,
   createCommentSchema,
@@ -9,6 +9,7 @@ import {
   deleteCommentSchema,
   commentsOnTeacherSchema,
 } from '@/schemas/comments.js';
+import { academicAccessFilter } from '@/services/academic-access.js';
 
 import {
   createReaction,
@@ -39,8 +40,8 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
         return reply.badRequest(`Invalid User: ${userId}`);
       }
 
-      const enrollments = await getUserEnrollments(user.ra);
-      const comments = await getUserComments(user.ra);
+      const enrollments = await getUserEnrollments(user._id);
+      const comments = await getUserComments(user._id);
       const enrollmentsFromComments = comments.map((comment) =>
         comment.enrollment.toString()
       );
@@ -69,7 +70,12 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
       return reply.notFound('Enrollment not found');
     }
 
-    if (Number(user.ra) !== Number(enrollment.ra)) {
+    if (
+      !(await EnrollmentModel.exists({
+        _id: enrollment._id,
+        ...(await academicAccessFilter(user._id)),
+      }))
+    ) {
       request.log.warn(
         { userRa: user.ra, commentRa: enrollment.ra },
         'Unauthorized comment creation attempt'
@@ -90,6 +96,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
 
     const createdComment = await insert({
       comment,
+      authorUserId: new Types.ObjectId(user._id),
       type,
       enrollment: enrollment._id,
       // @ts-ignore for nwo
@@ -120,7 +127,13 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
         return reply.notFound('Comment not found');
       }
 
-      if (Number(user.ra) !== Number(comment.ra)) {
+      if (
+        comment.authorUserId?.toString() !== user._id.toString() ||
+        !(await EnrollmentModel.exists({
+          _id: comment.enrollment,
+          ...(await academicAccessFilter(user._id)),
+        }))
+      ) {
         request.log.warn(
           { userRa: user.ra, commentRa: comment.ra },
           'Unauthorized comment update attempt'
@@ -155,7 +168,13 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
         return reply.notFound('Comment not found');
       }
 
-      if (Number(user.ra) !== Number(comment.ra)) {
+      if (
+        comment.authorUserId?.toString() !== user._id.toString() ||
+        !(await EnrollmentModel.exists({
+          _id: comment.enrollment,
+          ...(await academicAccessFilter(user._id)),
+        }))
+      ) {
         request.log.warn(
           { userRa: user.ra, commentRa: comment.ra },
           'Unauthorized comment delete attempt'

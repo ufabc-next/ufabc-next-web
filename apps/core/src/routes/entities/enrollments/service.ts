@@ -1,12 +1,12 @@
 import type { currentQuad } from '@next/utils';
 
-import type { SubjectDocument } from '@/models/Subject.js';
-import type { TeacherDocument } from '@/models/Teacher.js';
-import type { EnrollmentsList } from '@/schemas/entities/enrollments.js';
-
 import { CommentModel } from '@/models/Comment.js';
 import { ComponentModel } from '@/models/Component.js';
 import { EnrollmentModel } from '@/models/Enrollment.js';
+import type { SubjectDocument } from '@/models/Subject.js';
+import type { TeacherDocument } from '@/models/Teacher.js';
+import type { EnrollmentsList } from '@/schemas/entities/enrollments.js';
+import { academicAccessFilter } from '@/services/academic-access.js';
 
 type PopulatedFields = {
   pratica: TeacherDocument;
@@ -14,10 +14,9 @@ type PopulatedFields = {
   subject: SubjectDocument;
 };
 
-export async function listByRa(ra: number) {
+export async function listByUser(userId: string) {
   const populatedEnrollments = await EnrollmentModel.find({
-    ra,
-    active: { $ne: false },
+    ...(await academicAccessFilter(userId)),
     conceito: { $in: ['A', 'B', 'C', 'D', 'O', 'F'] },
   })
     .populate<PopulatedFields>(['pratica', 'teoria', 'subject'])
@@ -26,11 +25,10 @@ export async function listByRa(ra: number) {
   return populatedEnrollments as unknown as EnrollmentsList[];
 }
 
-export async function findOne(id: string, ra: number) {
+export async function findOne(id: string, userId: string) {
   const enrollment = await EnrollmentModel.findOne({
     _id: id,
-    ra,
-    active: { $ne: false },
+    ...(await academicAccessFilter(userId)),
   })
     .populate<PopulatedFields>(['pratica', 'teoria', 'subject'])
     .lean();
@@ -44,12 +42,12 @@ export async function findComment(enrollmentId: string) {
 }
 
 export async function listWithComponents(
-  ra: number,
+  userId: string,
   season: ReturnType<typeof currentQuad>
 ) {
   // Fetch enrollments for the given ra and season
   const enrollments = await EnrollmentModel.find({
-    ra,
+    ...(await academicAccessFilter(userId, true)),
     season,
     active: { $ne: false },
   })

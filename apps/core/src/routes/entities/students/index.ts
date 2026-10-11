@@ -40,35 +40,39 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
     return allStudentsCourses;
   });
 
-  app.get('/', { schema: listStudentSchema }, async ({ headers }, reply) => {
-    const login = headers['uf-login'];
-    const ra = Number(headers.ra as string);
+  app.get(
+    '/',
+    { schema: listStudentSchema },
+    async ({ headers, user }, reply) => {
+      const login = headers['uf-login'];
+      const ra = Number(headers.ra as string);
 
-    if (!login || !ra) {
-      return await reply.badRequest('Missing required params');
+      if (!login || !ra) {
+        return await reply.badRequest('Missing required params');
+      }
+
+      const student = await getStudent({ login, ra }, user._id);
+
+      if (!student) {
+        return await reply.notFound('Student not found');
+      }
+
+      return {
+        graduations: student.cursos.map((c) => ({
+          name: c.nome_curso,
+          courseId: c.id_curso,
+          shift: c.turno,
+          cp: c.cp,
+          ca: c.ca,
+          cr: c.cr,
+          affinity: c.ind_afinidade,
+        })),
+        login: student.login,
+        studentId: student.aluno_id,
+        updatedAt: student.updatedAt.toISOString(),
+      };
     }
-
-    const student = await getStudent({ login, ra });
-
-    if (!student) {
-      return await reply.notFound('Student not found');
-    }
-
-    return {
-      graduations: student.cursos.map((c) => ({
-        name: c.nome_curso,
-        courseId: c.id_curso,
-        shift: c.turno,
-        cp: c.cp,
-        ca: c.ca,
-        cr: c.cr,
-        affinity: c.ind_afinidade,
-      })),
-      login: student.login,
-      studentId: student.aluno_id,
-      updatedAt: student.updatedAt.toISOString(),
-    };
-  });
+  );
 
   app.get(
     '/student',
@@ -80,7 +84,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
         return await reply.badRequest('Missing required params');
       }
 
-      const student = await getStudent({ login });
+      const student = await getStudent({ login }, request.user._id);
 
       if (!student) {
         return await reply.notFound('Student not found');
@@ -108,6 +112,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
     const { login, ra, studentId, graduationId } = request.body;
 
     const updatedStudent = await update({
+      userId: request.user._id,
       graduationId,
       login,
       ra,

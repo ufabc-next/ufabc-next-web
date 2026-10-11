@@ -5,9 +5,10 @@ import {
   model,
 } from 'mongoose';
 
+import { academicAccessFilter } from '@/services/academic-access.js';
+
 import { CommentModel } from './Comment.js';
 import { EnrollmentModel } from './Enrollment.js';
-import { UserModel } from './User.js';
 
 const REACTIONS_KIND = ['like', 'recommendation', 'star'] as const;
 const reactionSchema = new Schema(
@@ -46,18 +47,12 @@ const reactionSchema = new Schema(
 
 async function validateRules(reaction: ReactionDocument) {
   if (reaction.kind === 'recommendation') {
-    const user = isObjectIdOrHexString(reaction.user)
-      ? await UserModel.findById(reaction.user)
-      : reaction.user;
-
     const comment = isObjectIdOrHexString(reaction.comment)
       ? await CommentModel.findById(reaction.comment)
       : reaction.comment;
 
     const isValid = await EnrollmentModel.findOne({
-      // @ts-expect-error
-      ra: user?.ra,
-      active: { $ne: false },
+      ...(await academicAccessFilter(reaction.user.toString())),
       // @ts-expect-error
       $or: [{ teoria: comment?.teacher }, { pratica: comment?.teacher }],
     });

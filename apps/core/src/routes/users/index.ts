@@ -14,6 +14,7 @@ import {
   sendRecoveryEmailSchema,
   validateUserEmailSchema,
 } from '@/schemas/user.js';
+import { academicAccessFilter } from '@/services/academic-access.js';
 
 const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
   const usersCache = app.cache<Auth>();
@@ -30,7 +31,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
 
     const season = currentQuad();
     const isUserSynced = await StudentModel.exists({
-      ra: user.ra,
+      ...(await academicAccessFilter(user._id.toString(), true)),
       season,
       active: { $ne: false },
     });

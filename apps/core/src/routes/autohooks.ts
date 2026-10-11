@@ -1,5 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 
+import { authenticateAcademicRequest } from '@/services/academic-credential.js';
+
 const PUBLIC_ROUTES = [
   '/public',
   '/login',
@@ -15,16 +17,10 @@ const PUBLIC_ROUTES = [
   '/help/form',
   '/users/recover',
   '/users/validate',
-  '/entities/enrollments/wpp',
   '/v2/auth/whatsapp-token',
 ];
 
-const EXTENSION_ROUTES = [
-  '/entities/students/sig',
-  '/histories',
-  '/entities/students',
-  '/components',
-];
+const EXTENSION_ROUTES = ['/histories', '/components'];
 
 const isPublicRoute = (url: string): boolean => {
   return PUBLIC_ROUTES.some((route) => url.startsWith(route));
@@ -56,7 +52,15 @@ export default async function (app: FastifyInstance) {
     }
 
     try {
-      await request.jwtVerify();
+      const path = request.url.split('?')[0].replace(/\/$/, '');
+      if (
+        path === '/entities/students' &&
+        ['GET', 'PUT'].includes(request.method)
+      ) {
+        await authenticateAcademicRequest(request);
+      } else {
+        await request.jwtVerify();
+      }
     } catch (error) {
       return reply.unauthorized(
         'You must be authenticated to access this route'

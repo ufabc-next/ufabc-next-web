@@ -1,28 +1,30 @@
+import { currentQuad } from '@next/utils';
 import type { preHandlerAsyncHookHandler } from 'fastify';
 import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
-
-import { currentQuad } from '@next/utils';
 import { orderBy as LodashOrderBy } from 'lodash-es';
-
-import type { SubjectDocument } from '@/models/Subject.js';
-import type { TeacherDocument } from '@/models/Teacher.js';
 
 import { type Component, ComponentModel } from '@/models/Component.js';
 import { StudentModel } from '@/models/Student.js';
+import type { SubjectDocument } from '@/models/Subject.js';
+import type { TeacherDocument } from '@/models/Teacher.js';
 import {
   listKickedSchema,
   listTeacherComponents,
   type NonPaginatedComponents,
 } from '@/schemas/entities/components.js';
+import { academicAccessFilter } from '@/services/academic-access.js';
+import { authenticateAcademicRequest } from '@/services/academic-credential.js';
 
 import { findTeachers } from './service.js';
 
 const validateStudent: preHandlerAsyncHookHandler = async (request, reply) => {
+  await authenticateAcademicRequest(request);
   const { studentId, season } = request.query as {
     studentId: number;
     season: string;
   };
   const student = await StudentModel.findOne({
+    ...(await academicAccessFilter(request.user._id, true)),
     active: { $ne: false },
     season,
     aluno_id: studentId,
