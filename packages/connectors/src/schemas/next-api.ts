@@ -47,12 +47,6 @@ export const emailResponseSchema = z.object({
 });
 export type EmailResponse = z.infer<typeof emailResponseSchema>;
 
-export const facebookAuthSchema = z.object({
-  email: z.string(),
-  ra: z.string(),
-});
-export type FacebookAuth = z.infer<typeof facebookAuthSchema>;
-
 export const whatsappTokenResponseSchema = z.object({
   token: z.string(),
 });

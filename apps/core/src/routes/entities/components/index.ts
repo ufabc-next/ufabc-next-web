@@ -1,14 +1,13 @@
+import { currentQuad } from '@next/utils';
 import type { preHandlerAsyncHookHandler } from 'fastify';
 import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
-
-import { currentQuad } from '@next/utils';
 import { orderBy as LodashOrderBy } from 'lodash-es';
 
-import type { SubjectDocument } from '@/models/Subject.js';
-import type { TeacherDocument } from '@/models/Teacher.js';
-
+import { validateInternalTokenAuthHook } from '@/hooks/validate-token.js';
 import { type Component, ComponentModel } from '@/models/Component.js';
 import { StudentModel } from '@/models/Student.js';
+import type { SubjectDocument } from '@/models/Subject.js';
+import type { TeacherDocument } from '@/models/Teacher.js';
 import {
   listKickedSchema,
   listTeacherComponents,
@@ -85,11 +84,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
       praticaId: component.pratica?._id.toString(),
     }));
 
-    await request.redisService.setJSON(
-      cacheKey,
-      nonPaginatedComponents,
-      '5m'
-    );
+    await request.redisService.setJSON(cacheKey, nonPaginatedComponents, '5m');
 
     return nonPaginatedComponents;
   });
@@ -237,82 +232,87 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
     }
   );
 
-  app.patch('/update-group-urls/:originKey', async (request, reply) => {
-    const { originKey } = request.params as { originKey: string };
-    const { season } = request.query as { season?: string };
-    const { groupURL } = request.body as { groupURL: string | null };
+  app.patch(
+    '/update-group-urls/:originKey',
+    { preHandler: [validateInternalTokenAuthHook] },
+    async (request, reply) => {
+      const { originKey } = request.params as { originKey: string };
+      const { season } = request.query as { season?: string };
+      const { groupURL } = request.body as { groupURL: string | null };
 
-    if (groupURL === undefined) {
-      return reply.badRequest('groupURL in request body is required');
-    }
-
-    if (groupURL !== null && typeof groupURL !== 'string') {
-      return reply.badRequest('groupURL must be a string or null');
-    }
-
-    try {
-      app.log.info({ originKey, season, groupURL }, 'Updating groupURL');
-
-      const seasonToUse = season ?? currentQuad();
-
-      const result = await ComponentModel.updateOne(
-        { origin_key: originKey, season },
-        { $set: { groupURL } }
-      );
-
-      if (result.matchedCount === 0) {
-        app.log.info(
-          { originKey, season: seasonToUse },
-          'No matching component found'
-        );
-        return reply.status(404).send({
-          error: 'No matching component found',
-          originKey,
-          season: seasonToUse,
-        });
+      if (groupURL === undefined) {
+        return reply.badRequest('groupURL in request body is required');
       }
 
-      if (result.modifiedCount === 0) {
-        app.log.info(
-          { originKey, season: seasonToUse },
-          'Component found but not modified (same groupURL)'
+      if (groupURL !== null && typeof groupURL !== 'string') {
+        return reply.badRequest('groupURL must be a string or null');
+      }
+
+      try {
+        app.log.info({ originKey, season, groupURL }, 'Updating groupURL');
+
+        const seasonToUse = season ?? currentQuad();
+
+        const result = await ComponentModel.updateOne(
+          { origin_key: originKey, season },
+          { $set: { groupURL } }
         );
+
+        if (result.matchedCount === 0) {
+          app.log.info(
+            { originKey, season: seasonToUse },
+            'No matching component found'
+          );
+          return reply.status(404).send({
+            error: 'No matching component found',
+            originKey,
+            season: seasonToUse,
+          });
+        }
+
+        if (result.modifiedCount === 0) {
+          app.log.info(
+            { originKey, season: seasonToUse },
+            'Component found but not modified (same groupURL)'
+          );
+          return reply.send({
+            message:
+              'Component found but groupURL was already set to this value',
+            originKey,
+            season: seasonToUse,
+            groupURL,
+          });
+        }
+
+        app.log.info(
+          {
+            originKey,
+            season: seasonToUse,
+            modifiedCount: result.modifiedCount,
+          },
+          'GroupURL updated successfully'
+        );
+
         return reply.send({
-          message: 'Component found but groupURL was already set to this value',
+          message: 'GroupURL updated successfully',
           originKey,
           season: seasonToUse,
           groupURL,
-        });
-      }
-
-      app.log.info(
-        {
-          originKey,
-          season: seasonToUse,
           modifiedCount: result.modifiedCount,
-        },
-        'GroupURL updated successfully'
-      );
-
-      return reply.send({
-        message: 'GroupURL updated successfully',
-        originKey,
-        season: seasonToUse,
-        groupURL,
-        modifiedCount: result.modifiedCount,
-      });
-    } catch (error) {
-      app.log.error(
-        {
-          error: error instanceof Error ? error.message : String(error),
-          originKey,
-          season: season,
-        },
-        'Error updating groupURL'
-      );
-      return reply.internalServerError('Error updating groupURL');
+        });
+      } catch (error) {
+        app.log.error(
+          {
+            error: error instanceof Error ? error.message : String(error),
+            originKey,
+            season: season,
+          },
+          'Error updating groupURL'
+        );
+        return reply.internalServerError('Error updating groupURL');
+      }
     }
-  });
+  );
 };
 
 function kickRule(idealQuad: boolean, season: string) {

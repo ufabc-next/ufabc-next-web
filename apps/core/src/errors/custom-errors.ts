@@ -116,3 +116,52 @@ export class TeacherSummaryNotFound extends NextError {
     );
   }
 }
+
+export class BoardUnauthorized extends NextError {
+  constructor() {
+    super(
+      'Board Unauthorized',
+      'NEX0010',
+      401,
+      'Missing or invalid board token',
+      'Token de acesso ao painel ausente ou inválido'
+    );
+  }
+}
+
+export class BoardForbidden extends NextError {
+  constructor(userId: string) {
+    super(
+      'Board Forbidden',
+      'NEX0011',
+      403,
+      'User is not allowed to access the board',
+      'Você não tem permissão para acessar o painel',
+      { userId }
+    );
+  }
+}
+
+export class InvalidWebhookApiKey extends NextError {
+  constructor() {
+    super(
+      'Invalid Webhook API Key',
+      'NEX0012',
+      401,
+      'Invalid or missing webhook API key',
+      'Chave de API do webhook inválida ou ausente'
+    );
+  }
+}
+
+export class InvalidInternalToken extends NextError {
+  constructor() {
+    super(
+      'Invalid Internal Token',
+      'NEX0013',
+      401,
+      'Invalid or missing x-internal-token header',
+      'Token interno inválido ou ausente'
+    );
+  }
+}

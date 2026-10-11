@@ -115,6 +115,7 @@ const componentsController: FastifyPluginAsyncZod = async (app) => {
       });
     },
     method: 'GET',
+    preHandler: [validateInternalTokenAuthHook],
     url: '/components/archives/uploads',
   });
 

@@ -4,50 +4,53 @@ import { z } from 'zod';
 
 import type { QueueNames } from '@/queue/types.js';
 
+import { adminHook } from '@/hooks/admin.js';
 import { UserModel } from '@/models/User.js';
 
 const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
-  app.post(
-    '/token',
-    {
-      schema: {
-        body: z.object({
-          email: z.string().email(),
-        }),
-      },
-    },
-    async (request, reply) => {
-      const { email } = request.body;
-      const isValid = app.config.BACKOFFICE_EMAILS?.includes(email);
-
-      if (!isValid) {
-        return reply.badRequest();
-      }
-
-      const user = await UserModel.findOne({
-        email,
-      });
-
-      if (!user) {
-        return reply.badRequest('User not found');
-      }
-
-      const token = app.jwt.sign(
-        {
-          _id: user._id,
-          ra: user.ra,
-          confirmed: user.confirmed,
-          email: user.email,
-          permissions: user.permissions ?? [],
+  if (app.config.NODE_ENV === 'dev') {
+    app.post(
+      '/token',
+      {
+        schema: {
+          body: z.object({
+            email: z.string().email(),
+          }),
         },
-        { expiresIn: '2h' }
-      );
+      },
+      async (request, reply) => {
+        const { email } = request.body;
+        const isValid = app.config.BACKOFFICE_EMAILS?.includes(email);
 
-      return {
-        token,
-      };
-    }
-  );
+        if (!isValid) {
+          return reply.badRequest();
+        }
+
+        const user = await UserModel.findOne({
+          email,
+        });
+
+        if (!user) {
+          return reply.badRequest('User not found');
+        }
+
+        const token = app.jwt.sign(
+          {
+            _id: user._id,
+            ra: user.ra,
+            confirmed: user.confirmed,
+            email: user.email,
+            permissions: user.permissions ?? [],
+          },
+          { expiresIn: '2h' }
+        );
+
+        return {
+          token,
+        };
+      }
+    );
+  }
 
   app.get(
     '/jobs/failed',
@@ -64,7 +67,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
           }),
         }),
       },
-      // preHandler: (request, reply) => request.isAdmin(reply),
+      preHandler: [adminHook],
     },
     async (request, reply) => {
       const { reason, batchSize, queue } = request.query;
@@ -96,6 +99,7 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
           recipients: z.array(z.string().email()).min(1),
         }),
       },
+      preHandler: [adminHook],
     },
     async (request, reply) => {
       const { templateName, recipients } = request.body;

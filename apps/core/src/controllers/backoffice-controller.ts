@@ -25,27 +25,6 @@ const backofficeController: FastifyPluginAsyncZod = async (app) => {
       return reply.status(200).send({ keys });
     },
   });
-
-  app.route({
-    method: 'DELETE',
-    url: '/backoffice/redis/key',
-    schema: {
-      response: {
-        200: z.object({
-          message: z.string(),
-        }),
-      },
-      querystring: z.object({
-        key: z.string().min(1),
-      }),
-    },
-    // preHandler: [adminHook],
-    handler: async (request, reply) => {
-      const { key } = request.query;
-      await app.redis.del(key);
-      return reply.status(200).send({ message: 'Key deleted' });
-    },
-  });
 };
 
 export default backofficeController;

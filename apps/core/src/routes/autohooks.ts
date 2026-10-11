@@ -3,7 +3,7 @@ import type { FastifyInstance } from 'fastify';
 const PUBLIC_ROUTES = [
   '/public',
   '/login',
-  '/backoffice',
+  '/backoffice/token',
   '/entities/components',
   '/entities/subjects/reviews/',
   '/entities/teachers/reviews/',
@@ -11,11 +11,9 @@ const PUBLIC_ROUTES = [
   '/entities/students/courses',
   '/public/stats/components',
   '/users/check-email',
-  '/users/facebook',
   '/help/form',
   '/users/recover',
   '/users/validate',
-  '/entities/enrollments/wpp',
   '/v2/auth/whatsapp-token',
 ];
 
