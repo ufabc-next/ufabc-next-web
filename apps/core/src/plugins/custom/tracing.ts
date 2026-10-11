@@ -2,7 +2,7 @@ import type { FastifyBaseLogger, FastifyInstance, FastifyReply, FastifyRequest }
 
 import { fastifyPlugin as fp } from 'fastify-plugin';
 
-import { serializeQueryParams } from '@next/logger/sanitize';
+import { sanitizeUrl, serializeQueryParams } from '@next/logger/sanitize';
 
 import { TRACING_DIRECTION, TRACING_MESSAGES } from '@/constants.js';
 
@@ -22,8 +22,8 @@ export default fp(async (app: FastifyInstance) => {
       {
         direction: TRACING_DIRECTION.INCOMING,
         method: request.method,
-        url: request.url,
-        headers: request.headers, // Redaction should happen at the Pino level
+        url: sanitizeUrl(request.url),
+        headers: request.headers, // redacted at the Pino level, see REDACTED_PATHS
         queryParams: serializeQueryParams(request.query),
       },
       TRACING_MESSAGES.INCOMING_REQUEST
@@ -36,7 +36,7 @@ export default fp(async (app: FastifyInstance) => {
     const logData = {
       direction: TRACING_DIRECTION.OUTGOING,
       method: request.method,
-      path: request.url,
+      path: sanitizeUrl(request.url),
       status,
       duration: reply.elapsedTime,
       headers: reply.getHeaders(),

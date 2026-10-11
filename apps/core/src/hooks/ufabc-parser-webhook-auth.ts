@@ -6,14 +6,6 @@ export function createUfabcParserWebhookAuthHook(app: FastifyInstance) {
     const deliveryId = request.headers['x-webhook-delivery-id'] as string;
     const webhookSecret = app.config.UFABC_PARSER_WEBHOOK_SECRET;
 
-    if (!webhookSecret) {
-      request.log.warn(
-        { deliveryId },
-        'Webhook secret not configured, skipping authentication'
-      );
-      return;
-    }
-
     if (!apiKey || apiKey !== webhookSecret) {
       request.log.warn({ deliveryId }, 'Invalid webhook API key');
       return reply.status(401).send({

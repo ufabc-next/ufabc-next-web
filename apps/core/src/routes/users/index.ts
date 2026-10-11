@@ -8,7 +8,6 @@ import { completeUserSchema, type Auth } from '@/schemas/auth.js';
 import {
   confirmUserSchema,
   deactivateUserSchema,
-  loginFacebookSchema,
   resendEmailSchema,
   sendRecoveryEmailSchema,
   validateUserEmailSchema,
@@ -65,47 +64,6 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
 
     return userInfo;
   });
-
-  app.post(
-    '/facebook',
-    { schema: loginFacebookSchema },
-    async (request, reply) => {
-      const { ra, email } = request.body;
-      const user = await UserModel.findOne({
-        ra,
-        $or: [
-          { 'oauth.facebookEmail': email },
-          { 'oauth.email': email },
-          { 'oauth.emailFacebook': email },
-        ],
-      });
-
-      if (!user) {
-        return reply.notFound('Usuario não encontrado');
-      }
-
-      const userEmails = [user.oauth?.emailFacebook, user.oauth?.email].filter(
-        Boolean
-      );
-
-      if (!userEmails.includes(email)) {
-        throw new Error(
-          'Email does not match the registered email for this RA'
-        );
-      }
-
-      const jwtToken = app.jwt.sign({
-        _id: user._id.toJSON(),
-        ra: user.ra,
-        permissions: user.permissions,
-        active: user.active,
-        confirmed: user.confirmed,
-        email: user.email,
-      });
-
-      return { success: true, token: jwtToken };
-    }
-  );
 
   app.post('/resend', { schema: resendEmailSchema }, async (request, reply) => {
     const user = await UserModel.findOne({

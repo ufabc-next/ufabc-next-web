@@ -6,7 +6,6 @@ import type {
   CrDistributionData,
   EmailResponse,
   Enrollment,
-  FacebookAuth,
   GetCommentResponse,
   HelpFormResult,
   HistoriesGraduations,
@@ -74,13 +73,6 @@ export class NextApiConnector extends BaseRequester {
 
    async getUserInfo() {
     return await this.request<User>('/users/info');
-  }
-
-   async facebookAuth(data: FacebookAuth) {
-    return await this.request<UserConfirmResponse>('/users/facebook', {
-      body: data,
-      method: 'POST',
-    });
   }
 
    async getEmail(ra: string) {
