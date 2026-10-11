@@ -5,8 +5,11 @@ import type {
   SigStudent,
   UpdatedStudent,
 } from '@next/connectors/schemas/next-api';
-import type { Student } from './ufabc-parser';
+import { storage } from 'wxt/storage';
+
 import { logger } from '@/utils/logger';
+
+import type { Student } from './ufabc-parser';
 
 export type { Component, MatriculaStudent, SigStudent, UpdatedStudent };
 export type { Student } from './ufabc-parser';
@@ -114,7 +117,33 @@ export type TeacherReview = {
   specific: TeacherDetailedReview[];
 };
 
-const nextApiConnector = new NextApiConnector({ baseURL: __NEXT_API_BASE_URL__ });
+const nextApiConnector = new NextApiConnector({
+  baseURL: __NEXT_API_BASE_URL__,
+});
+
+type AcademicCredential = { accessToken: string; expiresAt: string };
+export class AcademicSyncError extends Error {
+  override name = 'AcademicSyncError';
+}
+function credentialKey(login: string) {
+  return `local:academic-credential:${encodeURIComponent(__NEXT_API_BASE_URL__)}:${encodeURIComponent(login.trim().toLowerCase())}` as const;
+}
+
+async function academicConnector(login?: string) {
+  if (login === undefined || login.trim() === '') {
+    throw new Error('Sincronize sua sessão no SIGAA para acessar seus dados.');
+  }
+  const credential = await storage.getItem<AcademicCredential>(
+    credentialKey(login)
+  );
+  if (!credential || Date.parse(credential.expiresAt) <= Date.now()) {
+    throw new Error('Sincronize sua sessão no SIGAA para acessar seus dados.');
+  }
+  return new NextApiConnector({
+    baseURL: __NEXT_API_BASE_URL__,
+    defaultHeaders: { 'x-academic-token': credential.accessToken },
+  });
+}
 
 type SyncHistory = {
   sessionId: string;
@@ -131,13 +160,38 @@ export async function syncHistory(data: SyncHistory) {
 }
 
 export async function syncHistoryV2(data: SyncHistory) {
-  await nextApiConnector.syncSigaaStudent(
+  const result = await nextApiConnector.syncSigaaStudent(
     {
       login: data.login,
-      ra: Number.parseInt(data.ra),
+      ra: Number.parseInt(data.ra, 10),
     },
     data.sessionId,
-    data.viewState,
+    data.viewState
+  );
+  const deadline = Date.now() + 5 * 60 * 1000;
+  while (Date.now() < deadline) {
+    const progress = await nextApiConnector.getAcademicSyncStatus(
+      result.data.accessToken
+    );
+    if (progress.status === 'applied') {
+      await storage.setItem<AcademicCredential>(credentialKey(data.login), {
+        accessToken: result.data.accessToken,
+        expiresAt: result.data.expiresAt,
+      });
+      return;
+    }
+    if (progress.status !== 'awaiting') {
+      throw new AcademicSyncError(
+        'A sincronização não foi confirmada. Verifique sua conta ou entre em contato com o suporte.'
+      );
+    }
+    // eslint-disable-next-line promise/avoid-new -- Adapt the browser timer to await polling.
+    await new Promise<void>((resolve) => {
+      setTimeout(resolve, 2000);
+    });
+  }
+  throw new AcademicSyncError(
+    'A sincronização continua pendente. Acesse o SIGAA novamente mais tarde.'
   );
 }
 
@@ -147,8 +201,7 @@ export async function sendResults(results: {
 }) {
   if (!results.sessionToken || !results.sessKey) {
     logger.warn(
-      results,
-      '[sendResults] Token de sessão ou sessKey inválido(s), abortando envio.',
+      '[sendResults] Token de sessão ou sessKey inválido(s), abortando envio.'
     );
     return;
   }
@@ -156,7 +209,7 @@ export async function sendResults(results: {
   try {
     return await nextApiConnector.sendResults(
       results.sessionToken,
-      results.sessKey,
+      results.sessKey
     );
   } catch (error) {
     logger.error({ error }, '[sendResults] Erro ao enviar dados');
@@ -165,13 +218,13 @@ export async function sendResults(results: {
 
 export async function getSubjectReviews(subjectId: string) {
   return (await nextApiConnector.getSubjectReviews(
-    subjectId,
+    subjectId
   )) as unknown as SubjectReview;
 }
 
 export async function getTeacherReviews(teacherId: string) {
   return (await nextApiConnector.getTeacherReviews(
-    teacherId,
+    teacherId
   )) as unknown as TeacherReview;
 }
 
@@ -180,11 +233,16 @@ export async function getComponents() {
 }
 
 export async function getKicksInfo(kickId: string, studentId?: number) {
-  return nextApiConnector.getComponentKicks(kickId, { studentId });
+  const student = await storage.getItem<{ login: string }>('local:student');
+  const connector = await academicConnector(student?.login);
+  return await connector.getComponentKicks(kickId, {
+    studentId,
+  });
 }
 
 export async function getStudent(login: string, sessionId: string) {
-  return nextApiConnector.getStudent(login, sessionId);
+  const connector = await academicConnector(login);
+  return await connector.getStudent(login, sessionId);
 }
 
 type SyncMatriculaStudentParams = {
@@ -195,12 +253,13 @@ type SyncMatriculaStudentParams = {
 
 export async function syncMatriculaStudent(
   sessionId: string,
-  { studentId, login, graduationId }: SyncMatriculaStudentParams,
+  { studentId, login, graduationId }: SyncMatriculaStudentParams
 ) {
-  await nextApiConnector.syncMatriculaStudent(sessionId, {
-    studentId: studentId ?? undefined,
+  const connector = await academicConnector(login);
+  await connector.syncMatriculaStudent(sessionId, {
     graduationId: graduationId ?? undefined,
     login,
+    studentId: studentId ?? undefined,
   });
 }
 
@@ -217,20 +276,21 @@ export async function updateStudent({
   graduationId: number | null;
   sessionId: string;
 }) {
-  return nextApiConnector.updateStudent(
+  const connector = await academicConnector(login);
+  return await connector.updateStudent(
     {
+      graduationId: graduationId ?? undefined,
       login,
       ra,
       studentId: studentId ?? undefined,
-      graduationId: graduationId ?? undefined,
     },
-    sessionId,
+    sessionId
   );
 }
 
 export async function getSigStudent(sigStudent: SigStudent, sessionId: string) {
   return (await nextApiConnector.getSigStudent(
     sigStudent,
-    sessionId,
+    sessionId
   )) as unknown as Student;
 }

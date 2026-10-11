@@ -193,10 +193,16 @@ export class NextApiConnector extends BaseRequester {
     sessionId: string,
     viewId: string
   ) {
-    return await this.request('/v2/students/sigaa', {
+    return await this.request<{ status: string; data: { operationId: string; accessToken: string; expiresAt: string } }>('/v2/students/sigaa', {
       body: data,
       headers: { 'session-id': sessionId, 'view-id': viewId },
       method: 'POST',
+    });
+  }
+
+   async getAcademicSyncStatus(accessToken: string) {
+    return this.request<{ operationId: string; status: 'awaiting' | 'applied' | 'failed' | 'conflict' | 'rejected' }>('/v2/students/sigaa/status', {
+      headers: { 'x-academic-token': accessToken },
     });
   }
 
