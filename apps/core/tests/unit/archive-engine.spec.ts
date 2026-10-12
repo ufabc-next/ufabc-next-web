@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { findTeacher } from '../../src/models/Teacher.js';
 import { ArchiveEngine } from '../../src/services/archive-engine.js';
 
 const repositoryMock = vi.hoisted(() => ({
@@ -11,7 +12,11 @@ const repositoryMock = vi.hoisted(() => ({
 vi.mock('../../src/repositories/components-repository.js', () => ({
   ComponentsRepository: vi.fn(() => repositoryMock),
 }));
-vi.mock('../../src/connectors/moodle.js', () => ({ MoodleConnector: vi.fn() }));
+const moodleMock = vi.hoisted(() => ({ getUsersByCoursePage: vi.fn() }));
+
+vi.mock('../../src/connectors/moodle.js', () => ({
+  MoodleConnector: vi.fn(() => moodleMock),
+}));
 vi.mock('../../src/models/Teacher.js', () => ({ findTeacher: vi.fn() }));
 
 const codelessCourse = {
@@ -55,5 +60,35 @@ describe('ArchiveEngine.findComponentByMoodleCourse', () => {
 
     expect(matched).toBeNull();
     expect(repositoryMock.findByDisciplinaKeywords).not.toHaveBeenCalled();
+  });
+});
+
+describe('ArchiveEngine teacher handling', () => {
+  it('extracts teacher names without the avatar initials', async () => {
+    moodleMock.getUsersByCoursePage.mockResolvedValue(`
+      <a href="https://moodle.ufabc.edu.br/user/view.php?id=1"><span class="userinitials size-35">JM</span>João Marcelo Borovina Josko</a>
+      <a href="https://moodle.ufabc.edu.br/user/view.php?id=2"><img class="userpicture" alt="" />Carlos da Silva dos Santos</a>
+    `);
+
+    const engine = new ArchiveEngine({
+      session: { sessionId: 'session', sessKey: 'key' },
+    });
+    const names = await engine.extractTeacherNames(1911);
+
+    expect(names).toEqual([
+      'João Marcelo Borovina Josko',
+      'Carlos da Silva dos Santos',
+    ]);
+  });
+
+  it('never creates teachers while matching a Moodle course', async () => {
+    vi.mocked(findTeacher).mockResolvedValue(null);
+
+    const engine = new ArchiveEngine();
+    await engine.findComponentByMoodleCourse(codelessCourse, ['Some Name'], []);
+
+    expect(findTeacher).toHaveBeenCalledWith('Some Name', {
+      createIfMissing: false,
+    });
   });
 });

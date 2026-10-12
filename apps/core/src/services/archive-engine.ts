@@ -90,7 +90,9 @@ export class ArchiveEngine {
     const teacherIds: string[] = [];
     if (teacherNames && teacherNames.length > 0) {
       for (const teacherName of teacherNames) {
-        const teacherId = await findTeacher(teacherName);
+        const teacherId = await findTeacher(teacherName, {
+          createIfMissing: false,
+        });
         if (teacherId) {
           teacherIds.push(teacherId.toString());
         }
@@ -416,6 +418,7 @@ export class ArchiveEngine {
     const teacherNames: string[] = [];
 
     $('a[href*="user/view.php"]').each((_index, el) => {
+      $(el).find('.userinitials').remove();
       const name = $(el).text().trim();
       if (name && name.length > 2 && !/^\d+$/u.test(name)) {
         teacherNames.push(name);

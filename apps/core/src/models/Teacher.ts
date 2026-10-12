@@ -128,7 +128,8 @@ export function setTeacherCacheEntry<Value>(
 const teacherCache = new Map<string, Types.ObjectId | null>();
 
 export async function findTeacher(
-  name: string | null
+  name: string | null,
+  { createIfMissing = true } = {}
 ): Promise<Types.ObjectId | null> {
   if (!name) return null;
 
@@ -164,6 +165,10 @@ export async function findTeacher(
     });
     setTeacherCacheEntry(teacherCache, normalizedName, levMatch._id);
     return levMatch._id;
+  }
+
+  if (!createIfMissing) {
+    return null;
   }
 
   const newTeacher = await TeacherModel.create({
