@@ -2,7 +2,7 @@ import { defineJob } from '@next/queues/client';
 import type { Types } from 'mongoose';
 import z from 'zod';
 
-import { JOB_NAMES } from '@/constants.js';
+import { ARCHIVE_MAX_FAILURE_EVENTS, JOB_NAMES } from '@/constants.js';
 import { ComponentArchiveModel } from '@/models/ComponentArchive.js';
 import { ArchiveEngine } from '@/services/archive-engine.js';
 
@@ -89,8 +89,6 @@ export const componentsArchivesProcessingJob = defineJob(
     };
   });
 
-const MAX_FAILURE_EVENTS = 5;
-
 type FailureCountRow = {
   failureCount: number;
 };
@@ -126,7 +124,7 @@ async function markArchiveAsFailed(
 ) {
   const existingFailureCount = await countFailureEvents(archiveId);
 
-  if (existingFailureCount >= MAX_FAILURE_EVENTS) {
+  if (existingFailureCount >= ARCHIVE_MAX_FAILURE_EVENTS) {
     return;
   }
 
