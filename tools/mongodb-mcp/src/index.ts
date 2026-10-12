@@ -1,5 +1,5 @@
+import { existsSync } from 'node:fs';
 import { loadEnvFile } from 'node:process';
-import { fileURLToPath } from 'node:url';
 
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
@@ -7,6 +7,9 @@ import mongoose from 'mongoose';
 import { z } from 'zod';
 
 const { MongoClient, BSON } = mongoose.mongo;
+
+const documentSchema = z.record(z.unknown());
+type Document = z.infer<typeof documentSchema>;
 
 const MAX_DOCUMENTS = 200;
 const QUERY_TIMEOUT_MS = 20_000;
@@ -23,7 +26,7 @@ export function isReadOnlyMode(env: NodeJS.ProcessEnv) {
   return env.MONGODB_MCP_READ_ONLY !== 'false';
 }
 
-export function capLimit(requestedLimit: number | undefined) {
+export function capLimit(requestedLimit?: number) {
   if (requestedLimit === undefined) {
     return MAX_DOCUMENTS;
   }
@@ -50,16 +53,24 @@ export function assertReadOnlyValue(value: unknown) {
   }
 }
 
-function parseExtendedJson(value: unknown) {
-  return BSON.EJSON.deserialize(JSON.parse(JSON.stringify(value)));
+function parseExtendedJson(value: Document): Document {
+  return documentSchema.parse(BSON.EJSON.deserialize(structuredClone(value)));
+}
+
+function parseExtendedJsonList(values: Document[]) {
+  const parsedValues: Document[] = [];
+  for (const value of values) {
+    parsedValues.push(parseExtendedJson(value));
+  }
+  return parsedValues;
 }
 
 function toToolResult(payload: unknown) {
   return {
     content: [
       {
-        type: 'text' as const,
         text: BSON.EJSON.stringify(payload, undefined, 2, { relaxed: true }),
+        type: 'text' as const,
       },
     ],
   };
@@ -68,20 +79,22 @@ function toToolResult(payload: unknown) {
 function toToolError(error: unknown) {
   const errorMessage = error instanceof Error ? error.message : String(error);
   return {
-    content: [{ type: 'text' as const, text: `Query failed: ${errorMessage}` }],
+    content: [{ text: `Query failed: ${errorMessage}`, type: 'text' as const }],
     isError: true,
   };
 }
 
 async function main() {
-  if (!process.env.MONGODB_CONNECTION_URL) {
-    try {
-      loadEnvFile(new URL('../../../apps/core/.env', import.meta.url));
-    } catch {}
+  const localEnvFileUrl = new URL('../../../apps/core/.env', import.meta.url);
+  if (
+    process.env.MONGODB_CONNECTION_URL === undefined &&
+    existsSync(localEnvFileUrl)
+  ) {
+    loadEnvFile(localEnvFileUrl);
   }
 
   const connectionUrl = process.env.MONGODB_CONNECTION_URL;
-  if (!connectionUrl) {
+  if (connectionUrl === undefined || connectionUrl === '') {
     throw new Error('MONGODB_CONNECTION_URL environment variable is required');
   }
 
@@ -122,31 +135,45 @@ async function main() {
       inputSchema: {
         collection: z.string().min(1),
         filter: z.record(z.unknown()).default({}),
+        limit: z.number().int().positive().optional(),
         projection: z.record(z.unknown()).optional(),
         sort: z.record(z.unknown()).optional(),
-        limit: z.number().int().positive().optional(),
       },
     },
-    async ({ collection, filter, projection, sort, limit }) => {
+    async ({
+      collection,
+      filter,
+      projection,
+      sort,
+      limit,
+    }: {
+      collection: string;
+      filter: Document;
+      limit?: number;
+      projection?: Document;
+      sort?: Document;
+    }) => {
       try {
         const parsedFilter = parseExtendedJson(filter);
         if (readOnly) {
           assertReadOnlyValue(parsedFilter);
         }
 
-        let cursor = database
+        const pipeline: Document[] = [{ $match: parsedFilter }];
+        if (sort !== undefined) {
+          pipeline.push({ $sort: parseExtendedJson(sort) });
+        }
+        pipeline.push({ $limit: capLimit(limit) });
+        if (projection !== undefined) {
+          pipeline.push({ $project: parseExtendedJson(projection) });
+        }
+
+        const documents = await database
           .collection(collection)
-          .find(parsedFilter, { maxTimeMS: QUERY_TIMEOUT_MS })
-          .limit(capLimit(limit));
+          .aggregate(pipeline, { maxTimeMS: QUERY_TIMEOUT_MS })
+          .toArray();
 
-        if (projection) {
-          cursor = cursor.project(parseExtendedJson(projection));
-        }
-        if (sort) {
-          cursor = cursor.sort(parseExtendedJson(sort));
-        }
-
-        return toToolResult(await cursor.toArray());
+        return toToolResult(documents);
       } catch (error) {
         return toToolError(error);
       }
@@ -162,9 +189,15 @@ async function main() {
         pipeline: z.array(z.record(z.unknown())),
       },
     },
-    async ({ collection, pipeline }) => {
+    async ({
+      collection,
+      pipeline,
+    }: {
+      collection: string;
+      pipeline: Document[];
+    }) => {
       try {
-        const parsedPipeline = parseExtendedJson(pipeline);
+        const parsedPipeline = parseExtendedJsonList(pipeline);
         if (readOnly) {
           assertReadOnlyValue(parsedPipeline);
         }
@@ -191,7 +224,13 @@ async function main() {
         filter: z.record(z.unknown()).default({}),
       },
     },
-    async ({ collection, filter }) => {
+    async ({
+      collection,
+      filter,
+    }: {
+      collection: string;
+      filter: Document;
+    }) => {
       try {
         const parsedFilter = parseExtendedJson(filter);
         if (readOnly) {
@@ -213,10 +252,11 @@ async function main() {
   await server.connect(transport);
 }
 
-const isEntryPoint = process.argv[1] === fileURLToPath(import.meta.url);
-if (isEntryPoint) {
-  main().catch((error) => {
-    process.stderr.write(`mongodb-mcp failed to start: ${error}\n`);
+if (process.argv[1] === import.meta.filename) {
+  try {
+    await main();
+  } catch (error) {
+    process.stderr.write(`mongodb-mcp failed to start: ${String(error)}\n`);
     process.exit(1);
-  });
+  }
 }
