@@ -116,11 +116,20 @@ export const pdfDownloadJob = defineJob(
       session,
     });
 
-    return await archivesService.processArchive({
+    const result = await archivesService.processArchive({
       bucket: app.config.AWS_BUCKET,
       componentId,
       rawUrl,
     });
+
+    if (result.changed) {
+      await app.manager.dispatch(JOB_NAMES.ARCHIVE_EXTRACTION, {
+        archiveId: result.archiveId.toString(),
+        globalTraceId,
+      });
+    }
+
+    return result;
   });
 
 export const archivesSummaryJob = defineJob(

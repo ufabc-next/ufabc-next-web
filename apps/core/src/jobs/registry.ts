@@ -1,4 +1,5 @@
 import { JOB_NAMES } from '../constants.js';
+import { archiveExtractionJob } from './archive-extraction.js';
 import {
   componentsArchivesProcessingJob,
   pdfDownloadJob,
@@ -13,9 +14,16 @@ import { enrollmentsProcessingJob } from './enrollments-processing.js';
 import { settledEnrollmentsProcessingJob } from './settled-enrollments-processing.js';
 import { studentSyncProcessingJob } from './student-sync-processing.js';
 import { teacherCreatedJob } from './teacher-created.js';
+import {
+  teacherSummaryJob,
+  teacherSummaryScheduleJob,
+} from './teacher-summaries.js';
 import { ufabcParserWebhookProcessingJob } from './ufabc-parser-webhook-processing.js';
 
 export const jobRegistry = {
+  [JOB_NAMES.ARCHIVE_EXTRACTION]: archiveExtractionJob,
+  [JOB_NAMES.TEACHER_SUMMARY]: teacherSummaryJob,
+  [JOB_NAMES.TEACHER_SUMMARY_SCHEDULE]: teacherSummaryScheduleJob,
   [JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING]: componentsArchivesProcessingJob,
   [JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING_PDF]: pdfDownloadJob,
   [JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING_SUMMARY]: archivesSummaryJob,

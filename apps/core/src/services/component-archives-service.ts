@@ -86,6 +86,7 @@ export class ComponentArchivesService extends BaseService {
 
       return {
         archiveId: archive._id,
+        changed: true,
         data: { fileName: pdfName, s3Key },
         message: 'PDF uploaded',
         success: true,
