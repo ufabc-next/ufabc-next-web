@@ -1,10 +1,9 @@
 import { defineJob } from '@next/queues/client';
-import type { Types } from 'mongoose';
 import z from 'zod';
 
-import { ARCHIVE_MAX_FAILURE_EVENTS, JOB_NAMES } from '@/constants.js';
-import { ComponentArchiveModel } from '@/models/ComponentArchive.js';
+import { JOB_NAMES } from '@/constants.js';
 import { ArchiveEngine } from '@/services/archive-engine.js';
+import { ComponentArchivesService } from '@/services/component-archives-service.js';
 
 const componentSchema = z.object({
   fullname: z.string(),
@@ -89,53 +88,6 @@ export const componentsArchivesProcessingJob = defineJob(
     };
   });
 
-type FailureCountRow = {
-  failureCount: number;
-};
-
-async function countFailureEvents(archiveId: Types.ObjectId): Promise<number> {
-  const rows = await ComponentArchiveModel.aggregate<FailureCountRow>([
-    { $match: { _id: archiveId } },
-    {
-      $project: {
-        failureCount: {
-          $size: {
-            $filter: {
-              as: 'event',
-              cond: { $eq: ['$$event.status', 'failed'] },
-              input: '$timeline',
-            },
-          },
-        },
-      },
-    },
-  ]);
-
-  if (rows.length === 0) {
-    return 0;
-  }
-
-  return rows[0].failureCount;
-}
-
-async function markArchiveAsFailed(
-  archiveId: Types.ObjectId,
-  metadata: Record<string, unknown>
-) {
-  const existingFailureCount = await countFailureEvents(archiveId);
-
-  if (existingFailureCount >= ARCHIVE_MAX_FAILURE_EVENTS) {
-    return;
-  }
-
-  await ComponentArchiveModel.findByIdAndUpdate(archiveId, {
-    $push: {
-      timeline: { metadata, status: 'failed' },
-    },
-    $set: { status: 'failed' },
-  });
-}
-
 export const pdfDownloadJob = defineJob(
   JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING_PDF
 )
@@ -157,89 +109,17 @@ export const pdfDownloadJob = defineJob(
   .handler(async ({ job, app }) => {
     const { rawUrl, componentDbId, globalTraceId, session } = job.data;
 
-    const engine = new ArchiveEngine({
+    const archivesService = new ComponentArchivesService({
       globalTraceId,
       s3Connector: app.aws.s3,
       session,
     });
 
-    const archive = await ComponentArchiveModel.findOneAndUpdate(
-      { component: componentDbId, original_url: rawUrl },
-      {
-        $setOnInsert: {
-          component: componentDbId,
-          original_url: rawUrl,
-          status: 'created',
-          timeline: [{ metadata: { globalTraceId }, status: 'created' }],
-        },
-      },
-      { new: true, upsert: true }
-    );
-
-    const alreadyStored = archive.status === 'stored';
-
-    try {
-      const result = await engine.downloadAndUpload(
-        rawUrl,
-        componentDbId,
-        app.config.AWS_BUCKET
-      );
-
-      if (!result) {
-        if (!alreadyStored) {
-          await markArchiveAsFailed(archive._id, {
-            reason: 'missing_session',
-          });
-        }
-
-        return {
-          archiveId: archive._id,
-          message: 'No Moodle session available, skipped download',
-          success: false,
-        };
-      }
-
-      const { checksum, pdfName, s3Key } = result;
-
-      if (archive.checksum === checksum) {
-        return {
-          archiveId: archive._id,
-          data: {
-            fileName: archive.file_name,
-            s3Key: archive.s3_key,
-          },
-          message: 'PDF unchanged since last run, skipping stored event',
-          success: true,
-        };
-      }
-
-      await ComponentArchiveModel.findByIdAndUpdate(archive._id, {
-        $push: {
-          timeline: { status: 'stored' },
-        },
-        $set: {
-          checksum,
-          file_name: pdfName,
-          s3_key: s3Key,
-          status: 'stored',
-        },
-      });
-
-      return {
-        archiveId: archive._id,
-        data: {
-          fileName: pdfName,
-          s3Key,
-        },
-        message: 'PDF uploaded',
-        success: true,
-      };
-    } catch (error) {
-      if (!alreadyStored) {
-        await markArchiveAsFailed(archive._id, { error: String(error) });
-      }
-      throw error;
-    }
+    return await archivesService.processArchive({
+      bucket: app.config.AWS_BUCKET,
+      componentDbId,
+      rawUrl,
+    });
   });
 
 export const archivesSummaryJob = defineJob(
