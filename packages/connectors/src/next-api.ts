@@ -16,7 +16,6 @@ import type {
   SearchCourseItem,
   SearchSubject,
   SearchTeacher,
-  SigStudent,
   StatsClass,
   StatsCourse,
   StatsOverview,
@@ -192,13 +191,6 @@ export class NextApiConnector extends BaseRequester {
     });
   }
 
-   async getSigStudent(data: SigStudent, sessionId: string) {
-    return await this.request('/entities/students/sig', {
-      body: data,
-      headers: { 'session-id': sessionId },
-      method: 'POST',
-    });
-  }
 
    async searchComponents(season?: string) {
      const query: Record<string, string> = {}
@@ -240,23 +232,8 @@ export class NextApiConnector extends BaseRequester {
     return await this.request('/v2/components/archives/uploads');
   }
 
-   async getTeachers() {
-    return await this.request<Array<{ name: string; alias: string[] }>>('/entities/teachers/');
-  }
 
-   async createTeachers(names: string[]) {
-    return await this.request('/entities/teachers/', {
-      body: { names },
-      method: 'POST',
-    });
-  }
 
-   async updateTeacher(teacherId: string, alias: string) {
-    return await this.request(`/entities/teachers/${teacherId}`, {
-      body: { alias },
-      method: 'PUT',
-    });
-  }
 
    async searchTeachers(q: string) {
     return await this.request<SearchTeacher>('/entities/teachers/search', {
@@ -268,9 +245,6 @@ export class NextApiConnector extends BaseRequester {
     return await this.request<TeacherReview>(`/entities/teachers/reviews/${teacherId}`);
   }
 
-   async getSubjects(params: { limit: number; page: number }) {
-    return await this.request('/entities/subjects/', { query: params });
-  }
 
    async searchSubjects(q: string) {
     return await this.request<SearchSubject>('/entities/subjects/search', {

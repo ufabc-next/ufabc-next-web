@@ -483,16 +483,6 @@ export const updatedStudentSchema = z.object({
 });
 export type UpdatedStudent = z.infer<typeof updatedStudentSchema>;
 
-export const sigStudentSchema = z.object({
-  curso: z.string(),
-  email: z.string(),
-  entrada: z.string(),
-  matricula: z.string(),
-  nivel: z.enum(['graduacao', 'licenciatura']),
-  status: z.string(),
-});
-export type SigStudent = z.infer<typeof sigStudentSchema>;
-
 export const componentSchema = z.object({
   campus: z.enum(['sbc', 'sa']),
   disciplina_id: z.number(),
