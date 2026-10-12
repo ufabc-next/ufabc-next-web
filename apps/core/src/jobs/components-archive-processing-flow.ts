@@ -1,4 +1,5 @@
 import { defineJob } from '@next/queues/client';
+import { UnrecoverableError } from 'bullmq';
 import z from 'zod';
 
 import { JOB_NAMES } from '@/constants.js';
@@ -45,7 +46,7 @@ export const componentsArchivesProcessingJob = defineJob(
     );
 
     if (!matchedComponent) {
-      throw new Error(
+      throw new UnrecoverableError(
         `No matching component found for Moodle course: "${component.fullname}" (id: ${component.id}). ` +
           `Could not find a matching component in the system.`
       );
