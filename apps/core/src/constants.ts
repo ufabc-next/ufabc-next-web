@@ -98,3 +98,5 @@ export const REGEX_SPECIAL_CHARS = /[.*+?^${}()|[\]\\]/u;
 export const DISCIPLINE_CODE_PATTERN = /[A-Z]{2,}\d{3,}(?:-\d+)?/u;
 
 export const BOARD_COOKIE_MAX_AGE_SECONDS = 3600;
+
+export const ARCHIVE_MAX_FAILURE_EVENTS = 5;

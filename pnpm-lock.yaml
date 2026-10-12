@@ -52,6 +52,9 @@ catalogs:
     '@fastify/env':
       specifier: ^5.0.3
       version: 5.0.3
+    '@fastify/error':
+      specifier: ^4.2.0
+      version: 4.2.0
     '@fastify/jwt':
       specifier: ^9.1.0
       version: 9.1.0
@@ -351,6 +354,8 @@ overrides:
   '@smithy/types': 4.14.3
   '@smithy/core': 3.33.2
 
+packageExtensionsChecksum: sha256-CgML6ZPCs0ce3qXUwgqV1dF9tT3rNv7j5zTUFQIyrJ8=
+
 importers:
 
   .:
@@ -395,142 +400,6 @@ importers:
         specifier: 'catalog:'
         version: 0.2.2(@typescript/native-preview@7.0.0-dev.20260606.1)
 
-  apps/web:
-    dependencies:
-      '@amcharts/amcharts5':
-        specifier: 'catalog:'
-        version: 5.15.1
-      '@mdi/font':
-        specifier: 'catalog:'
-        version: 7.4.47
-      '@next/logger':
-        specifier: workspace:*
-        version: link:../../packages/logger
-      '@next/services':
-        specifier: workspace:*
-        version: link:../../packages/services
-      '@tanstack/query-core':
-        specifier: 'catalog:'
-        version: 5.90.16
-      '@tanstack/vue-query':
-        specifier: 5.92.5
-        version: 5.92.5(vue@3.5.35(typescript@5.9.3))
-      '@tanstack/vue-query-devtools':
-        specifier: 'catalog:'
-        version: 5.91.0(@tanstack/vue-query@5.92.5(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3))
-      '@vee-validate/zod':
-        specifier: 'catalog:'
-        version: 4.15.1(vue@3.5.35(typescript@5.9.3))(zod@3.25.76)
-      '@vue/shared':
-        specifier: 3.5.35
-        version: 3.5.35
-      '@vueuse/core':
-        specifier: ^13.9.0
-        version: 13.9.0(vue@3.5.35(typescript@5.9.3))
-      axios:
-        specifier: 'catalog:'
-        version: 1.13.2
-      dayjs:
-        specifier: 1.11.19
-        version: 1.11.19
-      element-plus:
-        specifier: 2.13.1
-        version: 2.13.1(vue@3.5.35(typescript@5.9.3))
-      highcharts:
-        specifier: 11.4.8
-        version: 11.4.8
-      highcharts-vue:
-        specifier: 1.4.3
-        version: 1.4.3(highcharts@11.4.8)(vue@3.5.35(typescript@5.9.3))
-      ics:
-        specifier: 'catalog:'
-        version: 3.12.0
-      jwt-decode:
-        specifier: 'catalog:'
-        version: 4.0.0
-      lodash.debounce:
-        specifier: 'catalog:'
-        version: 4.0.8
-      mixpanel-browser:
-        specifier: 'catalog:'
-        version: 2.80.0
-      pinia:
-        specifier: 'catalog:'
-        version: 3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3))
-      pinia-plugin-persistedstate:
-        specifier: 'catalog:'
-        version: 4.7.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))
-      vee-validate:
-        specifier: 'catalog:'
-        version: 4.15.1(vue@3.5.35(typescript@5.9.3))
-      vue:
-        specifier: 3.5.35
-        version: 3.5.35(typescript@5.9.3)
-      vue-router:
-        specifier: 4.6.4
-        version: 4.6.4(vue@3.5.35(typescript@5.9.3))
-      vue-zustand:
-        specifier: 'catalog:'
-        version: 0.6.0(vue@3.5.35(typescript@5.9.3))(zustand@5.0.14)
-      vuetify:
-        specifier: 'catalog:'
-        version: 3.11.6(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3))
-      zod:
-        specifier: 'catalog:'
-        version: 3.25.76
-    devDependencies:
-      '@next/config':
-        specifier: workspace:*
-        version: link:../../tools/tsconfig
-      '@testing-library/jest-dom':
-        specifier: 'catalog:'
-        version: 6.9.1
-      '@testing-library/user-event':
-        specifier: 'catalog:'
-        version: 14.6.1(@testing-library/dom@9.3.4)
-      '@testing-library/vue':
-        specifier: 'catalog:'
-        version: 8.1.0(@vue/compiler-dom@3.5.35)(@vue/compiler-sfc@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3))
-      '@types/lodash.debounce':
-        specifier: 'catalog:'
-        version: 4.0.9
-      '@types/mixpanel-browser':
-        specifier: 'catalog:'
-        version: 2.66.0
-      '@types/node':
-        specifier: 'catalog:'
-        version: 24.13.1
-      '@vitejs/plugin-vue':
-        specifier: 'catalog:'
-        version: 6.0.7(vite@6.4.3(@types/node@24.13.1)(jiti@2.7.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
-      '@vitest/coverage-v8':
-        specifier: 'catalog:'
-        version: 3.2.4(vitest@3.2.4(@types/node@24.13.1)(jiti@2.7.0)(jsdom@26.1.0)(msw@2.14.6(@types/node@24.13.1)(typescript@5.9.3))(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
-      globals:
-        specifier: 'catalog:'
-        version: 16.5.0
-      jsdom:
-        specifier: 'catalog:'
-        version: 26.1.0
-      msw:
-        specifier: 'catalog:'
-        version: 2.14.6(@types/node@24.13.1)(typescript@5.9.3)
-      sass:
-        specifier: 'catalog:'
-        version: 1.100.0
-      sass-loader:
-        specifier: 'catalog:'
-        version: 16.0.6(sass@1.100.0)
-      typescript:
-        specifier: 5.9.3
-        version: 5.9.3
-      vite:
-        specifier: 'catalog:'
-        version: 6.4.3(@types/node@24.13.1)(jiti@2.7.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
-      vitest:
-        specifier: 'catalog:'
-        version: 3.2.4(@types/node@24.13.1)(jiti@2.7.0)(jsdom@26.1.0)(msw@2.14.6(@types/node@24.13.1)(typescript@5.9.3))(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
-
   apps/core:
     dependencies:
       '@aws-sdk/client-s3':
@@ -563,6 +432,9 @@ importers:
       '@fastify/env':
         specifier: 'catalog:'
         version: 5.0.3
+      '@fastify/error':
+        specifier: 'catalog:'
+        version: 4.2.0
       '@fastify/jwt':
         specifier: 'catalog:'
         version: 9.1.0
@@ -820,6 +692,142 @@ importers:
       zod:
         specifier: 'catalog:'
         version: 3.25.76
+
+  apps/web:
+    dependencies:
+      '@amcharts/amcharts5':
+        specifier: 'catalog:'
+        version: 5.15.1
+      '@mdi/font':
+        specifier: 'catalog:'
+        version: 7.4.47
+      '@next/logger':
+        specifier: workspace:*
+        version: link:../../packages/logger
+      '@next/services':
+        specifier: workspace:*
+        version: link:../../packages/services
+      '@tanstack/query-core':
+        specifier: 'catalog:'
+        version: 5.90.16
+      '@tanstack/vue-query':
+        specifier: 5.92.5
+        version: 5.92.5(vue@3.5.35(typescript@5.9.3))
+      '@tanstack/vue-query-devtools':
+        specifier: 'catalog:'
+        version: 5.91.0(@tanstack/vue-query@5.92.5(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3))
+      '@vee-validate/zod':
+        specifier: 'catalog:'
+        version: 4.15.1(vue@3.5.35(typescript@5.9.3))(zod@3.25.76)
+      '@vue/shared':
+        specifier: 3.5.35
+        version: 3.5.35
+      '@vueuse/core':
+        specifier: ^13.9.0
+        version: 13.9.0(vue@3.5.35(typescript@5.9.3))
+      axios:
+        specifier: 'catalog:'
+        version: 1.13.2
+      dayjs:
+        specifier: 1.11.19
+        version: 1.11.19
+      element-plus:
+        specifier: 2.13.1
+        version: 2.13.1(vue@3.5.35(typescript@5.9.3))
+      highcharts:
+        specifier: 11.4.8
+        version: 11.4.8
+      highcharts-vue:
+        specifier: 1.4.3
+        version: 1.4.3(highcharts@11.4.8)(vue@3.5.35(typescript@5.9.3))
+      ics:
+        specifier: 'catalog:'
+        version: 3.12.0
+      jwt-decode:
+        specifier: 'catalog:'
+        version: 4.0.0
+      lodash.debounce:
+        specifier: 'catalog:'
+        version: 4.0.8
+      mixpanel-browser:
+        specifier: 'catalog:'
+        version: 2.80.0
+      pinia:
+        specifier: 'catalog:'
+        version: 3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3))
+      pinia-plugin-persistedstate:
+        specifier: 'catalog:'
+        version: 4.7.1(pinia@3.0.4(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3)))
+      vee-validate:
+        specifier: 'catalog:'
+        version: 4.15.1(vue@3.5.35(typescript@5.9.3))
+      vue:
+        specifier: 3.5.35
+        version: 3.5.35(typescript@5.9.3)
+      vue-router:
+        specifier: 4.6.4
+        version: 4.6.4(vue@3.5.35(typescript@5.9.3))
+      vue-zustand:
+        specifier: 'catalog:'
+        version: 0.6.0(vue@3.5.35(typescript@5.9.3))(zustand@5.0.14)
+      vuetify:
+        specifier: 'catalog:'
+        version: 3.11.6(typescript@5.9.3)(vue@3.5.35(typescript@5.9.3))
+      zod:
+        specifier: 'catalog:'
+        version: 3.25.76
+    devDependencies:
+      '@next/config':
+        specifier: workspace:*
+        version: link:../../tools/tsconfig
+      '@testing-library/jest-dom':
+        specifier: 'catalog:'
+        version: 6.9.1
+      '@testing-library/user-event':
+        specifier: 'catalog:'
+        version: 14.6.1(@testing-library/dom@9.3.4)
+      '@testing-library/vue':
+        specifier: 'catalog:'
+        version: 8.1.0(@vue/compiler-dom@3.5.35)(@vue/compiler-sfc@3.5.35)(@vue/server-renderer@3.5.35(vue@3.5.35(typescript@5.9.3)))(vue@3.5.35(typescript@5.9.3))
+      '@types/lodash.debounce':
+        specifier: 'catalog:'
+        version: 4.0.9
+      '@types/mixpanel-browser':
+        specifier: 'catalog:'
+        version: 2.66.0
+      '@types/node':
+        specifier: 'catalog:'
+        version: 24.13.1
+      '@vitejs/plugin-vue':
+        specifier: 'catalog:'
+        version: 6.0.7(vite@6.4.3(@types/node@24.13.1)(jiti@2.7.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))(vue@3.5.35(typescript@5.9.3))
+      '@vitest/coverage-v8':
+        specifier: 'catalog:'
+        version: 3.2.4(vitest@3.2.4(@types/node@24.13.1)(jiti@2.7.0)(jsdom@26.1.0)(msw@2.14.6(@types/node@24.13.1)(typescript@5.9.3))(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0))
+      globals:
+        specifier: 'catalog:'
+        version: 16.5.0
+      jsdom:
+        specifier: 'catalog:'
+        version: 26.1.0
+      msw:
+        specifier: 'catalog:'
+        version: 2.14.6(@types/node@24.13.1)(typescript@5.9.3)
+      sass:
+        specifier: 'catalog:'
+        version: 1.100.0
+      sass-loader:
+        specifier: 'catalog:'
+        version: 16.0.6(sass@1.100.0)
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vite:
+        specifier: 'catalog:'
+        version: 6.4.3(@types/node@24.13.1)(jiti@2.7.0)(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
+      vitest:
+        specifier: 'catalog:'
+        version: 3.2.4(@types/node@24.13.1)(jiti@2.7.0)(jsdom@26.1.0)(msw@2.14.6(@types/node@24.13.1)(typescript@5.9.3))(sass@1.100.0)(tsx@4.22.4)(yaml@2.9.0)
 
   packages/connectors:
     dependencies:
@@ -11549,6 +11557,7 @@ snapshots:
 
   fastify-type-provider-zod@3.0.0(fastify@5.8.5)(zod@3.25.76):
     dependencies:
+      '@fastify/error': 4.2.0
       fastify: 5.8.5
       zod: 3.25.76
       zod-to-json-schema: 3.25.2(zod@3.25.76)

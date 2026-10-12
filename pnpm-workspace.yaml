@@ -21,6 +21,10 @@ allowBuilds:
   ssh2: true
   weak-napi: true
 injectWorkspacePackages: true
+packageExtensions:
+  fastify-type-provider-zod@3.0.0:
+    dependencies:
+      "@fastify/error": ^4.2.0
 overrides:
   "@smithy/types": 4.14.3
   "@smithy/core": 3.33.2
@@ -46,6 +50,7 @@ catalog:
   "@fastify/cookie": ^11.0.2
   "@fastify/cors": ^10.1.0
   "@fastify/env": ^5.0.3
+  "@fastify/error": ^4.2.0
   "@fastify/jwt": ^9.1.0
   "@fastify/multipart": ^9.3.0
   "@fastify/oauth2": ^8.1.2

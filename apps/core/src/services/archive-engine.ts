@@ -530,7 +530,8 @@ export class ArchiveEngine {
     const url = new URL(rawUrl);
     const buffer = await this.moodleConnector.downloadFile(
       url.href,
-      this.session.sessionId
+      this.session.sessionId,
+      this.session.sessKey
     );
 
     const filename = this.extractFilenameFromUrl(url);
