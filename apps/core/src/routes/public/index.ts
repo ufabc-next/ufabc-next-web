@@ -6,15 +6,9 @@ import { currentQuad } from '@next/utils';
 import { CommentModel } from '@/models/Comment.js';
 import { type Component, ComponentModel } from '@/models/Component.js';
 import { EnrollmentModel } from '@/models/Enrollment.js';
-import { GraduationModel } from '@/models/Graduation.js';
 import { StudentModel } from '@/models/Student.js';
 import { UserModel } from '@/models/User.js';
-import {
-  listComponentsResume,
-  listGraduationsSchema,
-  listStudentStats,
-  type GraduationList,
-} from '@/schemas/public.js';
+import { listComponentsResume } from '@/schemas/public.js';
 import { resolveStep } from '@/utils/resolve-stats-steps.js';
 
 import { getAllCourses } from './service.js';
@@ -112,63 +106,6 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
 
     return summary;
   });
-
-  app.get(
-    '/graduations',
-    { schema: listGraduationsSchema, logLevel: 'silent' },
-    async () => {
-      const graduations = await GraduationModel.find(
-        {
-          grade: { $exists: true },
-        },
-        {
-          _id: 0,
-          createdAt: 0,
-          locked: 0,
-          updatedAt: 0,
-          __v: 0,
-          creditsBreakdown: 0,
-        }
-      ).lean<GraduationList[]>();
-
-      return graduations;
-    }
-  );
-
-  app.get(
-    '/stats/student',
-    { schema: listStudentStats, logLevel: 'silent' },
-    async (request, reply) => {
-      const { season } = request.query;
-
-      if (!season) {
-        return reply.badRequest('Missing season');
-      }
-
-      const isPrevious = await ComponentModel.countDocuments({
-        season,
-        before_kick: { $exists: true, $ne: [] },
-      });
-
-      const dataKey = isPrevious ? '$before_kick' : '$alunos_matriculados';
-
-      const studentsStats = await ComponentModel.aggregate([
-        { $match: { season } },
-        { $unwind: dataKey },
-        { $group: { _id: dataKey, count: { $sum: 1 } } },
-        { $group: { _id: '$count', students_number: { $sum: 1 } } },
-        { $sort: { _id: 1 } },
-        {
-          $project: {
-            students_number: 1,
-            components_number: '$_id',
-          },
-        },
-      ]);
-
-      return studentsStats;
-    }
-  );
 
   app.get('/stats/usage', { logLevel: 'silent' }, async () => {
     const season = currentQuad();

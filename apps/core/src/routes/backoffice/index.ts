@@ -2,9 +2,6 @@ import type { FastifyPluginAsyncZodOpenApi } from 'fastify-zod-openapi';
 
 import { z } from 'zod';
 
-import type { QueueNames } from '@/queue/types.js';
-
-import { adminHook } from '@/hooks/admin.js';
 import { UserModel } from '@/models/User.js';
 
 const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
@@ -51,74 +48,6 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
       }
     );
   }
-
-  app.get(
-    '/jobs/failed',
-    {
-      schema: {
-        querystring: z.object({
-          reason: z.string(),
-          batchSize: z.number().optional().default(500),
-          queue: z.custom<QueueNames>((val) => {
-            return (
-              typeof val === 'string' &&
-              Object.keys(app.job.queues).includes(val)
-            );
-          }),
-        }),
-      },
-      preHandler: [adminHook],
-    },
-    async (request, reply) => {
-      const { reason, batchSize, queue } = request.query;
-
-      if (!reason) {
-        return reply.badRequest('Missing reason');
-      }
-
-      const failedJobs = await app.job.getFailedByReason(
-        queue,
-        reason,
-        batchSize
-      );
-
-      // log the quantity of failed jobs per reason
-      return reply.send({
-        count: failedJobs.length,
-        data: failedJobs,
-      });
-    }
-  );
-
-  app.post(
-    '/send-email',
-    {
-      schema: {
-        body: z.object({
-          templateName: z.string().min(1),
-          recipients: z.array(z.string().email()).min(1),
-        }),
-      },
-      preHandler: [adminHook],
-    },
-    async (request, reply) => {
-      const { templateName, recipients } = request.body;
-
-      if (recipients.length === 0) {
-        return reply.badRequest('Empty recipients list');
-      }
-      const job = await app.job.dispatch('SendBulkEmail', {
-        templateName,
-        recipients,
-      });
-
-      return reply.send({
-        success: true,
-        jobId: job.id,
-        recipients: recipients.length,
-      });
-    }
-  );
 };
 
 export default plugin;

@@ -2,13 +2,12 @@ import { NextApiConnector } from '@next/connectors/next-api';
 import type {
   Component,
   MatriculaStudent,
-  SigStudent,
   UpdatedStudent,
 } from '@next/connectors/schemas/next-api';
 import type { Student } from './ufabc-parser';
 import { logger } from '@/utils/logger';
 
-export type { Component, MatriculaStudent, SigStudent, UpdatedStudent };
+export type { Component, MatriculaStudent, UpdatedStudent };
 export type { Student } from './ufabc-parser';
 
 export type SigHistory = {
@@ -241,11 +240,4 @@ export async function updateStudent({
     },
     sessionId,
   );
-}
-
-export async function getSigStudent(sigStudent: SigStudent, sessionId: string) {
-  return (await nextApiConnector.getSigStudent(
-    sigStudent,
-    sessionId,
-  )) as unknown as Student;
 }
