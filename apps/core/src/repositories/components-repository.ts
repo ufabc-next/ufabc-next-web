@@ -86,4 +86,14 @@ export class ComponentsRepository extends BaseRepository {
       $set: { moodleCourseId },
     });
   }
+
+  async getByComponentId(componentId: Types.ObjectId, lean: boolean) {
+    this.logger.debug({ componentId }, 'Getting component by ID');
+
+    if (lean) {
+      return await this.model.findById(componentId).lean();
+    }
+
+    return await this.model.findById(componentId);
+  }
 }

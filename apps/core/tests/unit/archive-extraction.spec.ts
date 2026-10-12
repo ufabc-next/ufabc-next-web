@@ -3,81 +3,100 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ArchiveExtractionService } from '../../src/services/archive-extraction-service.js';
 
-const modelMock = vi.hoisted(() => ({
-  archiveFindById: vi.fn(),
-  componentFindById: vi.fn(),
-  metadataUpdate: vi.fn(),
+const mocks = vi.hoisted(() => ({
+  extractArchive: vi.fn(),
+  findArchive: vi.fn(),
+  findComponent: vi.fn(),
+  getParserComponents: vi.fn(),
+  getPresignedUrl: vi.fn(),
+  upsertMetadata: vi.fn(),
 }));
 
-vi.mock('../../src/models/ComponentArchive.js', () => ({
-  ComponentArchiveModel: {
-    findById: () => ({ lean: modelMock.archiveFindById }),
-  },
+vi.mock('../../src/connectors/extractor.js', () => ({
+  ExtractorConnector: vi.fn(() => ({ extractArchive: mocks.extractArchive })),
 }));
-vi.mock('../../src/models/Component.js', () => ({
-  ComponentModel: { findById: () => ({ lean: modelMock.componentFindById }) },
+vi.mock('../../src/connectors/ufabc-parser.js', () => ({
+  UfabcParserConnector: vi.fn(() => ({
+    getComponentByClassroomCode: mocks.getParserComponents,
+  })),
+}));
+vi.mock('../../src/repositories/component-archives-repository.js', () => ({
+  ComponentArchivesRepository: vi.fn(() => ({ findById: mocks.findArchive })),
+}));
+vi.mock('../../src/repositories/components-repository.js', () => ({
+  ComponentsRepository: vi.fn(() => ({
+    getByComponentId: mocks.findComponent,
+  })),
 }));
 vi.mock('../../src/models/ComponentMetadata.js', () => ({
-  ComponentMetadataModel: { findOneAndUpdate: modelMock.metadataUpdate },
+  ComponentMetadataModel: { findOneAndUpdate: mocks.upsertMetadata },
 }));
 
 const extraction = {
-  cronograma: [{ aula: 'Intro', data: '2026-02-09' }],
-  planejamento: { avaliacao: 'a', ementa: 'e', metodologia: 'm', objetivos: 'o' },
+  planning: {
+    assessment: 'a',
+    methodology: 'm',
+    objectives: 'o',
+    syllabus: 'e',
+  },
+  schedule: [{ date: '2026-02-09', lesson: 'Intro' }],
 };
-const parserComponent = { ufClassroomCode: 'DA1MCTD019-18SA', ufComponentId: 7 };
 
-function buildService(parserResult: unknown[]) {
-  const extractor = { extractArchive: vi.fn().mockResolvedValue(extraction) };
-  const service = new ArchiveExtractionService({
-    bucket: 'bucket',
-    extractor: extractor as never,
-    parser: {
-      getComponentByClassroomCode: vi.fn().mockResolvedValue(parserResult),
-    } as never,
-    s3Connector: {
-      getPresignedUrl: vi.fn().mockResolvedValue('https://signed'),
-    } as never,
+function buildService() {
+  return new ArchiveExtractionService({
+    config: { AWS_BUCKET: 'bucket' } as never,
+    globalTraceId: 'trace',
+    storageConnector: { getPresignedUrl: mocks.getPresignedUrl } as never,
   });
-  return { extractor, service };
 }
 
 describe('ArchiveExtractionService.extractArchive', () => {
   beforeEach(() => {
-    modelMock.archiveFindById.mockReset();
-    modelMock.componentFindById.mockReset();
-    modelMock.metadataUpdate.mockReset();
+    for (const mock of Object.values(mocks)) {
+      mock.mockReset();
+    }
   });
 
   it('rejects archives that are not stored', async () => {
-    modelMock.archiveFindById.mockResolvedValue({ status: 'failed' });
-    const { service } = buildService([parserComponent]);
+    mocks.findArchive.mockResolvedValue({ status: 'failed' });
 
-    await expect(service.extractArchive('a1')).rejects.toBeInstanceOf(
+    await expect(buildService().extractArchive('a1')).rejects.toBeInstanceOf(
       UnrecoverableError
     );
   });
 
-  it('sends a presigned url to the extractor and upserts by s3 key', async () => {
-    modelMock.archiveFindById.mockResolvedValue({
+  it('stores the extraction with the legacy portuguese keys', async () => {
+    mocks.findArchive.mockResolvedValue({
       component: 'c1',
       s3_key: 'k.pdf',
       status: 'stored',
     });
-    modelMock.componentFindById.mockResolvedValue({
+    mocks.findComponent.mockResolvedValue({
       season: '2026:1',
       uf_cod_turma: 'DA1MCTD019-18SA',
     });
-    const { extractor, service } = buildService([parserComponent]);
+    mocks.getParserComponents.mockResolvedValue([
+      { ufClassroomCode: 'DA1MCTD019-18SA', ufComponentId: 7 },
+    ]);
+    mocks.getPresignedUrl.mockResolvedValue('https://signed');
+    mocks.extractArchive.mockResolvedValue(extraction);
 
-    await service.extractArchive('a1');
+    await buildService().extractArchive('a1');
 
-    expect(extractor.extractArchive).toHaveBeenCalledWith('https://signed');
-    expect(modelMock.metadataUpdate).toHaveBeenCalledWith(
+    expect(mocks.extractArchive).toHaveBeenCalledWith('https://signed');
+    expect(mocks.upsertMetadata).toHaveBeenCalledWith(
       { 'metadata.source_file': 'k.pdf' },
-      expect.objectContaining({
-        $set: expect.objectContaining({ cronograma: extraction.cronograma }),
-      }),
+      {
+        $set: expect.objectContaining({
+          cronograma: [{ aula: 'Intro', data: '2026-02-09' }],
+          planejamento: {
+            avaliacao: 'a',
+            ementa: 'e',
+            metodologia: 'm',
+            objetivos: 'o',
+          },
+        }),
+      },
       { upsert: true }
     );
   });

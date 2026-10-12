@@ -1,57 +1,75 @@
 import { UnrecoverableError } from 'bullmq';
+import type { FastifyInstance } from 'fastify';
 
-import type { ExtractorConnector } from '@/connectors/extractor.js';
+import { ExtractorConnector } from '@/connectors/extractor.js';
 import type { S3Connector } from '@/connectors/s3-connector.js';
-import type { UfabcParserConnector } from '@/connectors/ufabc-parser.js';
+import { UfabcParserConnector } from '@/connectors/ufabc-parser.js';
 import { ARCHIVE_PRESIGNED_URL_TTL_SECONDS } from '@/constants.js';
-import { ComponentModel } from '@/models/Component.js';
-import { ComponentArchiveModel } from '@/models/ComponentArchive.js';
 import { ComponentMetadataModel } from '@/models/ComponentMetadata.js';
+import { ComponentArchivesRepository } from '@/repositories/component-archives-repository.js';
+import { ComponentsRepository } from '@/repositories/components-repository.js';
+import { extractionSchema } from '@/schemas/v2/extractor.js';
 
 import { BaseService } from './base-service.js';
 
 type ArchiveExtractionDependencies = {
-  bucket: string;
-  extractor: ExtractorConnector;
-  globalTraceId?: string;
-  parser: UfabcParserConnector;
-  s3Connector: S3Connector;
+  globalTraceId: string;
+  config: FastifyInstance['config'];
+  storageConnector: S3Connector;
 };
 
 export class ArchiveExtractionService extends BaseService {
+  private readonly extractorConnector: ExtractorConnector;
+  private readonly ufabcParserConnector: UfabcParserConnector;
+  private readonly storageConnector: S3Connector;
+  private readonly componentArchiveRepository: ComponentArchivesRepository;
+  private readonly componentRepository: ComponentsRepository;
   private readonly bucket: string;
-  private readonly extractor: ExtractorConnector;
-  private readonly parser: UfabcParserConnector;
-  private readonly s3Connector: S3Connector;
 
-  constructor(dependencies: ArchiveExtractionDependencies) {
-    super({ globalTraceId: dependencies.globalTraceId });
-    this.bucket = dependencies.bucket;
-    this.extractor = dependencies.extractor;
-    this.parser = dependencies.parser;
-    this.s3Connector = dependencies.s3Connector;
+  constructor({
+    config,
+    globalTraceId,
+    storageConnector,
+  }: ArchiveExtractionDependencies) {
+    super({ globalTraceId });
+    this.storageConnector = storageConnector;
+    this.extractorConnector = new ExtractorConnector({
+      baseUrl: config.EXTRACTOR_URL,
+      globalTraceId,
+      internalToken: config.INTERNAL_TOKEN,
+      token: config.SERVICE_HEADER,
+    });
+    this.ufabcParserConnector = new UfabcParserConnector(config, globalTraceId);
+    this.componentArchiveRepository = new ComponentArchivesRepository({
+      globalTraceId: this.globalTraceId,
+    });
+    this.componentRepository = new ComponentsRepository({ globalTraceId });
+    this.bucket = config.AWS_BUCKET;
   }
 
   async extractArchive(archiveId: string) {
-    const archive = await ComponentArchiveModel.findById(archiveId).lean();
+    const archive = await this.componentArchiveRepository.findById(archiveId);
 
-    if (!archive || archive.status !== 'stored' || !archive.s3_key) {
+    if (!archive || archive.status !== 'stored' || archive.s3_key == null) {
       throw new UnrecoverableError(`Archive ${archiveId} is not stored`);
     }
 
-    const component = await ComponentModel.findById(archive.component).lean();
+    const component = await this.componentRepository.getByComponentId(
+      archive.component,
+      true
+    );
 
     if (!component) {
       throw new UnrecoverableError(
-        `Component ${archive.component} of archive ${archiveId} not found`
+        `Component ${archive.component.toString()} of archive ${archiveId} not found`
       );
     }
 
-    const parserComponents = await this.parser.getComponentByClassroomCode(
-      component.season,
-      component.uf_cod_turma
-    );
-    const parserComponent = parserComponents[0];
+    const [parserComponent] =
+      await this.ufabcParserConnector.getComponentByClassroomCode(
+        component.season,
+        component.uf_cod_turma
+      );
 
     if (!parserComponent) {
       throw new UnrecoverableError(
@@ -59,18 +77,24 @@ export class ArchiveExtractionService extends BaseService {
       );
     }
 
-    const pdfUrl = await this.s3Connector.getPresignedUrl(
+    const fileURL = await this.storageConnector.getPresignedUrl(
       this.bucket,
       archive.s3_key,
       ARCHIVE_PRESIGNED_URL_TTL_SECONDS
     );
-    const extraction = await this.extractor.extractArchive(pdfUrl);
+    const extraction = await this.extractorConnector.extractArchive(fileURL);
+    const validatedExtraction = extractionSchema.parse(extraction);
+
+    const cronograma = [];
+    for (const item of validatedExtraction.schedule) {
+      cronograma.push({ aula: item.lesson, data: item.date });
+    }
 
     await ComponentMetadataModel.findOneAndUpdate(
       { 'metadata.source_file': archive.s3_key },
       {
         $set: {
-          cronograma: extraction.cronograma,
+          cronograma,
           metadata: {
             component_code: parserComponent.ufClassroomCode,
             component_data: parserComponent,
@@ -78,17 +102,22 @@ export class ArchiveExtractionService extends BaseService {
             processed_at: new Date().toISOString(),
             source_file: archive.s3_key,
           },
-          planejamento: extraction.planejamento,
+          planejamento: {
+            avaliacao: validatedExtraction.planning.assessment,
+            ementa: validatedExtraction.planning.syllabus,
+            metodologia: validatedExtraction.planning.methodology,
+            objetivos: validatedExtraction.planning.objectives,
+          },
         },
       },
       { upsert: true }
     );
 
     this.logger.info(
-      { archiveId, cronogramaItems: extraction.cronograma.length },
+      { archiveId, cronogramaItems: validatedExtraction.schedule.length },
       'archive extraction stored'
     );
 
-    return { archiveId, cronogramaItems: extraction.cronograma.length };
+    return { archiveId, scheduleItems: validatedExtraction.schedule.length };
   }
 }

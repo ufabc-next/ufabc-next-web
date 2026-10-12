@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const extractionSchema = z.object({
   planning: z.object({
-    assesement: z.string(),
+    assessment: z.string(),
     methodology: z.string(),
     objectives: z.string(),
     syllabus: z.string(),

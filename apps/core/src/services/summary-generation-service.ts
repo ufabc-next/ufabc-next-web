@@ -1,7 +1,8 @@
-import { Types } from 'mongoose';
 import { UnrecoverableError } from 'bullmq';
+import type { FastifyInstance } from 'fastify';
+import { Types } from 'mongoose';
 
-import type { ExtractorConnector } from '@/connectors/extractor.js';
+import { ExtractorConnector } from '@/connectors/extractor.js';
 import {
   SUMMARY_BATCH_SIZE,
   SUMMARY_MAX_COMMENTS,
@@ -10,23 +11,28 @@ import {
 } from '@/constants.js';
 import { CommentModel } from '@/models/Comment.js';
 import { SummaryModel } from '@/models/Summary.js';
+import { summarySchema } from '@/schemas/v2/extractor.js';
 
 import { BaseService } from './base-service.js';
 
 type SummaryGenerationDependencies = {
-  extractor?: ExtractorConnector;
+  config: FastifyInstance['config'];
   globalTraceId?: string;
-  promptVersion: string;
 };
 
 export class SummaryGenerationService extends BaseService {
-  private readonly extractor?: ExtractorConnector;
+  private readonly extractorConnector: ExtractorConnector;
   private readonly promptVersion: string;
 
-  constructor(dependencies: SummaryGenerationDependencies) {
-    super({ globalTraceId: dependencies.globalTraceId });
-    this.extractor = dependencies.extractor;
-    this.promptVersion = dependencies.promptVersion;
+  constructor({ config, globalTraceId }: SummaryGenerationDependencies) {
+    super({ globalTraceId });
+    this.extractorConnector = new ExtractorConnector({
+      baseUrl: config.EXTRACTOR_URL,
+      globalTraceId: this.globalTraceId,
+      internalToken: config.INTERNAL_TOKEN,
+      token: config.SERVICE_HEADER,
+    });
+    this.promptVersion = config.SUMMARY_PROMPT_VERSION;
   }
 
   /**
@@ -98,10 +104,6 @@ export class SummaryGenerationService extends BaseService {
   }
 
   async generateSummary(teacherId: string) {
-    if (!this.extractor) {
-      throw new UnrecoverableError('Extractor connector is required');
-    }
-
     const comments = await CommentModel.find(
       { active: true, teacher: new Types.ObjectId(teacherId) },
       { comment: 1, createdAt: 1 }
@@ -121,7 +123,9 @@ export class SummaryGenerationService extends BaseService {
       commentDates.push(comment.createdAt);
     }
 
-    const result = await this.extractor.summarizeComments(commentTexts);
+    const rawSummary =
+      await this.extractorConnector.summarizeComments(commentTexts);
+    const result = summarySchema.parse(rawSummary);
     const timestamps = commentDates.map((date) => date.getTime());
 
     const summary = await SummaryModel.create({
