@@ -11,7 +11,6 @@ const { MongoClient, BSON } = mongoose.mongo;
 const MAX_DOCUMENTS = 200;
 const QUERY_TIMEOUT_MS = 20_000;
 
-// Write stages and server-side JavaScript: never allowed in read-only mode.
 const FORBIDDEN_OPERATORS = new Set([
   '$out',
   '$merge',
@@ -31,8 +30,6 @@ export function capLimit(requestedLimit: number | undefined) {
   return Math.min(requestedLimit, MAX_DOCUMENTS);
 }
 
-// Walks every nested object/array so stages inside $lookup, $facet and
-// $unionWith sub-pipelines are checked too.
 export function assertReadOnlyValue(value: unknown) {
   if (Array.isArray(value)) {
     for (const item of value) {
@@ -53,7 +50,6 @@ export function assertReadOnlyValue(value: unknown) {
   }
 }
 
-// Accepts Extended JSON so callers can pass {"$oid": "..."} or {"$date": "..."}.
 function parseExtendedJson(value: unknown) {
   return BSON.EJSON.deserialize(JSON.parse(JSON.stringify(value)));
 }
@@ -81,9 +77,7 @@ async function main() {
   if (!process.env.MONGODB_CONNECTION_URL) {
     try {
       loadEnvFile(new URL('../../../apps/core/.env', import.meta.url));
-    } catch {
-      // no local .env file, which is fine when MONGODB_CONNECTION_URL is set directly
-    }
+    } catch {}
   }
 
   const connectionUrl = process.env.MONGODB_CONNECTION_URL;
