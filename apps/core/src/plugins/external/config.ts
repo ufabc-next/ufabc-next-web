@@ -40,9 +40,6 @@ const configSchema = z.object({
   AWS_REGION: z.string().default('us-east-1'),
   AWS_ACCESS_KEY_ID: z.string().default('AWS_ACCESS_KEY_ID_LOCALSTACK'),
   NEXT_AGENT_URL: z.string(),
-  COMMUNICATIONS_API_URL: z
-    .string()
-    .default('https://communications.fundacaonexus.com/v2'),
   SERVICE_HEADER: z.string().optional(),
   AWS_SECRET_ACCESS_KEY: z.string().default('AWS_SECRET_ACCESS_KEY_LOCALSTACK'),
   USE_LOCALSTACK: z.coerce.boolean().default(true),

@@ -10,11 +10,8 @@ import type { SubjectDocument } from '@/models/Subject.js';
 import type { TeacherDocument } from '@/models/Teacher.js';
 import {
   listKickedSchema,
-  listTeacherComponents,
   type NonPaginatedComponents,
 } from '@/schemas/entities/components.js';
-
-import { findTeachers } from './service.js';
 
 const validateStudent: preHandlerAsyncHookHandler = async (request, reply) => {
   const { studentId, season } = request.query as {
@@ -214,21 +211,6 @@ const plugin: FastifyPluginAsyncZodOpenApi = async (app) => {
       );
 
       return uniqueStudents;
-    }
-  );
-
-  app.get(
-    '/teachers',
-    { schema: listTeacherComponents },
-    async (request, reply) => {
-      const { season, subject } = request.query;
-
-      const components = await findTeachers(subject, season);
-
-      return components.map((c) => ({
-        teoria: c.teoria?.name,
-        pratica: c.pratica?.name,
-      }));
     }
   );
 

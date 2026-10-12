@@ -83,12 +83,6 @@ export const PERMISSIONS = {
   ANNOUNCEMENTS_BCC: 'announcements-bcc',
 } as const;
 
-export const ALLOWED_ANNOUNCEMENT_PERMISSIONS = [
-  PERMISSIONS.ADMIN,
-  PERMISSIONS.ANNOUNCEMENTS,
-  PERMISSIONS.ANNOUNCEMENTS_BCC,
-] as const;
-
 export const UFABC_EMAIL_DOMAINS = ['aluno.ufabc.edu.br', 'ufabc.edu.br'];
 
 // accent-insensitive character classes used to build disciplina-name regexes

@@ -3,7 +3,6 @@ import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 
 import { AIProxyConnector } from '@/connectors/ai-proxy.js';
-import { MoodleConnector } from '@/connectors/moodle.js';
 import { jwtVerifyHook } from '@/hooks/jwt-verify.js';
 import { isSession, moodleSession } from '@/hooks/moodle-session.js';
 import { validateInternalTokenAuthHook } from '@/hooks/validate-token.js';
@@ -14,13 +13,8 @@ import type {
   ListComponent,
   PopulatedComponent,
 } from '@/schemas/v2/components.js';
-import {
-  getComponentSchema,
-  listComponentsSchema,
-} from '@/schemas/v2/components.js';
+import { listComponentsSchema } from '@/schemas/v2/components.js';
 import { ComponentsService } from '@/services/components-service.js';
-
-const moodleConnector = new MoodleConnector();
 
 const componentsController: FastifyPluginAsyncZod = async (app) => {
   app.route({
@@ -74,49 +68,6 @@ const componentsController: FastifyPluginAsyncZod = async (app) => {
       },
     },
     url: '/components/archives',
-  });
-
-  app.route({
-    handler: async (request, reply) => {
-      const rawSession = request.requestContext.get('moodleSession');
-      const session = isSession(rawSession) ? rawSession : undefined;
-      if (!session) {
-        return await reply.unauthorized();
-      }
-
-      const components = await moodleConnector.getComponents(
-        session.sessionId,
-        session.sessKey
-      );
-      return await reply.status(200).send({
-        data: components,
-        status: 'success',
-      });
-    },
-    method: 'GET',
-    preHandler: [moodleSession],
-    schema: {
-      response: {
-        200: z.object({
-          data: z.any().array(),
-          status: z.string(),
-        }),
-      },
-    },
-    url: '/components/archives',
-  });
-
-  app.route({
-    handler: async (_request, reply) => {
-      const uploads = await app.aws.s3.list(app.config.AWS_BUCKET);
-      return await reply.status(200).send({
-        data: uploads,
-        status: 'success',
-      });
-    },
-    method: 'GET',
-    preHandler: [validateInternalTokenAuthHook],
-    url: '/components/archives/uploads',
   });
 
   app.route({
@@ -295,40 +246,6 @@ const componentsController: FastifyPluginAsyncZod = async (app) => {
 
   app.route({
     handler: async (request, reply) => {
-      const { id } = request.params;
-      const { with_metadata } = request.query;
-
-      const componentsService = new ComponentsService({
-        requestId: request.id,
-      });
-      const response = await componentsService.findComponentByIdOrOriginKey(
-        id,
-        with_metadata
-      );
-
-      if (!response) {
-        return await reply.notFound('Component not found');
-      }
-
-      return await reply.status(200).send(response);
-    },
-    method: 'GET',
-    schema: {
-      params: z.object({
-        id: z.string(),
-      }),
-      querystring: z.object({
-        with_metadata: z.coerce.boolean().default(false),
-      }),
-      response: {
-        200: getComponentSchema,
-      },
-    },
-    url: '/components/:id',
-  });
-
-  app.route({
-    handler: async (request, reply) => {
       const { componentId } = request.params;
 
       const componentsService = new ComponentsService({
@@ -352,40 +269,6 @@ const componentsController: FastifyPluginAsyncZod = async (app) => {
       },
     },
     url: '/components/:componentId/archives',
-  });
-
-  app.route({
-    handler: async (request, reply) => {
-      const { archiveId } = request.params as { archiveId: string };
-
-      const componentsService = new ComponentsService({
-        globalTraceId: request.id,
-        manager: app.manager,
-      });
-      const { body, contentType, filename } =
-        await componentsService.getArchiveDownload(
-          archiveId,
-          app.aws.s3,
-          app.config.AWS_BUCKET
-        );
-
-      return await reply
-        .type(contentType)
-        .header('Content-Disposition', `attachment; filename="${filename}"`)
-        .send(body);
-    },
-    method: 'GET',
-    preHandler: [validateInternalTokenAuthHook],
-    schema: {
-      params: z.object({
-        archiveId: z.string(),
-        componentId: z.string(),
-      }),
-      response: {
-        200: z.any(),
-      },
-    },
-    url: '/components/:componentId/archives/:archiveId/download',
   });
 
   app.route({
