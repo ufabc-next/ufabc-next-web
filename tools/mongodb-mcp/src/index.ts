@@ -87,15 +87,15 @@ function toToolError(error: unknown) {
 async function main() {
   const localEnvFileUrl = new URL('../../../apps/core/.env', import.meta.url);
   if (
-    process.env.MONGODB_CONNECTION_URL === undefined &&
+    process.env.MONGODB_MCP_URL === undefined &&
     existsSync(localEnvFileUrl)
   ) {
     loadEnvFile(localEnvFileUrl);
   }
 
-  const connectionUrl = process.env.MONGODB_CONNECTION_URL;
+  const connectionUrl = process.env.MONGODB_MCP_URL;
   if (connectionUrl === undefined || connectionUrl === '') {
-    throw new Error('MONGODB_CONNECTION_URL environment variable is required');
+    throw new Error('MONGODB_MCP_URL environment variable is required');
   }
 
   const readOnly = isReadOnlyMode(process.env);
