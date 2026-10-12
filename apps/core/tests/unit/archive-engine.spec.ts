@@ -91,4 +91,44 @@ describe('ArchiveEngine teacher handling', () => {
       createIfMissing: false,
     });
   });
+
+  const keywordCases: Array<[string, string[]]> = [
+    [
+      'Turma NA1 - Algoritmos em Grafos - Alexandre Noma - 2026.Q3',
+      ['algoritmos', 'grafos'],
+    ],
+    ['Compiladores&amp;Interpretadores', ['compiladores', 'interpretadores']],
+    ['Biofísica2026', ['biofísica']],
+    [
+      'FHAL - FORMAÇÃO HISTÓRICA DA AMERICA LATINA 2026.3 FUSER',
+      ['formação', 'histórica', 'america', 'latina'],
+    ],
+  ];
+
+  for (const [fullname, expectedKeywords] of keywordCases) {
+    it(`finds keywords for "${fullname}"`, async () => {
+      const component = { _id: 'component-id', disciplina: 'match' };
+      repositoryMock.findByDisciplinaKeywords.mockImplementation(
+        async (keywords: string[]) => {
+          if (keywords.join(' ') === expectedKeywords.join(' ')) {
+            return component;
+          }
+          return null;
+        }
+      );
+
+      const engine = new ArchiveEngine();
+      const matched = await engine.findComponentByMoodleCourse(
+        {
+          fullname,
+          id: 1,
+          viewurl: 'https://moodle.ufabc.edu.br/course/view.php?id=1',
+        },
+        [],
+        ['MCCC007-23']
+      );
+
+      expect(matched).toBe(component);
+    });
+  }
 });

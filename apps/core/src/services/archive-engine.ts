@@ -27,6 +27,19 @@ export type MoodleCourse = {
   startdate?: number;
 };
 
+const MAX_KEYWORDS = 5;
+const NOISE_KEYWORDS = new Set([
+  'turma',
+  'prof',
+  'profa',
+  'professor',
+  'professora',
+  'noturno',
+  'diurno',
+  'matutino',
+  'vespertino',
+]);
+
 export class ArchiveEngine {
   private readonly logger;
   private readonly moodleConnector;
@@ -336,11 +349,22 @@ export class ArchiveEngine {
   }
 
   private static extractKeywords(fullname: string): string[] {
-    return fullname
+    const words = fullname
       .toLowerCase()
-      .split(/[\s-]+/u)
-      .filter((w) => w.length > 3 && !/\d/u.test(w))
-      .slice(0, 4);
+      .replaceAll(/&[a-z]+;|&#\d+;/gu, ' ')
+      .replaceAll(/(\p{L})(\d)/gu, '$1 $2')
+      .replaceAll(/(\d)(\p{L})/gu, '$1 $2')
+      .split(/[^\p{L}\p{N}]+/u);
+
+    const keywords: string[] = [];
+    for (const word of words) {
+      if (word.length <= 3 || /\d/u.test(word) || NOISE_KEYWORDS.has(word)) {
+        continue;
+      }
+      keywords.push(word);
+    }
+
+    return keywords.slice(0, MAX_KEYWORDS);
   }
 
   private static async relaxedKeywordSearch(
@@ -359,10 +383,12 @@ export class ArchiveEngine {
     }
 
     for (let count = cleanKeywords.length; count >= 1; count -= 1) {
-      const subset = cleanKeywords.slice(0, count);
-      const result = await finder(subset, extraFilter);
-      if (result) {
-        return { component: result, keywordsUsed: subset };
+      for (let start = 0; start + count <= cleanKeywords.length; start += 1) {
+        const subset = cleanKeywords.slice(start, start + count);
+        const result = await finder(subset, extraFilter);
+        if (result) {
+          return { component: result, keywordsUsed: subset };
+        }
       }
     }
 

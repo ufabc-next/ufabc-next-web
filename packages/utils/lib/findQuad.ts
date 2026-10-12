@@ -107,6 +107,20 @@ const SEASON_NAME_PATTERNS: Array<{
     }),
   },
   {
+    pattern: /\b(2\d)\s*[./\-]?\s*Q([123])\b/iu,
+    readSeason: (match) => ({
+      quad: Number(match[2]),
+      year: 2000 + Number(match[1]),
+    }),
+  },
+  {
+    pattern: /\b([123])Q\s*(20)?(\d{2})\b/iu,
+    readSeason: (match) => ({
+      quad: Number(match[1]),
+      year: 2000 + Number(match[3]),
+    }),
+  },
+  {
     pattern: /\b(2\d)\.([123])\b/u,
     readSeason: (match) => ({
       quad: Number(match[2]),
