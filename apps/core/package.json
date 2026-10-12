@@ -31,6 +31,7 @@
     "@fastify/cookie": "catalog:",
     "@fastify/cors": "catalog:",
     "@fastify/env": "catalog:",
+    "@fastify/error": "catalog:",
     "@fastify/jwt": "catalog:",
     "@fastify/multipart": "catalog:",
     "@fastify/oauth2": "catalog:",
