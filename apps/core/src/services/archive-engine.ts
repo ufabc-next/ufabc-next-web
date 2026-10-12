@@ -1,6 +1,7 @@
-import { findArchiveQuarter } from '@next/utils';
-import { load } from 'cheerio';
 import { createHash } from 'node:crypto';
+
+import { findArchiveQuarter, parseSeasonFromName } from '@next/utils';
+import { load } from 'cheerio';
 
 import { MoodleConnector } from '@/connectors/moodle.js';
 import type { S3Connector } from '@/connectors/s3-connector.js';
@@ -54,14 +55,6 @@ export class ArchiveEngine {
     teacherNames?: string[],
     enrolledCodigos?: string[]
   ) {
-    if (ArchiveEngine.isProgramShellCourse(moodleCourse)) {
-      this.logger.info(
-        { courseId: moodleCourse.id, courseName: moodleCourse.fullname },
-        'Skipping Moodle program/degree-shell course, no discipline code found'
-      );
-      return null;
-    }
-
     this.logger.info(
       { courseId: moodleCourse.id, courseName: moodleCourse.fullname },
       'Matching moodle course to internal component'
@@ -111,10 +104,15 @@ export class ArchiveEngine {
       'Resolved teachers for matching'
     );
 
-    const seasonFilter =
-      moodleCourse.startdate === undefined
-        ? null
-        : findArchiveQuarter(new Date(moodleCourse.startdate * 1000));
+    let seasonFilter =
+      parseSeasonFromName(moodleCourse.fullname) ??
+      parseSeasonFromName(moodleCourse.shortname ?? '');
+
+    if (seasonFilter === null && moodleCourse.startdate !== undefined) {
+      seasonFilter = findArchiveQuarter(
+        new Date(moodleCourse.startdate * 1000)
+      );
+    }
 
     if (seasonFilter) {
       this.logger.info(
@@ -305,7 +303,11 @@ export class ArchiveEngine {
     }
 
     // Strategy 4: disciplina keyword only
-    {
+    const hasNarrowingSignal =
+      uniqueCandidates.length > 0 ||
+      uniqueTeacherIds.length > 0 ||
+      enrolledCodigosFilter.codigo !== undefined;
+    if (hasNarrowingSignal) {
       const keywords = ArchiveEngine.extractKeywords(moodleCourse.fullname);
 
       const match = await ArchiveEngine.relaxedKeywordSearch(
@@ -329,23 +331,6 @@ export class ArchiveEngine {
     }
 
     return null;
-  }
-
-  private static isProgramShellCourse(moodleCourse: MoodleCourse): boolean {
-    const hasIdNumber =
-      moodleCourse.idnumber != null && moodleCourse.idnumber !== '';
-    if (hasIdNumber) {
-      return false;
-    }
-
-    const shortnameHasDisciplineCode =
-      moodleCourse.shortname != null &&
-      DISCIPLINE_CODE_PATTERN.test(moodleCourse.shortname);
-    const fullnameHasDisciplineCode = DISCIPLINE_CODE_PATTERN.test(
-      moodleCourse.fullname
-    );
-
-    return !shortnameHasDisciplineCode && !fullnameHasDisciplineCode;
   }
 
   private static extractKeywords(fullname: string): string[] {
