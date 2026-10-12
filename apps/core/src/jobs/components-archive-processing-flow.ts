@@ -51,7 +51,7 @@ export const componentsArchivesProcessingJob = defineJob(
       );
     }
 
-    const componentDbId = matchedComponent._id.toString();
+    const componentId = matchedComponent._id.toString();
 
     const files = await engine.extractFiles(component.viewurl, component.id);
 
@@ -67,7 +67,7 @@ export const componentsArchivesProcessingJob = defineJob(
       children: files.map((file) => ({
         data: {
           component: component.fullname,
-          componentDbId,
+          componentId,
           globalTraceId,
           rawUrl: file.url,
           session,
@@ -81,7 +81,7 @@ export const componentsArchivesProcessingJob = defineJob(
     });
 
     return {
-      componentDbId,
+      componentId,
       flowStarted: true,
       moodleCourseId: component.id,
       success: true,
@@ -94,7 +94,7 @@ export const pdfDownloadJob = defineJob(
   .input(
     z.object({
       component: z.string(),
-      componentDbId: z.string(),
+      componentId: z.string(),
       globalTraceId: z.string().optional(),
       rawUrl: z.string().url(),
       session: z
@@ -107,7 +107,7 @@ export const pdfDownloadJob = defineJob(
   )
   .concurrency(3)
   .handler(async ({ job, app }) => {
-    const { rawUrl, componentDbId, globalTraceId, session } = job.data;
+    const { rawUrl, componentId, globalTraceId, session } = job.data;
 
     const archivesService = new ComponentArchivesService({
       globalTraceId,
@@ -117,7 +117,7 @@ export const pdfDownloadJob = defineJob(
 
     return await archivesService.processArchive({
       bucket: app.config.AWS_BUCKET,
-      componentDbId,
+      componentId,
       rawUrl,
     });
   });

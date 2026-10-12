@@ -172,11 +172,16 @@ export class MoodleConnector extends BaseRequester {
     }
   }
 
-  async downloadFile(url: string, sessionId: string): Promise<ArrayBuffer> {
+  async downloadFile(
+    url: string,
+    sessionId: string,
+    sessKey: string
+  ): Promise<ArrayBuffer> {
     await this.rateLimit();
 
     const headers = new Headers();
     headers.set('Cookie', `MoodleSession=${sessionId}`);
+    headers.set('sesskey', sessKey);
 
     const response = await this.request<ArrayBuffer>(url, {
       headers,

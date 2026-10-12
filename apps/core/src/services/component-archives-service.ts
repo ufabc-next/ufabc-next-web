@@ -7,7 +7,7 @@ import { BaseService } from './base-service.js';
 
 export type ProcessArchiveInput = {
   bucket: string;
-  componentDbId: string;
+  componentId: string;
   rawUrl: string;
   s3Connector?: S3Connector;
   session?: MoodleSession;
@@ -33,10 +33,10 @@ export class ComponentArchivesService extends BaseService {
   }
 
   async processArchive(input: ProcessArchiveInput) {
-    const { bucket, componentDbId, rawUrl } = input;
+    const { bucket, componentId, rawUrl } = input;
 
     const archive = await this.repository.findOrCreateForProcessing(
-      componentDbId,
+      componentId,
       rawUrl,
       this.globalTraceId
     );
@@ -46,7 +46,7 @@ export class ComponentArchivesService extends BaseService {
     try {
       const result = await this.engine.downloadAndUpload(
         rawUrl,
-        componentDbId,
+        componentId,
         bucket
       );
 
