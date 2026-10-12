@@ -44,6 +44,16 @@ export const SNAPSHOT_URL_TTL_SECONDS = 7 * 24 * 60 * 60;
 export const TEACHER_CACHE_MAX_SIZE = 500;
 
 /**
+ * A fuzzy name match may differ by at most this many characters (typos only).
+ * Higher values merged different people, e.g. "rafaela valero da silva" into
+ * "marcela ribeiro da silva".
+ */
+export const TEACHER_FUZZY_MATCH_MAX_DISTANCE = 2;
+
+/** Connectors that vary between spellings of the same name and are ignored when comparing. */
+export const TEACHER_NAME_PARTICLES = ['de', 'da', 'do', 'dos', 'das', 'e'];
+
+/**
  * Values ufabc-parser sends in place of a real teacher name when none is
  * assigned yet. These must never be matched or created as a teacher.
  */
