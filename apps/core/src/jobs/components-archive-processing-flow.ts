@@ -89,10 +89,6 @@ export const componentsArchivesProcessingJob = defineJob(
     };
   });
 
-/**
- * Upper bound on failure events recorded for a single archive. Repeated runs
- * against an unreachable Moodle must not grow the timeline without limit.
- */
 const MAX_FAILURE_EVENTS = 5;
 
 type FailureCountRow = {
@@ -172,8 +168,6 @@ export const pdfDownloadJob = defineJob(
     const archive = await ComponentArchiveModel.findOneAndUpdate(
       { component: componentDbId, original_url: rawUrl },
       {
-        // Never reset an existing status here: a re-run must not overwrite a
-        // previously stored archive back to 'created'.
         $setOnInsert: {
           component: componentDbId,
           original_url: rawUrl,
@@ -184,8 +178,6 @@ export const pdfDownloadJob = defineJob(
       { new: true, upsert: true }
     );
 
-    // A stored archive already has its payload in S3. Leave it untouched even
-    // when this attempt fails, so a transient error cannot hide good data.
     const alreadyStored = archive.status === 'stored';
 
     try {
