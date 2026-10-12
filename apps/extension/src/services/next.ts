@@ -125,13 +125,6 @@ type SyncHistory = {
   ra: string;
 };
 
-export async function syncHistory(data: SyncHistory) {
-  return nextApiConnector.syncHistory(data.sessionId, data.viewState, {
-    login: data.login,
-    ra: data.ra,
-  });
-}
-
 export async function syncHistoryV2(data: SyncHistory) {
   await nextApiConnector.syncSigaaStudent(
     {

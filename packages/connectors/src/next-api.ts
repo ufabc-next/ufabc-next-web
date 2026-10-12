@@ -111,9 +111,6 @@ export class NextApiConnector extends BaseRequester {
     });
   }
 
-   async deleteComment(id: string) {
-    return await this.request(`/comments/${id}`, { method: 'DELETE' });
-  }
 
    async createReaction(commentId: string, kind: ReactionKind) {
     return await this.request(`/comments/reactions/${commentId}`, {
@@ -215,11 +212,6 @@ export class NextApiConnector extends BaseRequester {
     });
   }
 
-   async getComponentArchives(sessionId: string, sessKey: string) {
-    return await this.request('/v2/components/archives', {
-      headers: { 'sess-key': sessKey, 'session-id': sessionId },
-    });
-  }
 
    async triggerComponentArchiveProcessing(sessionId: string, sessKey: string) {
     return await this.request('/v2/components/archives', {
@@ -228,9 +220,6 @@ export class NextApiConnector extends BaseRequester {
     });
   }
 
-   async getComponentUploads() {
-    return await this.request('/v2/components/archives/uploads');
-  }
 
 
 
@@ -310,17 +299,6 @@ export class NextApiConnector extends BaseRequester {
     return await this.request<HistoriesGraduations>('/courseStats/user/grades');
   }
 
-   async syncHistory(
-    sessionId: string,
-    viewState: string,
-    data: { login: string; ra: string }
-  ) {
-    return await this.request('/histories', {
-      body: data,
-      headers: { 'session-id': sessionId, 'view-state': viewState },
-      method: 'POST',
-    });
-  }
 
    async sendResults(sessionId: string, sessKey: string) {
     return await this.request<{ msg: string }>('/v2/components/archives', {
