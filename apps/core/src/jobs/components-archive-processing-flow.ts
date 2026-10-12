@@ -1,4 +1,5 @@
 import { defineJob } from '@next/queues/client';
+import type { Types } from 'mongoose';
 import z from 'zod';
 
 import { JOB_NAMES } from '@/constants.js';
@@ -88,6 +89,59 @@ export const componentsArchivesProcessingJob = defineJob(
     };
   });
 
+/**
+ * Upper bound on failure events recorded for a single archive. Repeated runs
+ * against an unreachable Moodle must not grow the timeline without limit.
+ */
+const MAX_FAILURE_EVENTS = 5;
+
+type FailureCountRow = {
+  failureCount: number;
+};
+
+async function countFailureEvents(archiveId: Types.ObjectId): Promise<number> {
+  const rows = await ComponentArchiveModel.aggregate<FailureCountRow>([
+    { $match: { _id: archiveId } },
+    {
+      $project: {
+        failureCount: {
+          $size: {
+            $filter: {
+              as: 'event',
+              cond: { $eq: ['$$event.status', 'failed'] },
+              input: '$timeline',
+            },
+          },
+        },
+      },
+    },
+  ]);
+
+  if (rows.length === 0) {
+    return 0;
+  }
+
+  return rows[0].failureCount;
+}
+
+async function markArchiveAsFailed(
+  archiveId: Types.ObjectId,
+  metadata: Record<string, unknown>
+) {
+  const existingFailureCount = await countFailureEvents(archiveId);
+
+  if (existingFailureCount >= MAX_FAILURE_EVENTS) {
+    return;
+  }
+
+  await ComponentArchiveModel.findByIdAndUpdate(archiveId, {
+    $push: {
+      timeline: { metadata, status: 'failed' },
+    },
+    $set: { status: 'failed' },
+  });
+}
+
 export const pdfDownloadJob = defineJob(
   JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING_PDF
 )
@@ -118,15 +172,21 @@ export const pdfDownloadJob = defineJob(
     const archive = await ComponentArchiveModel.findOneAndUpdate(
       { component: componentDbId, original_url: rawUrl },
       {
-        $set: { status: 'created' },
+        // Never reset an existing status here: a re-run must not overwrite a
+        // previously stored archive back to 'created'.
         $setOnInsert: {
           component: componentDbId,
           original_url: rawUrl,
+          status: 'created',
           timeline: [{ metadata: { globalTraceId }, status: 'created' }],
         },
       },
       { new: true, upsert: true }
     );
+
+    // A stored archive already has its payload in S3. Leave it untouched even
+    // when this attempt fails, so a transient error cannot hide good data.
+    const alreadyStored = archive.status === 'stored';
 
     try {
       const result = await engine.downloadAndUpload(
@@ -136,15 +196,11 @@ export const pdfDownloadJob = defineJob(
       );
 
       if (!result) {
-        await ComponentArchiveModel.findByIdAndUpdate(archive._id, {
-          $push: {
-            timeline: {
-              metadata: { reason: 'missing_session' },
-              status: 'failed',
-            },
-          },
-          $set: { status: 'failed' },
-        });
+        if (!alreadyStored) {
+          await markArchiveAsFailed(archive._id, {
+            reason: 'missing_session',
+          });
+        }
 
         return {
           archiveId: archive._id,
@@ -189,12 +245,9 @@ export const pdfDownloadJob = defineJob(
         success: true,
       };
     } catch (error) {
-      await ComponentArchiveModel.findByIdAndUpdate(archive._id, {
-        $push: {
-          timeline: { metadata: { error: String(error) }, status: 'failed' },
-        },
-        $set: { status: 'failed' },
-      });
+      if (!alreadyStored) {
+        await markArchiveAsFailed(archive._id, { error: String(error) });
+      }
       throw error;
     }
   });
