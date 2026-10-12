@@ -54,9 +54,8 @@ export class ArchiveExtractionService extends BaseService {
       throw new UnrecoverableError(`Archive ${archiveId} is not stored`);
     }
 
-    const component = await this.componentRepository.getByComponentId(
-      archive.component,
-      true
+    const component = await this.componentRepository.findLeanById(
+      archive.component
     );
 
     if (!component) {

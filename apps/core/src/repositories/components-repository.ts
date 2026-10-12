@@ -87,13 +87,15 @@ export class ComponentsRepository extends BaseRepository {
     });
   }
 
-  async getByComponentId(componentId: Types.ObjectId, lean: boolean) {
-    this.logger.debug({ componentId }, 'Getting component by ID');
-
-    if (lean) {
-      return await this.model.findById(componentId).lean();
-    }
+  async findById(componentId: Types.ObjectId) {
+    this.logger.debug({ componentId }, 'Finding component by id');
 
     return await this.model.findById(componentId);
+  }
+
+  async findLeanById(componentId: Types.ObjectId) {
+    this.logger.debug({ componentId }, 'Finding lean component by id');
+
+    return await this.model.findById(componentId).lean();
   }
 }

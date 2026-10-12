@@ -25,7 +25,7 @@ vi.mock('../../src/repositories/component-archives-repository.js', () => ({
 }));
 vi.mock('../../src/repositories/components-repository.js', () => ({
   ComponentsRepository: vi.fn(() => ({
-    getByComponentId: mocks.findComponent,
+    findLeanById: mocks.findComponent,
   })),
 }));
 vi.mock('../../src/models/ComponentMetadata.js', () => ({
