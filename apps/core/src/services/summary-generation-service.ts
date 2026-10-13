@@ -35,11 +35,6 @@ export class SummaryGenerationService extends BaseService {
     this.promptVersion = config.SUMMARY_PROMPT_VERSION;
   }
 
-  /**
-   * Teachers with enough active comments whose active summary is missing,
-   * older than their newest comment, or made with another prompt version.
-   * Oldest comments first, capped at SUMMARY_BATCH_SIZE per run.
-   */
   async findTeacherIdsToSummarize() {
     const rows = await CommentModel.aggregate<{ _id: Types.ObjectId }>([
       { $match: { active: true } },
@@ -110,10 +105,12 @@ export class SummaryGenerationService extends BaseService {
     )
       .sort({ createdAt: -1 })
       .limit(SUMMARY_MAX_COMMENTS)
-      .lean<{ comment: string; createdAt: Date }[]>();
+      .lean<Array<{ comment: string; createdAt: Date }>>();
 
     if (comments.length === 0) {
-      throw new UnrecoverableError(`No active comments for teacher ${teacherId}`);
+      throw new UnrecoverableError(
+        `No active comments for teacher ${teacherId}`
+      );
     }
 
     const commentTexts: string[] = [];

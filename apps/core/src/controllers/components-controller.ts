@@ -284,7 +284,6 @@ const componentsController: FastifyPluginAsyncZod = async (app) => {
       let response: unknown = null;
 
       if (externalKey !== undefined) {
-        // prefer the requested season, fall back to the most recent offering
         let component = await ComponentModel.findOne({
           origin_key: externalKey,
           season,

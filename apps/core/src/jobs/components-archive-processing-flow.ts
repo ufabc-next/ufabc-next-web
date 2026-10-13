@@ -122,7 +122,7 @@ export const pdfDownloadJob = defineJob(
       rawUrl,
     });
 
-    if (result.changed) {
+    if (result != null && result?.changed != null && result?.changed) {
       await app.manager.dispatch(JOB_NAMES.ARCHIVE_EXTRACTION, {
         archiveId: result.archiveId.toString(),
         globalTraceId,
