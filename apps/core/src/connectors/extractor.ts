@@ -24,7 +24,7 @@ export class ExtractorConnector extends BaseRequester {
     this.internalToken = internalToken;
     this.headers = {
       'x-internal-token': this.internalToken,
-      'x-service-token': this.serviceToken,
+      'x-service-id': this.serviceToken,
     };
   }
 
