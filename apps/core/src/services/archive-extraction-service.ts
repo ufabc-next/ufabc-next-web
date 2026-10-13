@@ -5,7 +5,7 @@ import { ExtractorConnector } from '@/connectors/extractor.js';
 import type { S3Connector } from '@/connectors/s3-connector.js';
 import { UfabcParserConnector } from '@/connectors/ufabc-parser.js';
 import { ARCHIVE_PRESIGNED_URL_TTL_SECONDS } from '@/constants.js';
-import { ComponentMetadataModel } from '@/models/ComponentMetadata.js';
+import { ComponentPlanModel } from '@/models/ComponentPlan.js';
 import { ComponentArchivesRepository } from '@/repositories/component-archives-repository.js';
 import { ComponentsRepository } from '@/repositories/components-repository.js';
 import { extractionSchema } from '@/schemas/v2/extractor.js';
@@ -84,36 +84,32 @@ export class ArchiveExtractionService extends BaseService {
     const extraction = await this.extractorConnector.extractArchive(fileURL);
     const validatedExtraction = extractionSchema.parse(extraction);
 
-    const cronograma = [];
+    const schedule = [];
     for (const item of validatedExtraction.schedule) {
-      cronograma.push({ aula: item.lesson, data: item.date });
+      schedule.push({ date: item.date, lesson: item.lesson });
     }
 
-    await ComponentMetadataModel.findOneAndUpdate(
-      { 'metadata.source_file': archive.s3_key },
+    const timetable = [];
+    for (const slot of parserComponent.timetable) {
+      timetable.push(slot.unparsed);
+    }
+
+    await ComponentPlanModel.updateOne(
+      { archive: archive._id },
       {
         $set: {
-          cronograma,
-          metadata: {
-            component_code: parserComponent.ufClassroomCode,
-            component_data: parserComponent,
-            disciplina_id: parserComponent.ufComponentId,
-            processed_at: new Date().toISOString(),
-            source_file: archive.s3_key,
-          },
-          planejamento: {
-            avaliacao: validatedExtraction.planning.assessment,
-            ementa: validatedExtraction.planning.syllabus,
-            metodologia: validatedExtraction.planning.methodology,
-            objetivos: validatedExtraction.planning.objectives,
-          },
+          component: component._id,
+          extractedAt: new Date(),
+          planning: validatedExtraction.planning,
+          schedule,
+          timetable,
         },
       },
       { upsert: true }
     );
 
     this.logger.info(
-      { archiveId, cronogramaItems: validatedExtraction.schedule.length },
+      { archiveId, scheduleItems: validatedExtraction.schedule.length },
       'archive extraction stored'
     );
 

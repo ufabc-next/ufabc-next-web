@@ -9,7 +9,7 @@ const mocks = vi.hoisted(() => ({
   findComponent: vi.fn(),
   getParserComponents: vi.fn(),
   getPresignedUrl: vi.fn(),
-  upsertMetadata: vi.fn(),
+  upsertPlan: vi.fn(),
 }));
 
 vi.mock('../../src/connectors/extractor.js', () => ({
@@ -28,8 +28,8 @@ vi.mock('../../src/repositories/components-repository.js', () => ({
     findLeanById: mocks.findComponent,
   })),
 }));
-vi.mock('../../src/models/ComponentMetadata.js', () => ({
-  ComponentMetadataModel: { findOneAndUpdate: mocks.upsertMetadata },
+vi.mock('../../src/models/ComponentPlan.js', () => ({
+  ComponentPlanModel: { updateOne: mocks.upsertPlan },
 }));
 
 const extraction = {
@@ -65,18 +65,23 @@ describe('ArchiveExtractionService.extractArchive', () => {
     );
   });
 
-  it('stores the extraction with the legacy portuguese keys', async () => {
+  it('upserts the plan for the archive', async () => {
     mocks.findArchive.mockResolvedValue({
+      _id: 'a1',
       component: 'c1',
       s3_key: 'k.pdf',
       status: 'stored',
     });
     mocks.findComponent.mockResolvedValue({
+      _id: 'c1',
       season: '2026:1',
       uf_cod_turma: 'DA1MCTD019-18SA',
     });
     mocks.getParserComponents.mockResolvedValue([
-      { ufClassroomCode: 'DA1MCTD019-18SA', ufComponentId: 7 },
+      {
+        timetable: [{ unparsed: 'seg 08:00' }],
+        ufClassroomCode: 'DA1MCTD019-18SA',
+      },
     ]);
     mocks.getPresignedUrl.mockResolvedValue('https://signed');
     mocks.extractArchive.mockResolvedValue(extraction);
@@ -84,17 +89,14 @@ describe('ArchiveExtractionService.extractArchive', () => {
     await buildService().extractArchive('a1');
 
     expect(mocks.extractArchive).toHaveBeenCalledWith('https://signed');
-    expect(mocks.upsertMetadata).toHaveBeenCalledWith(
-      { 'metadata.source_file': 'k.pdf' },
+    expect(mocks.upsertPlan).toHaveBeenCalledWith(
+      { archive: 'a1' },
       {
         $set: expect.objectContaining({
-          cronograma: [{ aula: 'Intro', data: '2026-02-09' }],
-          planejamento: {
-            avaliacao: 'a',
-            ementa: 'e',
-            metodologia: 'm',
-            objetivos: 'o',
-          },
+          component: 'c1',
+          planning: extraction.planning,
+          schedule: [{ date: '2026-02-09', lesson: 'Intro' }],
+          timetable: ['seg 08:00'],
         }),
       },
       { upsert: true }
