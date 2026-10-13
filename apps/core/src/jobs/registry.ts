@@ -5,6 +5,7 @@ import {
   pdfDownloadJob,
   archivesSummaryJob,
 } from './components-archive-processing-flow.js';
+import { cmccPlanJob, cmccPlansScheduleJob } from './cmcc-plans.js';
 import { createComponentJob } from './components-processing.js';
 import {
   enrolledStudentsJob,
@@ -22,6 +23,8 @@ import { ufabcParserWebhookProcessingJob } from './ufabc-parser-webhook-processi
 
 export const jobRegistry = {
   [JOB_NAMES.ARCHIVE_EXTRACTION]: archiveExtractionJob,
+  [JOB_NAMES.CMCC_PLAN]: cmccPlanJob,
+  [JOB_NAMES.CMCC_PLANS_SCHEDULE]: cmccPlansScheduleJob,
   [JOB_NAMES.TEACHER_SUMMARY]: teacherSummaryJob,
   [JOB_NAMES.TEACHER_SUMMARY_SCHEDULE]: teacherSummaryScheduleJob,
   [JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING]: componentsArchivesProcessingJob,

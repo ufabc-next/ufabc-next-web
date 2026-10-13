@@ -50,8 +50,15 @@ export class ArchiveExtractionService extends BaseService {
   async extractArchive(archiveId: string) {
     const archive = await this.componentArchiveRepository.findById(archiveId);
 
-    if (!archive || archive.status !== 'stored' || archive.s3_key == null) {
-      throw new UnrecoverableError(`Archive ${archiveId} is not stored`);
+    if (
+      !archive ||
+      archive.source !== 'cmcc' ||
+      archive.status !== 'stored' ||
+      archive.s3_key == null
+    ) {
+      throw new UnrecoverableError(
+        `Archive ${archiveId} is not a stored cmcc archive`
+      );
     }
 
     const component = await this.componentRepository.findLeanById(

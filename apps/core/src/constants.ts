@@ -22,6 +22,8 @@ export const JOB_NAMES = {
   COMPONENTS_ARCHIVES_PROCESSING_SUMMARY:
     'components_archives_processing_summary',
   ARCHIVE_EXTRACTION: 'archive_extraction',
+  CMCC_PLAN: 'cmcc_plan',
+  CMCC_PLANS_SCHEDULE: 'cmcc_plans_schedule',
   COMPONENTS_PROCESSING: 'components_processing',
   ENROLLED_STUDENTS: 'enrolled_students',
   PROCESS_COMPONENTS_ENROLLMENTS: 'process_components_enrollments',

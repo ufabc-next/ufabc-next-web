@@ -93,6 +93,15 @@ export class ComponentsRepository extends BaseRepository {
     return await this.model.findById(componentId);
   }
 
+  async findLeanByClassroomCode(season: string, classroomCode: string) {
+    this.logger.debug({ classroomCode, season }, 'Finding component by code');
+
+    return await this.model
+      .findOne({ season, uf_cod_turma: classroomCode })
+      .select('_id')
+      .lean();
+  }
+
   async findLeanById(componentId: Types.ObjectId) {
     this.logger.debug({ componentId }, 'Finding lean component by id');
 

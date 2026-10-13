@@ -70,6 +70,7 @@ describe('ArchiveExtractionService.extractArchive', () => {
       _id: 'a1',
       component: 'c1',
       s3_key: 'k.pdf',
+      source: 'cmcc',
       status: 'stored',
     });
     mocks.findComponent.mockResolvedValue({

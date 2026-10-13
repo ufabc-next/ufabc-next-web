@@ -35,7 +35,7 @@ const componentArchiveSchema = new Schema(
     s3_key: { type: String },
     source: {
       default: 'moodle',
-      enum: ['moodle', 'manual', 'sigaa'],
+      enum: ['moodle', 'manual', 'sigaa', 'cmcc'],
       required: true,
       type: String,
     },
