@@ -10,17 +10,15 @@ const mocks = vi.hoisted(() => ({
 vi.mock('../../src/connectors/extractor.js', () => ({
   ExtractorConnector: vi.fn(() => ({})),
 }));
-vi.mock('../../src/models/Comment.js', () => ({
-  CommentModel: { countDocuments: mocks.countComments },
+vi.mock('../../src/repositories/comments-repository.js', () => ({
+  CommentsRepository: vi.fn(() => ({
+    countActiveByTeacher: mocks.countComments,
+  })),
 }));
-vi.mock('../../src/models/Summary.js', () => ({
-  SummaryModel: {
-    findOne: () => ({
-      sort: () => ({
-        select: () => ({ lean: mocks.findLatestSummary }),
-      }),
-    }),
-  },
+vi.mock('../../src/repositories/summaries-repository.js', () => ({
+  SummariesRepository: vi.fn(() => ({
+    findLatestActiveByTeacher: mocks.findLatestSummary,
+  })),
 }));
 
 const teacherId = '507f1f77bcf86cd799439011';
@@ -41,9 +39,7 @@ describe('SummaryGenerationService.hasEnoughNewComments', () => {
     mocks.countComments.mockResolvedValue(4);
 
     expect(await buildService().hasEnoughNewComments(teacherId)).toBe(false);
-    expect(mocks.countComments).toHaveBeenCalledWith(
-      expect.objectContaining({ createdAt: { $gt: newestComment } })
-    );
+    expect(mocks.countComments).toHaveBeenCalledWith(teacherId, newestComment);
   });
 
   it('triggers at the threshold, counting every comment when no summary exists', async () => {
@@ -51,6 +47,6 @@ describe('SummaryGenerationService.hasEnoughNewComments', () => {
     mocks.countComments.mockResolvedValue(5);
 
     expect(await buildService().hasEnoughNewComments(teacherId)).toBe(true);
-    expect(mocks.countComments.mock.calls[0][0]).not.toHaveProperty('createdAt');
+    expect(mocks.countComments).toHaveBeenCalledWith(teacherId, undefined);
   });
 });

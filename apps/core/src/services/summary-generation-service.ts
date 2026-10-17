@@ -1,6 +1,5 @@
 import { UnrecoverableError } from 'bullmq';
 import type { FastifyInstance } from 'fastify';
-import { Types } from 'mongoose';
 
 import { ExtractorConnector } from '@/connectors/extractor.js';
 import {
@@ -8,8 +7,8 @@ import {
   SUMMARY_MAX_COMMENTS,
   SUMMARY_MAX_COMMENT_CHARS,
 } from '@/constants.js';
-import { CommentModel } from '@/models/Comment.js';
-import { SummaryModel } from '@/models/Summary.js';
+import { CommentsRepository } from '@/repositories/comments-repository.js';
+import { SummariesRepository } from '@/repositories/summaries-repository.js';
 import { summarySchema } from '@/schemas/v2/extractor.js';
 
 import { BaseService } from './base-service.js';
@@ -21,6 +20,8 @@ type SummaryGenerationDependencies = {
 
 export class SummaryGenerationService extends BaseService {
   private readonly extractorConnector: ExtractorConnector;
+  private readonly commentsRepository: CommentsRepository;
+  private readonly summariesRepository: SummariesRepository;
 
   constructor({ config, globalTraceId }: SummaryGenerationDependencies) {
     super({ globalTraceId });
@@ -30,45 +31,32 @@ export class SummaryGenerationService extends BaseService {
       internalToken: config.INTERNAL_TOKEN,
       token: config.SERVICE_HEADER,
     });
+    this.commentsRepository = new CommentsRepository({ globalTraceId });
+    this.summariesRepository = new SummariesRepository({ globalTraceId });
   }
 
   async hasEnoughNewComments(teacherId: string) {
-    const teacherObjectId = new Types.ObjectId(teacherId);
+    const latestSummary =
+      await this.summariesRepository.findLatestActiveByTeacher(teacherId);
 
-    const latestSummary = await SummaryModel.findOne({
-      status: 'active',
-      subject: null,
-      teacher: teacherObjectId,
-    })
-      .sort({ createdAt: -1 })
-      .select('newestComment')
-      .lean();
+    const newComments = await this.commentsRepository.countActiveByTeacher(
+      teacherId,
+      latestSummary?.newestComment
+    );
 
-    const filter: Record<string, unknown> = {
-      active: true,
-      teacher: teacherObjectId,
-    };
-    if (latestSummary) {
-      filter.createdAt = { $gt: latestSummary.newestComment };
-    }
-
-    const newComments = await CommentModel.countDocuments(filter);
     return newComments >= SUMMARY_COMMENT_THRESHOLD;
   }
 
   async generateSummary(teacherId: string) {
-    // several events can queue before the first summary lands; skip the rest
-    if (!(await this.hasEnoughNewComments(teacherId))) {
+    const hasEnoughNewComments = await this.hasEnoughNewComments(teacherId);
+    if (!hasEnoughNewComments) {
       return { skipped: true, teacherId };
     }
 
-    const comments = await CommentModel.find(
-      { active: true, teacher: new Types.ObjectId(teacherId) },
-      { comment: 1, createdAt: 1 }
-    )
-      .sort({ createdAt: -1 })
-      .limit(SUMMARY_MAX_COMMENTS)
-      .lean<Array<{ comment: string; createdAt: Date }>>();
+    const comments = await this.commentsRepository.findRecentActiveByTeacher(
+      teacherId,
+      SUMMARY_MAX_COMMENTS
+    );
 
     if (comments.length === 0) {
       throw new UnrecoverableError(
@@ -88,7 +76,7 @@ export class SummaryGenerationService extends BaseService {
     const result = summarySchema.parse(rawSummary);
     const timestamps = commentDates.map((date) => date.getTime());
 
-    const summary = await SummaryModel.create({
+    const summary = await this.summariesRepository.create({
       commentsCount: comments.length,
       didacticQuality: result.didactic_quality,
       model: result.model,

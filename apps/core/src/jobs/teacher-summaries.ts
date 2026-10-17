@@ -24,7 +24,6 @@ export const teacherCommentCreatedJob = defineJob(
 
 export const teacherSummaryJob = defineJob(JOB_NAMES.TEACHER_SUMMARY)
   .input(z.object({ teacherId: z.string() }))
-  // one at a time, so the "enough new comments" guard is race-free
   .concurrency(1)
   .handler(async ({ job, app }) => {
     const service = new SummaryGenerationService({ config: app.config });

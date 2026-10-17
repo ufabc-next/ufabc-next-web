@@ -109,7 +109,6 @@ export const BOARD_COOKIE_MAX_AGE_SECONDS = 3600;
 
 export const ARCHIVE_MAX_FAILURE_EVENTS = 5;
 
-// a new summary is generated every time this many new comments arrive
 export const SUMMARY_COMMENT_THRESHOLD = 5;
 export const SUMMARY_MAX_COMMENTS = 50;
 export const SUMMARY_MAX_COMMENT_CHARS = 500;
