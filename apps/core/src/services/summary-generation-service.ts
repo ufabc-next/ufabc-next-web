@@ -4,10 +4,9 @@ import { Types } from 'mongoose';
 
 import { ExtractorConnector } from '@/connectors/extractor.js';
 import {
-  SUMMARY_BATCH_SIZE,
+  SUMMARY_COMMENT_THRESHOLD,
   SUMMARY_MAX_COMMENTS,
   SUMMARY_MAX_COMMENT_CHARS,
-  SUMMARY_MIN_COMMENTS,
 } from '@/constants.js';
 import { CommentModel } from '@/models/Comment.js';
 import { SummaryModel } from '@/models/Summary.js';
@@ -22,7 +21,6 @@ type SummaryGenerationDependencies = {
 
 export class SummaryGenerationService extends BaseService {
   private readonly extractorConnector: ExtractorConnector;
-  private readonly promptVersion: string;
 
   constructor({ config, globalTraceId }: SummaryGenerationDependencies) {
     super({ globalTraceId });
@@ -32,73 +30,38 @@ export class SummaryGenerationService extends BaseService {
       internalToken: config.INTERNAL_TOKEN,
       token: config.SERVICE_HEADER,
     });
-    this.promptVersion = config.SUMMARY_PROMPT_VERSION;
   }
 
-  async findTeacherIdsToSummarize() {
-    const rows = await CommentModel.aggregate<{ _id: Types.ObjectId }>([
-      { $match: { active: true } },
-      {
-        $group: {
-          _id: '$teacher',
-          count: { $sum: 1 },
-          newestComment: { $max: '$createdAt' },
-        },
-      },
-      { $match: { count: { $gte: SUMMARY_MIN_COMMENTS } } },
-      {
-        $lookup: {
-          as: 'latestSummary',
-          from: 'summaries',
-          let: { teacherId: '$_id' },
-          pipeline: [
-            {
-              $match: {
-                $expr: { $eq: ['$teacher', '$$teacherId'] },
-                status: 'active',
-                subject: null,
-              },
-            },
-            { $sort: { createdAt: -1 } },
-            { $limit: 1 },
-          ],
-        },
-      },
-      {
-        $match: {
-          $or: [
-            { latestSummary: { $size: 0 } },
-            {
-              $expr: {
-                $gt: [
-                  '$newestComment',
-                  { $arrayElemAt: ['$latestSummary.newestComment', 0] },
-                ],
-              },
-            },
-            {
-              $expr: {
-                $ne: [
-                  { $arrayElemAt: ['$latestSummary.promptVersion', 0] },
-                  this.promptVersion,
-                ],
-              },
-            },
-          ],
-        },
-      },
-      { $sort: { newestComment: 1 } },
-      { $limit: SUMMARY_BATCH_SIZE },
-    ]);
+  async hasEnoughNewComments(teacherId: string) {
+    const teacherObjectId = new Types.ObjectId(teacherId);
 
-    const teacherIds: string[] = [];
-    for (const row of rows) {
-      teacherIds.push(row._id.toString());
+    const latestSummary = await SummaryModel.findOne({
+      status: 'active',
+      subject: null,
+      teacher: teacherObjectId,
+    })
+      .sort({ createdAt: -1 })
+      .select('newestComment')
+      .lean();
+
+    const filter: Record<string, unknown> = {
+      active: true,
+      teacher: teacherObjectId,
+    };
+    if (latestSummary) {
+      filter.createdAt = { $gt: latestSummary.newestComment };
     }
-    return teacherIds;
+
+    const newComments = await CommentModel.countDocuments(filter);
+    return newComments >= SUMMARY_COMMENT_THRESHOLD;
   }
 
   async generateSummary(teacherId: string) {
+    // several events can queue before the first summary lands; skip the rest
+    if (!(await this.hasEnoughNewComments(teacherId))) {
+      return { skipped: true, teacherId };
+    }
+
     const comments = await CommentModel.find(
       { active: true, teacher: new Types.ObjectId(teacherId) },
       { comment: 1, createdAt: 1 }

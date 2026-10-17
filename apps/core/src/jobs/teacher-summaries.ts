@@ -4,25 +4,28 @@ import z from 'zod';
 import { JOB_NAMES } from '@/constants.js';
 import { SummaryGenerationService } from '@/services/summary-generation-service.js';
 
-export const teacherSummaryScheduleJob = defineJob(
-  JOB_NAMES.TEACHER_SUMMARY_SCHEDULE
+export const teacherCommentCreatedJob = defineJob(
+  JOB_NAMES.TEACHER_COMMENT_CREATED
 )
-  .input(z.object({}))
-  .every('1 day')
-  .handler(async ({ app }) => {
+  .input(z.object({ teacherId: z.string() }))
+  .concurrency(5)
+  .handler(async ({ job, app }) => {
+    const { teacherId } = job.data;
     const service = new SummaryGenerationService({ config: app.config });
-    const teacherIds = await service.findTeacherIdsToSummarize();
 
-    for (const teacherId of teacherIds) {
-      await app.manager.dispatch(JOB_NAMES.TEACHER_SUMMARY, { teacherId });
+    const shouldSummarize = await service.hasEnoughNewComments(teacherId);
+    if (!shouldSummarize) {
+      return { dispatched: false, teacherId };
     }
 
-    return { dispatched: teacherIds.length };
+    await app.manager.dispatch(JOB_NAMES.TEACHER_SUMMARY, { teacherId });
+    return { dispatched: true, teacherId };
   });
 
 export const teacherSummaryJob = defineJob(JOB_NAMES.TEACHER_SUMMARY)
   .input(z.object({ teacherId: z.string() }))
-  .concurrency(3)
+  // one at a time, so the "enough new comments" guard is race-free
+  .concurrency(1)
   .handler(async ({ job, app }) => {
     const service = new SummaryGenerationService({ config: app.config });
 

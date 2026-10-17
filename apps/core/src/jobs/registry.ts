@@ -16,8 +16,8 @@ import { settledEnrollmentsProcessingJob } from './settled-enrollments-processin
 import { studentSyncProcessingJob } from './student-sync-processing.js';
 import { teacherCreatedJob } from './teacher-created.js';
 import {
+  teacherCommentCreatedJob,
   teacherSummaryJob,
-  teacherSummaryScheduleJob,
 } from './teacher-summaries.js';
 import { ufabcParserWebhookProcessingJob } from './ufabc-parser-webhook-processing.js';
 
@@ -26,7 +26,7 @@ export const jobRegistry = {
   [JOB_NAMES.CMCC_PLAN]: cmccPlanJob,
   [JOB_NAMES.CMCC_PLANS_SCHEDULE]: cmccPlansScheduleJob,
   [JOB_NAMES.TEACHER_SUMMARY]: teacherSummaryJob,
-  [JOB_NAMES.TEACHER_SUMMARY_SCHEDULE]: teacherSummaryScheduleJob,
+  [JOB_NAMES.TEACHER_COMMENT_CREATED]: teacherCommentCreatedJob,
   [JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING]: componentsArchivesProcessingJob,
   [JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING_PDF]: pdfDownloadJob,
   [JOB_NAMES.COMPONENTS_ARCHIVES_PROCESSING_SUMMARY]: archivesSummaryJob,

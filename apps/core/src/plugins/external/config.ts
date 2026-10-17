@@ -59,7 +59,6 @@ const configSchema = z.object({
   REDIS_CONNECTION_URL: z.string().default('redis://localhost:6379'),
   SERVICE_HEADER: z.string().default('service-header'),
   SIGAA_URL: z.string().default('https://sig.ufabc.edu.br'),
-  SUMMARY_PROMPT_VERSION: z.string().default('v1'),
   UFABC_MATRICULA_URL: z.string().default('https://matricula.ufabc.edu.br'),
   UFABC_PARSER_REQUESTER_KEY: z.string(),
   UFABC_PARSER_URL: z.string().default('https://ufabc-parser.com'),
