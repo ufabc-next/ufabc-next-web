@@ -3,11 +3,11 @@ import type { InferSchemaType } from 'mongoose';
 
 const componentPlanSchema = new Schema(
   {
+    // null for plans migrated from the legacy disciplinas_metadata collection
     archive: {
+      default: null,
       ref: 'component_archives',
-      required: true,
       type: Schema.Types.ObjectId,
-      unique: true,
     },
     component: {
       ref: 'disciplinas',
@@ -35,6 +35,10 @@ const componentPlanSchema = new Schema(
 );
 
 componentPlanSchema.index({ component: 1, extractedAt: -1 });
+componentPlanSchema.index(
+  { archive: 1 },
+  { partialFilterExpression: { archive: { $type: 'objectId' } }, unique: true }
+);
 
 export type ComponentPlan = InferSchemaType<typeof componentPlanSchema>;
 
