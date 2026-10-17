@@ -72,13 +72,13 @@ export class CmccPlansService extends BaseService {
     const archive = await this.archiveRepository.findOrCreateForProcessing(
       componentId,
       url,
-      this.globalTraceId,
       'cmcc'
     );
     const alreadyStored = archive.status === 'stored';
 
     try {
-      const buffer = Buffer.from(await this.cmccConnector.downloadPlan(url));
+      const fileBuffer = await this.cmccConnector.downloadPlan(url);
+      const buffer = Buffer.from(fileBuffer);
       const checksum = createHash('sha256').update(buffer).digest('hex');
 
       if (archive.checksum === checksum) {
@@ -86,13 +86,13 @@ export class CmccPlansService extends BaseService {
       }
 
       const fileName = decodeURIComponent(url.split('/').at(-1) ?? 'plan.pdf');
-      const s3Key = `/archives/${componentId}/${fileName}`;
+      const storageKey = `/archives/${componentId}/${fileName}`;
 
-      await this.storageConnector?.upload(this.bucket, s3Key, buffer);
+      await this.storageConnector?.upload(this.bucket, storageKey, buffer);
       await this.archiveRepository.markStored(archive._id, {
         checksum,
         fileName,
-        s3Key,
+        s3Key: storageKey,
       });
 
       return { archiveId: archive._id, changed: true };

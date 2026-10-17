@@ -49,7 +49,6 @@ export class ComponentArchivesRepository extends BaseRepository {
   async findOrCreateForProcessing(
     componentId: string,
     originalUrl: string,
-    globalTraceId?: string,
     source: 'moodle' | 'cmcc' = 'moodle'
   ) {
     this.logger.debug(
@@ -65,7 +64,7 @@ export class ComponentArchivesRepository extends BaseRepository {
           original_url: originalUrl,
           source,
           status: 'created',
-          timeline: [{ metadata: { globalTraceId }, status: 'created' }],
+          timeline: [{ status: 'created' }],
         },
       },
       { new: true, upsert: true }
