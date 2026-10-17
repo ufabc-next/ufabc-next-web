@@ -1,5 +1,6 @@
 import { createHash } from 'node:crypto';
 
+import { currentQuad } from '@next/utils';
 import type { FastifyInstance } from 'fastify';
 
 import { CmccConnector } from '@/connectors/cmcc.js';
@@ -38,7 +39,7 @@ export class CmccPlansService extends BaseService {
     this.storageConnector = storageConnector;
     this.archiveRepository = new ComponentArchivesRepository({ globalTraceId });
     this.componentRepository = new ComponentsRepository({ globalTraceId });
-    this.season = config.CMCC_SEASON;
+    this.season = currentQuad();
     this.bucket = config.AWS_BUCKET;
   }
 
