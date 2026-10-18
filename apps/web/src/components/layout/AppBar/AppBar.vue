@@ -290,8 +290,11 @@ const internalNavigationItems = computed(() => {
       if (!isAllowed) continue;
     }
     visibleItems.push({
-      ...item,
+      icon: item.icon,
       locked: item.locked(Boolean(authStore.user?.confirmed)),
+      releaseDate: item.releaseDate,
+      route: item.route,
+      title: item.title,
     });
   }
 

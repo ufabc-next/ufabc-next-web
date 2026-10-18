@@ -1,4 +1,5 @@
 import type { S3Connector } from '@/connectors/s3-connector.js';
+import { ARCHIVE_DOWNLOAD_TTL_SECONDS } from '@/constants.js';
 import {
   ArchiveNotFound,
   ComponentPlanNotFound,
@@ -11,8 +12,6 @@ import { ComponentPlansRepository } from '@/repositories/component-plans-reposit
 
 import type { BaseServiceOptions } from './base-service.js';
 import { BaseService } from './base-service.js';
-
-const DOWNLOAD_TTL_SECONDS = 300;
 
 export type ArchiveMonitoringServiceOptions = BaseServiceOptions & {
   bucket: string;
@@ -27,14 +26,10 @@ export class ArchiveMonitoringService extends BaseService {
   private readonly bucket: string;
   private readonly storageConnector: S3Connector;
 
-  constructor({
-    bucket,
-    storageConnector,
-    ...options
-  }: ArchiveMonitoringServiceOptions) {
-    super(options);
-    this.bucket = bucket;
-    this.storageConnector = storageConnector;
+  constructor(options: ArchiveMonitoringServiceOptions) {
+    super({ globalTraceId: options.globalTraceId });
+    this.bucket = options.bucket;
+    this.storageConnector = options.storageConnector;
     this.archivesRepository = new ComponentArchivesRepository({
       globalTraceId: this.globalTraceId,
     });
@@ -46,12 +41,11 @@ export class ArchiveMonitoringService extends BaseService {
   async listArchives(filter: ArchivePageFilter) {
     const { items, total } = await this.archivesRepository.findPage(filter);
 
-    const data = [];
-    for (const archive of items) {
-      data.push(this.archiveMapper.toResponse(archive));
-    }
-
-    return { data, limit: filter.limit, page: filter.page, total };
+    return this.archiveMapper.toPageResponse(items, {
+      limit: filter.limit,
+      page: filter.page,
+      total,
+    });
   }
 
   async createDownloadUrl(archiveId: string) {
@@ -64,11 +58,11 @@ export class ArchiveMonitoringService extends BaseService {
     const url = await this.storageConnector.getPresignedUrl(
       this.bucket,
       archive.s3_key,
-      DOWNLOAD_TTL_SECONDS
+      ARCHIVE_DOWNLOAD_TTL_SECONDS
     );
 
     return this.archiveMapper.toDownloadResponse(archive, {
-      expiresInSeconds: DOWNLOAD_TTL_SECONDS,
+      expiresInSeconds: ARCHIVE_DOWNLOAD_TTL_SECONDS,
       url,
     });
   }

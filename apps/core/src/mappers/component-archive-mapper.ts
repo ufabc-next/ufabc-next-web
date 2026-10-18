@@ -1,27 +1,67 @@
 import type { ComponentArchive } from '@/models/ComponentArchive.js';
-import type { LeanComponentArchive } from '@/repositories/component-archives-repository.js';
+import type { LeanPopulatedArchive } from '@/repositories/component-archives-repository.js';
 
 export type PresignedDownload = {
   expiresInSeconds: number;
   url: string;
 };
 
+export type ArchivePagination = {
+  limit: number;
+  page: number;
+  total: number;
+};
+
 export class ComponentArchiveMapper {
-  toResponse(archive: LeanComponentArchive) {
+  toResponse(archive: LeanPopulatedArchive) {
+    let component = null;
+    if (archive.component) {
+      component = {
+        _id: archive.component._id.toString(),
+        codigo: archive.component.codigo,
+        disciplina: archive.component.disciplina,
+        season: archive.component.season,
+        turma: archive.component.turma,
+        turno: archive.component.turno,
+      };
+    }
+
+    const timeline = [];
+    for (const event of archive.timeline) {
+      timeline.push({
+        metadata: event.metadata as unknown,
+        status: event.status,
+        timestamp: event.timestamp.toISOString(),
+      });
+    }
+
     return {
       _id: archive._id.toString(),
-      component: archive.component ?? null,
-      createdAt: archive.createdAt?.toISOString() ?? '',
+      component,
+      createdAt: archive.createdAt.toISOString(),
       file_name: archive.file_name ?? null,
       original_url: archive.original_url,
       s3_key: archive.s3_key ?? null,
       source: archive.source,
       status: archive.status,
-      timeline: (archive.timeline ?? []).map((event) => ({
-        metadata: event.metadata as unknown,
-        status: event.status,
-        timestamp: event.timestamp?.toISOString() ?? '',
-      })),
+      timeline,
+    };
+  }
+
+  toPageResponse(
+    archives: LeanPopulatedArchive[],
+    pagination: ArchivePagination
+  ) {
+    const data = [];
+    for (const archive of archives) {
+      data.push(this.toResponse(archive));
+    }
+
+    return {
+      data,
+      limit: pagination.limit,
+      page: pagination.page,
+      total: pagination.total,
     };
   }
 

@@ -7,6 +7,11 @@ export class ComponentPlanMapper {
       schedule.push({ date: entry.date, lesson: entry.lesson });
     }
 
+    const timetable = [];
+    for (const slot of plan.timetable) {
+      timetable.push(slot);
+    }
+
     let planning = null;
     if (plan.planning) {
       planning = {
@@ -21,7 +26,7 @@ export class ComponentPlanMapper {
       extractedAt: plan.extractedAt.toISOString(),
       planning,
       schedule,
-      timetable: [...plan.timetable],
+      timetable,
     };
   }
 }

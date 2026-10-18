@@ -7,20 +7,54 @@ const objectIdSchema = z
     message: 'Invalid id',
   });
 
+const archiveSourceSchema = z.enum(['moodle', 'manual', 'sigaa', 'cmcc']);
+const archiveStatusSchema = z.enum([
+  'created',
+  'downloaded',
+  'stored',
+  'failed',
+  'deleted',
+]);
+
 export const archiveListQuerySchema = z.object({
   limit: z.coerce.number().int().min(1).max(100).default(20),
   page: z.coerce.number().int().min(1).default(1),
-  source: z.enum(['moodle', 'manual', 'sigaa', 'cmcc']).optional(),
-  status: z
-    .enum(['created', 'downloaded', 'stored', 'failed', 'deleted'])
-    .optional(),
+  source: archiveSourceSchema.optional(),
+  status: archiveStatusSchema.optional(),
 });
 
 export const archiveParamsSchema = z.object({ archiveId: objectIdSchema });
 export const planParamsSchema = z.object({ componentId: objectIdSchema });
 
+const archiveResponseSchema = z.object({
+  _id: z.string(),
+  component: z
+    .object({
+      _id: z.string(),
+      codigo: z.string(),
+      disciplina: z.string(),
+      season: z.string(),
+      turma: z.string(),
+      turno: z.string(),
+    })
+    .nullable(),
+  createdAt: z.string().datetime(),
+  file_name: z.string().nullable(),
+  original_url: z.string().url(),
+  s3_key: z.string().nullable(),
+  source: archiveSourceSchema,
+  status: archiveStatusSchema,
+  timeline: z.array(
+    z.object({
+      metadata: z.unknown(),
+      status: archiveStatusSchema,
+      timestamp: z.string().datetime(),
+    })
+  ),
+});
+
 export const archiveListResponseSchema = z.object({
-  data: z.array(z.any()),
+  data: z.array(archiveResponseSchema),
   limit: z.number(),
   page: z.number(),
   total: z.number(),
@@ -29,11 +63,11 @@ export const archiveListResponseSchema = z.object({
 export const archiveDownloadResponseSchema = z.object({
   expiresInSeconds: z.number(),
   fileName: z.string().nullable(),
-  url: z.string(),
+  url: z.string().url(),
 });
 
 export const componentPlanResponseSchema = z.object({
-  extractedAt: z.string(),
+  extractedAt: z.string().datetime(),
   planning: z
     .object({
       assessment: z.string(),
@@ -41,7 +75,7 @@ export const componentPlanResponseSchema = z.object({
       objectives: z.string(),
       syllabus: z.string(),
     })
-    .nullish(),
+    .nullable(),
   schedule: z.array(z.object({ date: z.string(), lesson: z.string() })),
   timetable: z.array(z.string()),
 });

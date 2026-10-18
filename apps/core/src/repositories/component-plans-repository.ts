@@ -11,9 +11,9 @@ export type ComponentPlansRepositoryOptions = BaseRepositoryOptions & {
 export class ComponentPlansRepository extends BaseRepository {
   private readonly model: typeof ComponentPlanModel;
 
-  constructor({ model, ...options }: ComponentPlansRepositoryOptions = {}) {
-    super(options);
-    this.model = model ?? ComponentPlanModel;
+  constructor(options: ComponentPlansRepositoryOptions = {}) {
+    super({ globalTraceId: options.globalTraceId });
+    this.model = options.model ?? ComponentPlanModel;
   }
 
   async findLatestByComponent(componentId: string) {

@@ -9,7 +9,20 @@ import type { BaseRepositoryOptions } from './base-repository.js';
 
 export type LeanComponentArchive = ComponentArchive & {
   _id: Types.ObjectId;
-  createdAt?: Date;
+  createdAt: Date;
+};
+
+export type ArchiveComponentSummary = {
+  _id: Types.ObjectId;
+  codigo: string;
+  disciplina: string;
+  season: string;
+  turma: string;
+  turno: string;
+};
+
+export type LeanPopulatedArchive = Omit<LeanComponentArchive, 'component'> & {
+  component: ArchiveComponentSummary | null;
 };
 
 type FailureCountRow = {
@@ -48,11 +61,14 @@ export class ComponentArchivesRepository extends BaseRepository {
 
     const items = await this.model
       .find(filter)
-      .populate('component', 'disciplina codigo turma turno season')
+      .populate<{ component: ArchiveComponentSummary | null }>(
+        'component',
+        'disciplina codigo turma turno season'
+      )
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
-      .lean();
+      .lean<LeanPopulatedArchive[]>();
     const total = await this.model.countDocuments(filter);
 
     return { items, total };
