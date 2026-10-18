@@ -86,6 +86,7 @@ export const PERMISSIONS = {
   ADMIN: 'admin',
   ANNOUNCEMENTS: 'announcements',
   ANNOUNCEMENTS_BCC: 'announcements-bcc',
+  ARCHIVES: 'archives',
 } as const;
 
 export const UFABC_EMAIL_DOMAINS = ['aluno.ufabc.edu.br', 'ufabc.edu.br'];

@@ -16,6 +16,13 @@ type FailureCountRow = {
   failureCount: number;
 };
 
+export type ArchivePageFilter = {
+  limit: number;
+  page: number;
+  source?: ComponentArchive['source'];
+  status?: ComponentArchive['status'];
+};
+
 export type ComponentArchivesRepositoryOptions = BaseRepositoryOptions & {
   model?: typeof ComponentArchiveModel;
 };
@@ -28,16 +35,27 @@ export class ComponentArchivesRepository extends BaseRepository {
     this.model = model ?? ComponentArchiveModel;
   }
 
-  async findByComponentId(
-    componentId: string
-  ): Promise<LeanComponentArchive[]> {
-    this.logger.debug({ componentId }, 'Listing archives by component');
+  async findPage({ limit, page, source, status }: ArchivePageFilter) {
+    this.logger.debug({ limit, page, source, status }, 'Listing archives page');
 
-    return await this.model
-      .find({ component: componentId })
+    const filter: Record<string, string> = {};
+    if (source) {
+      filter.source = source;
+    }
+    if (status) {
+      filter.status = status;
+    }
+
+    const items = await this.model
+      .find(filter)
       .populate('component', 'disciplina codigo turma turno season')
       .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(limit)
       .lean();
+    const total = await this.model.countDocuments(filter);
+
+    return { items, total };
   }
 
   async findById(archiveId: string) {
