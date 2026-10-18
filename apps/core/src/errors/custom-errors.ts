@@ -165,3 +165,16 @@ export class InvalidInternalToken extends NextError {
     );
   }
 }
+
+export class ComponentPlanNotFound extends NextError {
+  constructor(componentId: string) {
+    super(
+      'Component Plan Not Found',
+      'NEX0014',
+      404,
+      'No extracted plan available for this component',
+      'Nenhum plano de ensino extraído para esta disciplina',
+      { componentId }
+    );
+  }
+}

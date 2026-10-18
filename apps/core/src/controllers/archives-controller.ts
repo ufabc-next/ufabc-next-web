@@ -52,17 +52,10 @@ export const archivesController: FastifyPluginAsyncZod = async (app) => {
   });
 
   app.route({
-    handler: async (request, reply) => {
-      const plan = await createService(request.id).findLatestPlan(
+    handler: async (request) =>
+      await createService(request.id).findLatestPlan(
         request.params.componentId
-      );
-
-      if (!plan) {
-        return await reply.notFound('Plan not found');
-      }
-
-      return plan;
-    },
+      ),
     method: 'GET',
     preHandler,
     schema: {

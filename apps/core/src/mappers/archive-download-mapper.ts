@@ -1,15 +1,16 @@
-export type ArchiveDownload = {
+import type { ComponentArchive } from '@/models/ComponentArchive.js';
+
+export type PresignedDownload = {
   expiresInSeconds: number;
-  fileName?: string | null;
   url: string;
 };
 
 export class ArchiveDownloadMapper {
-  toResponse(download: ArchiveDownload) {
+  toResponse(archive: ComponentArchive, presigned: PresignedDownload) {
     return {
-      expiresInSeconds: download.expiresInSeconds,
-      fileName: download.fileName ?? null,
-      url: download.url,
+      expiresInSeconds: presigned.expiresInSeconds,
+      fileName: archive.file_name ?? null,
+      url: presigned.url,
     };
   }
 }

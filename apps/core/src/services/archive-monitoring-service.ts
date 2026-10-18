@@ -1,5 +1,8 @@
 import type { S3Connector } from '@/connectors/s3-connector.js';
-import { ArchiveNotFound } from '@/errors/custom-errors.js';
+import {
+  ArchiveNotFound,
+  ComponentPlanNotFound,
+} from '@/errors/custom-errors.js';
 import { ArchiveDownloadMapper } from '@/mappers/archive-download-mapper.js';
 import { ComponentArchiveMapper } from '@/mappers/component-archive-mapper.js';
 import { ComponentPlanMapper } from '@/mappers/component-plan-mapper.js';
@@ -66,9 +69,8 @@ export class ArchiveMonitoringService extends BaseService {
       DOWNLOAD_TTL_SECONDS
     );
 
-    return this.downloadMapper.toResponse({
+    return this.downloadMapper.toResponse(archive, {
       expiresInSeconds: DOWNLOAD_TTL_SECONDS,
-      fileName: archive.file_name,
       url,
     });
   }
@@ -77,7 +79,7 @@ export class ArchiveMonitoringService extends BaseService {
     const plan = await this.plansRepository.findLatestByComponent(componentId);
 
     if (!plan) {
-      return null;
+      throw new ComponentPlanNotFound(componentId);
     }
 
     return this.planMapper.toResponse(plan);

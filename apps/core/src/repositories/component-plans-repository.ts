@@ -1,4 +1,5 @@
 import { ComponentPlanModel } from '@/models/ComponentPlan.js';
+import type { ComponentPlan } from '@/models/ComponentPlan.js';
 
 import { BaseRepository } from './base-repository.js';
 import type { BaseRepositoryOptions } from './base-repository.js';
@@ -21,6 +22,6 @@ export class ComponentPlansRepository extends BaseRepository {
     return await this.model
       .findOne({ component: componentId })
       .sort({ extractedAt: -1 })
-      .lean();
+      .lean<ComponentPlan>();
   }
 }

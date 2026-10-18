@@ -1,17 +1,7 @@
-type PlanSource = {
-  extractedAt: Date;
-  planning?: {
-    assessment: string;
-    methodology: string;
-    objectives: string;
-    syllabus: string;
-  } | null;
-  schedule: { date: string; lesson: string }[];
-  timetable: string[];
-};
+import type { ComponentPlan } from '@/models/ComponentPlan.js';
 
 export class ComponentPlanMapper {
-  toResponse(plan: PlanSource) {
+  toResponse(plan: ComponentPlan) {
     const schedule = [];
     for (const entry of plan.schedule) {
       schedule.push({ date: entry.date, lesson: entry.lesson });
