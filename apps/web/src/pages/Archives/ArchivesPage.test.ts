@@ -12,7 +12,7 @@ describe('<ArchivesPage />', () => {
     expect(await screen.findByText(firstComponentName)).toBeInTheDocument();
     expect(screen.getByText('20263_DA1MCTB021-17SA.pdf')).toBeInTheDocument();
     expect(screen.getByText('Sem disciplina')).toBeInTheDocument();
-    expect(screen.getAllByText('failed')).toHaveLength(1);
+    expect(screen.getAllByText('Falhou')).toHaveLength(1);
   });
 
   test('disables download for archives that are not stored', async () => {

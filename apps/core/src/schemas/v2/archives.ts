@@ -38,19 +38,11 @@ const archiveResponseSchema = z.object({
       turno: z.string(),
     })
     .nullable(),
-  createdAt: z.string().datetime(),
   file_name: z.string().nullable(),
   original_url: z.string().url(),
   s3_key: z.string().nullable(),
   source: archiveSourceSchema,
   status: archiveStatusSchema,
-  timeline: z.array(
-    z.object({
-      metadata: z.unknown(),
-      status: archiveStatusSchema,
-      timestamp: z.string().datetime(),
-    })
-  ),
 });
 
 export const archiveListResponseSchema = z.object({
@@ -67,7 +59,6 @@ export const archiveDownloadResponseSchema = z.object({
 });
 
 export const componentPlanResponseSchema = z.object({
-  extractedAt: z.string().datetime(),
   planning: z
     .object({
       assessment: z.string(),

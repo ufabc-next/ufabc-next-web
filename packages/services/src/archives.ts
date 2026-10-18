@@ -20,7 +20,6 @@ export type ArchiveComponent = {
 export type ComponentArchive = {
   _id: string;
   component: ArchiveComponent | null;
-  createdAt: string;
   file_name: string | null;
   original_url: string;
   source: ArchiveSource;
@@ -48,7 +47,6 @@ export type ArchiveDownload = {
 };
 
 export type ComponentPlan = {
-  extractedAt: string;
   planning: {
     assessment: string;
     methodology: string;

@@ -16,7 +16,6 @@ export const archives = {
         turno: 'diurno',
         season: '2026:3',
       },
-      createdAt: '2026-10-10T12:00:00.000Z',
       file_name: '20263_DA1MCTB021-17SA.pdf',
       original_url: 'https://example.com/20263_DA1MCTB021-17SA.pdf',
       source: 'cmcc',
@@ -32,7 +31,6 @@ export const archives = {
         turno: 'noturno',
         season: '2026:3',
       },
-      createdAt: '2026-10-09T09:30:00.000Z',
       file_name: 'lista-de-exercicios.pdf',
       original_url: 'https://example.com/lista-de-exercicios.pdf',
       source: 'moodle',
@@ -41,7 +39,6 @@ export const archives = {
     {
       _id: 'archive-3',
       component: null,
-      createdAt: '2026-10-08T18:45:00.000Z',
       file_name: null,
       original_url: 'https://example.com/quebrado.pdf',
       source: 'moodle',
@@ -60,7 +57,6 @@ export const archiveDownload = {
 } satisfies ArchiveDownload;
 
 export const componentPlan = {
-  extractedAt: '2026-10-10T12:05:00.000Z',
   planning: {
     assessment: 'Duas provas e uma lista de exercícios.',
     methodology: 'Aulas expositivas e práticas em laboratório.',

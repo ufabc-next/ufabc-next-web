@@ -26,25 +26,14 @@ export class ComponentArchiveMapper {
       };
     }
 
-    const timeline = [];
-    for (const event of archive.timeline) {
-      timeline.push({
-        metadata: event.metadata as unknown,
-        status: event.status,
-        timestamp: event.timestamp.toISOString(),
-      });
-    }
-
     return {
       _id: archive._id.toString(),
       component,
-      createdAt: archive.createdAt.toISOString(),
       file_name: archive.file_name ?? null,
       original_url: archive.original_url,
       s3_key: archive.s3_key ?? null,
       source: archive.source,
       status: archive.status,
-      timeline,
     };
   }
 

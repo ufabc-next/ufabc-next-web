@@ -23,7 +23,6 @@ export class ComponentPlanMapper {
     }
 
     return {
-      extractedAt: plan.extractedAt.toISOString(),
       planning,
       schedule,
       timetable,

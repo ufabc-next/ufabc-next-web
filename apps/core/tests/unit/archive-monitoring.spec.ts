@@ -90,7 +90,7 @@ describe('ArchiveMonitoringService.findLatestPlan', () => {
 
     const result = await buildService().findLatestPlan('component-id');
 
-    expect(result.extractedAt).toBe('2026-10-10T12:00:00.000Z');
+    expect(result).not.toHaveProperty('extractedAt');
     expect(result.schedule).toEqual([{ date: '06/10', lesson: 'Intro' }]);
   });
 });

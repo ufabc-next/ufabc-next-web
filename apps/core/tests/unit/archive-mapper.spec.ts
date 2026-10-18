@@ -21,13 +21,11 @@ describe('archive and plan mappers match the response schemas', () => {
         turma: 'A1',
         turno: 'diurno',
       },
-      createdAt: new Date('2026-10-10T12:00:00.000Z'),
       file_name: '20263_DA1MCTB021-17SA.pdf',
       original_url: 'https://example.com/plan.pdf',
       s3_key: '/archives/1/plan.pdf',
       source: 'cmcc',
       status: 'stored',
-      timeline: [{ status: 'stored', timestamp: new Date('2026-10-10') }],
     } as never;
 
     const page = new ComponentArchiveMapper().toPageResponse([archive], {
@@ -37,6 +35,8 @@ describe('archive and plan mappers match the response schemas', () => {
     });
 
     expect(archiveListResponseSchema.safeParse(page).success).toBe(true);
+    expect(page.data[0]).not.toHaveProperty('createdAt');
+    expect(page.data[0]).not.toHaveProperty('timeline');
   });
 
   it('maps the download and the plan', () => {
@@ -45,7 +45,6 @@ describe('archive and plan mappers match the response schemas', () => {
       { expiresInSeconds: 300, url: 'https://example.com/signed' }
     );
     const plan = new ComponentPlanMapper().toResponse({
-      extractedAt: new Date('2026-10-10T12:00:00.000Z'),
       planning: null,
       schedule: [{ date: '06/10', lesson: 'Intro' }],
       timetable: ['segunda'],

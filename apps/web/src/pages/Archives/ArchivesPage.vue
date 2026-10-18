@@ -1,131 +1,219 @@
 <template>
-  <PaperCard title="Arquivos">
-    <div class="d-flex flex-column flex-sm-row ga-4 mt-4 mb-4">
-      <v-select
-        v-model="source"
-        :items="sourceOptions"
-        label="Origem"
-        density="compact"
-        hide-details
-        clearable
+  <div class="archives-page">
+    <header class="mb-6">
+      <h1 class="text-h5 font-weight-medium">Arquivos</h1>
+      <p class="text-body-2 text-medium-emphasis mt-1">
+        Arquivos coletados por disciplina e o plano de ensino extraído de cada
+        um.
+      </p>
+    </header>
+
+    <v-card flat border class="rounded-lg">
+      <div
+        class="toolbar d-flex flex-column flex-sm-row align-sm-center ga-3 pa-4"
+      >
+        <v-select
+          v-model="source"
+          :items="sourceOptions"
+          label="Origem"
+          variant="outlined"
+          density="compact"
+          hide-details
+          clearable
+          class="toolbar-select"
+        />
+        <v-select
+          v-model="status"
+          :items="statusOptions"
+          label="Status"
+          variant="outlined"
+          density="compact"
+          hide-details
+          clearable
+          class="toolbar-select"
+        />
+        <v-spacer />
+        <span class="text-body-2 text-medium-emphasis">
+          {{ total }} {{ total === 1 ? 'arquivo' : 'arquivos' }}
+        </span>
+      </div>
+
+      <v-progress-linear
+        :active="isFetching"
+        indeterminate
+        height="2"
+        color="primary"
       />
-      <v-select
-        v-model="status"
-        :items="statusOptions"
-        label="Status"
-        density="compact"
-        hide-details
-        clearable
+      <v-divider />
+
+      <FeedbackAlert
+        v-if="isError"
+        text="Não foi possível carregar os arquivos."
       />
-    </div>
 
-    <v-progress-linear v-if="isFetching" indeterminate color="primary" />
-    <FeedbackAlert
-      v-if="isError"
-      text="Não foi possível carregar os arquivos."
-    />
+      <div
+        v-if="archives.length === 0 && !isFetching"
+        class="empty-state d-flex flex-column align-center text-center pa-12"
+      >
+        <v-icon size="32" class="text-medium-emphasis mb-3">
+          mdi-file-search-outline
+        </v-icon>
+        <p class="text-body-1 font-weight-medium">Nenhum arquivo encontrado</p>
+        <p class="text-body-2 text-medium-emphasis">
+          Ajuste os filtros para ver outros arquivos.
+        </p>
+      </div>
 
-    <v-table>
-      <thead>
-        <tr>
-          <th class="text-left">Disciplina</th>
-          <th class="text-left">Arquivo</th>
-          <th class="text-center">Origem</th>
-          <th class="text-center">Status</th>
-          <th class="text-left">Criado em</th>
-          <th class="text-center">Ações</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-if="archives.length === 0 && !isFetching">
-          <td colspan="6" class="text-center py-8">
-            Nenhum arquivo encontrado
-          </td>
-        </tr>
-        <tr v-for="archive in archives" :key="archive._id">
-          <td>
-            <div v-if="archive.component">
-              <p class="font-weight-bold">{{ archive.component.disciplina }}</p>
-              <p class="text-caption">
-                {{ archive.component.codigo }} · {{ archive.component.season }}
-              </p>
-            </div>
-            <span v-else class="text-caption">Sem disciplina</span>
-          </td>
-          <td>{{ archive.file_name ?? '—' }}</td>
-          <td class="text-center">
-            <v-chip size="small">{{ archive.source }}</v-chip>
-          </td>
-          <td class="text-center">
-            <v-chip size="small" :color="getStatusColor(archive.status)">
-              {{ archive.status }}
-            </v-chip>
-          </td>
-          <td>{{ formatDate(archive.createdAt) }}</td>
-          <td class="text-center text-no-wrap">
-            <v-btn
-              icon="mdi-download"
-              size="small"
-              variant="text"
-              aria-label="Baixar arquivo"
-              :disabled="archive.status !== 'stored'"
-              @click="downloadArchive(archive._id)"
-            />
-            <v-btn
-              icon="mdi-calendar-text"
-              size="small"
-              variant="text"
-              aria-label="Ver plano de ensino"
-              :disabled="!archive.component"
-              @click="openPlan(archive.component)"
-            />
-          </td>
-        </tr>
-      </tbody>
-    </v-table>
+      <v-table v-else hover class="archives-table">
+        <thead>
+          <tr>
+            <th class="text-left">Disciplina</th>
+            <th class="text-left d-none d-md-table-cell">Arquivo</th>
+            <th class="text-left d-none d-md-table-cell">Origem</th>
+            <th class="text-left">Status</th>
+            <th class="text-right">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="archive in archives" :key="archive._id">
+            <td>
+              <template v-if="archive.component">
+                <p class="text-body-2 font-weight-medium">
+                  {{ archive.component.disciplina }}
+                </p>
+                <p class="text-caption text-medium-emphasis">
+                  <span class="mono">{{ archive.component.codigo }}</span>
+                  · {{ archive.component.season }}
+                </p>
+              </template>
+              <span v-else class="text-body-2 text-medium-emphasis">
+                Sem disciplina
+              </span>
+            </td>
+            <td class="d-none d-md-table-cell">
+              <span v-if="archive.file_name" class="mono file-name">
+                {{ archive.file_name }}
+              </span>
+              <span v-else class="text-medium-emphasis">—</span>
+            </td>
+            <td class="d-none d-md-table-cell">
+              <v-chip size="x-small" variant="tonal" label>
+                {{ sourceLabels[archive.source] }}
+              </v-chip>
+            </td>
+            <td>
+              <span class="status d-inline-flex align-center text-body-2">
+                <span
+                  class="status-dot mr-2"
+                  :class="statusDotClass[archive.status]"
+                />
+                {{ statusLabels[archive.status] }}
+              </span>
+            </td>
+            <td class="text-right text-no-wrap">
+              <v-btn
+                icon="mdi-download-outline"
+                size="small"
+                variant="text"
+                aria-label="Baixar arquivo"
+                :disabled="archive.status !== 'stored'"
+                @click="downloadArchive(archive._id)"
+              />
+              <v-btn
+                icon="mdi-calendar-text-outline"
+                size="small"
+                variant="text"
+                aria-label="Ver plano de ensino"
+                :disabled="!archive.component"
+                @click="openPlan(archive.component)"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </v-table>
 
-    <v-pagination
-      v-model="page"
-      :length="pageCount"
-      :total-visible="5"
-      class="mt-4"
-    />
+      <v-divider />
+      <div class="d-flex align-center justify-space-between pa-3">
+        <span class="text-body-2 text-medium-emphasis pl-1">
+          {{ rangeLabel }}
+        </span>
+        <div class="d-flex ga-2">
+          <v-btn
+            size="small"
+            variant="outlined"
+            class="text-none"
+            :disabled="page <= 1"
+            @click="page -= 1"
+          >
+            Anterior
+          </v-btn>
+          <v-btn
+            size="small"
+            variant="outlined"
+            class="text-none"
+            :disabled="page >= pageCount"
+            @click="page += 1"
+          >
+            Próxima
+          </v-btn>
+        </div>
+      </div>
+    </v-card>
 
-    <v-dialog v-model="isPlanOpen" max-width="720">
-      <v-card>
-        <v-card-title>{{ selectedComponent?.disciplina }}</v-card-title>
-        <v-card-text>
+    <v-dialog v-model="isPlanOpen" max-width="640" scrollable>
+      <v-card class="rounded-lg">
+        <v-card-item class="pa-6 pb-4">
+          <v-card-title class="text-h6 font-weight-medium">
+            {{ selectedComponent?.disciplina }}
+          </v-card-title>
+          <v-card-subtitle>
+            <span class="mono">{{ selectedComponent?.codigo }}</span>
+            · {{ selectedComponent?.season }}
+          </v-card-subtitle>
+        </v-card-item>
+        <v-divider />
+        <v-card-text class="pa-6">
           <CenteredLoading v-if="isPlanLoading" />
-          <p v-else-if="!plan">Nenhum plano de ensino extraído.</p>
+          <p v-else-if="!plan" class="text-body-2 text-medium-emphasis">
+            Nenhum plano de ensino extraído.
+          </p>
           <div v-else>
-            <template v-if="plan.planning">
-              <div
-                v-for="section in planSections"
-                :key="section.key"
-                class="mb-3"
+            <section
+              v-for="section in visibleSections"
+              :key="section.key"
+              class="mb-5"
+            >
+              <p class="text-caption text-medium-emphasis mb-1">
+                {{ section.title }}
+              </p>
+              <p class="text-body-2">{{ section.text }}</p>
+            </section>
+
+            <p class="text-caption text-medium-emphasis mb-2">Cronograma</p>
+            <ul class="schedule">
+              <li
+                v-for="entry in plan.schedule"
+                :key="entry.date"
+                class="schedule-row d-flex ga-4 py-2 text-body-2"
               >
-                <p class="font-weight-bold">{{ section.title }}</p>
-                <p>{{ plan.planning[section.key] }}</p>
-              </div>
-            </template>
-            <p class="font-weight-bold">Cronograma</p>
-            <v-table density="compact">
-              <tbody>
-                <tr v-for="entry in plan.schedule" :key="entry.date">
-                  <td class="text-no-wrap">{{ entry.date }}</td>
-                  <td>{{ entry.lesson }}</td>
-                </tr>
-              </tbody>
-            </v-table>
+                <span class="mono schedule-date text-medium-emphasis">
+                  {{ entry.date }}
+                </span>
+                <span>{{ entry.lesson }}</span>
+              </li>
+            </ul>
           </div>
         </v-card-text>
-        <v-card-actions>
+        <v-divider />
+        <v-card-actions class="pa-3">
           <v-spacer />
-          <v-btn @click="isPlanOpen = false">Fechar</v-btn>
+          <v-btn variant="text" class="text-none" @click="isPlanOpen = false">
+            Fechar
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
-  </PaperCard>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -140,18 +228,40 @@ import { computed, ref, watch } from 'vue';
 
 import { CenteredLoading } from '@/components/ui/CenteredLoading';
 import { FeedbackAlert } from '@/components/ui/FeedbackAlert';
-import { PaperCard } from '@/components/ui/PaperCard';
 
 const PAGE_SIZE = 20;
 
-const sourceOptions: ArchiveSource[] = ['cmcc', 'moodle', 'manual', 'sigaa'];
-const statusOptions: ArchiveStatus[] = [
-  'stored',
-  'created',
-  'downloaded',
-  'failed',
-  'deleted',
-];
+const sourceLabels: Record<ArchiveSource, string> = {
+  cmcc: 'CMCC',
+  manual: 'Manual',
+  moodle: 'Moodle',
+  sigaa: 'SIGAA',
+};
+const statusLabels: Record<ArchiveStatus, string> = {
+  created: 'Criado',
+  deleted: 'Removido',
+  downloaded: 'Baixado',
+  failed: 'Falhou',
+  stored: 'Armazenado',
+};
+const statusDotClass: Record<ArchiveStatus, string> = {
+  created: 'bg-warning',
+  deleted: 'bg-grey',
+  downloaded: 'bg-info',
+  failed: 'bg-error',
+  stored: 'bg-success',
+};
+
+function buildOptions(labels: Record<string, string>) {
+  const options = [];
+  for (const value of Object.keys(labels)) {
+    options.push({ title: labels[value], value });
+  }
+  return options;
+}
+const sourceOptions = buildOptions(sourceLabels);
+const statusOptions = buildOptions(statusLabels);
+
 const planSections = [
   { key: 'syllabus', title: 'Ementa' },
   { key: 'objectives', title: 'Objetivos' },
@@ -179,9 +289,18 @@ const { data, isFetching, isError } = useQuery({
 });
 
 const archives = computed(() => data.value?.data ?? []);
+const total = computed(() => data.value?.total ?? 0);
 const pageCount = computed(() =>
-  Math.max(1, Math.ceil((data.value?.total ?? 0) / PAGE_SIZE))
+  Math.max(1, Math.ceil(total.value / PAGE_SIZE))
 );
+const rangeLabel = computed(() => {
+  if (total.value === 0) {
+    return '0 arquivos';
+  }
+  const first = (page.value - 1) * PAGE_SIZE + 1;
+  const last = Math.min(page.value * PAGE_SIZE, total.value);
+  return `${first}–${last} de ${total.value}`;
+});
 
 const isPlanOpen = ref(false);
 const selectedComponent = ref<ArchiveComponent | null>(null);
@@ -193,6 +312,22 @@ const { data: plan, isLoading: isPlanLoading } = useQuery({
   retry: false,
 });
 
+const visibleSections = computed(() => {
+  const planning = plan.value?.planning;
+  const sections: Array<{ key: string; text: string; title: string }> = [];
+  if (!planning) {
+    return sections;
+  }
+  for (const section of planSections) {
+    sections.push({
+      key: section.key,
+      text: planning[section.key],
+      title: section.title,
+    });
+  }
+  return sections;
+});
+
 const openPlan = (component: ArchiveComponent | null) => {
   selectedComponent.value = component;
   isPlanOpen.value = true;
@@ -202,13 +337,57 @@ const downloadArchive = async (archiveId: string) => {
   const download = await Archives.getDownload(archiveId);
   window.open(download.url, '_blank', 'noopener');
 };
-
-const getStatusColor = (archiveStatus: ArchiveStatus) => {
-  if (archiveStatus === 'stored') return 'success';
-  if (archiveStatus === 'failed') return 'error';
-  return undefined;
-};
-
-const formatDate = (isoDate: string) =>
-  new Date(isoDate).toLocaleDateString('pt-BR');
 </script>
+
+<style scoped lang="scss">
+.toolbar-select {
+  max-width: 220px;
+}
+
+.archives-table :deep(th) {
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity));
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.archives-table :deep(td) {
+  padding-bottom: 12px;
+  padding-top: 12px;
+}
+
+.mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12px;
+}
+
+.file-name {
+  display: inline-block;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+
+.status-dot {
+  border-radius: 50%;
+  display: inline-block;
+  height: 8px;
+  width: 8px;
+}
+
+.schedule {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.schedule-row + .schedule-row {
+  border-top: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.schedule-date {
+  font-variant-numeric: tabular-nums;
+  min-width: 48px;
+}
+</style>
