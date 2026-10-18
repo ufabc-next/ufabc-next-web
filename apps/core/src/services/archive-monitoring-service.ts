@@ -3,7 +3,6 @@ import {
   ArchiveNotFound,
   ComponentPlanNotFound,
 } from '@/errors/custom-errors.js';
-import { ArchiveDownloadMapper } from '@/mappers/archive-download-mapper.js';
 import { ComponentArchiveMapper } from '@/mappers/component-archive-mapper.js';
 import { ComponentPlanMapper } from '@/mappers/component-plan-mapper.js';
 import { ComponentArchivesRepository } from '@/repositories/component-archives-repository.js';
@@ -22,7 +21,6 @@ export type ArchiveMonitoringServiceOptions = BaseServiceOptions & {
 
 export class ArchiveMonitoringService extends BaseService {
   private readonly archiveMapper = new ComponentArchiveMapper();
-  private readonly downloadMapper = new ArchiveDownloadMapper();
   private readonly planMapper = new ComponentPlanMapper();
   private readonly archivesRepository: ComponentArchivesRepository;
   private readonly plansRepository: ComponentPlansRepository;
@@ -69,7 +67,7 @@ export class ArchiveMonitoringService extends BaseService {
       DOWNLOAD_TTL_SECONDS
     );
 
-    return this.downloadMapper.toResponse(archive, {
+    return this.archiveMapper.toDownloadResponse(archive, {
       expiresInSeconds: DOWNLOAD_TTL_SECONDS,
       url,
     });

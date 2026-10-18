@@ -1,4 +1,10 @@
+import type { ComponentArchive } from '@/models/ComponentArchive.js';
 import type { LeanComponentArchive } from '@/repositories/component-archives-repository.js';
+
+export type PresignedDownload = {
+  expiresInSeconds: number;
+  url: string;
+};
 
 export class ComponentArchiveMapper {
   toResponse(archive: LeanComponentArchive) {
@@ -16,6 +22,14 @@ export class ComponentArchiveMapper {
         status: event.status,
         timestamp: event.timestamp?.toISOString() ?? '',
       })),
+    };
+  }
+
+  toDownloadResponse(archive: ComponentArchive, presigned: PresignedDownload) {
+    return {
+      expiresInSeconds: presigned.expiresInSeconds,
+      fileName: archive.file_name ?? null,
+      url: presigned.url,
     };
   }
 }
