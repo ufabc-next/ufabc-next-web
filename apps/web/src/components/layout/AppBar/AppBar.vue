@@ -277,12 +277,26 @@ const toggleTheme = () => {
 
 const apiURL = api.defaults.baseURL ?? runtimeConfig.apiBaseUrl;
 
-const internalNavigationItems = computed(() =>
-  baseInternalItems.map((item) => ({
-    ...item,
-    locked: item.locked(Boolean(authStore.user?.confirmed)),
-  }))
-);
+const internalNavigationItems = computed(() => {
+  const userPermissions = authStore.user?.permissions ?? [];
+  const visibleItems = [];
+
+  for (const item of baseInternalItems) {
+    if (item.permissions) {
+      let isAllowed = false;
+      for (const permission of item.permissions) {
+        if (userPermissions.includes(permission)) isAllowed = true;
+      }
+      if (!isAllowed) continue;
+    }
+    visibleItems.push({
+      ...item,
+      locked: item.locked(Boolean(authStore.user?.confirmed)),
+    });
+  }
+
+  return visibleItems;
+});
 
 const externalNavigationItems = computed(() =>
   getExternalNavigationItems({

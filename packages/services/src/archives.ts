@@ -1,0 +1,79 @@
+import { api } from './api';
+
+export type ArchiveSource = 'moodle' | 'manual' | 'sigaa' | 'cmcc';
+export type ArchiveStatus =
+  | 'created'
+  | 'downloaded'
+  | 'stored'
+  | 'failed'
+  | 'deleted';
+
+export type ArchiveComponent = {
+  _id: string;
+  disciplina: string;
+  codigo: string;
+  turma: string;
+  turno: string;
+  season: string;
+};
+
+export type ComponentArchive = {
+  _id: string;
+  component: ArchiveComponent | null;
+  createdAt: string;
+  file_name: string | null;
+  original_url: string;
+  source: ArchiveSource;
+  status: ArchiveStatus;
+};
+
+export type ArchivesParams = {
+  page: number;
+  limit: number;
+  source?: ArchiveSource;
+  status?: ArchiveStatus;
+};
+
+export type ArchivesPage = {
+  data: ComponentArchive[];
+  limit: number;
+  page: number;
+  total: number;
+};
+
+export type ArchiveDownload = {
+  expiresInSeconds: number;
+  fileName: string | null;
+  url: string;
+};
+
+export type ComponentPlan = {
+  extractedAt: string;
+  planning: {
+    assessment: string;
+    methodology: string;
+    objectives: string;
+    syllabus: string;
+  } | null;
+  schedule: Array<{ date: string; lesson: string }>;
+  timetable: string[];
+};
+
+export const Archives = {
+  getDownload: async (archiveId: string) => {
+    const { data } = await api.get<ArchiveDownload>(
+      `/v2/archives/${archiveId}/download`
+    );
+    return data;
+  },
+  getPlan: async (componentId: string) => {
+    const { data } = await api.get<ComponentPlan>(
+      `/v2/components/${componentId}/plan`
+    );
+    return data;
+  },
+  list: async (params: ArchivesParams) => {
+    const { data } = await api.get<ArchivesPage>('/v2/archives', { params });
+    return data;
+  },
+};
