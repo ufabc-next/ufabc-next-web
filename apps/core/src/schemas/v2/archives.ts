@@ -40,7 +40,6 @@ const archiveResponseSchema = z.object({
     .nullable(),
   file_name: z.string().nullable(),
   original_url: z.string().url(),
-  s3_key: z.string().nullable(),
   source: archiveSourceSchema,
   status: archiveStatusSchema,
 });

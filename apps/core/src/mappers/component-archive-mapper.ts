@@ -31,7 +31,6 @@ export class ComponentArchiveMapper {
       component,
       file_name: archive.file_name ?? null,
       original_url: archive.original_url,
-      s3_key: archive.s3_key ?? null,
       source: archive.source,
       status: archive.status,
     };
