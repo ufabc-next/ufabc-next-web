@@ -6,31 +6,45 @@ import { ArchivesPage } from '.';
 const firstComponentName = archives.data[0].component?.disciplina ?? '';
 
 describe('<ArchivesPage />', () => {
-  test('lists archives with source and status', async () => {
+  test('lists archives and opens the first plan automatically', async () => {
     render(ArchivesPage);
 
-    expect(await screen.findByText(firstComponentName)).toBeInTheDocument();
-    expect(screen.getByText('20263_DA1MCTB021-17SA.pdf')).toBeInTheDocument();
-    expect(screen.getByText('Sem disciplina')).toBeInTheDocument();
-    expect(screen.getAllByText('Falhou')).toHaveLength(1);
-  });
-
-  test('disables download for archives that are not stored', async () => {
-    render(ArchivesPage);
-    await screen.findByText(firstComponentName);
-
-    const downloadButtons = screen.getAllByLabelText('Baixar arquivo');
-    expect(downloadButtons[0]).toBeEnabled();
-    expect(downloadButtons[2]).toBeDisabled();
-  });
-
-  test('shows the extracted plan of a component', async () => {
-    render(ArchivesPage);
-    await screen.findByText(firstComponentName);
-
-    await userEvent.click(screen.getAllByLabelText('Ver plano de ensino')[0]);
-
+    const matches = await screen.findAllByText(firstComponentName);
+    expect(matches.length).toBeGreaterThan(0);
     expect(await screen.findByText('Listas encadeadas')).toBeInTheDocument();
     expect(screen.getByText('Ementa')).toBeInTheDocument();
+    expect(screen.getByText('Sem disciplina vinculada')).toBeInTheDocument();
+  });
+
+  test('enables opening the file only for stored archives', async () => {
+    render(ArchivesPage);
+    await screen.findByText('Listas encadeadas');
+
+    expect(
+      screen.getByRole('button', { name: /Abrir arquivo/u })
+    ).toBeEnabled();
+
+    const unlinkedItem = screen
+      .getByText('Sem disciplina vinculada')
+      .closest('button');
+    if (!unlinkedItem) {
+      throw new Error('Unlinked archive item not found');
+    }
+    await userEvent.click(unlinkedItem);
+
+    expect(
+      await screen.findByText(/ainda não foi vinculado a uma disciplina/u)
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Abrir arquivo/u })
+    ).toBeDisabled();
+  });
+
+  test('marks the selected archive for assistive technology', async () => {
+    render(ArchivesPage);
+    await screen.findByText('Listas encadeadas');
+
+    const items = screen.getAllByRole('button', { current: true });
+    expect(items).toHaveLength(1);
   });
 });
