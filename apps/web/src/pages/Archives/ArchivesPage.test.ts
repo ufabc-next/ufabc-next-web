@@ -1,9 +1,10 @@
 import { archives } from '@/mocks/archives';
 import { render, screen, userEvent } from '@/test-utils';
+import { capitalizeName } from '@/utils/capitalizeName';
 
 import { ArchivesPage } from '.';
 
-const firstComponentName = archives.data[0].component?.name ?? '';
+const firstComponentName = capitalizeName(archives.data[0].component?.name);
 
 describe('<ArchivesPage />', () => {
   test('lists archives and opens the first plan automatically', async () => {

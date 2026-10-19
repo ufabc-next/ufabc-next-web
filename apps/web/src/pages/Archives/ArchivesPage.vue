@@ -135,11 +135,12 @@ function clearFilters() {
 .layout {
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 560px;
+  grid-template-rows: minmax(0, 1fr);
+  height: calc(100vh - 220px);
+  min-height: 520px;
 }
 
 .pane-list {
-  max-height: 70vh;
   min-height: 0;
 }
 
@@ -150,11 +151,10 @@ function clearFilters() {
 
   .pane-list {
     border-right: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-    max-height: none;
   }
 
   .pane-reader {
-    max-height: 70vh;
+    min-height: 0;
     overflow-y: auto;
   }
 }

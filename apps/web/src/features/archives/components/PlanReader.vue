@@ -16,7 +16,11 @@
     <div v-else :key="archive._id" class="content">
       <header class="mb-6">
         <h2 class="title">
-          {{ archive.component?.name ?? 'Sem disciplina vinculada' }}
+          {{
+            archive.component
+              ? capitalizeName(archive.component.name)
+              : 'Sem disciplina vinculada'
+          }}
         </h2>
 
         <dl v-if="archive.component" class="facts mt-4">
@@ -34,7 +38,7 @@
           </div>
           <div>
             <dt>Temporada</dt>
-            <dd>{{ archive.component.season }}</dd>
+            <dd>{{ formatSeason(archive.component.season) }}</dd>
           </div>
         </dl>
       </header>
@@ -43,7 +47,11 @@
         <v-icon class="text-medium-emphasis">mdi-file-pdf-box</v-icon>
         <div class="file-info">
           <p class="file-name text-body-2 font-weight-medium">
-            {{ archive.fileName ?? 'Arquivo sem nome' }}
+            {{
+              archive.fileName
+                ? cleanFileName(archive.fileName)
+                : 'Arquivo sem nome'
+            }}
           </p>
           <p class="text-caption text-medium-emphasis d-flex align-center">
             <span
@@ -93,7 +101,7 @@
           <h3 class="reading-heading">Cronograma</h3>
           <ol class="schedule">
             <li v-for="(entry, index) in plan.schedule" :key="index">
-              <span class="date">{{ entry.date }}</span>
+              <span class="date">{{ formatScheduleDate(entry.date) }}</span>
               <span class="lesson">{{ entry.lesson }}</span>
             </li>
           </ol>
@@ -119,7 +127,10 @@ import { useQuery } from '@tanstack/vue-query';
 import { computed, ref } from 'vue';
 
 import { CenteredLoading } from '@/components/ui/CenteredLoading';
+import { capitalizeName } from '@/utils/capitalizeName';
+import { formatSeason } from '@/utils/season';
 
+import { cleanFileName, formatScheduleDate } from '../utils/archiveFormat';
 import {
   shiftLabels,
   sourceLabels,
@@ -283,6 +294,7 @@ $reading-font: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif;
     font-size: 17px;
     line-height: 1.7;
     max-width: 62ch;
+    white-space: pre-line;
   }
 }
 

@@ -17,13 +17,17 @@
           />
           <span class="text">
             <span class="name text-body-2 font-weight-medium">
-              {{ archive.component?.name ?? 'Sem disciplina vinculada' }}
+              {{
+                archive.fileName
+                  ? cleanFileName(archive.fileName)
+                  : 'Sem nome de arquivo'
+              }}
             </span>
             <span class="code text-caption text-medium-emphasis">
               {{
-                archive.component?.code ??
-                archive.fileName ??
-                'Sem nome de arquivo'
+                archive.component
+                  ? `${capitalizeName(archive.component.name)} (${archive.component.code})`
+                  : 'Sem disciplina vinculada'
               }}
             </span>
           </span>
@@ -80,6 +84,9 @@
 import type { ComponentArchive } from '@next/services';
 import { computed } from 'vue';
 
+import { capitalizeName } from '@/utils/capitalizeName';
+
+import { cleanFileName } from '../utils/archiveFormat';
 import {
   sourceLabels,
   statusDotClass,
@@ -117,6 +124,7 @@ const rangeLabel = computed(() => {
 
 <style scoped lang="scss">
 .archive-list {
+  flex: 1 1 0;
   min-height: 0;
 }
 
