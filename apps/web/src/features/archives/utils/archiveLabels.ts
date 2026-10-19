@@ -7,6 +7,11 @@ export const sourceLabels: Record<ArchiveSource, string> = {
   sigaa: 'SIGAA',
 };
 
+export const shiftLabels = {
+  day: 'Diurno',
+  night: 'Noturno',
+} as const;
+
 export const statusLabels: Record<ArchiveStatus, string> = {
   created: 'Aguardando',
   deleted: 'Removido',

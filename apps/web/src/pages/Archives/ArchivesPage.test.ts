@@ -3,7 +3,7 @@ import { render, screen, userEvent } from '@/test-utils';
 
 import { ArchivesPage } from '.';
 
-const firstComponentName = archives.data[0].component?.disciplina ?? '';
+const firstComponentName = archives.data[0].component?.name ?? '';
 
 describe('<ArchivesPage />', () => {
   test('lists archives and opens the first plan automatically', async () => {

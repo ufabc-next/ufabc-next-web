@@ -17,12 +17,12 @@
           />
           <span class="text">
             <span class="name text-body-2 font-weight-medium">
-              {{ archive.component?.disciplina ?? 'Sem disciplina vinculada' }}
+              {{ archive.component?.name ?? 'Sem disciplina vinculada' }}
             </span>
             <span class="code text-caption text-medium-emphasis">
               {{
-                archive.component?.codigo ??
-                archive.file_name ??
+                archive.component?.code ??
+                archive.fileName ??
                 'Sem nome de arquivo'
               }}
             </span>

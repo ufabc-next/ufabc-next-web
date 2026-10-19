@@ -10,17 +10,17 @@ export type ArchiveStatus =
 
 export type ArchiveComponent = {
   _id: string;
-  disciplina: string;
-  codigo: string;
-  turma: string;
-  turno: string;
+  code: string;
+  group: string;
+  name: string;
   season: string;
+  shift: 'day' | 'night';
 };
 
 export type ComponentArchive = {
   _id: string;
   component: ArchiveComponent | null;
-  file_name: string | null;
+  fileName: string | null;
   source: ArchiveSource;
   status: ArchiveStatus;
 };

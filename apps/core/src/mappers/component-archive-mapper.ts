@@ -16,20 +16,25 @@ export class ComponentArchiveMapper {
   toResponse(archive: LeanPopulatedArchive) {
     let component = null;
     if (archive.component) {
+      let shift: 'day' | 'night' = 'night';
+      if (archive.component.turno === 'diurno') {
+        shift = 'day';
+      }
+
       component = {
         _id: archive.component._id.toString(),
-        codigo: archive.component.codigo,
-        disciplina: archive.component.disciplina,
+        code: archive.component.codigo,
+        group: archive.component.turma,
+        name: archive.component.disciplina,
         season: archive.component.season,
-        turma: archive.component.turma,
-        turno: archive.component.turno,
+        shift,
       };
     }
 
     return {
       _id: archive._id.toString(),
       component,
-      file_name: archive.file_name ?? null,
+      fileName: archive.file_name ?? null,
       source: archive.source,
       status: archive.status,
     };

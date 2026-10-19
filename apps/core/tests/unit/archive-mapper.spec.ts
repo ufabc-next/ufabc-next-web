@@ -35,6 +35,14 @@ describe('archive and plan mappers match the response schemas', () => {
     });
 
     expect(archiveListResponseSchema.safeParse(page).success).toBe(true);
+    expect(page.data[0].component).toEqual({
+      _id: expect.any(String),
+      code: 'DA1MCTB021-17SA',
+      group: 'A1',
+      name: 'Algoritmos',
+      season: '2026:3',
+      shift: 'day',
+    });
     expect(page.data[0]).not.toHaveProperty('createdAt');
     expect(page.data[0]).not.toHaveProperty('timeline');
     expect(page.data[0]).not.toHaveProperty('s3_key');

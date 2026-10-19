@@ -31,14 +31,14 @@ const archiveResponseSchema = z.object({
   component: z
     .object({
       _id: z.string(),
-      codigo: z.string(),
-      disciplina: z.string(),
+      code: z.string(),
+      group: z.string(),
+      name: z.string(),
       season: z.string(),
-      turma: z.string(),
-      turno: z.string(),
+      shift: z.enum(['day', 'night']),
     })
     .nullable(),
-  file_name: z.string().nullable(),
+  fileName: z.string().nullable(),
   source: archiveSourceSchema,
   status: archiveStatusSchema,
 });

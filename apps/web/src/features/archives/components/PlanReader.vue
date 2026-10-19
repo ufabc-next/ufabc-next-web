@@ -16,21 +16,21 @@
     <div v-else :key="archive._id" class="content">
       <header class="mb-6">
         <h2 class="title">
-          {{ archive.component?.disciplina ?? 'Sem disciplina vinculada' }}
+          {{ archive.component?.name ?? 'Sem disciplina vinculada' }}
         </h2>
 
         <dl v-if="archive.component" class="facts mt-4">
           <div>
             <dt>Código</dt>
-            <dd>{{ archive.component.codigo }}</dd>
+            <dd>{{ archive.component.code }}</dd>
           </div>
           <div>
             <dt>Turma</dt>
-            <dd>{{ archive.component.turma }}</dd>
+            <dd>{{ archive.component.group }}</dd>
           </div>
           <div>
             <dt>Turno</dt>
-            <dd class="text-capitalize">{{ archive.component.turno }}</dd>
+            <dd>{{ shiftLabels[archive.component.shift] }}</dd>
           </div>
           <div>
             <dt>Temporada</dt>
@@ -43,7 +43,7 @@
         <v-icon class="text-medium-emphasis">mdi-file-pdf-box</v-icon>
         <div class="file-info">
           <p class="file-name text-body-2 font-weight-medium">
-            {{ archive.file_name ?? 'Arquivo sem nome' }}
+            {{ archive.fileName ?? 'Arquivo sem nome' }}
           </p>
           <p class="text-caption text-medium-emphasis d-flex align-center">
             <span
@@ -121,6 +121,7 @@ import { computed, ref } from 'vue';
 import { CenteredLoading } from '@/components/ui/CenteredLoading';
 
 import {
+  shiftLabels,
   sourceLabels,
   statusDotClass,
   statusLabels,
