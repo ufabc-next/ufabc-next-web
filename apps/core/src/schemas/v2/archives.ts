@@ -39,7 +39,6 @@ const archiveResponseSchema = z.object({
     })
     .nullable(),
   file_name: z.string().nullable(),
-  original_url: z.string().url(),
   source: archiveSourceSchema,
   status: archiveStatusSchema,
 });

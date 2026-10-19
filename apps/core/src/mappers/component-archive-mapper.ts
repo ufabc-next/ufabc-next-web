@@ -30,7 +30,6 @@ export class ComponentArchiveMapper {
       _id: archive._id.toString(),
       component,
       file_name: archive.file_name ?? null,
-      original_url: archive.original_url,
       source: archive.source,
       status: archive.status,
     };

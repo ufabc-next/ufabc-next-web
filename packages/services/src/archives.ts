@@ -21,7 +21,6 @@ export type ComponentArchive = {
   _id: string;
   component: ArchiveComponent | null;
   file_name: string | null;
-  original_url: string;
   source: ArchiveSource;
   status: ArchiveStatus;
 };

@@ -38,6 +38,7 @@ describe('archive and plan mappers match the response schemas', () => {
     expect(page.data[0]).not.toHaveProperty('createdAt');
     expect(page.data[0]).not.toHaveProperty('timeline');
     expect(page.data[0]).not.toHaveProperty('s3_key');
+    expect(page.data[0]).not.toHaveProperty('original_url');
   });
 
   it('maps the download and the plan', () => {
