@@ -11,7 +11,11 @@
       <div class="layout">
         <aside class="pane-list d-flex flex-column">
           <div class="pa-4 pb-3">
-            <ArchiveFilters v-model:source="source" v-model:status="status" />
+            <ArchiveFilters
+              v-model:search="searchText"
+              v-model:source="source"
+              v-model:status="status"
+            />
           </div>
           <v-progress-linear
             :active="isFetching"
@@ -63,6 +67,7 @@
 import type { ArchiveSource, ArchiveStatus } from '@next/services';
 import { Archives } from '@next/services';
 import { useQuery } from '@tanstack/vue-query';
+import debounce from 'lodash.debounce';
 import { computed, ref, watch } from 'vue';
 import { useDisplay } from 'vuetify';
 
@@ -80,8 +85,18 @@ const source = ref<ArchiveSource | null>(null);
 const status = ref<ArchiveStatus | null>(null);
 const selectedId = ref<string | null>(null);
 const isReaderOpen = ref(false);
+const searchText = ref('');
+const searchTerm = ref('');
 
-watch([source, status], () => {
+const applySearch = debounce((text: string) => {
+  searchTerm.value = text.trim();
+}, 300);
+
+watch(searchText, (text) => {
+  applySearch(text);
+});
+
+watch([source, status, searchTerm], () => {
   page.value = 1;
 });
 
@@ -90,10 +105,11 @@ const { data, isFetching, isError } = useQuery({
     Archives.list({
       limit: PAGE_SIZE,
       page: page.value,
+      q: searchTerm.value || undefined,
       source: source.value ?? undefined,
       status: status.value ?? undefined,
     }),
-  queryKey: ['archives', page, source, status],
+  queryKey: ['archives', page, searchTerm, source, status],
 });
 
 const archives = computed(() => data.value?.data ?? []);
@@ -126,6 +142,8 @@ function selectArchive(archiveId: string) {
 }
 
 function clearFilters() {
+  searchText.value = '';
+  searchTerm.value = '';
   source.value = null;
   status.value = null;
 }

@@ -1,6 +1,9 @@
 import type { Types } from 'mongoose';
 
-import { ARCHIVE_MAX_FAILURE_EVENTS } from '@/constants.js';
+import {
+  ARCHIVE_MAX_FAILURE_EVENTS,
+  REGEX_SPECIAL_CHARS,
+} from '@/constants.js';
 import { ComponentArchiveModel } from '@/models/ComponentArchive.js';
 import type { ComponentArchive } from '@/models/ComponentArchive.js';
 
@@ -32,9 +35,22 @@ type FailureCountRow = {
 export type ArchivePageFilter = {
   limit: number;
   page: number;
+  q?: string;
   source?: ComponentArchive['source'];
   status?: ComponentArchive['status'];
 };
+
+function escapeRegex(text: string) {
+  let escaped = '';
+  for (const char of text) {
+    if (REGEX_SPECIAL_CHARS.test(char)) {
+      escaped += `\\${char}`;
+    } else {
+      escaped += char;
+    }
+  }
+  return escaped;
+}
 
 export type ComponentArchivesRepositoryOptions = BaseRepositoryOptions & {
   model?: typeof ComponentArchiveModel;
@@ -48,10 +64,16 @@ export class ComponentArchivesRepository extends BaseRepository {
     this.model = model ?? ComponentArchiveModel;
   }
 
-  async findPage({ limit, page, source, status }: ArchivePageFilter) {
-    this.logger.debug({ limit, page, source, status }, 'Listing archives page');
+  async findPage({ limit, page, q, source, status }: ArchivePageFilter) {
+    this.logger.debug(
+      { limit, page, q, source, status },
+      'Listing archives page'
+    );
 
-    const filter: Record<string, string> = {};
+    const filter: Record<string, unknown> = {};
+    if (q) {
+      filter.file_name = { $options: 'i', $regex: escapeRegex(q) };
+    }
     if (source) {
       filter.source = source;
     }

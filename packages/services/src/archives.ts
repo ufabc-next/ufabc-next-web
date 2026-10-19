@@ -28,6 +28,7 @@ export type ComponentArchive = {
 export type ArchivesParams = {
   page: number;
   limit: number;
+  q?: string;
   source?: ArchiveSource;
   status?: ArchiveStatus;
 };

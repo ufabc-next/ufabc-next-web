@@ -1,5 +1,8 @@
+import { http, HttpResponse } from 'msw';
+
 import { archives } from '@/mocks/archives';
-import { render, screen, userEvent } from '@/test-utils';
+import { server } from '@/mocks/server';
+import { render, screen, userEvent, waitFor } from '@/test-utils';
 import { capitalizeName } from '@/utils/capitalizeName';
 
 import { ArchivesPage } from '.';
@@ -47,5 +50,27 @@ describe('<ArchivesPage />', () => {
 
     const items = screen.getAllByRole('button', { current: true });
     expect(items).toHaveLength(1);
+  });
+
+  test('searches archives by file name', async () => {
+    const requestedTerms: string[] = [];
+    server.use(
+      http.get(
+        `${import.meta.env.VITE_API_BASE_URL}/v2/archives`,
+        ({ request }) => {
+          requestedTerms.push(new URL(request.url).searchParams.get('q') ?? '');
+          return HttpResponse.json(archives);
+        }
+      )
+    );
+    render(ArchivesPage);
+    await screen.findByText('Listas encadeadas');
+
+    await userEvent.type(
+      screen.getByLabelText('Buscar pelo nome do arquivo'),
+      'plano'
+    );
+
+    await waitFor(() => expect(requestedTerms).toContain('plano'));
   });
 });
