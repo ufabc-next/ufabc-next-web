@@ -15,14 +15,14 @@ describe('<ArchivesPage />', () => {
 
     const matches = await screen.findAllByText(firstComponentName);
     expect(matches.length).toBeGreaterThan(0);
-    expect(await screen.findByText('Listas encadeadas')).toBeInTheDocument();
+    expect(await screen.findByText('Apresentação da disciplina')).toBeInTheDocument();
     expect(screen.getByText('Ementa')).toBeInTheDocument();
     expect(screen.getByText('Sem disciplina vinculada')).toBeInTheDocument();
   });
 
   test('enables opening the file only for stored archives', async () => {
     render(ArchivesPage);
-    await screen.findByText('Listas encadeadas');
+    await screen.findByText('Apresentação da disciplina');
 
     expect(
       screen.getByRole('button', { name: /Abrir arquivo/u })
@@ -46,7 +46,7 @@ describe('<ArchivesPage />', () => {
 
   test('marks the selected archive for assistive technology', async () => {
     render(ArchivesPage);
-    await screen.findByText('Listas encadeadas');
+    await screen.findByText('Apresentação da disciplina');
 
     const items = screen.getAllByRole('button', { current: true });
     expect(items).toHaveLength(1);
@@ -64,7 +64,7 @@ describe('<ArchivesPage />', () => {
       )
     );
     render(ArchivesPage);
-    await screen.findByText('Listas encadeadas');
+    await screen.findByText('Apresentação da disciplina');
 
     await userEvent.type(
       screen.getByLabelText('Buscar pelo nome do arquivo'),

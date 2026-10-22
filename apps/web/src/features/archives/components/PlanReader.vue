@@ -94,7 +94,7 @@
           class="reading mb-6"
         >
           <h3>{{ section.title }}</h3>
-          <p>{{ section.text }}</p>
+          <PlanText :text="section.text" />
         </section>
 
         <section v-if="plan.schedule.length > 0" class="mb-6">
@@ -137,6 +137,7 @@ import {
   statusDotClass,
   statusLabels,
 } from '../utils/archiveLabels';
+import PlanText from './PlanText.vue';
 
 const props = defineProps<{
   archive: ComponentArchive | null;
