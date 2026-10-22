@@ -165,3 +165,29 @@ export class InvalidInternalToken extends NextError {
     );
   }
 }
+
+export class ComponentPlanNotFound extends NextError {
+  constructor(componentId: string) {
+    super(
+      'Component Plan Not Found',
+      'NEX0014',
+      404,
+      'No extracted plan available for this component',
+      'Nenhum plano de ensino extraído para esta disciplina',
+      { componentId }
+    );
+  }
+}
+
+export class ComponentNotFound extends NextError {
+  constructor(externalKey: string) {
+    super(
+      'Component Not Found',
+      'NEX0015',
+      404,
+      'No component found for this external key',
+      'Disciplina não encontrada',
+      { externalKey }
+    );
+  }
+}
