@@ -178,3 +178,16 @@ export class ComponentPlanNotFound extends NextError {
     );
   }
 }
+
+export class ComponentNotFound extends NextError {
+  constructor(externalKey: string) {
+    super(
+      'Component Not Found',
+      'NEX0015',
+      404,
+      'No component found for this external key',
+      'Disciplina não encontrada',
+      { externalKey }
+    );
+  }
+}

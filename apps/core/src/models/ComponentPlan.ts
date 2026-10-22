@@ -3,7 +3,7 @@ import type { InferSchemaType } from 'mongoose';
 
 const componentPlanSchema = new Schema(
   {
-    // null for plans migrated from the legacy disciplinas_metadata collection
+    // null for plans migrated from the legacy collection, which have no archive
     archive: {
       default: null,
       ref: 'component_archives',

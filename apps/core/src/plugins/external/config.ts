@@ -33,11 +33,11 @@ const configSchema = z.object({
     .default('next.dev@aluno.ufabc.edu.br')
     .transform((emails) => emails.split(',')),
   BOARD_PATH: z.string().optional(),
+  CMCC_URL: z.string(),
   CRONOS_URL: z.string().default('http://localhost:5173'),
   EXTRACTOR_URL: z.string(),
   HOST: z.string().min(4).default('0.0.0.0'),
   INTERNAL_TOKEN: z.string().default('internal-token'),
-  CMCC_URL: z.string().default('https://cds2.cmcc.ufabc.edu.br/planoensino/'),
   JWT_SECRET: z.string().default(JWT_SECRET),
   LOCALSTACK_ENDPOINT: z.string().default('http://localhost:4566'),
   MEMORY_SAMPLE_INTERVAL_SECONDS: z.coerce.number().default(60),

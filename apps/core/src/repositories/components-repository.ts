@@ -107,4 +107,23 @@ export class ComponentsRepository extends BaseRepository {
 
     return await this.model.findById(componentId).lean();
   }
+
+  async findLeanByOriginKey(originKey: string, season: string) {
+    this.logger.debug({ originKey, season }, 'Finding component by origin key');
+
+    return await this.model
+      .findOne({ origin_key: originKey, season })
+      .populate<{ teoria: { name: string } | null }>('teoria', 'name')
+      .lean();
+  }
+
+  async findLatestLeanByOriginKey(originKey: string) {
+    this.logger.debug({ originKey }, 'Finding latest component by origin key');
+
+    return await this.model
+      .findOne({ origin_key: originKey })
+      .sort(MOST_RECENT_SEASON_FIRST)
+      .populate<{ teoria: { name: string } | null }>('teoria', 'name')
+      .lean();
+  }
 }

@@ -2,17 +2,16 @@ import { currentQuad } from '@next/utils';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 import { z } from 'zod';
 
-import { AIProxyConnector } from '@/connectors/ai-proxy.js';
 import { jwtVerifyHook } from '@/hooks/jwt-verify.js';
 import { isSession, moodleSession } from '@/hooks/moodle-session.js';
 import { validateInternalTokenAuthHook } from '@/hooks/validate-token.js';
 import { ComponentModel } from '@/models/Component.js';
-import { ComponentPlanModel } from '@/models/ComponentPlan.js';
 import type {
   ListComponent,
   PopulatedComponent,
 } from '@/schemas/v2/components.js';
 import { listComponentsSchema } from '@/schemas/v2/components.js';
+import { ComponentPlanChatService } from '@/services/component-plan-chat-service.js';
 import { ComponentsService } from '@/services/components-service.js';
 
 const componentsController: FastifyPluginAsyncZod = async (app) => {
@@ -245,49 +244,19 @@ const componentsController: FastifyPluginAsyncZod = async (app) => {
 
   app.route({
     handler: async (request, reply) => {
-      const { config } = request.server;
-      const aiConnector = new AIProxyConnector(
-        config.NEXT_AGENT_URL,
-        'whatsapp'
-      );
-
       const { externalKey, season } = request.query;
       const { userMessage } = request.body as { userMessage: string };
 
       let response: unknown = null;
 
       if (externalKey !== undefined) {
-        let component = await ComponentModel.findOne({
-          origin_key: externalKey,
+        const chatService = new ComponentPlanChatService({
+          agentUrl: app.config.NEXT_AGENT_URL,
+          globalTraceId: request.id,
+        });
+        response = await chatService.answer({
+          externalKey,
           season,
-        })
-          .populate<{ teoria: { name: string } | null }>('teoria', 'name')
-          .lean();
-
-        component ??= await ComponentModel.findOne({ origin_key: externalKey })
-          .sort({ quad: -1, year: -1 })
-          .populate<{ teoria: { name: string } | null }>('teoria', 'name')
-          .lean();
-
-        if (component === null) {
-          return await reply.notFound('Component not found');
-        }
-
-        const plan = await ComponentPlanModel.findOne({
-          component: component._id,
-        })
-          .sort({ extractedAt: -1 })
-          .lean();
-
-        if (plan === null) {
-          return await reply.notFound('Component not found');
-        }
-
-        response = await aiConnector.requestNaturalResponse({
-          classroomCode: component.uf_cod_turma,
-          componentName: component.disciplina,
-          plan,
-          teacherName: component.teoria?.name ?? '',
           userMessage,
         });
       }
